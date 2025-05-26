@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:car_manager/models/inspection_data.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/painting.dart';
 import 'package:car_manager/models/car.dart';
@@ -40,7 +41,6 @@ Car _carFromJson(Map<String, dynamic> json) {
     licensePlate: json['licensePlate'],
     acquisitionDate: DateTime.parse(json['acquisitionDate']),
     insuranceExpirationDate: DateTime.parse(json['insuranceExpirationDate']),
-    carInspectionDate: DateTime.parse(json['carInspectionDate']),
     imageUrl: json['imageUrl'],
     imageAlignment: _parseAlignment(json['imageAlignment']),
     bodySpecs: json['bodySpecs'] != null
@@ -55,6 +55,9 @@ Car _carFromJson(Map<String, dynamic> json) {
     fuelConsumption: json['fuelConsumption'] != null
         ? _fuelConsumptionFromJson(json['fuelConsumption'])
         : null,
+    carInspectionsData: json['carInspectionsData'] != null
+        ? _inspectionDataFromJson(json['carInspectionsData'])
+        : [],
   );
 }
 
@@ -188,6 +191,17 @@ FuelConsumption _fuelConsumptionFromJson(Map<String, dynamic> json) {
   );
 }
 
+List<InspectionData> _inspectionDataFromJson(List<dynamic> json) {
+  return json.map((item) {
+    return InspectionData(
+      date: DateTime.parse(item['date']),
+      isPassed: item['isPassed'],
+      amount: item['amount']?.toDouble(),
+      mileage: item['mileage']?.toDouble(),
+    );
+  }).toList();
+}
+
 Car _getDefaultCar() {
   return Car(
     name: "Demo Vehicle",
@@ -201,7 +215,6 @@ Car _getDefaultCar() {
     licensePlate: "XY789ZW",
     acquisitionDate: DateTime(2022, 5, 12),
     insuranceExpirationDate: DateTime(2024, 6, 15),
-    carInspectionDate: DateTime(2024, 8, 23),
     imageUrl: "https://cdn.motor1.com/images/mgl/nOpO1/s3/1992-ferrari-f40.jpg",
     imageAlignment: Alignment.center,
     bodySpecs: BodySpecs(
@@ -240,5 +253,19 @@ Car _getDefaultCar() {
       extraUrban: 4.9,
       combined: 5.4,
     ),
+    carInspectionsData: [
+      InspectionData(
+        date: DateTime(2023, 1, 15),
+        isPassed: true,
+        amount: 0.0,
+        mileage: 15000.0,
+      ),
+      InspectionData(
+        date: DateTime(2024, 1, 15),
+        isPassed: false,
+        amount: 200.0,
+        mileage: 30000.0,
+      ),
+    ],
   );
 }

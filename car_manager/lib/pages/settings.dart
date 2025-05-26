@@ -38,6 +38,7 @@ class LanguageSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
+          hPadding: 32,
           title:
               AppLocalizations.of(context)?.language_selector_title ??
               'Language',

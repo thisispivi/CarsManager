@@ -207,6 +207,11 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String unit_km(String length) {
+    return '$length km';
+  }
+
+  @override
   String unit_l_per_100km(String consumption) {
     return '$consumption L/100km';
   }
@@ -266,4 +271,31 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get language_selector_title => 'Lingua';
+
+  @override
+  String get payments_inspectionsData_title => 'Dati Revisioni';
+
+  @override
+  String get payments_inspectionsData_nextInspectionDue => 'Prossima Revisione';
+
+  @override
+  String get payments_inspectionsData_nextInspectionDue_days => 'giorni';
+
+  @override
+  String get payments_inspectionsData_date => 'Data';
+
+  @override
+  String get payments_inspectionsData_status => 'Stato';
+
+  @override
+  String get payments_inspectionsData_status_passed => 'Superata';
+
+  @override
+  String get payments_inspectionsData_status_failed => 'Non Superata';
+
+  @override
+  String get payments_inspectionsData_mileage => 'Chilometraggio';
+
+  @override
+  String get payments_inspectionsData_amount => 'Importo';
 }

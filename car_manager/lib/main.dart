@@ -3,6 +3,7 @@ import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/l10n/l10n.dart';
 import 'package:car_manager/pages/Home.dart';
 import 'package:car_manager/pages/car_stats.dart';
+import 'package:car_manager/pages/payments.dart';
 import 'package:car_manager/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -36,6 +37,7 @@ class CarManager extends StatelessWidget {
               primary: Color.fromRGBO(255, 255, 255, 1),
               secondary: Color.fromRGBO(158, 171, 184, 1),
               tertiary: Color.fromRGBO(45, 53, 62, 1),
+              onSurfaceVariant: Color.fromRGBO(163, 171, 178, 1),
             ),
             navigationBarTheme: NavigationBarThemeData(
               backgroundColor: Color.fromRGBO(30, 33, 36, 1),
@@ -95,7 +97,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  var selectedIndex = 4;
+  var selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +113,7 @@ class _DashboardPageState extends State<DashboardPage> {
         page = Placeholder();
         break;
       case 3:
-        page = Placeholder();
+        page = PaymentsPage();
         break;
       case 4:
         page = SettingsPage();
@@ -165,8 +167,8 @@ class _DashboardPageState extends State<DashboardPage> {
               label: 'Fuel',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.description),
-              label: 'Documents',
+              icon: Icon(Icons.payment),
+              label: 'Payments',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),

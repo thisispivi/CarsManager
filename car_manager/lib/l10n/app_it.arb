@@ -274,6 +274,16 @@
       }
     }
   },
+  "unit_km": "{length} km",
+  "@unit_km": {
+    "description": "Distance in kilometers",
+    "placeholders": {
+      "length": {
+        "type": "String",
+        "example": "100"
+      }
+    }
+  },
   "unit_l_per_100km": "{consumption} L/100km",
   "@unit_l_per_100km": {
     "description": "Fuel consumption in liters per 100 kilometers",
@@ -395,5 +405,41 @@
   "language_selector_title": "Lingua",
   "@language_selector_title": {
     "description": "Title for the language selection dropdown"
+  },
+  "payments_inspectionsData_title": "Dati Revisioni",
+  "@payments_inspectionsData_title": {
+    "description": "Title for the car inspections data section"
+  },
+  "payments_inspectionsData_nextInspectionDue": "Prossima Revisione",
+  "@payments_inspectionsData_nextInspectionDue": {
+    "description": "Label for the next inspection due date field"
+  },
+  "payments_inspectionsData_nextInspectionDue_days": "giorni",
+  "@payments_inspectionsData_nextInspectionDue_days": {
+    "description": "Label for the number of days until the next inspection is due"
+  },
+  "payments_inspectionsData_date": "Data",
+  "@payments_inspectionsData_date": {
+    "description": "Label for the date of the next inspection"
+  },
+  "payments_inspectionsData_status": "Stato",
+  "@payments_inspectionsData_status": {
+    "description": "Label for the status of the next inspection (e.g., due, overdue)"
+  },
+  "payments_inspectionsData_status_passed": "Superata",
+  "@payments_inspectionsData_status_passed": {
+    "description": "Label for the status indicating the inspection has been passed"
+  },
+  "payments_inspectionsData_status_failed": "Non Superata",
+  "@payments_inspectionsData_status_failed": {
+    "description": "Label for the status indicating the inspection has not been passed"
+  },
+  "payments_inspectionsData_mileage": "Chilometraggio",
+  "@payments_inspectionsData_mileage": {
+    "description": "Label for the mileage at which the next inspection is due"
+  },
+  "payments_inspectionsData_amount": "Importo",
+  "@payments_inspectionsData_amount": {
+    "description": "Label for the amount due for the next inspection"
   }
 }

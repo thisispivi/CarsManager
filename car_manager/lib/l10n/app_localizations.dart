@@ -482,6 +482,12 @@ abstract class AppLocalizations {
   /// **'{length} m'**
   String unit_m(String length);
 
+  /// Length in kilometers
+  ///
+  /// In en, this message translates to:
+  /// **'{length} km'**
+  String unit_km(String length);
+
   /// Fuel consumption in liters per 100 kilometers
   ///
   /// In en, this message translates to:
@@ -559,6 +565,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language'**
   String get language_selector_title;
+
+  /// Title for the inspections data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Inspections Data'**
+  String get payments_inspectionsData_title;
+
+  /// Label for the next inspection date field in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Next Inspection Due'**
+  String get payments_inspectionsData_nextInspectionDue;
+
+  /// Label for the number of days until the next inspection is due
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get payments_inspectionsData_nextInspectionDue_days;
+
+  /// Label for the date of the next inspection
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get payments_inspectionsData_date;
+
+  /// Label for the status of the next inspection (e.g., due, overdue)
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get payments_inspectionsData_status;
+
+  /// Label for the status indicating the inspection has been passed
+  ///
+  /// In en, this message translates to:
+  /// **'Passed'**
+  String get payments_inspectionsData_status_passed;
+
+  /// Label for the status indicating the inspection has not been passed
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get payments_inspectionsData_status_failed;
+
+  /// Label for the mileage at which the next inspection is due
+  ///
+  /// In en, this message translates to:
+  /// **'Mileage'**
+  String get payments_inspectionsData_mileage;
+
+  /// Label for the amount due for the next inspection
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get payments_inspectionsData_amount;
 }
 
 class _AppLocalizationsDelegate

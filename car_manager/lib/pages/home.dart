@@ -72,6 +72,43 @@ class CarCard extends StatelessWidget {
                   Text(AppLocalizations.of(context)!.bodySpecs_weight),
                   Text('Year: ${car.yearOfManufacture}'),
                   Text('License Plate: ${car.licensePlate}'),
+                  if (car.carInspectionsData != null &&
+                      car.carInspectionsData!.isNotEmpty)
+                    ...car.carInspectionsData!.map((inspection) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${inspection.date.toLocal()} - ${inspection.isPassed ? 'Passed' : 'Failed'}',
+                          ),
+                          if (inspection.amount != null)
+                            Text(
+                              'Amount: \$${inspection.amount!.toStringAsFixed(2)}',
+                            ),
+                          if (inspection.mileage != null)
+                            Text('Mileage: ${inspection.mileage} km'),
+                          SizedBox(height: 8),
+                        ],
+                      );
+                    }).toList(),
+                  if (car.carInspectionsData != null &&
+                      car.carInspectionsData!.isNotEmpty)
+                    Text(
+                      'Next Inspection: ${car.getNextInspectionDate().toLocal()}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  if (car.carInspectionsData != null &&
+                      car.carInspectionsData!.isNotEmpty)
+                    Text(
+                      'Days until next inspection: ${car.getDaysUntilNextInspection()}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
                 ],
               ),
             ),
