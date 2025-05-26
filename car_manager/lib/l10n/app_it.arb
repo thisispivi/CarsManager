@@ -410,16 +410,16 @@
   "@payments_inspectionsData_title": {
     "description": "Title for the car inspections data section"
   },
-  "payments_inspectionsData_nextInspectionDue": "Prossima Revisione",
-  "@payments_inspectionsData_nextInspectionDue": {
+  "payments_inspectionsData_nextDue": "Prossima Revisione",
+  "@payments_inspectionsData_nextDue": {
     "description": "Label for the next inspection due date field"
   },
-  "payments_inspectionsData_nextInspectionDue_days": "giorni",
-  "@payments_inspectionsData_nextInspectionDue_days": {
+  "days": "giorni",
+  "@days": {
     "description": "Label for the number of days until the next inspection is due"
   },
-  "payments_inspectionsData_date": "Data",
-  "@payments_inspectionsData_date": {
+  "date": "Data",
+  "@date": {
     "description": "Label for the date of the next inspection"
   },
   "payments_inspectionsData_status": "Stato",
@@ -441,5 +441,25 @@
   "payments_inspectionsData_amount": "Importo",
   "@payments_inspectionsData_amount": {
     "description": "Label for the amount due for the next inspection"
+  },
+  "payments_insuranceData_title": "Dati Assicurazione",
+  "@payments_insuranceData_title": {
+    "description": "Title for the car insurance data section"
+  },
+  "payments_insuranceData_nextDue": "Scadenza Assicurazione",
+  "@payments_insuranceData_nextDue": {
+    "description": "Label for the next insurance due date field"
+  },
+  "payments_insuranceData_policyNumber": "Numero",
+  "@payments_insuranceData_policyNumber": {
+    "description": "Label for the insurance policy number field"
+  },
+  "payments_insuranceData_provider": "Fornitore",
+  "@payments_insuranceData_provider": {
+    "description": "Label for the insurance provider field"
+  },
+  "payments_insuranceData_policyAmount": "Importo",
+  "@payments_insuranceData_policyAmount": {
+    "description": "Label for the insurance policy amount field"
   }
 }

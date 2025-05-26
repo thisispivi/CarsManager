@@ -1,3 +1,4 @@
+import 'package:car_manager/components/row_with_leading_icon.dart';
 import 'package:car_manager/components/section_header.dart';
 import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/models/car.dart';
@@ -19,19 +20,123 @@ class PaymentsPage extends StatelessWidget {
           final Car car = carState.car;
 
           final bool hasInspectionData =
-              car.carInspectionsData != null &&
-              car.carInspectionsData!.isNotEmpty;
+              car.inspectionDatas != null && car.inspectionDatas!.isNotEmpty;
+
+          final bool hasInsuranceData =
+              car.insuranceDatas != null && car.insuranceDatas!.isNotEmpty;
 
           final List<Widget> sections = [
             const SizedBox(height: 16),
+            if (hasInsuranceData) InsuranceDataBlock(car: car),
+            const SizedBox(height: 50),
             if (hasInspectionData) InspectionDataBlock(car: car),
-            const SizedBox(height: 45),
+            const SizedBox(height: 16),
           ];
 
           return ListView(children: sections);
         },
       ),
     );
+  }
+}
+
+class InsuranceDataBlock extends StatelessWidget {
+  final Car car;
+  static const double horizontalPadding = 32.0;
+
+  const InsuranceDataBlock({super.key, required this.car});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
+
+    final carManagerState = Provider.of<CarManagerState>(
+      context,
+      listen: false,
+    );
+    final locale = carManagerState.locale ?? const Locale('en');
+    final dateFormat = DateFormat.yMMMd(locale.toString());
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeader(
+          hPadding: horizontalPadding,
+          title: localizations.payments_insuranceData_title,
+          icon: ImageIcon(AssetImage("assets/icons/insurance.png"), size: 24),
+        ),
+        const SizedBox(height: 16),
+        _buildNextInsuranceInfo(
+          context,
+          dateFormat,
+          localizations,
+          colorScheme,
+        ),
+        const SizedBox(height: 16),
+        ..._buildInsuranceItems(context, localizations, locale),
+      ],
+    );
+  }
+
+  Widget _buildNextInsuranceInfo(
+    BuildContext context,
+    DateFormat dateFormat,
+    AppLocalizations localizations,
+    ColorScheme colorScheme,
+  ) {
+    final nextInsuranceDate = car.getNextInsuranceExpirationDate();
+    final daysUntilNext = car.getDaysUntilNextInsuranceExpiration().toString();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: "${localizations.payments_insuranceData_nextDue}: ",
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 16,
+                color: colorScheme.primary,
+              ),
+            ),
+            TextSpan(
+              text:
+                  "${dateFormat.format(nextInsuranceDate)} ($daysUntilNext ${localizations.days})",
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+        softWrap: true,
+        textScaler: MediaQuery.textScalerOf(context),
+      ),
+    );
+  }
+
+  List<Widget> _buildInsuranceItems(
+    BuildContext context,
+    AppLocalizations localizations,
+    Locale locale,
+  ) {
+    final numberFormat = NumberFormat.decimalPattern(locale.toString());
+    final dateFormat = DateFormat.yMMMEd(locale.toString());
+
+    return car.insuranceDatas!.map((insurance) {
+      return RowWithLeadingIcon(
+        icon: ImageIcon(AssetImage("assets/icons/insurance.png"), size: 24),
+        title:
+            "${localizations.payments_insuranceData_provider}: ${insurance.insuranceCompany}",
+        subtitles: [
+          "${localizations.payments_insuranceData_policyNumber}: ${insurance.policyNumber}",
+          "${localizations.payments_insuranceData_policyAmount}: ${localizations.unit_currency(numberFormat.format(insurance.premiumAmount), "€")}",
+          "${localizations.date}: ${dateFormat.format(insurance.startDate)} - ${dateFormat.format(insurance.endDate)}",
+        ],
+      );
+    }).toList();
   }
 }
 
@@ -66,7 +171,7 @@ class InspectionDataBlock extends StatelessWidget {
             colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         _buildNextInspectionInfo(
           context,
           dateFormat,
@@ -90,25 +195,29 @@ class InspectionDataBlock extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-      child: Row(
-        children: [
-          Text(
-            "${localizations.payments_inspectionsData_nextInspectionDue}:",
-            style: GoogleFonts.spaceGrotesk(
-              fontSize: 16,
-              color: colorScheme.primary,
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: "${localizations.payments_inspectionsData_nextDue}: ",
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 16,
+                color: colorScheme.primary,
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            "${dateFormat.format(nextInspectionDate)} ($daysUntilNext ${localizations.payments_inspectionsData_nextInspectionDue_days})",
-            style: GoogleFonts.spaceGrotesk(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: colorScheme.primary,
+            TextSpan(
+              text:
+                  "${dateFormat.format(nextInspectionDate)} ($daysUntilNext ${localizations.days})",
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: colorScheme.primary,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+        softWrap: true,
+        textScaler: MediaQuery.textScalerOf(context),
       ),
     );
   }
@@ -121,7 +230,7 @@ class InspectionDataBlock extends StatelessWidget {
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat.yMMMd(locale.toString());
 
-    return car.carInspectionsData!.map((inspection) {
+    return car.inspectionDatas!.map((inspection) {
       return RowWithLeadingIcon(
         icon: SvgPicture.asset(
           "assets/icons/inspection.svg",
@@ -132,8 +241,7 @@ class InspectionDataBlock extends StatelessWidget {
             BlendMode.srcIn,
           ),
         ),
-        title:
-            "${localizations.payments_inspectionsData_date}: ${dateFormat.format(inspection.date)}",
+        title: "${localizations.date}: ${dateFormat.format(inspection.date)}",
         subtitles: [
           inspection.amount != null
               ? "${localizations.payments_inspectionsData_amount}: ${localizations.unit_currency(numberFormat.format(inspection.amount), "€")}"
@@ -142,75 +250,5 @@ class InspectionDataBlock extends StatelessWidget {
         ],
       );
     }).toList();
-  }
-}
-
-class RowWithLeadingIcon extends StatelessWidget {
-  final Widget icon;
-  final String title;
-  final List<String?> subtitles;
-
-  static const double horizontalPadding = 32.0;
-  static const double iconSize = 48.0;
-
-  const RowWithLeadingIcon({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitles,
-  });
-
-  List<String> get filteredSubtitles =>
-      subtitles.where((subtitle) => subtitle != null).cast<String>().toList();
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: horizontalPadding,
-        vertical: 8,
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: iconSize,
-            width: iconSize,
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(43, 48, 54, 1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(child: icon),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.spaceGrotesk(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                ...filteredSubtitles.map(
-                  (subtitle) => Text(
-                    subtitle,
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 14,
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

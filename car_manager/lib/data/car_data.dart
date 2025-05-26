@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:car_manager/models/inspection_data.dart';
+import 'package:car_manager/models/insurance_data.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/painting.dart';
 import 'package:car_manager/models/car.dart';
@@ -39,7 +40,6 @@ Car _carFromJson(Map<String, dynamic> json) {
     productionStartYear: json['productionStartYear'],
     productionEndYear: json['productionEndYear'],
     licensePlate: json['licensePlate'],
-    acquisitionDate: DateTime.parse(json['acquisitionDate']),
     insuranceExpirationDate: DateTime.parse(json['insuranceExpirationDate']),
     imageUrl: json['imageUrl'],
     imageAlignment: _parseAlignment(json['imageAlignment']),
@@ -55,8 +55,22 @@ Car _carFromJson(Map<String, dynamic> json) {
     fuelConsumption: json['fuelConsumption'] != null
         ? _fuelConsumptionFromJson(json['fuelConsumption'])
         : null,
-    carInspectionsData: json['carInspectionsData'] != null
-        ? _inspectionDataFromJson(json['carInspectionsData'])
+    inspectionDatas: json['inspectionDatas'] != null
+        ? _inspectionDataFromJson(json['inspectionDatas'])
+        : [],
+    insuranceDatas: json['insuranceDatas'] != null
+        ? (json['insuranceDatas'] as List<dynamic>).map((item) {
+            return InsuranceData(
+              endDate: DateTime.parse(item['endDate']),
+              insuranceCompany: item['insuranceCompany'],
+              policyNumber: item['policyNumber'],
+              startDate: DateTime.parse(item['startDate']),
+              extensionDate: item['extensionDate'] != null
+                  ? DateTime.parse(item['extensionDate'])
+                  : null,
+              premiumAmount: item['premiumAmount']?.toDouble(),
+            );
+          }).toList()
         : [],
   );
 }
@@ -213,7 +227,6 @@ Car _getDefaultCar() {
     productionStartYear: 2016,
     productionEndYear: 2021,
     licensePlate: "XY789ZW",
-    acquisitionDate: DateTime(2022, 5, 12),
     insuranceExpirationDate: DateTime(2024, 6, 15),
     imageUrl: "https://cdn.motor1.com/images/mgl/nOpO1/s3/1992-ferrari-f40.jpg",
     imageAlignment: Alignment.center,
@@ -253,7 +266,7 @@ Car _getDefaultCar() {
       extraUrban: 4.9,
       combined: 5.4,
     ),
-    carInspectionsData: [
+    inspectionDatas: [
       InspectionData(
         date: DateTime(2023, 1, 15),
         isPassed: true,
@@ -265,6 +278,16 @@ Car _getDefaultCar() {
         isPassed: false,
         amount: 200.0,
         mileage: 30000.0,
+      ),
+    ],
+    insuranceDatas: [
+      InsuranceData(
+        startDate: DateTime(2023, 6, 1),
+        endDate: DateTime(2024, 6, 1),
+        insuranceCompany: "Demo Insurance Co.",
+        policyNumber: "INS123456",
+        extensionDate: null,
+        premiumAmount: 1200.0,
       ),
     ],
   );

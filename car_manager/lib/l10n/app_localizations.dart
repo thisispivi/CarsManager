@@ -576,19 +576,19 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Next Inspection Due'**
-  String get payments_inspectionsData_nextInspectionDue;
+  String get payments_inspectionsData_nextDue;
 
   /// Label for the number of days until the next inspection is due
   ///
   /// In en, this message translates to:
   /// **'days'**
-  String get payments_inspectionsData_nextInspectionDue_days;
+  String get days;
 
   /// Label for the date of the next inspection
   ///
   /// In en, this message translates to:
   /// **'Date'**
-  String get payments_inspectionsData_date;
+  String get date;
 
   /// Label for the status of the next inspection (e.g., due, overdue)
   ///
@@ -619,6 +619,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Amount'**
   String get payments_inspectionsData_amount;
+
+  /// Title for the insurance data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance Data'**
+  String get payments_insuranceData_title;
+
+  /// Label for the next insurance due date field in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Next Insurance Due'**
+  String get payments_insuranceData_nextDue;
+
+  /// Label for the insurance policy number field
+  ///
+  /// In en, this message translates to:
+  /// **'Number'**
+  String get payments_insuranceData_policyNumber;
+
+  /// Label for the insurance provider field
+  ///
+  /// In en, this message translates to:
+  /// **'Provider'**
+  String get payments_insuranceData_provider;
+
+  /// Label for the insurance policy amount field
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get payments_insuranceData_policyAmount;
 }
 
 class _AppLocalizationsDelegate

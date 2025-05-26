@@ -410,16 +410,16 @@
   "@payments_inspectionsData_title": {
     "description": "Title for the inspections data section in payments"
   },
-  "payments_inspectionsData_nextInspectionDue": "Next Inspection Due",
-  "@payments_inspectionsData_nextInspectionDue": {
+  "payments_inspectionsData_nextDue": "Next Inspection Due",
+  "@payments_inspectionsData_nextDue": {
     "description": "Label for the next inspection date field in payments"
   },
-  "payments_inspectionsData_nextInspectionDue_days": "days",
-  "@payments_inspectionsData_nextInspectionDue_days": {
+  "days": "days",
+  "@days": {
     "description": "Label for the number of days until the next inspection is due"
   },
-  "payments_inspectionsData_date": "Date",
-  "@payments_inspectionsData_date": {
+  "date": "Date",
+  "@date": {
     "description": "Label for the date of the next inspection"
   },
   "payments_inspectionsData_status": "Status",
@@ -441,5 +441,25 @@
   "payments_inspectionsData_amount": "Amount",
   "@payments_inspectionsData_amount": {
     "description": "Label for the amount due for the next inspection"
+  },
+  "payments_insuranceData_title": "Insurance Data",
+  "@payments_insuranceData_title": {
+    "description": "Title for the insurance data section in payments"
+  },
+  "payments_insuranceData_nextDue": "Next Insurance Due",
+  "@payments_insuranceData_nextDue": {
+    "description": "Label for the next insurance due date field in payments"
+  },
+  "payments_insuranceData_policyNumber": "Number",
+  "@payments_insuranceData_policyNumber": {
+    "description": "Label for the insurance policy number field"
+  },
+  "payments_insuranceData_provider": "Provider",
+  "@payments_insuranceData_provider": {
+    "description": "Label for the insurance provider field"
+  },
+  "payments_insuranceData_policyAmount": "Amount",
+  "@payments_insuranceData_policyAmount": {
+    "description": "Label for the insurance policy amount field"
   }
 }

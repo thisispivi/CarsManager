@@ -1,4 +1,5 @@
 import 'package:car_manager/models/inspection_data.dart';
+import 'package:car_manager/models/insurance_data.dart';
 import 'package:car_manager/models/manufacture.dart';
 import 'package:car_manager/models/body_specs.dart';
 import 'package:car_manager/models/engine_specs.dart';
@@ -17,9 +18,8 @@ class Car {
   int? productionEndYear;
   String? imageUrl;
   Alignment? imageAlignment;
-
   String licensePlate;
-  DateTime acquisitionDate;
+
   DateTime insuranceExpirationDate;
 
   BodySpecs? bodySpecs;
@@ -27,7 +27,8 @@ class Car {
   PerformanceSpecs? performanceSpecs;
   FuelConsumption? fuelConsumption;
 
-  List<InspectionData>? carInspectionsData;
+  List<InsuranceData>? insuranceDatas;
+  List<InspectionData>? inspectionDatas;
 
   Car({
     required this.name,
@@ -40,9 +41,8 @@ class Car {
     this.productionEndYear,
     this.imageUrl,
     this.imageAlignment = Alignment.center,
-
     required this.licensePlate,
-    required this.acquisitionDate,
+
     required this.insuranceExpirationDate,
 
     this.bodySpecs,
@@ -50,19 +50,20 @@ class Car {
     this.performanceSpecs,
     this.fuelConsumption,
 
-    this.carInspectionsData,
+    this.inspectionDatas,
+    this.insuranceDatas,
   });
 
   _getLatestInspection() {
-    if (carInspectionsData == null || carInspectionsData!.isEmpty) {
+    if (inspectionDatas == null || inspectionDatas!.isEmpty) {
       return null;
     }
 
-    return carInspectionsData!.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+    return inspectionDatas!.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
   }
 
   getNextInspectionDate() {
-    if (carInspectionsData == null || carInspectionsData!.isEmpty) {
+    if (inspectionDatas == null || inspectionDatas!.isEmpty) {
       return null;
     }
 
@@ -82,5 +83,34 @@ class Car {
 
     final now = DateTime.now();
     return nextInspectionDate.difference(now).inDays;
+  }
+
+  _getLatestInsurance() {
+    if (insuranceDatas == null || insuranceDatas!.isEmpty) {
+      return null;
+    }
+
+    return insuranceDatas!.reduce(
+      (a, b) => a.endDate.isAfter(b.endDate) ? a : b,
+    );
+  }
+
+  getNextInsuranceExpirationDate() {
+    final latestInsurance = _getLatestInsurance();
+    if (latestInsurance == null) {
+      return null;
+    }
+
+    return latestInsurance.endDate;
+  }
+
+  getDaysUntilNextInsuranceExpiration() {
+    final nextInsuranceDate = getNextInsuranceExpirationDate();
+    if (nextInsuranceDate == null) {
+      return null;
+    }
+
+    final now = DateTime.now();
+    return nextInsuranceDate.difference(now).inDays;
   }
 }

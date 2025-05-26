@@ -276,13 +276,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get payments_inspectionsData_title => 'Dati Revisioni';
 
   @override
-  String get payments_inspectionsData_nextInspectionDue => 'Prossima Revisione';
+  String get payments_inspectionsData_nextDue => 'Prossima Revisione';
 
   @override
-  String get payments_inspectionsData_nextInspectionDue_days => 'giorni';
+  String get days => 'giorni';
 
   @override
-  String get payments_inspectionsData_date => 'Data';
+  String get date => 'Data';
 
   @override
   String get payments_inspectionsData_status => 'Stato';
@@ -298,4 +298,19 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get payments_inspectionsData_amount => 'Importo';
+
+  @override
+  String get payments_insuranceData_title => 'Dati Assicurazione';
+
+  @override
+  String get payments_insuranceData_nextDue => 'Scadenza Assicurazione';
+
+  @override
+  String get payments_insuranceData_policyNumber => 'Numero';
+
+  @override
+  String get payments_insuranceData_provider => 'Fornitore';
+
+  @override
+  String get payments_insuranceData_policyAmount => 'Importo';
 }

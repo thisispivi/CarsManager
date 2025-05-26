@@ -72,9 +72,9 @@ class CarCard extends StatelessWidget {
                   Text(AppLocalizations.of(context)!.bodySpecs_weight),
                   Text('Year: ${car.yearOfManufacture}'),
                   Text('License Plate: ${car.licensePlate}'),
-                  if (car.carInspectionsData != null &&
-                      car.carInspectionsData!.isNotEmpty)
-                    ...car.carInspectionsData!.map((inspection) {
+                  if (car.inspectionDatas != null &&
+                      car.inspectionDatas!.isNotEmpty)
+                    ...car.inspectionDatas!.map((inspection) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -91,8 +91,8 @@ class CarCard extends StatelessWidget {
                         ],
                       );
                     }).toList(),
-                  if (car.carInspectionsData != null &&
-                      car.carInspectionsData!.isNotEmpty)
+                  if (car.inspectionDatas != null &&
+                      car.inspectionDatas!.isNotEmpty)
                     Text(
                       'Next Inspection: ${car.getNextInspectionDate().toLocal()}',
                       style: TextStyle(
@@ -100,8 +100,8 @@ class CarCard extends StatelessWidget {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
-                  if (car.carInspectionsData != null &&
-                      car.carInspectionsData!.isNotEmpty)
+                  if (car.inspectionDatas != null &&
+                      car.inspectionDatas!.isNotEmpty)
                     Text(
                       'Days until next inspection: ${car.getDaysUntilNextInspection()}',
                       style: TextStyle(

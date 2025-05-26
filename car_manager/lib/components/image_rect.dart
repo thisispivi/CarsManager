@@ -11,7 +11,7 @@ class ImageRect extends StatelessWidget {
     required this.primaryColor,
   });
 
-  final imageUrl;
+  final String? imageUrl;
   final Alignment? imageAlignment;
   final double aspectRatio;
   final Color backgroundColor;
