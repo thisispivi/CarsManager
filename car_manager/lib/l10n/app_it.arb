@@ -1,0 +1,399 @@
+{
+  "@@locale": "it",
+  "appTitle": "Gestore Auto",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "carData_title": "Dati Auto",
+  "@carData_title": {
+    "description": "Title for the car data section"
+  },
+  "carData_name": "Nome Auto",
+  "@carData_name": {
+    "description": "Label for the car name field"
+  },
+  "carData_model": "Modello",
+  "@carData_model": {
+    "description": "Label for the car model field"
+  },
+  "carData_setUp": "Configura",
+  "@carData_setUp": {
+    "description": "Label for the car setup action"
+  },
+  "carData_manufacture": "Costruttore",
+  "@carData_manufacture": {
+    "description": "Label for the car manufacturer field"
+  },
+  "carData_yearOfManufacture": "Anno di Produzione",
+  "@carData_yearOfManufacture": {
+    "description": "Label for the manufacturing year field"
+  },
+  "carData_originalPrice": "Prezzo Originale",
+  "@carData_originalPrice": {
+    "description": "Label for the original price field"
+  },
+  "carData_productionRangeYears": "Periodo di Produzione",
+  "@carData_productionRangeYears": {
+    "description": "Label for the production years range field"
+  },
+  "carData_licensePlate": "Targa",
+  "@carData_licensePlate": {
+    "description": "Label for the license plate field"
+  },
+  "carData_acquisitionDate": "Data di Acquisizione",
+  "@carData_acquisitionDate": {
+    "description": "Label for the date when the car was acquired"
+  },
+  "carData_insuranceExpirationDate": "Scadenza Assicurazione",
+  "@carData_insuranceExpirationDate": {
+    "description": "Label for the insurance expiration date field"
+  },
+  "carData_carInspectionDate": "Data Revisione",
+  "@carData_carInspectionDate": {
+    "description": "Label for the car inspection date field"
+  },
+  "bodySpecs_title": "Specifiche Carrozzeria",
+  "@bodySpecs_title": {
+    "description": "Title for the body specifications section"
+  },
+  "bodySpecs_type": "Tipo di Carrozzeria",
+  "@bodySpecs_type": {
+    "description": "Label for the body type field (sedan, SUV, etc.)"
+  },
+  "bodySpecs_doors": "Porte",
+  "@bodySpecs_doors": {
+    "description": "Label for the number of doors field"
+  },
+  "bodySpecs_seats": "Posti",
+  "@bodySpecs_seats": {
+    "description": "Label for the number of seats field"
+  },
+  "bodySpecs_trunkCapacity": "Capacità Bagagliaio",
+  "@bodySpecs_trunkCapacity": {
+    "description": "Label for the trunk capacity field"
+  },
+  "bodySpecs_fuelTankCapacity": "Capacità Serbatoio",
+  "@bodySpecs_fuelTankCapacity": {
+    "description": "Label for the fuel tank capacity field"
+  },
+  "bodySpecs_weight": "Peso",
+  "@bodySpecs_weight": {
+    "description": "Label for the car weight field"
+  },
+  "bodySpecs_maxTowingWeight": "Peso Massimo Trainabile",
+  "@bodySpecs_maxTowingWeight": {
+    "description": "Label for the maximum towing weight field"
+  },
+  "bodySpecs_length": "Lunghezza",
+  "@bodySpecs_length": {
+    "description": "Label for the car length field"
+  },
+  "bodySpecs_width": "Larghezza",
+  "@bodySpecs_width": {
+    "description": "Label for the car width field"
+  },
+  "bodySpecs_height": "Altezza",
+  "@bodySpecs_height": {
+    "description": "Label for the car height field"
+  },
+  "bodySpecs_wheelbase": "Passo",
+  "@bodySpecs_wheelbase": {
+    "description": "Label for the wheelbase measurement field"
+  },
+  "engineSpecs_title": "Specifiche Motore",
+  "@engineSpecs_title": {
+    "description": "Title for the engine specifications section"
+  },
+  "engineSpecs_type": "Tipo di Motore",
+  "@engineSpecs_type": {
+    "description": "Label for the engine type field"
+  },
+  "engineSpecs_displacement": "Cilindrata",
+  "@engineSpecs_displacement": {
+    "description": "Label for the engine displacement field"
+  },
+  "engineSpecs_fuelType": "Tipo di Carburante",
+  "@engineSpecs_fuelType": {
+    "description": "Label for the fuel type field"
+  },
+  "engineSpecs_maxPower": "Potenza Massima",
+  "@engineSpecs_maxPower": {
+    "description": "Label for the maximum power output field"
+  },
+  "engineSpecs_horsePower": "Cavalli",
+  "@engineSpecs_horsePower": {
+    "description": "Label for the horsepower field"
+  },
+  "engineSpecs_engineSpeed": "Regime Motore",
+  "@engineSpecs_engineSpeed": {
+    "description": "Label for the engine speed field"
+  },
+  "engineSpecs_maxTorque": "Coppia Massima",
+  "@engineSpecs_maxTorque": {
+    "description": "Label for the maximum torque field"
+  },
+  "engineSpecs_driveType": "Tipo di Trazione",
+  "@engineSpecs_driveType": {
+    "description": "Label for the drive type field (FWD, RWD, AWD, etc.)"
+  },
+  "engineSpecs_transmissionType": "Tipo di Trasmissione",
+  "@engineSpecs_transmissionType": {
+    "description": "Label for the transmission type field"
+  },
+  "engineSpecs_gears": "Numero di Marce",
+  "@engineSpecs_gears": {
+    "description": "Label for the number of transmission gears field"
+  },
+  "performanceSpecs_title": "Prestazioni",
+  "@performanceSpecs_title": {
+    "description": "Title for the performance specifications section"
+  },
+  "performanceSpecs_maxSpeed": "Velocità Massima",
+  "@performanceSpecs_maxSpeed": {
+    "description": "Label for the maximum speed field"
+  },
+  "performanceSpecs_zeroToHundred": "0-100 km/h",
+  "@performanceSpecs_zeroToHundred": {
+    "description": "Label for the acceleration time from 0 to 100 km/h"
+  },
+  "performanceSpecs_co2Emissions": "Emissioni CO₂",
+  "@performanceSpecs_co2Emissions": {
+    "description": "Label for the CO₂ emissions field"
+  },
+  "performanceSpecs_emissionStandard": "Normativa Emissioni",
+  "@performanceSpecs_emissionStandard": {
+    "description": "Label for the emission standard field (Euro 6, etc.)"
+  },
+  "fuelConsumption_title": "Consumo Carburante",
+  "@fuelConsumption_title": {
+    "description": "Title for the fuel consumption section"
+  },
+  "fuelConsumption_urban": "Consumo Urbano",
+  "@fuelConsumption_urban": {
+    "description": "Label for the urban fuel consumption field"
+  },
+  "fuelConsumption_extraUrban": "Consumo Extraurbano",
+  "@fuelConsumption_extraUrban": {
+    "description": "Label for the extra-urban (highway) fuel consumption field"
+  },
+  "fuelConsumption_combined": "Consumo Combinato",
+  "@fuelConsumption_combined": {
+    "description": "Label for the combined fuel consumption field"
+  },
+  "engineType_fourCylinderInline": "4 cilindri in linea",
+  "@engineType_fourCylinderInline": {
+    "description": "Label for 4-cylinder inline engine type"
+  },
+  "engineType_sixCylinderInline": "6 cilindri in linea",
+  "@engineType_sixCylinderInline": {
+    "description": "Label for 6-cylinder inline engine type"
+  },
+  "engineType_v6": "V6",
+  "@engineType_v6": {
+    "description": "Label for V6 engine type"
+  },
+  "engineType_v8": "V8",
+  "@engineType_v8": {
+    "description": "Label for V8 engine type"
+  },
+  "engineType_v12": "V12",
+  "@engineType_v12": {
+    "description": "Label for V12 engine type"
+  },
+  "fuelType_petrol": "Benzina",
+  "@fuelType_petrol": {
+    "description": "Label for petrol/gasoline fuel type"
+  },
+  "fuelType_diesel": "Diesel",
+  "@fuelType_diesel": {
+    "description": "Label for diesel fuel type"
+  },
+  "fuelType_electric": "Elettrica",
+  "@fuelType_electric": {
+    "description": "Label for electric power type"
+  },
+  "fuelType_hybrid": "Ibrida",
+  "@fuelType_hybrid": {
+    "description": "Label for hybrid power type"
+  },
+  "driveType_fwd": "Trazione anteriore",
+  "@driveType_fwd": {
+    "description": "Label for front-wheel drive type"
+  },
+  "driveType_rwd": "Trazione posteriore",
+  "@driveType_rwd": {
+    "description": "Label for rear-wheel drive type"
+  },
+  "driveType_awd": "Trazione integrale",
+  "@driveType_awd": {
+    "description": "Label for all-wheel drive type"
+  },
+  "driveType_fourWheelDrive": "Trazione 4x4",
+  "@driveType_fourWheelDrive": {
+    "description": "Label for 4-wheel drive type"
+  },
+  "transmissionType_manual": "Manuale",
+  "@transmissionType_manual": {
+    "description": "Label for manual transmission type"
+  },
+  "transmissionType_automatic": "Automatica",
+  "@transmissionType_automatic": {
+    "description": "Label for automatic transmission type"
+  },
+  "transmissionType_semiAutomatic": "Semi-automatica",
+  "@transmissionType_semiAutomatic": {
+    "description": "Label for semi-automatic transmission type"
+  },
+  "unit_kg": "{weight} kg",
+  "@unit_kg": {
+    "description": "Weight in kilograms",
+    "placeholders": {
+      "weight": {
+        "type": "String",
+        "example": "1500"
+      }
+    }
+  },
+  "unit_l": "{volume} L",
+  "@unit_l": {
+    "description": "Volume in liters",
+    "placeholders": {
+      "volume": {
+        "type": "String",
+        "example": "50"
+      }
+    }
+  },
+  "unit_m": "{length} m",
+  "@unit_m": {
+    "description": "Length in meters",
+    "placeholders": {
+      "length": {
+        "type": "String",
+        "example": "4.5"
+      }
+    }
+  },
+  "unit_l_per_100km": "{consumption} L/100km",
+  "@unit_l_per_100km": {
+    "description": "Fuel consumption in liters per 100 kilometers",
+    "placeholders": {
+      "consumption": {
+        "type": "String",
+        "example": "6.5"
+      }
+    }
+  },
+  "unit_g_per_km": "{emission} g/km",
+  "@unit_g_per_km": {
+    "description": "CO₂ emissions in grams per kilometer",
+    "placeholders": {
+      "emission": {
+        "type": "String",
+        "example": "120"
+      }
+    }
+  },
+  "unit_kmh": "{speed} km/h",
+  "@unit_kmh": {
+    "description": "Speed in kilometers per hour",
+    "placeholders": {
+      "speed": {
+        "type": "String",
+        "example": "220"
+      }
+    }
+  },
+  "unit_s": "{time} s",
+  "@unit_s": {
+    "description": "Time in seconds",
+    "placeholders": {
+      "time": {
+        "type": "String",
+        "example": "8.5"
+      }
+    }
+  },
+  "unit_nm": "{torque} Nm",
+  "@unit_nm": {
+    "description": "Torque in Newton-meters",
+    "placeholders": {
+      "torque": {
+        "type": "String",
+        "example": "300"
+      }
+    }
+  },
+  "unit_rpm": "{speed} giri/min",
+  "@unit_rpm": {
+    "description": "Engine speed in revolutions per minute",
+    "placeholders": {
+      "speed": {
+        "type": "String",
+        "example": "6000"
+      }
+    }
+  },
+  "unit_hp": "{power} CV",
+  "@unit_hp": {
+    "description": "Power in horsepower",
+    "placeholders": {
+      "power": {
+        "type": "String",
+        "example": "150"
+      }
+    }
+  },
+  "unit_kw": "{power} kW",
+  "@unit_kw": {
+    "description": "Power in kilowatts",
+    "placeholders": {
+      "power": {
+        "type": "String",
+        "example": "110"
+      }
+    }
+  },
+  "unit_cc": "{displacement} cc",
+  "@unit_cc": {
+    "description": "Engine displacement in cubic centimeters",
+    "placeholders": {
+      "displacement": {
+        "type": "String",
+        "example": "2000"
+      }
+    }
+  },
+  "unit_dm3": "{volume} dm³",
+  "@unit_dm3": {
+    "description": "Volume in cubic decimeters (liters)",
+    "placeholders": {
+      "volume": {
+        "type": "String",
+        "example": "50"
+      }
+    }
+  },
+  "unit_currency": "{amount} {currency}",
+  "@unit_currency": {
+    "description": "Amount in specified currency",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "30000"
+      },
+      "currency": {
+        "type": "String",
+        "example": "USD"
+      }
+    }
+  },
+  "settings_title": "Impostazioni",
+  "@settings_title": {
+    "description": "Title for the settings section"
+  },
+  "language_selector_title": "Lingua",
+  "@language_selector_title": {
+    "description": "Title for the language selection dropdown"
+  }
+}
