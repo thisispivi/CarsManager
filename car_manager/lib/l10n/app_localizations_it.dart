@@ -313,4 +313,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get payments_insuranceData_policyAmount => 'Importo';
+
+  @override
+  String get themeSelector_title => 'Tema';
+
+  @override
+  String get themeSelector_dark_mode => 'Modalità Scura';
 }

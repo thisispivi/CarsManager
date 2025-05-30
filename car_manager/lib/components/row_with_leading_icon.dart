@@ -36,7 +36,7 @@ class RowWithLeadingIcon extends StatelessWidget {
             width: iconSize,
             margin: const EdgeInsets.only(top: 3),
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(43, 48, 54, 1),
+              color: Theme.of(context).colorScheme.onSecondaryFixedVariant,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(child: icon),

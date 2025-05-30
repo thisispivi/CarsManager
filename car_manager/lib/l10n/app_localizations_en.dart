@@ -313,4 +313,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get payments_insuranceData_policyAmount => 'Amount';
+
+  @override
+  String get themeSelector_title => 'Theme';
+
+  @override
+  String get themeSelector_dark_mode => 'Dark Mode';
 }

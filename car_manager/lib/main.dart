@@ -1,3 +1,4 @@
+import 'package:car_manager/core/theme/app_theme.dart';
 import 'package:car_manager/data/car_data.dart';
 import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/l10n/l10n.dart';
@@ -27,25 +28,9 @@ class CarManager extends StatelessWidget {
         builder: (context, state, child) => MaterialApp(
           title: 'Car Manager',
           locale: state.locale,
-          theme: ThemeData(
-            splashFactory: NoSplash.splashFactory,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            colorScheme: ColorScheme.dark(
-              surface: Color.fromRGBO(19, 20, 22, 1),
-              primary: Color.fromRGBO(255, 255, 255, 1),
-              secondary: Color.fromRGBO(158, 171, 184, 1),
-              tertiary: Color.fromRGBO(45, 53, 62, 1),
-              onSurfaceVariant: Color.fromRGBO(163, 171, 178, 1),
-            ),
-            navigationBarTheme: NavigationBarThemeData(
-              backgroundColor: Color.fromRGBO(30, 33, 36, 1),
-              indicatorColor: Color.fromRGBO(30, 33, 36, 1),
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-            ),
-            cardColor: Color.fromRGBO(30, 33, 36, 1),
-          ),
+          theme: AppTheme.getLightTheme(),
+          darkTheme: AppTheme.getDarkTheme(),
+          themeMode: state.themeMode,
           home: DashboardPage(),
           supportedLocales: L10n.locals,
           localizationsDelegates: [
@@ -64,6 +49,7 @@ class CarManagerState extends ChangeNotifier {
   var car = currentCar;
 
   Locale? _locale;
+  ThemeMode _themeMode = ThemeMode.dark;
 
   CarManagerState() {
     final systemLocale = ui.PlatformDispatcher.instance.locale;
@@ -82,9 +68,17 @@ class CarManagerState extends ChangeNotifier {
   }
 
   Locale? get locale => _locale;
+  ThemeMode get themeMode => _themeMode;
 
   void setLocale(Locale locale) {
     _locale = locale;
+    notifyListeners();
+  }
+
+  void toggleThemeMode() {
+    _themeMode = _themeMode == ThemeMode.light
+        ? ThemeMode.dark
+        : ThemeMode.light;
     notifyListeners();
   }
 }

@@ -461,5 +461,13 @@
   "payments_insuranceData_policyAmount": "Amount",
   "@payments_insuranceData_policyAmount": {
     "description": "Label for the insurance policy amount field"
+  },
+  "themeSelector_title": "Theme",
+  "@themeSelector_title": {
+    "description": "Title for the theme selection dropdown"
+  },
+  "themeSelector_dark_mode": "Dark Mode",
+  "@themeSelector_dark_mode": {
+    "description": "Label for the dark mode theme option"
   }
 }

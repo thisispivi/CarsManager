@@ -649,6 +649,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Amount'**
   String get payments_insuranceData_policyAmount;
+
+  /// Title for the theme selection dropdown
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get themeSelector_title;
+
+  /// Label for the dark mode theme option
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Mode'**
+  String get themeSelector_dark_mode;
 }
 
 class _AppLocalizationsDelegate

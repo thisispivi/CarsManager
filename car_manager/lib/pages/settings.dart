@@ -82,6 +82,49 @@ class LanguageSelector extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(height: 32),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(
+              hPadding: 32,
+              title:
+                  AppLocalizations.of(context)?.themeSelector_title ?? 'Theme',
+              icon: Icon(
+                Icons.translate,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)?.themeSelector_dark_mode ??
+                        'Dark Mode',
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  Switch(
+                    value:
+                        Provider.of<CarManagerState>(context).themeMode ==
+                        ThemeMode.light,
+                    onChanged: (value) {
+                      Provider.of<CarManagerState>(
+                        context,
+                        listen: false,
+                      ).toggleThemeMode();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -108,7 +151,7 @@ class _LanguageOption extends StatelessWidget {
 
     return Material(
       color: isSelected
-          ? Color.fromRGBO(61, 68, 74, 1)
+          ? Theme.of(context).colorScheme.onTertiaryFixedVariant
           : Theme.of(context).navigationBarTheme.backgroundColor,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
