@@ -1,5 +1,5 @@
-import 'package:car_manager/components/image_rect.dart';
-import 'package:car_manager/components/section_header.dart';
+import 'package:car_manager/presentation/common/widgets/image_rect.dart';
+import 'package:car_manager/presentation/common/widgets/section_header.dart';
 import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/models/body_specs.dart';
 import 'package:car_manager/models/car.dart';
@@ -101,7 +101,7 @@ class CarDataBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          hPadding: 32,
+          horizontalPadding: 32,
           title: AppLocalizations.of(context)!.carData_title,
           icon: Icon(
             Icons.info_outline,
@@ -180,7 +180,7 @@ class BodySpecsBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          hPadding: 32,
+          horizontalPadding: 32,
           title: AppLocalizations.of(context)!.bodySpecs_title,
           icon: Icon(
             Icons.directions_car_outlined,
@@ -302,7 +302,7 @@ class EngineSpecsBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          hPadding: 32,
+          horizontalPadding: 32,
           title: AppLocalizations.of(context)!.engineSpecs_title,
           icon: SvgPicture.asset(
             "assets/icons/engine.svg",
@@ -429,7 +429,7 @@ class PerformanceSpecsBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          hPadding: 32,
+          horizontalPadding: 32,
           title: AppLocalizations.of(context)!.performanceSpecs_title,
           icon: SvgPicture.asset(
             "assets/icons/speedometer.svg",
@@ -502,7 +502,7 @@ class FuelConsumptionBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          hPadding: 32,
+          horizontalPadding: 32,
           title: AppLocalizations.of(context)!.fuelConsumption_title,
           icon: Icon(
             Icons.local_gas_station_outlined,

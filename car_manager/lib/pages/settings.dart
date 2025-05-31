@@ -1,4 +1,4 @@
-import 'package:car_manager/components/section_header.dart';
+import 'package:car_manager/presentation/common/widgets/section_header.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,7 @@ class LanguageSelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SectionHeader(
-          hPadding: 32,
+          horizontalPadding: 32,
           title:
               AppLocalizations.of(context)?.language_selector_title ??
               'Language',
@@ -87,7 +87,7 @@ class LanguageSelector extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SectionHeader(
-              hPadding: 32,
+              horizontalPadding: 32,
               title:
                   AppLocalizations.of(context)?.themeSelector_title ?? 'Theme',
               icon: Icon(

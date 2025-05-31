@@ -4,7 +4,7 @@ import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/l10n/l10n.dart';
 import 'package:car_manager/pages/Home.dart';
 import 'package:car_manager/pages/car_stats.dart';
-import 'package:car_manager/pages/payments.dart';
+import 'package:car_manager/presentation/pages/payments/view/payments_page.dart';
 import 'package:car_manager/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

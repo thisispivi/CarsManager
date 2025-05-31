@@ -1,6 +1,6 @@
-import 'package:car_manager/components/image_rect.dart';
 import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/models/car.dart';
+import 'package:car_manager/presentation/common/widgets/image_rect.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
