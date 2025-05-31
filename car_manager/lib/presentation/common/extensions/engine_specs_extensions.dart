@@ -1,4 +1,4 @@
-import '../models/engine_specs.dart';
+import '../../../models/engine_specs.dart';
 import 'package:car_manager/l10n/app_localizations.dart';
 
 extension EngineTypeExtension on EngineType {

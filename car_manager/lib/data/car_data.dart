@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:car_manager/models/inspection_data.dart';
 import 'package:car_manager/models/insurance_data.dart';
+import 'package:car_manager/models/tax_data.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/painting.dart';
 import 'package:car_manager/models/car.dart';
@@ -59,18 +60,10 @@ Car _carFromJson(Map<String, dynamic> json) {
         ? _inspectionDataFromJson(json['inspectionDatas'])
         : [],
     insuranceDatas: json['insuranceDatas'] != null
-        ? (json['insuranceDatas'] as List<dynamic>).map((item) {
-            return InsuranceData(
-              endDate: DateTime.parse(item['endDate']),
-              insuranceCompany: item['insuranceCompany'],
-              policyNumber: item['policyNumber'],
-              startDate: DateTime.parse(item['startDate']),
-              extensionDate: item['extensionDate'] != null
-                  ? DateTime.parse(item['extensionDate'])
-                  : null,
-              premiumAmount: item['premiumAmount']?.toDouble(),
-            );
-          }).toList()
+        ? _insuranceDataFromJson(json['insuranceDatas'])
+        : [],
+    taxDatas: json['taxDatas'] != null
+        ? _taxDataFromJson(json['taxDatas'])
         : [],
   );
 }
@@ -212,6 +205,30 @@ List<InspectionData> _inspectionDataFromJson(List<dynamic> json) {
       isPassed: item['isPassed'],
       amount: item['amount']?.toDouble(),
       mileage: item['mileage']?.toDouble(),
+    );
+  }).toList();
+}
+
+List<InsuranceData> _insuranceDataFromJson(List<dynamic> json) {
+  return json.map((item) {
+    return InsuranceData(
+      startDate: DateTime.parse(item['startDate']),
+      endDate: DateTime.parse(item['endDate']),
+      insuranceCompany: item['insuranceCompany'],
+      policyNumber: item['policyNumber'],
+      extensionDate: item['extensionDate'] != null
+          ? DateTime.parse(item['extensionDate'])
+          : null,
+      premiumAmount: item['premiumAmount']?.toDouble(),
+    );
+  }).toList();
+}
+
+List<TaxData> _taxDataFromJson(List<dynamic> json) {
+  return json.map((item) {
+    return TaxData(
+      date: DateTime.parse(item['date']),
+      amount: item['amount']?.toDouble(),
     );
   }).toList();
 }

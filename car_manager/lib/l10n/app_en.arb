@@ -458,8 +458,16 @@
   "@payments_insuranceData_provider": {
     "description": "Label for the insurance provider field"
   },
-  "payments_insuranceData_policyAmount": "Amount",
-  "@payments_insuranceData_policyAmount": {
+  "payments_taxesData_title": "Tax Data",
+  "@payments_taxesData_title": {
+    "description": "Title for the car tax data section"
+  },
+  "payments_taxesData_nextDue": "Next Tax Due",
+  "@payments_taxesData_nextDue": {
+    "description": "Label for the next tax due date field in payments"
+  },
+  "amount": "Amount",
+  "@amount": {
     "description": "Label for the insurance policy amount field"
   },
   "themeSelector_title": "Theme",

@@ -312,7 +312,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get payments_insuranceData_provider => 'Fornitore';
 
   @override
-  String get payments_insuranceData_policyAmount => 'Importo';
+  String get payments_taxesData_title => 'Dati Bollo';
+
+  @override
+  String get payments_taxesData_nextDue => 'Prossimo Bollo';
+
+  @override
+  String get amount => 'Importo';
 
   @override
   String get themeSelector_title => 'Tema';

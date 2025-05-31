@@ -1,6 +1,7 @@
 import 'package:car_manager/models/car.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/inspection/inspection_section.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/insurance/insurance_section.dart';
+import 'package:car_manager/presentation/pages/payments/view/widgets/tax/tax_section.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../main.dart';
@@ -21,11 +22,16 @@ class PaymentsPage extends StatelessWidget {
           final bool hasInsuranceData =
               car.insuranceDatas != null && car.insuranceDatas!.isNotEmpty;
 
+          final bool hasTaxData =
+              car.taxDatas != null && car.taxDatas!.isNotEmpty;
+
           final List<Widget> sections = [
             const SizedBox(height: 16),
             if (hasInsuranceData) InsuranceSection(car: car),
             const SizedBox(height: 50),
             if (hasInspectionData) InspectionSection(car: car),
+            const SizedBox(height: 50),
+            if (hasTaxData) TaxSection(car: car),
             const SizedBox(height: 16),
           ];
 

@@ -12,7 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../main.dart';
-import '../extensions/engine_specs_extensions.dart';
+import '../presentation/common/extensions/engine_specs_extensions.dart';
 
 class CarStatsPage extends StatelessWidget {
   const CarStatsPage({super.key});

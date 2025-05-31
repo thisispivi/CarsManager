@@ -312,7 +312,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payments_insuranceData_provider => 'Provider';
 
   @override
-  String get payments_insuranceData_policyAmount => 'Amount';
+  String get payments_taxesData_title => 'Tax Data';
+
+  @override
+  String get payments_taxesData_nextDue => 'Next Tax Due';
+
+  @override
+  String get amount => 'Amount';
 
   @override
   String get themeSelector_title => 'Theme';

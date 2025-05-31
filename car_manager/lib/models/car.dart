@@ -5,6 +5,7 @@ import 'package:car_manager/models/body_specs.dart';
 import 'package:car_manager/models/engine_specs.dart';
 import 'package:car_manager/models/performance_specs.dart';
 import 'package:car_manager/models/fuel_consumption.dart';
+import 'package:car_manager/models/tax_data.dart';
 import 'package:flutter/painting.dart';
 
 class Car {
@@ -29,6 +30,7 @@ class Car {
 
   List<InsuranceData>? insuranceDatas;
   List<InspectionData>? inspectionDatas;
+  List<TaxData>? taxDatas;
 
   Car({
     required this.name,
@@ -52,6 +54,7 @@ class Car {
 
     this.inspectionDatas,
     this.insuranceDatas,
+    this.taxDatas,
   });
 
   _getLatestInspection() {
@@ -112,5 +115,32 @@ class Car {
 
     final now = DateTime.now();
     return nextInsuranceDate.difference(now).inDays;
+  }
+
+  _getLatestTax() {
+    if (taxDatas == null || taxDatas!.isEmpty) {
+      return null;
+    }
+
+    return taxDatas!.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+  }
+
+  getNextTaxDueDate() {
+    final latestTax = _getLatestTax();
+    if (latestTax == null) {
+      return null;
+    }
+
+    return latestTax.date.add(Duration(days: 365));
+  }
+
+  getDaysUntilNextTaxDue() {
+    final nextTaxDueDate = getNextTaxDueDate();
+    if (nextTaxDueDate == null) {
+      return null;
+    }
+
+    final now = DateTime.now();
+    return nextTaxDueDate.difference(now).inDays;
   }
 }

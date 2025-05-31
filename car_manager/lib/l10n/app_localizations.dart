@@ -644,11 +644,23 @@ abstract class AppLocalizations {
   /// **'Provider'**
   String get payments_insuranceData_provider;
 
+  /// Title for the car tax data section
+  ///
+  /// In en, this message translates to:
+  /// **'Tax Data'**
+  String get payments_taxesData_title;
+
+  /// Label for the next tax due date field in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Next Tax Due'**
+  String get payments_taxesData_nextDue;
+
   /// Label for the insurance policy amount field
   ///
   /// In en, this message translates to:
   /// **'Amount'**
-  String get payments_insuranceData_policyAmount;
+  String get amount;
 
   /// Title for the theme selection dropdown
   ///
