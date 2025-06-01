@@ -551,8 +551,8 @@ abstract class AppLocalizations {
   /// Amount in specified currency
   ///
   /// In en, this message translates to:
-  /// **'{amount} {currency}'**
-  String unit_currency(String amount, String currency);
+  /// **'{amount}{space}{currency}'**
+  String unit_currency(String amount, String currency, String space);
 
   /// Title for the settings section
   ///
@@ -655,6 +655,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next Tax Due'**
   String get payments_taxesData_nextDue;
+
+  /// Title for the expense distribution section
+  ///
+  /// In en, this message translates to:
+  /// **'Expense Distribution'**
+  String get payments_expenseDistribution_title;
+
+  /// Short title for the inspections data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Inspection'**
+  String get payments_inspectionData_shortTitle;
+
+  /// Short title for the insurance data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance'**
+  String get payments_insuranceData_shortTitle;
+
+  /// Short title for the tax data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get payments_taxData_shortTitle;
 
   /// Label for the insurance policy amount field
   ///

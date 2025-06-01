@@ -34,7 +34,7 @@ class InspectionItem extends StatelessWidget {
       title: "${localizations.date}: ${dateFormat.format(inspection.date)}",
       subtitles: [
         inspection.amount != null
-            ? "${localizations.payments_inspectionsData_amount}: ${localizations.unit_currency(numberFormat.format(inspection.amount), "€")}"
+            ? "${localizations.payments_inspectionsData_amount}: ${localizations.unit_currency(numberFormat.format(inspection.amount), "€", " ")}"
             : null,
         "${localizations.payments_inspectionsData_status}: ${inspection.isPassed ? localizations.payments_inspectionsData_status_passed : localizations.payments_inspectionsData_status_failed} • ${localizations.payments_inspectionsData_mileage}: ${localizations.unit_km(numberFormat.format(inspection.mileage))}",
       ],

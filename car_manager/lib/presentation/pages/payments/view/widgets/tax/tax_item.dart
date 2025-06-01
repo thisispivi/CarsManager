@@ -24,7 +24,7 @@ class TaxItem extends StatelessWidget {
       ),
       title: "${localizations.date}: ${dateFormat.format(tax.date)}",
       subtitles: [
-        "${localizations.amount}: ${localizations.unit_currency(numberFormat.format(tax.amount), "€")}",
+        "${localizations.amount}: ${localizations.unit_currency(numberFormat.format(tax.amount), "€", " ")}",
       ],
     );
   }

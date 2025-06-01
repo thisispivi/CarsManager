@@ -384,7 +384,7 @@
       }
     }
   },
-  "unit_currency": "{amount} {currency}",
+  "unit_currency": "{amount}{space}{currency}",
   "@unit_currency": {
     "description": "Amount in specified currency",
     "placeholders": {
@@ -395,6 +395,10 @@
       "currency": {
         "type": "String",
         "example": "USD"
+      },
+      "space": {
+        "type": "String",
+        "example": " "
       }
     }
   },
@@ -465,6 +469,22 @@
   "payments_taxesData_nextDue": "Prossimo Bollo",
   "@payments_taxesData_nextDue": {
     "description": "Label for the next tax due date field"
+  },
+  "payments_expenseDistribution_title": "Distribuzione Spese",
+  "@payments_expenseDistribution_title": {
+    "description": "Title for the expense distribution section"
+  },
+  "payments_inspectionData_shortTitle": "Revisione",
+  "@payments_inspectionData_shortTitle": {
+    "description": "Short title for the inspections data section in payments"
+  },
+  "payments_insuranceData_shortTitle": "Assicurazione",
+  "@payments_insuranceData_shortTitle": {
+    "description": "Short title for the insurance data section in payments"
+  },
+  "payments_taxData_shortTitle": "Bollo",
+  "@payments_taxData_shortTitle": {
+    "description": "Short title for the taxes data section in payments"
   },
   "amount": "Importo",
   "@amount": {

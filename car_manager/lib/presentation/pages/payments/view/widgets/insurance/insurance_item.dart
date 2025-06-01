@@ -26,7 +26,7 @@ class InsuranceItem extends StatelessWidget {
           "${localizations.payments_insuranceData_provider}: ${insurance.insuranceCompany}",
       subtitles: [
         "${localizations.payments_insuranceData_policyNumber}: ${insurance.policyNumber}",
-        "${localizations.amount}: ${localizations.unit_currency(numberFormat.format(insurance.premiumAmount), "€")}",
+        "${localizations.amount}: ${localizations.unit_currency(numberFormat.format(insurance.premiumAmount), "€", " ")}",
         "${localizations.date}: ${dateFormat.format(insurance.startDate)} - ${dateFormat.format(insurance.endDate)}",
       ],
     );

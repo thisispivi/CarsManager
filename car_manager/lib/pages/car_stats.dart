@@ -141,6 +141,7 @@ class CarDataBlock extends StatelessWidget {
                     ? AppLocalizations.of(context)!.unit_currency(
                         NumberFormat("#,###").format(car.originalPrice!),
                         "€",
+                        " ",
                       )
                     : "-",
               ),

@@ -88,6 +88,17 @@ class Car {
     return nextInspectionDate.difference(now).inDays;
   }
 
+  calculateTotalPaidInspections() {
+    if (inspectionDatas == null || inspectionDatas!.isEmpty) {
+      return 0;
+    }
+
+    return inspectionDatas!.fold(
+      0,
+      (sum, data) => sum + (data.amount?.toInt() ?? 0),
+    );
+  }
+
   _getLatestInsurance() {
     if (insuranceDatas == null || insuranceDatas!.isEmpty) {
       return null;
@@ -117,6 +128,17 @@ class Car {
     return nextInsuranceDate.difference(now).inDays;
   }
 
+  calculateTotalPaidInsurances() {
+    if (insuranceDatas == null || insuranceDatas!.isEmpty) {
+      return 0;
+    }
+
+    return insuranceDatas!.fold(
+      0,
+      (sum, data) => sum + (data.premiumAmount.toInt()),
+    );
+  }
+
   _getLatestTax() {
     if (taxDatas == null || taxDatas!.isEmpty) {
       return null;
@@ -142,5 +164,13 @@ class Car {
 
     final now = DateTime.now();
     return nextTaxDueDate.difference(now).inDays;
+  }
+
+  calculateTotalPaidTaxes() {
+    if (taxDatas == null || taxDatas!.isEmpty) {
+      return 0;
+    }
+
+    return taxDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
   }
 }

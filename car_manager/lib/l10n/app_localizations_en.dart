@@ -262,8 +262,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String unit_currency(String amount, String currency) {
-    return '$amount $currency';
+  String unit_currency(String amount, String currency, String space) {
+    return '$amount$space$currency';
   }
 
   @override
@@ -316,6 +316,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get payments_taxesData_nextDue => 'Next Tax Due';
+
+  @override
+  String get payments_expenseDistribution_title => 'Expense Distribution';
+
+  @override
+  String get payments_inspectionData_shortTitle => 'Inspection';
+
+  @override
+  String get payments_insuranceData_shortTitle => 'Insurance';
+
+  @override
+  String get payments_taxData_shortTitle => 'Tax';
 
   @override
   String get amount => 'Amount';
