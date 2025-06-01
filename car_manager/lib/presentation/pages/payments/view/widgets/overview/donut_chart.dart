@@ -1,28 +1,37 @@
 import 'package:car_manager/l10n/app_localizations.dart';
+import 'package:car_manager/main.dart';
 import 'package:car_manager/models/car.dart';
 import 'package:car_manager/presentation/common/widgets/donut_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class PaymentsOverviewDonutChart extends StatelessWidget {
   const PaymentsOverviewDonutChart({
     super.key,
     required this.hasInsuranceData,
     required this.car,
-    required this.numberFormat,
     required this.hasInspectionData,
     required this.hasTaxData,
+    required this.hasFineData,
   });
 
   final bool hasInsuranceData;
   final Car car;
-  final NumberFormat numberFormat;
   final bool hasInspectionData;
   final bool hasTaxData;
+  final bool hasFineData;
 
   @override
   Widget build(BuildContext context) {
+    final carManagerState = Provider.of<CarManagerState>(
+      context,
+      listen: false,
+    );
+    final locale = carManagerState.locale ?? const Locale('en');
+    final numberFormat = NumberFormat.decimalPattern(locale.toString());
+
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -50,6 +59,13 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
             ),
           ),
           DonutChart(
+            totalPrefix: "${AppLocalizations.of(context)?.total ?? 'Total'}: ",
+            totalSuffix: '€',
+            totalTextStyle: GoogleFonts.spaceGrotesk(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
+            ),
             sections: [
               if (hasInsuranceData)
                 PieChartSection(
@@ -98,6 +114,22 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
                         context,
                       )?.payments_taxData_shortTitle ??
                       'Tax',
+                ),
+              if (hasFineData)
+                PieChartSection(
+                  color: Colors.orange,
+                  value: car.calculateTotalPaidFines().toDouble(),
+                  title: AppLocalizations.of(context)!.unit_currency(
+                    numberFormat.format(car.calculateTotalPaidFines()),
+                    "€",
+                    "",
+                  ),
+                  textColor: Colors.white,
+                  label:
+                      AppLocalizations.of(
+                        context,
+                      )?.payments_fineData_shortTitle ??
+                      'Fine',
                 ),
             ],
           ),

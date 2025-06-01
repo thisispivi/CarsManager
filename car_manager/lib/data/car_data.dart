@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:car_manager/models/fine_data.dart';
 import 'package:car_manager/models/inspection_data.dart';
 import 'package:car_manager/models/insurance_data.dart';
 import 'package:car_manager/models/tax_data.dart';
@@ -64,6 +65,9 @@ Car _carFromJson(Map<String, dynamic> json) {
         : [],
     taxDatas: json['taxDatas'] != null
         ? _taxDataFromJson(json['taxDatas'])
+        : [],
+    fineDatas: json['fineDatas'] != null
+        ? _fineDataFromJson(json['fineDatas'])
         : [],
   );
 }
@@ -229,6 +233,31 @@ List<TaxData> _taxDataFromJson(List<dynamic> json) {
     return TaxData(
       date: DateTime.parse(item['date']),
       amount: item['amount']?.toDouble(),
+    );
+  }).toList();
+}
+
+FineType _parseFineType(String type) {
+  switch (type) {
+    case 'speeding':
+      return FineType.speeding;
+    case 'parking':
+      return FineType.parking;
+    case 'redLight':
+      return FineType.redLight;
+    case 'other':
+      return FineType.other;
+    default:
+      return FineType.other;
+  }
+}
+
+List<FineData> _fineDataFromJson(List<dynamic> json) {
+  return json.map((item) {
+    return FineData(
+      date: DateTime.parse(item['date']),
+      amount: item['amount'].toDouble(),
+      type: _parseFineType(item['type']),
     );
   }).toList();
 }

@@ -24,6 +24,9 @@ class DonutChart extends StatelessWidget {
   final double radius;
   final double fontSize;
   final double centerSpaceRadius;
+  final String? totalPrefix;
+  final String? totalSuffix;
+  final TextStyle? totalTextStyle;
 
   const DonutChart({
     super.key,
@@ -31,10 +34,18 @@ class DonutChart extends StatelessWidget {
     this.radius = 50.0,
     this.fontSize = 16.0,
     this.centerSpaceRadius = 40,
+    this.totalPrefix,
+    this.totalSuffix,
+    this.totalTextStyle,
   });
 
   @override
   Widget build(BuildContext context) {
+    final double total = sections.fold(
+      0,
+      (sum, section) => sum + section.value,
+    );
+
     return AspectRatio(
       aspectRatio: 1.75,
       child: Row(
@@ -56,7 +67,20 @@ class DonutChart extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: buildIndicators(),
+            children: [
+              ...buildIndicators(),
+              const SizedBox(height: 16),
+              if (totalPrefix != null || totalSuffix != null)
+                Text(
+                  '${totalPrefix ?? ''} $total ${totalSuffix ?? ''}',
+                  style:
+                      totalTextStyle ??
+                      GoogleFonts.spaceGrotesk(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+            ],
           ),
         ],
       ),

@@ -294,10 +294,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get payments_inspectionsData_status_failed => 'Non Superata';
 
   @override
-  String get payments_inspectionsData_mileage => 'Chilometraggio';
-
-  @override
-  String get payments_inspectionsData_amount => 'Importo';
+  String get payments_inspectionsData_mileage => 'Chilometri';
 
   @override
   String get payments_insuranceData_title => 'Dati Assicurazione';
@@ -337,4 +334,28 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get themeSelector_dark_mode => 'Modalità Scura';
+
+  @override
+  String get fineType_speeding => 'Eccesso di Velocità';
+
+  @override
+  String get fineType_parking => 'Parcheggio';
+
+  @override
+  String get fineType_redLight => 'Semaforo Rosso';
+
+  @override
+  String get fineType_other => 'Other';
+
+  @override
+  String get payments_finesData_type => 'Tipo';
+
+  @override
+  String get payments_finesData_title => 'Dati Multe';
+
+  @override
+  String get payments_fineData_shortTitle => 'Multa';
+
+  @override
+  String get total => 'Totale';
 }

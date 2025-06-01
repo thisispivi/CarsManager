@@ -442,10 +442,6 @@
   "@payments_inspectionsData_mileage": {
     "description": "Label for the mileage at which the next inspection is due"
   },
-  "payments_inspectionsData_amount": "Amount",
-  "@payments_inspectionsData_amount": {
-    "description": "Label for the amount due for the next inspection"
-  },
   "payments_insuranceData_title": "Insurance Data",
   "@payments_insuranceData_title": {
     "description": "Title for the insurance data section in payments"
@@ -497,5 +493,37 @@
   "themeSelector_dark_mode": "Dark Mode",
   "@themeSelector_dark_mode": {
     "description": "Label for the dark mode theme option"
+  },
+  "fineType_speeding": "Speeding",
+  "@fineType_speeding": {
+    "description": "Label for the speeding fine type"
+  },
+  "fineType_parking": "Parking",
+  "@fineType_parking": {
+    "description": "Label for the parking fine type"
+  },
+  "fineType_redLight": "Red Light Violation",
+  "@fineType_redLight": {
+    "description": "Label for the red light violation fine type"
+  },
+  "fineType_other": "Other",
+  "@fineType_other": {
+    "description": "Label for other types of fines"
+  },
+  "payments_finesData_type": "Type",
+  "@payments_finesData_type": {
+    "description": "Label for the type of fine in payments"
+  },
+  "payments_finesData_title": "Fines Data",
+  "@payments_finesData_title": {
+    "description": "Title for the fines data section in payments"
+  },
+  "payments_fineData_shortTitle": "Fine",
+  "@payments_fineData_shortTitle": {
+    "description": "Short title for the fines data section in payments"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Label for the total amount in payments"
   }
 }

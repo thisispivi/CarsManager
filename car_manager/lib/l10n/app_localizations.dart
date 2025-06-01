@@ -614,12 +614,6 @@ abstract class AppLocalizations {
   /// **'Mileage'**
   String get payments_inspectionsData_mileage;
 
-  /// Label for the amount due for the next inspection
-  ///
-  /// In en, this message translates to:
-  /// **'Amount'**
-  String get payments_inspectionsData_amount;
-
   /// Title for the insurance data section in payments
   ///
   /// In en, this message translates to:
@@ -697,6 +691,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark Mode'**
   String get themeSelector_dark_mode;
+
+  /// Label for the speeding fine type
+  ///
+  /// In en, this message translates to:
+  /// **'Speeding'**
+  String get fineType_speeding;
+
+  /// Label for the parking fine type
+  ///
+  /// In en, this message translates to:
+  /// **'Parking'**
+  String get fineType_parking;
+
+  /// Label for the red light violation fine type
+  ///
+  /// In en, this message translates to:
+  /// **'Red Light Violation'**
+  String get fineType_redLight;
+
+  /// Label for other types of fines
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get fineType_other;
+
+  /// Label for the type of fine in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get payments_finesData_type;
+
+  /// Title for the fines data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Fines Data'**
+  String get payments_finesData_title;
+
+  /// Short title for the fines data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Fine'**
+  String get payments_fineData_shortTitle;
+
+  /// Label for the total amount in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
 }
 
 class _AppLocalizationsDelegate

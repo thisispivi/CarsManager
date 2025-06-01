@@ -1,3 +1,4 @@
+import 'package:car_manager/models/fine_data.dart';
 import 'package:car_manager/models/inspection_data.dart';
 import 'package:car_manager/models/insurance_data.dart';
 import 'package:car_manager/models/manufacture.dart';
@@ -31,6 +32,7 @@ class Car {
   List<InsuranceData>? insuranceDatas;
   List<InspectionData>? inspectionDatas;
   List<TaxData>? taxDatas;
+  List<FineData>? fineDatas;
 
   Car({
     required this.name,
@@ -55,6 +57,7 @@ class Car {
     this.inspectionDatas,
     this.insuranceDatas,
     this.taxDatas,
+    this.fineDatas,
   });
 
   _getLatestInspection() {
@@ -172,5 +175,20 @@ class Car {
     }
 
     return taxDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
+  }
+
+  calculateTotalPaidFines() {
+    if (fineDatas == null || fineDatas!.isEmpty) {
+      return 0;
+    }
+
+    return fineDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
+  }
+
+  calculateTotalPaidExpenses() {
+    return calculateTotalPaidInspections() +
+        calculateTotalPaidInsurances() +
+        calculateTotalPaidTaxes() +
+        calculateTotalPaidFines();
   }
 }

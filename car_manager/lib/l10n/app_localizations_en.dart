@@ -297,9 +297,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payments_inspectionsData_mileage => 'Mileage';
 
   @override
-  String get payments_inspectionsData_amount => 'Amount';
-
-  @override
   String get payments_insuranceData_title => 'Insurance Data';
 
   @override
@@ -337,4 +334,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get themeSelector_dark_mode => 'Dark Mode';
+
+  @override
+  String get fineType_speeding => 'Speeding';
+
+  @override
+  String get fineType_parking => 'Parking';
+
+  @override
+  String get fineType_redLight => 'Red Light Violation';
+
+  @override
+  String get fineType_other => 'Other';
+
+  @override
+  String get payments_finesData_type => 'Type';
+
+  @override
+  String get payments_finesData_title => 'Fines Data';
+
+  @override
+  String get payments_fineData_shortTitle => 'Fine';
+
+  @override
+  String get total => 'Total';
 }
