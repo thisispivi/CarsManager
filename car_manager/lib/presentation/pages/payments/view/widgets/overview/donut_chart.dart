@@ -46,7 +46,12 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: const EdgeInsets.only(
+              left: 24.0,
+              right: 24.0,
+              bottom: 0.0,
+              top: 0.0,
+            ),
             child: Text(
               AppLocalizations.of(
                     context,

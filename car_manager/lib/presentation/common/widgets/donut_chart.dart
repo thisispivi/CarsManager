@@ -46,44 +46,62 @@ class DonutChart extends StatelessWidget {
       (sum, section) => sum + section.value,
     );
 
-    return AspectRatio(
-      aspectRatio: 1.75,
-      child: Row(
-        children: <Widget>[
-          AspectRatio(
-            aspectRatio: 1,
-            child: PieChart(
-              PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, pieTouchResponse) {},
-                ),
-                borderData: FlBorderData(show: false),
-                sectionsSpace: 0,
-                centerSpaceRadius: centerSpaceRadius,
-                sections: buildSections(),
-              ),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...buildIndicators(),
-              const SizedBox(height: 16),
-              if (totalPrefix != null || totalSuffix != null)
-                Text(
-                  '${totalPrefix ?? ''} $total ${totalSuffix ?? ''}',
-                  style:
-                      totalTextStyle ??
-                      GoogleFonts.spaceGrotesk(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // For landscape mode, use a more compact layout
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: constraints.maxWidth * 0.6,
+                  height: 220,
+                  child: PieChart(
+                    PieChartData(
+                      pieTouchData: PieTouchData(
+                        touchCallback:
+                            (FlTouchEvent event, pieTouchResponse) {},
                       ),
+                      borderData: FlBorderData(show: false),
+                      sectionsSpace: 0,
+                      centerSpaceRadius:
+                          centerSpaceRadius * 0.8, // Slightly smaller
+                      sections: buildSections(),
+                    ),
+                  ),
                 ),
-            ],
-          ),
-        ],
-      ),
+                // Indicators area
+                SizedBox(
+                  width: constraints.maxWidth * 0.4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...buildIndicators(),
+                      const SizedBox(height: 16),
+                      if (totalPrefix != null || totalSuffix != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            '${totalPrefix ?? ''} $total ${totalSuffix ?? ''}',
+                            style:
+                                totalTextStyle ??
+                                GoogleFonts.spaceGrotesk(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
