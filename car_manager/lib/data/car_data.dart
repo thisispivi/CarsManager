@@ -12,7 +12,7 @@ import 'package:car_manager/models/performance_specs.dart';
 import 'package:car_manager/models/fuel_consumption.dart';
 import 'package:car_manager/models/manufacture.dart';
 
-late Car currentCar;
+Car currentCar = _getDefaultCar();
 
 Future<void> loadCarData() async {
   try {

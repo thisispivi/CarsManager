@@ -41,7 +41,12 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       padding: const EdgeInsets.only(top: 16.0, bottom: 0),
-      margin: const EdgeInsets.all(32.0),
+      margin: const EdgeInsets.only(
+        left: 32.0,
+        right: 32.0,
+        top: 32.0,
+        bottom: 0.0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -71,6 +76,7 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
+            locale: locale,
             sections: [
               if (hasInsuranceData)
                 PieChartSection(

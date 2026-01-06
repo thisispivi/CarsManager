@@ -3,6 +3,7 @@ import 'package:car_manager/presentation/pages/payments/view/widgets/fine/fine_s
 import 'package:car_manager/presentation/pages/payments/view/widgets/inspection/inspection_section.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/insurance/insurance_section.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/overview/donut_chart.dart';
+import 'package:car_manager/presentation/pages/payments/view/widgets/overview/stacked_bar_chart.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/tax/tax_section.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class PaymentsPage extends StatelessWidget {
               hasTaxData: hasTaxData,
               hasFineData: hasFineData,
             ),
+            ExpensesByYearChart(car: car),
             const SizedBox(height: 16),
             if (hasInsuranceData) InsuranceSection(car: car),
             if (hasInsuranceData) const SizedBox(height: 50),

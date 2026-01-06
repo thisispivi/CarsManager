@@ -57,7 +57,6 @@ class LanguageSelector extends StatelessWidget {
                   title: 'English',
                   languageCode: 'en',
                   isSelected: isEnglish,
-                  flagEmoji: '🇬🇧',
                   onTap: () {
                     if (!isEnglish) {
                       appState.setLocale(const Locale('en'));
@@ -71,7 +70,6 @@ class LanguageSelector extends StatelessWidget {
                   title: 'Italiano',
                   languageCode: 'it',
                   isSelected: isItalian,
-                  flagEmoji: '🇮🇹',
                   onTap: () {
                     if (!isItalian) {
                       appState.setLocale(const Locale('it'));
@@ -134,14 +132,12 @@ class _LanguageOption extends StatelessWidget {
   final String title;
   final String languageCode;
   final bool isSelected;
-  final String flagEmoji;
   final VoidCallback onTap;
 
   const _LanguageOption({
     required this.title,
     required this.languageCode,
     required this.isSelected,
-    required this.flagEmoji,
     required this.onTap,
   });
 
@@ -165,11 +161,13 @@ class _LanguageOption extends StatelessWidget {
             children: [
               Opacity(
                 opacity: isSelected ? 1.0 : nonSelectedOpacity,
-                child: CountryFlag.fromLanguageCode(
-                  languageCode,
-                  shape: const RoundedRectangle(3),
+                child: SizedBox(
                   width: 33,
                   height: 22,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(3),
+                    child: CountryFlag.fromLanguageCode(languageCode),
+                  ),
                 ),
               ),
               const SizedBox(width: 10),

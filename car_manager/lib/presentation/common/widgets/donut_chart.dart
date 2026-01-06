@@ -2,6 +2,7 @@ import 'package:car_manager/presentation/common/widgets/indicator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class PieChartSection {
   final Color color;
@@ -27,6 +28,7 @@ class DonutChart extends StatelessWidget {
   final String? totalPrefix;
   final String? totalSuffix;
   final TextStyle? totalTextStyle;
+  final Locale locale;
 
   const DonutChart({
     super.key,
@@ -37,13 +39,14 @@ class DonutChart extends StatelessWidget {
     this.totalPrefix,
     this.totalSuffix,
     this.totalTextStyle,
+    this.locale = const Locale('en'),
   });
 
   @override
   Widget build(BuildContext context) {
-    final double total = sections.fold(
-      0,
-      (sum, section) => sum + section.value,
+    final numberFormat = NumberFormat.decimalPattern(locale.toString());
+    final String total = numberFormat.format(
+      sections.fold(0.0, (sum, section) => sum + section.value),
     );
 
     return LayoutBuilder(
