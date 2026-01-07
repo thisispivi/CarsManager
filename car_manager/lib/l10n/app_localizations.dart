@@ -656,6 +656,12 @@ abstract class AppLocalizations {
   /// **'Expense Distribution'**
   String get payments_expenseDistribution_title;
 
+  /// Title for the expenses by year chart section
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses by Year'**
+  String get payments_expensesByYear_title;
+
   /// Short title for the inspections data section in payments
   ///
   /// In en, this message translates to:
@@ -673,6 +679,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tax'**
   String get payments_taxData_shortTitle;
+
+  /// Title for the repairs (mechanic) data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Repairs Data'**
+  String get payments_repairsData_title;
+
+  /// Short title for the repairs data section in payments
+  ///
+  /// In en, this message translates to:
+  /// **'Repair'**
+  String get payments_repairsData_shortTitle;
 
   /// Label for the insurance policy amount field
   ///

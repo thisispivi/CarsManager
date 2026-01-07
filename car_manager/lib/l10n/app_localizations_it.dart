@@ -318,6 +318,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get payments_expenseDistribution_title => 'Distribuzione Spese';
 
   @override
+  String get payments_expensesByYear_title => 'Spese per Anno';
+
+  @override
   String get payments_inspectionData_shortTitle => 'Revisione';
 
   @override
@@ -325,6 +328,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get payments_taxData_shortTitle => 'Bollo';
+
+  @override
+  String get payments_repairsData_title => 'Dati Riparazioni';
+
+  @override
+  String get payments_repairsData_shortTitle => 'Riparazioni';
 
   @override
   String get amount => 'Importo';

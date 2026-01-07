@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:car_manager/models/fine_data.dart';
 import 'package:car_manager/models/inspection_data.dart';
 import 'package:car_manager/models/insurance_data.dart';
+import 'package:car_manager/models/repair_data.dart';
 import 'package:car_manager/models/tax_data.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/painting.dart';
@@ -65,6 +66,9 @@ Car _carFromJson(Map<String, dynamic> json) {
         : [],
     taxDatas: json['taxDatas'] != null
         ? _taxDataFromJson(json['taxDatas'])
+        : [],
+    repairDatas: json['repairDatas'] != null
+        ? _repairDataFromJson(json['repairDatas'])
         : [],
     fineDatas: json['fineDatas'] != null
         ? _fineDataFromJson(json['fineDatas'])
@@ -233,6 +237,16 @@ List<TaxData> _taxDataFromJson(List<dynamic> json) {
     return TaxData(
       date: DateTime.parse(item['date']),
       amount: item['amount']?.toDouble(),
+    );
+  }).toList();
+}
+
+List<RepairData> _repairDataFromJson(List<dynamic> json) {
+  return json.map((item) {
+    return RepairData(
+      date: DateTime.parse(item['date']),
+      amount: (item['amount'] ?? 0).toDouble(),
+      description: (item['description'] ?? '').toString(),
     );
   }).toList();
 }

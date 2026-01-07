@@ -6,6 +6,7 @@ import 'package:car_manager/models/body_specs.dart';
 import 'package:car_manager/models/engine_specs.dart';
 import 'package:car_manager/models/performance_specs.dart';
 import 'package:car_manager/models/fuel_consumption.dart';
+import 'package:car_manager/models/repair_data.dart';
 import 'package:car_manager/models/tax_data.dart';
 import 'package:flutter/painting.dart';
 
@@ -32,6 +33,7 @@ class Car {
   List<InsuranceData>? insuranceDatas;
   List<InspectionData>? inspectionDatas;
   List<TaxData>? taxDatas;
+  List<RepairData>? repairDatas;
   List<FineData>? fineDatas;
 
   Car({
@@ -57,6 +59,7 @@ class Car {
     this.inspectionDatas,
     this.insuranceDatas,
     this.taxDatas,
+    this.repairDatas,
     this.fineDatas,
   });
 
@@ -185,10 +188,19 @@ class Car {
     return fineDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
   }
 
+  calculateTotalPaidRepairs() {
+    if (repairDatas == null || repairDatas!.isEmpty) {
+      return 0;
+    }
+
+    return repairDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
+  }
+
   calculateTotalPaidExpenses() {
     return calculateTotalPaidInspections() +
         calculateTotalPaidInsurances() +
         calculateTotalPaidTaxes() +
+        calculateTotalPaidRepairs() +
         calculateTotalPaidFines();
   }
 }

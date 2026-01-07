@@ -1,6 +1,8 @@
 import 'package:car_manager/models/car.dart';
 import 'package:car_manager/presentation/common/widgets/stacked_bar_chart.dart';
+import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../../main.dart';
 
@@ -37,9 +39,23 @@ class ExpensesByYearChart extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(16.0),
           ),
-          child: StackedBarChart(
-            expensesByYearList: expensesByYearList,
-            locale: locale,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context)?.payments_expensesByYear_title ??
+                    'Expenses by Year',
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              StackedBarChart(
+                expensesByYearList: expensesByYearList,
+                locale: locale,
+              ),
+            ],
           ),
         ),
       ],

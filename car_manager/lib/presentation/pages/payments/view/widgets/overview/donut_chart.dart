@@ -14,6 +14,7 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
     required this.car,
     required this.hasInspectionData,
     required this.hasTaxData,
+    required this.hasRepairData,
     required this.hasFineData,
   });
 
@@ -21,6 +22,7 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
   final Car car;
   final bool hasInspectionData;
   final bool hasTaxData;
+  final bool hasRepairData;
   final bool hasFineData;
 
   @override
@@ -125,6 +127,22 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
                         context,
                       )?.payments_taxData_shortTitle ??
                       'Tax',
+                ),
+              if (hasRepairData)
+                PieChartSection(
+                  color: Colors.purple,
+                  value: car.calculateTotalPaidRepairs().toDouble(),
+                  title: AppLocalizations.of(context)!.unit_currency(
+                    numberFormat.format(car.calculateTotalPaidRepairs()),
+                    "€",
+                    "",
+                  ),
+                  textColor: Colors.white,
+                  label:
+                      AppLocalizations.of(
+                        context,
+                      )?.payments_repairsData_shortTitle ??
+                      'Repair',
                 ),
               if (hasFineData)
                 PieChartSection(

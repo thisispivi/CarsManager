@@ -4,6 +4,7 @@ import 'package:car_manager/presentation/pages/payments/view/widgets/inspection/
 import 'package:car_manager/presentation/pages/payments/view/widgets/insurance/insurance_section.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/overview/donut_chart.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/overview/stacked_bar_chart.dart';
+import 'package:car_manager/presentation/pages/payments/view/widgets/repair/repair_section.dart';
 import 'package:car_manager/presentation/pages/payments/view/widgets/tax/tax_section.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +29,9 @@ class PaymentsPage extends StatelessWidget {
           final bool hasTaxData =
               car.taxDatas != null && car.taxDatas!.isNotEmpty;
 
+          final bool hasRepairData =
+              car.repairDatas != null && car.repairDatas!.isNotEmpty;
+
           final bool hasFineData =
               car.fineDatas != null && car.fineDatas!.isNotEmpty;
 
@@ -37,6 +41,7 @@ class PaymentsPage extends StatelessWidget {
               car: car,
               hasInspectionData: hasInspectionData,
               hasTaxData: hasTaxData,
+              hasRepairData: hasRepairData,
               hasFineData: hasFineData,
             ),
             ExpensesByYearChart(car: car),
@@ -47,6 +52,8 @@ class PaymentsPage extends StatelessWidget {
             if (hasInspectionData) const SizedBox(height: 50),
             if (hasTaxData) TaxSection(car: car),
             if (hasTaxData) const SizedBox(height: 50),
+            if (hasRepairData) RepairSection(car: car),
+            if (hasRepairData) const SizedBox(height: 50),
             if (hasFineData) FineSection(car: car),
             if (hasFineData) const SizedBox(height: 50),
           ];
