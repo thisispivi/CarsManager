@@ -45,7 +45,6 @@ class PaymentsPage extends StatelessWidget {
               hasFineData: hasFineData,
             ),
             ExpensesByYearChart(car: car),
-            const SizedBox(height: 8),
             if (hasInsuranceData) InsuranceSection(car: car),
             if (hasInspectionData) InspectionSection(car: car),
             if (hasTaxData) TaxSection(car: car),

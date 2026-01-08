@@ -2,6 +2,7 @@ import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/main.dart';
 import 'package:car_manager/models/car.dart';
 import 'package:car_manager/presentation/common/widgets/donut_chart.dart';
+import 'package:car_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -34,136 +35,104 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
     final locale = carManagerState.locale ?? const Locale('en');
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.tertiary,
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(16.0),
-      ),
-      padding: const EdgeInsets.only(top: 16.0, bottom: 0),
-      margin: const EdgeInsets.only(
-        left: 32.0,
-        right: 32.0,
-        top: 32.0,
-        bottom: 0.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 24.0,
-              right: 24.0,
-              bottom: 0.0,
-              top: 0.0,
-            ),
-            child: Text(
-              AppLocalizations.of(
-                    context,
-                  )?.payments_expenseDistribution_title ??
-                  'Expense Distribution',
-              style: GoogleFonts.spaceGrotesk(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+    return PaymentSectionCard(
+      title:
+          AppLocalizations.of(context)?.payments_expenseDistribution_title ??
+          'Expense Distribution',
+      nextInfoDue: null,
+      verticalSpacing: 12,
+      items: [
+        DonutChart(
+          totalPrefix: "${AppLocalizations.of(context)?.total ?? 'Total'}: ",
+          totalSuffix: '€',
+          totalTextStyle: GoogleFonts.spaceGrotesk(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+          ),
+          locale: locale,
+          sections: [
+            if (hasInsuranceData)
+              PieChartSection(
+                color: Colors.blue,
+                value: car.calculateTotalPaidInsurances().toDouble(),
+                title: AppLocalizations.of(context)!.unit_currency(
+                  numberFormat.format(car.calculateTotalPaidInsurances()),
+                  "€",
+                  "",
+                ),
+                textColor: Colors.white,
+                label:
+                    AppLocalizations.of(
+                      context,
+                    )?.payments_insuranceData_shortTitle ??
+                    'Insurance',
               ),
-            ),
-          ),
-          DonutChart(
-            totalPrefix: "${AppLocalizations.of(context)?.total ?? 'Total'}: ",
-            totalSuffix: '€',
-            totalTextStyle: GoogleFonts.spaceGrotesk(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.bodyLarge?.color,
-            ),
-            locale: locale,
-            sections: [
-              if (hasInsuranceData)
-                PieChartSection(
-                  color: Colors.blue,
-                  value: car.calculateTotalPaidInsurances().toDouble(),
-                  title: AppLocalizations.of(context)!.unit_currency(
-                    numberFormat.format(car.calculateTotalPaidInsurances()),
-                    "€",
-                    "",
-                  ),
-                  textColor: Colors.white,
-                  label:
-                      AppLocalizations.of(
-                        context,
-                      )?.payments_insuranceData_shortTitle ??
-                      'Insurance',
+            if (hasInspectionData)
+              PieChartSection(
+                color: Colors.green,
+                value: car.calculateTotalPaidInspections().toDouble(),
+                title: AppLocalizations.of(context)!.unit_currency(
+                  numberFormat.format(car.calculateTotalPaidInspections()),
+                  "€",
+                  "",
                 ),
-              if (hasInspectionData)
-                PieChartSection(
-                  color: Colors.green,
-                  value: car.calculateTotalPaidInspections().toDouble(),
-                  title: AppLocalizations.of(context)!.unit_currency(
-                    numberFormat.format(car.calculateTotalPaidInspections()),
-                    "€",
-                    "",
-                  ),
-                  textColor: Colors.white,
-                  label:
-                      AppLocalizations.of(
-                        context,
-                      )?.payments_inspectionData_shortTitle ??
-                      'Inspection',
+                textColor: Colors.white,
+                label:
+                    AppLocalizations.of(
+                      context,
+                    )?.payments_inspectionData_shortTitle ??
+                    'Inspection',
+              ),
+            if (hasTaxData)
+              PieChartSection(
+                color: Colors.red,
+                value: car.calculateTotalPaidTaxes().toDouble(),
+                title: AppLocalizations.of(context)!.unit_currency(
+                  numberFormat.format(car.calculateTotalPaidTaxes()),
+                  "€",
+                  "",
                 ),
-              if (hasTaxData)
-                PieChartSection(
-                  color: Colors.red,
-                  value: car.calculateTotalPaidTaxes().toDouble(),
-                  title: AppLocalizations.of(context)!.unit_currency(
-                    numberFormat.format(car.calculateTotalPaidTaxes()),
-                    "€",
-                    "",
-                  ),
-                  textColor: Colors.white,
-                  label:
-                      AppLocalizations.of(
-                        context,
-                      )?.payments_taxData_shortTitle ??
-                      'Tax',
+                textColor: Colors.white,
+                label:
+                    AppLocalizations.of(context)?.payments_taxData_shortTitle ??
+                    'Tax',
+              ),
+            if (hasRepairData)
+              PieChartSection(
+                color: Colors.purple,
+                value: car.calculateTotalPaidRepairs().toDouble(),
+                title: AppLocalizations.of(context)!.unit_currency(
+                  numberFormat.format(car.calculateTotalPaidRepairs()),
+                  "€",
+                  "",
                 ),
-              if (hasRepairData)
-                PieChartSection(
-                  color: Colors.purple,
-                  value: car.calculateTotalPaidRepairs().toDouble(),
-                  title: AppLocalizations.of(context)!.unit_currency(
-                    numberFormat.format(car.calculateTotalPaidRepairs()),
-                    "€",
-                    "",
-                  ),
-                  textColor: Colors.white,
-                  label:
-                      AppLocalizations.of(
-                        context,
-                      )?.payments_repairsData_shortTitle ??
-                      'Repair',
+                textColor: Colors.white,
+                label:
+                    AppLocalizations.of(
+                      context,
+                    )?.payments_repairsData_shortTitle ??
+                    'Repair',
+              ),
+            if (hasFineData)
+              PieChartSection(
+                color: Colors.orange,
+                value: car.calculateTotalPaidFines().toDouble(),
+                title: AppLocalizations.of(context)!.unit_currency(
+                  numberFormat.format(car.calculateTotalPaidFines()),
+                  "€",
+                  "",
                 ),
-              if (hasFineData)
-                PieChartSection(
-                  color: Colors.orange,
-                  value: car.calculateTotalPaidFines().toDouble(),
-                  title: AppLocalizations.of(context)!.unit_currency(
-                    numberFormat.format(car.calculateTotalPaidFines()),
-                    "€",
-                    "",
-                  ),
-                  textColor: Colors.white,
-                  label:
-                      AppLocalizations.of(
-                        context,
-                      )?.payments_fineData_shortTitle ??
-                      'Fine',
-                ),
-            ],
-          ),
-        ],
-      ),
+                textColor: Colors.white,
+                label:
+                    AppLocalizations.of(
+                      context,
+                    )?.payments_fineData_shortTitle ??
+                    'Fine',
+              ),
+          ],
+        ),
+      ],
     );
   }
 }

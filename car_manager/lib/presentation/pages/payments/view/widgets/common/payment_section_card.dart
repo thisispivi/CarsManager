@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 
 class PaymentSectionCard extends StatelessWidget {
   final String title;
-  final Widget icon;
+  final Widget? icon;
   final Widget? nextInfoDue;
+  final double? verticalSpacing;
   final List<Widget> items;
   static const double horizontalPadding = 16.0;
 
   const PaymentSectionCard({
     super.key,
     required this.title,
-    required this.icon,
+    this.icon,
     this.nextInfoDue,
     required this.items,
+    this.verticalSpacing,
   });
 
   @override
@@ -33,9 +35,9 @@ class PaymentSectionCard extends StatelessWidget {
             title: title,
             icon: icon,
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: verticalSpacing ?? 24),
           if (nextInfoDue != null) nextInfoDue!,
-          if (nextInfoDue != null) const SizedBox(height: 24),
+          if (nextInfoDue != null) SizedBox(height: verticalSpacing ?? 24),
           ...items,
         ],
       ),

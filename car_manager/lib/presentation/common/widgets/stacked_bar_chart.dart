@@ -44,10 +44,8 @@ class StackedBarChart extends StatefulWidget {
   });
 
   static List<ExpensesByYear> generateFromCar(Car car) {
-    // Map to store aggregated data by year
     final Map<int, ExpensesByYear> expensesByYearMap = {};
 
-    // Process inspection data
     if (car.inspectionDatas != null) {
       for (InspectionData inspection in car.inspectionDatas!) {
         final year = inspection.date.year;
@@ -73,7 +71,6 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    // Process insurance data
     if (car.insuranceDatas != null) {
       for (InsuranceData insurance in car.insuranceDatas!) {
         final year = insurance.startDate.year;
@@ -99,7 +96,6 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    // Process tax data
     if (car.taxDatas != null) {
       for (TaxData tax in car.taxDatas!) {
         final year = tax.date.year;
@@ -124,7 +120,6 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    // Process repair data
     if (car.repairDatas != null) {
       for (RepairData repair in car.repairDatas!) {
         final year = repair.date.year;
@@ -149,7 +144,6 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    // Process fine data
     if (car.fineDatas != null) {
       for (FineData fine in car.fineDatas!) {
         final year = fine.date.year;
@@ -174,7 +168,6 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    // Convert map to list and sort by year
     return expensesByYearMap.values.toList()
       ..sort((a, b) => a.year.compareTo(b.year));
   }
@@ -221,7 +214,6 @@ class _StackedBarChartState extends State<StackedBarChart> {
     final localizations = AppLocalizations.of(context)!;
     final numberFormat = NumberFormat.decimalPattern(widget.locale.toString());
 
-    // Hide years that have no data at all.
     final data = widget.expensesByYearList.where((e) => e.total > 0).toList();
 
     final yInterval = _calculateInterval(data);
@@ -236,8 +228,8 @@ class _StackedBarChartState extends State<StackedBarChart> {
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Wrap(
             alignment: WrapAlignment.center,
-            spacing: 14,
-            runSpacing: 2,
+            spacing: 10,
+            runSpacing: 0,
             children: [
               _buildLegendItem(
                 context: context,
@@ -293,18 +285,13 @@ class _StackedBarChartState extends State<StackedBarChart> {
                 touchTooltipData: BarTouchTooltipData(
                   getTooltipColor: (group) =>
                       theme.colorScheme.surface.withValues(alpha: 0.95),
-                  tooltipBorder: BorderSide(
-                    color: theme.dividerColor.withValues(alpha: 0.6),
-                    width: 1,
-                  ),
+                  tooltipBorder: BorderSide.none,
                   tooltipBorderRadius: BorderRadius.circular(14),
                   tooltipPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 12,
                   ),
                   tooltipMargin: 14,
-                  fitInsideHorizontally: true,
-                  fitInsideVertically: true,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
                     if (groupIndex < 0 || groupIndex >= data.length) {
                       return null;
@@ -412,15 +399,30 @@ class _StackedBarChartState extends State<StackedBarChart> {
                       );
                     }
 
-                    return BarTooltipItem(
-                      '${e.year}\n\n${fmt(_totalFor(e))}\n\n',
-                      GoogleFonts.spaceGrotesk(
-                        color: theme.colorScheme.onSurface,
+                    final totalSpan = TextSpan(
+                      text: '  ${fmt(_totalFor(e))}',
+                      style: GoogleFonts.spaceGrotesk(
+                        color: Colors.limeAccent,
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
                         height: 1.2,
                       ),
-                      children: children,
+                    );
+
+                    return BarTooltipItem(
+                      '${e.year} - ',
+                      GoogleFonts.spaceGrotesk(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14,
+                        height: 1.2,
+                      ),
+                      children: [
+                        totalSpan,
+                        const TextSpan(text: '\n\n'),
+                        ...children,
+                      ],
+                      textAlign: TextAlign.left,
                     );
                   },
                 ),
@@ -453,7 +455,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    interval: yInterval, // y tick spacing
+                    interval: yInterval,
                     getTitlesWidget: (value, meta) {
                       return SideTitleWidget(
                         meta: meta,
@@ -461,7 +463,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                         child: Text(
                           '${numberFormat.format(value)}€',
                           style: GoogleFonts.spaceGrotesk(
-                            fontSize: 10,
+                            fontSize: 12,
                             color: theme.colorScheme.onSurface.withValues(
                               alpha: 0.75,
                             ),
@@ -469,7 +471,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                         ),
                       );
                     },
-                    reservedSize: 64,
+                    reservedSize: 72,
                   ),
                 ),
                 rightTitles: AxisTitles(
@@ -484,10 +486,13 @@ class _StackedBarChartState extends State<StackedBarChart> {
                 show: true,
                 drawVerticalLine: false,
                 horizontalInterval: yInterval,
-                getDrawingHorizontalLine: (value) => FlLine(
-                  color: theme.dividerColor.withValues(alpha: 0.3),
-                  strokeWidth: 1,
-                ),
+                getDrawingHorizontalLine: (value) {
+                  final isDarkTheme = theme.brightness == Brightness.dark;
+                  final gridColor = isDarkTheme
+                      ? theme.dividerColor.withValues(alpha: 0.3)
+                      : theme.dividerColor.withValues(alpha: 0.6);
+                  return FlLine(color: gridColor, strokeWidth: 1);
+                },
               ),
               barGroups: _buildBarGroups(data),
             ),
@@ -504,8 +509,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
     );
     if (maxTotal <= 0) return 1;
 
-    // Aim for more ticks (and grid lines) than the old coarse thresholds.
-    const targetTicks = 9; // ~8–10 visible ticks depending on rounding
+    const targetTicks = 9;
     final raw = maxTotal / targetTicks;
 
     return _niceStep(raw);
@@ -518,10 +522,8 @@ class _StackedBarChartState extends State<StackedBarChart> {
     );
     if (maxTotal <= 0) return interval;
 
-    // Keep maxY aligned to the tick interval (and avoid fractional headroom like 2125).
     final rounded = (maxTotal / interval).ceil() * interval;
 
-    // If interval is integer-ish, force an integer maxY to avoid odd top labels.
     final isIntegerInterval =
         interval >= 1 && (interval - interval.round()).abs() < 1e-9;
     if (isIntegerInterval) {
@@ -531,7 +533,6 @@ class _StackedBarChartState extends State<StackedBarChart> {
   }
 
   double _niceStep(double value) {
-    // 1/2/5 * 10^n rounding
     final exp = (math.log(value) / math.ln10).floor();
     final base = math.pow(10, exp).toDouble();
     final f = value / base;
@@ -628,7 +629,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
         barRods: [
           BarChartRodData(
             toY: total,
-            width: 22,
+            width: 28,
             borderRadius: BorderRadius.circular(4),
             rodStackItems: stacks,
           ),
