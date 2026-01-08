@@ -32,7 +32,15 @@ class FineSection extends StatelessWidget {
         colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
       ),
       items: car.fineDatas!
-          .map((fine) => FineItem(fine: fine, locale: locale))
+          .asMap()
+          .entries
+          .map(
+            (entry) => FineItem(
+              fine: entry.value,
+              locale: locale,
+              isLast: entry.key == car.fineDatas!.length - 1,
+            ),
+          )
           .toList(),
     );
   }

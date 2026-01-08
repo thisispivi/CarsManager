@@ -29,7 +29,15 @@ class RepairSection extends StatelessWidget {
         color: Theme.of(context).colorScheme.primary,
       ),
       items: car.repairDatas!
-          .map((repair) => RepairItem(repair: repair, locale: locale))
+          .asMap()
+          .entries
+          .map(
+            (entry) => RepairItem(
+              repair: entry.value,
+              locale: locale,
+              isLast: entry.key == car.repairDatas!.length - 1,
+            ),
+          )
           .toList(),
     );
   }

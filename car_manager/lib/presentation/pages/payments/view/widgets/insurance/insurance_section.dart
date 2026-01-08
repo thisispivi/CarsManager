@@ -25,14 +25,20 @@ class InsuranceSection extends StatelessWidget {
     return PaymentSectionCard(
       title: localizations.payments_insuranceData_title,
       icon: Icon(
-        Icons.paid_outlined,
+        Icons.description_outlined,
         size: 28,
         color: Theme.of(context).colorScheme.primary,
       ),
       nextInfoDue: NextInsuranceInfo(car: car),
       items: car.insuranceDatas!
+          .asMap()
+          .entries
           .map(
-            (insurance) => InsuranceItem(insurance: insurance, locale: locale),
+            (entry) => InsuranceItem(
+              insurance: entry.value,
+              locale: locale,
+              isLast: entry.key == car.insuranceDatas!.length - 1,
+            ),
           )
           .toList(),
     );

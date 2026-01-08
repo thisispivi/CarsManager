@@ -31,7 +31,15 @@ class TaxSection extends StatelessWidget {
       ),
       nextInfoDue: NextTaxInfo(car: car),
       items: car.taxDatas!
-          .map((tax) => TaxItem(tax: tax, locale: locale))
+          .asMap()
+          .entries
+          .map(
+            (entry) => TaxItem(
+              tax: entry.value,
+              locale: locale,
+              isLast: entry.key == car.taxDatas!.length - 1,
+            ),
+          )
           .toList(),
     );
   }

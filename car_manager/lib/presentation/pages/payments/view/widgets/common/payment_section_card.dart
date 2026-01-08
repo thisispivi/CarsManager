@@ -20,6 +20,7 @@ class PaymentSectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 20.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16.0),
         color: Theme.of(context).cardColor,
@@ -27,7 +28,6 @@ class PaymentSectionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 16),
           SectionHeader(
             horizontalPadding: horizontalPadding,
             title: title,
@@ -35,9 +35,8 @@ class PaymentSectionCard extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           if (nextInfoDue != null) nextInfoDue!,
-          if (nextInfoDue != null) const SizedBox(height: 16),
+          if (nextInfoDue != null) const SizedBox(height: 24),
           ...items,
-          const SizedBox(height: 16),
         ],
       ),
     );

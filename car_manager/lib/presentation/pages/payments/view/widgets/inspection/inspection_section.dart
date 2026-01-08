@@ -34,9 +34,14 @@ class InspectionSection extends StatelessWidget {
       ),
       nextInfoDue: NextInspectionInfo(car: car),
       items: car.inspectionDatas!
+          .asMap()
+          .entries
           .map(
-            (inspection) =>
-                InspectionItem(inspection: inspection, locale: locale),
+            (entry) => InspectionItem(
+              inspection: entry.value,
+              locale: locale,
+              isLast: entry.key == car.inspectionDatas!.length - 1,
+            ),
           )
           .toList(),
     );

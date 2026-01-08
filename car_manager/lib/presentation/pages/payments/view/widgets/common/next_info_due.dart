@@ -30,6 +30,18 @@ class NextInfoDue extends StatelessWidget {
     final locale = carManagerState.locale ?? const Locale('en');
     final dateFormat = DateFormat('d MMM y', locale.toString());
 
+    Color pillColor;
+
+    if (daysRemaining < 0) {
+      pillColor = Colors.grey;
+    } else if (daysRemaining < 7) {
+      pillColor = Colors.red;
+    } else if (daysRemaining < 30) {
+      pillColor = Colors.orange;
+    } else {
+      pillColor = Colors.green;
+    }
+
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: horizontalMargin),
@@ -74,7 +86,7 @@ class NextInfoDue extends StatelessWidget {
               horizontal: 10.0,
             ),
             decoration: BoxDecoration(
-              color: colorScheme.errorContainer,
+              color: pillColor,
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
