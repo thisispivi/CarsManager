@@ -12,6 +12,7 @@ class AppTheme {
       hoverColor: Colors.transparent,
       colorScheme: const ColorScheme.dark(
         surface: AppColors.surfaceDark,
+        surfaceContainerHighest: AppColors.surfaceContainerDark,
         primary: AppColors.primaryDark,
         secondary: AppColors.secondaryDark,
         tertiary: AppColors.tertiaryDark,
@@ -60,6 +61,7 @@ class AppTheme {
       hoverColor: Colors.transparent,
       colorScheme: const ColorScheme.light(
         surface: AppColors.surfaceLight,
+        surfaceContainerHighest: AppColors.surfaceContainerLight,
         primary: AppColors.primaryLight,
         secondary: AppColors.secondaryLight,
         tertiary: AppColors.tertiaryLight,

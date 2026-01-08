@@ -63,7 +63,7 @@ class Car {
     this.fineDatas,
   });
 
-  _getLatestInspection() {
+  InspectionData? _getLatestInspection() {
     if (inspectionDatas == null || inspectionDatas!.isEmpty) {
       return null;
     }
@@ -71,7 +71,7 @@ class Car {
     return inspectionDatas!.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
   }
 
-  getNextInspectionDate() {
+  dynamic getNextInspectionDate() {
     if (inspectionDatas == null || inspectionDatas!.isEmpty) {
       return null;
     }
@@ -84,7 +84,7 @@ class Car {
     return latestInspection.date.add(Duration(days: 365 * 2));
   }
 
-  getDaysUntilNextInspection() {
+  dynamic getDaysUntilNextInspection() {
     final nextInspectionDate = getNextInspectionDate();
     if (nextInspectionDate == null) {
       return null;
@@ -94,7 +94,7 @@ class Car {
     return nextInspectionDate.difference(now).inDays;
   }
 
-  calculateTotalPaidInspections() {
+  int calculateTotalPaidInspections() {
     if (inspectionDatas == null || inspectionDatas!.isEmpty) {
       return 0;
     }
@@ -105,7 +105,7 @@ class Car {
     );
   }
 
-  _getLatestInsurance() {
+  InsuranceData? _getLatestInsurance() {
     if (insuranceDatas == null || insuranceDatas!.isEmpty) {
       return null;
     }
@@ -115,7 +115,7 @@ class Car {
     );
   }
 
-  getNextInsuranceExpirationDate() {
+  dynamic getNextInsuranceExpirationDate() {
     final latestInsurance = _getLatestInsurance();
     if (latestInsurance == null) {
       return null;
@@ -124,7 +124,7 @@ class Car {
     return latestInsurance.endDate;
   }
 
-  getDaysUntilNextInsuranceExpiration() {
+  dynamic getDaysUntilNextInsuranceExpiration() {
     final nextInsuranceDate = getNextInsuranceExpirationDate();
     if (nextInsuranceDate == null) {
       return null;
@@ -134,7 +134,7 @@ class Car {
     return nextInsuranceDate.difference(now).inDays;
   }
 
-  calculateTotalPaidInsurances() {
+  int calculateTotalPaidInsurances() {
     if (insuranceDatas == null || insuranceDatas!.isEmpty) {
       return 0;
     }
@@ -145,7 +145,7 @@ class Car {
     );
   }
 
-  _getLatestTax() {
+  TaxData? _getLatestTax() {
     if (taxDatas == null || taxDatas!.isEmpty) {
       return null;
     }
@@ -153,7 +153,7 @@ class Car {
     return taxDatas!.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
   }
 
-  getNextTaxDueDate() {
+  dynamic getNextTaxDueDate() {
     final latestTax = _getLatestTax();
     if (latestTax == null) {
       return null;
@@ -162,7 +162,7 @@ class Car {
     return latestTax.date.add(Duration(days: 365));
   }
 
-  getDaysUntilNextTaxDue() {
+  dynamic getDaysUntilNextTaxDue() {
     final nextTaxDueDate = getNextTaxDueDate();
     if (nextTaxDueDate == null) {
       return null;
@@ -172,7 +172,7 @@ class Car {
     return nextTaxDueDate.difference(now).inDays;
   }
 
-  calculateTotalPaidTaxes() {
+  int calculateTotalPaidTaxes() {
     if (taxDatas == null || taxDatas!.isEmpty) {
       return 0;
     }
@@ -180,7 +180,7 @@ class Car {
     return taxDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
   }
 
-  calculateTotalPaidFines() {
+  int calculateTotalPaidFines() {
     if (fineDatas == null || fineDatas!.isEmpty) {
       return 0;
     }
@@ -188,7 +188,7 @@ class Car {
     return fineDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
   }
 
-  calculateTotalPaidRepairs() {
+  int calculateTotalPaidRepairs() {
     if (repairDatas == null || repairDatas!.isEmpty) {
       return 0;
     }
@@ -196,7 +196,7 @@ class Car {
     return repairDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
   }
 
-  calculateTotalPaidExpenses() {
+  dynamic calculateTotalPaidExpenses() {
     return calculateTotalPaidInspections() +
         calculateTotalPaidInsurances() +
         calculateTotalPaidTaxes() +

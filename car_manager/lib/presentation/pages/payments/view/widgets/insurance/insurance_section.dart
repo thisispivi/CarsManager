@@ -1,6 +1,6 @@
 import 'package:car_manager/l10n/app_localizations.dart';
 import 'package:car_manager/models/car.dart';
-import 'package:car_manager/presentation/common/widgets/section_header.dart';
+import 'package:car_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../main.dart';
@@ -9,7 +9,6 @@ import 'insurance_item.dart';
 
 class InsuranceSection extends StatelessWidget {
   final Car car;
-  static const double horizontalPadding = 32.0;
 
   const InsuranceSection({super.key, required this.car});
 
@@ -23,21 +22,19 @@ class InsuranceSection extends StatelessWidget {
     );
     final locale = carManagerState.locale ?? const Locale('en');
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SectionHeader(
-          horizontalPadding: horizontalPadding,
-          title: localizations.payments_insuranceData_title,
-          icon: ImageIcon(AssetImage("assets/icons/insurance.png"), size: 24),
-        ),
-        const SizedBox(height: 16),
-        NextInsuranceInfo(car: car),
-        const SizedBox(height: 16),
-        ...car.insuranceDatas!.map(
-          (insurance) => InsuranceItem(insurance: insurance, locale: locale),
-        ),
-      ],
+    return PaymentSectionCard(
+      title: localizations.payments_insuranceData_title,
+      icon: Icon(
+        Icons.paid_outlined,
+        size: 28,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      nextInfoDue: NextInsuranceInfo(car: car),
+      items: car.insuranceDatas!
+          .map(
+            (insurance) => InsuranceItem(insurance: insurance, locale: locale),
+          )
+          .toList(),
     );
   }
 }

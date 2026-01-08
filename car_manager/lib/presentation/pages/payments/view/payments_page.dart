@@ -45,20 +45,18 @@ class PaymentsPage extends StatelessWidget {
               hasFineData: hasFineData,
             ),
             ExpensesByYearChart(car: car),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             if (hasInsuranceData) InsuranceSection(car: car),
-            if (hasInsuranceData) const SizedBox(height: 50),
             if (hasInspectionData) InspectionSection(car: car),
-            if (hasInspectionData) const SizedBox(height: 50),
             if (hasTaxData) TaxSection(car: car),
-            if (hasTaxData) const SizedBox(height: 50),
             if (hasRepairData) RepairSection(car: car),
-            if (hasRepairData) const SizedBox(height: 50),
             if (hasFineData) FineSection(car: car),
-            if (hasFineData) const SizedBox(height: 50),
           ];
 
-          return ListView(children: sections);
+          return ListView(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            children: sections,
+          );
         },
       ),
     );

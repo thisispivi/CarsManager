@@ -227,7 +227,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
     final yInterval = _calculateInterval(data);
     final yMax = _calculateMaxY(data, yInterval);
 
-    String _fmt(double v) =>
+    String fmt(double v) =>
         localizations.unit_currency(numberFormat.format(v), "€", " ");
 
     return Column(
@@ -306,12 +306,13 @@ class _StackedBarChartState extends State<StackedBarChart> {
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
                   getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                    if (groupIndex < 0 || groupIndex >= data.length)
+                    if (groupIndex < 0 || groupIndex >= data.length) {
                       return null;
+                    }
 
                     final e = data[groupIndex];
 
-                    TextSpan _line({
+                    TextSpan line({
                       required String label,
                       required double value,
                       required Color color,
@@ -328,7 +329,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                             ),
                           ),
                           TextSpan(
-                            text: '$label: ${_fmt(value)}\n',
+                            text: '$label: ${fmt(value)}\n',
                             style: GoogleFonts.spaceGrotesk(
                               color: theme.colorScheme.onSurface.withValues(
                                 alpha: 0.9,
@@ -345,7 +346,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                     final children = <TextSpan>[];
                     if (_enabled.contains(ExpenseCategory.inspections)) {
                       children.add(
-                        _line(
+                        line(
                           label:
                               localizations.payments_inspectionData_shortTitle,
                           value: e.inspections,
@@ -355,7 +356,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                     }
                     if (_enabled.contains(ExpenseCategory.insurances)) {
                       children.add(
-                        _line(
+                        line(
                           label:
                               localizations.payments_insuranceData_shortTitle,
                           value: e.insurances,
@@ -365,7 +366,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                     }
                     if (_enabled.contains(ExpenseCategory.taxes)) {
                       children.add(
-                        _line(
+                        line(
                           label: localizations.payments_taxData_shortTitle,
                           value: e.taxes,
                           color: Colors.red,
@@ -374,7 +375,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                     }
                     if (_enabled.contains(ExpenseCategory.repairs)) {
                       children.add(
-                        _line(
+                        line(
                           label: localizations.payments_repairsData_shortTitle,
                           value: e.repairs,
                           color: Colors.purple,
@@ -396,7 +397,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                             ),
                             TextSpan(
                               text:
-                                  '${localizations.payments_fineData_shortTitle}: ${_fmt(e.fines)}',
+                                  '${localizations.payments_fineData_shortTitle}: ${fmt(e.fines)}',
                               style: GoogleFonts.spaceGrotesk(
                                 color: theme.colorScheme.onSurface.withValues(
                                   alpha: 0.9,
@@ -412,7 +413,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
                     }
 
                     return BarTooltipItem(
-                      '${e.year}\n\n${_fmt(_totalFor(e))}\n\n',
+                      '${e.year}\n\n${fmt(_totalFor(e))}\n\n',
                       GoogleFonts.spaceGrotesk(
                         color: theme.colorScheme.onSurface,
                         fontWeight: FontWeight.w800,
@@ -503,7 +504,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
     );
     if (maxTotal <= 0) return 1;
 
-    // Aim for more ticks (and gridlines) than the old coarse thresholds.
+    // Aim for more ticks (and grid lines) than the old coarse thresholds.
     const targetTicks = 9; // ~8–10 visible ticks depending on rounding
     final raw = maxTotal / targetTicks;
 

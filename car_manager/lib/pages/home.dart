@@ -90,11 +90,11 @@ class CarCard extends StatelessWidget {
                           SizedBox(height: 8),
                         ],
                       );
-                    }).toList(),
+                    }),
                   if (car.inspectionDatas != null &&
                       car.inspectionDatas!.isNotEmpty)
                     Text(
-                      'Next Inspection: ${car.getNextInspectionDate().toLocal()}',
+                      'Next Inspection: ${car.getNextInspectionDate()?.toLocal()}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.secondary,

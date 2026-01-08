@@ -1,0 +1,45 @@
+import 'package:car_manager/presentation/common/widgets/section_header.dart';
+import 'package:flutter/material.dart';
+
+class PaymentSectionCard extends StatelessWidget {
+  final String title;
+  final Widget icon;
+  final Widget? nextInfoDue;
+  final List<Widget> items;
+  static const double horizontalPadding = 16.0;
+
+  const PaymentSectionCard({
+    super.key,
+    required this.title,
+    required this.icon,
+    this.nextInfoDue,
+    required this.items,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        color: Theme.of(context).cardColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 16),
+          SectionHeader(
+            horizontalPadding: horizontalPadding,
+            title: title,
+            icon: icon,
+          ),
+          const SizedBox(height: 24),
+          if (nextInfoDue != null) nextInfoDue!,
+          if (nextInfoDue != null) const SizedBox(height: 16),
+          ...items,
+          const SizedBox(height: 16),
+        ],
+      ),
+    );
+  }
+}

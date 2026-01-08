@@ -27,7 +27,6 @@ Future<void> loadCarData() async {
       currentCar = _carFromJson(carJson);
     }
   } catch (e) {
-    print('Error loading car data: $e');
     currentCar = _getDefaultCar();
   }
 }

@@ -453,11 +453,7 @@
   "payments_insuranceData_policyNumber": "Number",
   "@payments_insuranceData_policyNumber": {
     "description": "Label for the insurance policy number field"
-    "payments_expenseDistribution_title": "Expense Distribution",
-    "payments_expensesByYear_title": "Expenses by Year",
-    "payments_expensesByYear_title@": {
-      "description": "Title for the expenses by year chart section"
-    },
+  },
   "payments_insuranceData_provider": "Provider",
   "@payments_insuranceData_provider": {
     "description": "Label for the insurance provider field"
@@ -473,6 +469,10 @@
   "payments_expenseDistribution_title": "Expense Distribution",
   "@payments_expenseDistribution_title": {
     "description": "Title for the expense distribution section"
+  },
+  "payments_expensesByYear_title": "Expenses by Year",
+  "@payments_expensesByYear_title": {
+    "description": "Title for the expenses by year chart section"
   },
   "payments_inspectionData_shortTitle": "Inspection",
   "@payments_inspectionData_shortTitle": {

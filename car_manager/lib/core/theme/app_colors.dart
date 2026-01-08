@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static const Color surfaceLight = Color.fromRGBO(255, 255, 255, 1);
+  static const Color surfaceContainerLight = Color.fromRGBO(250, 250, 250, 1);
   static const Color cardLight = Color.fromRGBO(245, 245, 245, 1);
   static const Color tertiaryLight = Color.fromRGBO(240, 240, 240, 1);
   static const Color secondaryLight = Color.fromRGBO(120, 120, 120, 1);
@@ -11,6 +12,7 @@ class AppColors {
   static const Color onSecondaryVariantLight = Color.fromRGBO(200, 200, 200, 1);
 
   static const Color surfaceDark = Color.fromRGBO(19, 20, 22, 1);
+  static const Color surfaceContainerDark = Color.fromRGBO(19, 20, 22, 0.6);
   static const Color cardDark = Color.fromRGBO(30, 33, 36, 1);
   static const Color tertiaryDark = Color.fromRGBO(45, 53, 62, 1);
   static const Color secondaryDark = Color.fromRGBO(158, 171, 184, 1);
