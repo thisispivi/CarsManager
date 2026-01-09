@@ -28,11 +28,11 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final carManagerState = Provider.of<CarManagerState>(
+    final carsManagerState = Provider.of<CarsManagerState>(
       context,
       listen: false,
     );
-    final locale = carManagerState.locale ?? const Locale('en');
+    final locale = carsManagerState.locale ?? const Locale('en');
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
 
     return PaymentSectionCard(

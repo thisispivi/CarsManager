@@ -5,20 +5,20 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "cars_manager",
+      "name": "Cars Manager",
       "cwd": "cars_manager",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "cars_manager (profile mode)",
+      "name": "Cars Manager (profile mode)",
       "cwd": "cars_manager",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "cars_manager (release mode)",
+      "name": "Cars Manager (release mode)",
       "cwd": "cars_manager",
       "request": "launch",
       "type": "dart",

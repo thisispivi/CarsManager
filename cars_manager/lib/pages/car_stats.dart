@@ -20,7 +20,7 @@ class CarStatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Consumer<CarManagerState>(
+      child: Consumer<CarsManagerState>(
         builder: (context, carState, child) {
           final Car car = carState.car;
 

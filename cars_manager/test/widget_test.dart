@@ -12,7 +12,7 @@ import 'package:cars_manager/main.dart';
 
 void main() {
   testWidgets('App builds smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const CarManager());
+    await tester.pumpWidget(const CarsManager());
     await tester.pumpAndSettle();
 
     expect(find.byType(MaterialApp), findsOneWidget);

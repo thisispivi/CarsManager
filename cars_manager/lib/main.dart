@@ -14,17 +14,17 @@ import 'dart:ui' as ui;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await loadCarData();
-  runApp(CarManager());
+  runApp(CarsManager());
 }
 
-class CarManager extends StatelessWidget {
-  const CarManager({super.key});
+class CarsManager extends StatelessWidget {
+  const CarsManager({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => CarManagerState(),
-      child: Consumer<CarManagerState>(
+      create: (context) => CarsManagerState(),
+      child: Consumer<CarsManagerState>(
         builder: (context, state, child) => MaterialApp(
           title: 'Cars Manager',
           locale: state.locale,
@@ -45,13 +45,13 @@ class CarManager extends StatelessWidget {
   }
 }
 
-class CarManagerState extends ChangeNotifier {
+class CarsManagerState extends ChangeNotifier {
   var car = currentCar;
 
   Locale? _locale;
   ThemeMode _themeMode = ThemeMode.dark;
 
-  CarManagerState() {
+  CarsManagerState() {
     final systemLocale = ui.PlatformDispatcher.instance.locale;
     if (L10n.locals.contains(systemLocale)) {
       _locale = systemLocale;

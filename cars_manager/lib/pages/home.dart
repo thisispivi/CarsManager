@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Consumer<CarManagerState>(
+              Consumer<CarsManagerState>(
                 builder: (context, carState, child) {
                   return CarCard(car: carState.car);
                 },

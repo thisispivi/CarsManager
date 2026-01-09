@@ -23,11 +23,11 @@ class NextInfoDue extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    final carManagerState = Provider.of<CarManagerState>(
+    final carsManagerState = Provider.of<CarsManagerState>(
       context,
       listen: false,
     );
-    final locale = carManagerState.locale ?? const Locale('en');
+    final locale = carsManagerState.locale ?? const Locale('en');
     final dateFormat = DateFormat('d MMM y', locale.toString());
 
     Color pillColor;

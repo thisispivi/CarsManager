@@ -29,7 +29,7 @@ class LanguageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<CarManagerState>(context);
+    final appState = Provider.of<CarsManagerState>(context);
     final currentLocale = appState.locale;
     final isEnglish = currentLocale?.languageCode == 'en';
     final isItalian = currentLocale?.languageCode == 'it';
@@ -109,10 +109,10 @@ class LanguageSelector extends StatelessWidget {
                   ),
                   Switch(
                     value:
-                        Provider.of<CarManagerState>(context).themeMode ==
+                        Provider.of<CarsManagerState>(context).themeMode ==
                         ThemeMode.light,
                     onChanged: (value) {
-                      Provider.of<CarManagerState>(
+                      Provider.of<CarsManagerState>(
                         context,
                         listen: false,
                       ).toggleThemeMode();
