@@ -15,10 +15,14 @@ class NextInspectionInfo extends StatelessWidget {
     final nextInspectionDate = car.getNextInspectionDate();
     final daysUntilNext = car.getDaysUntilNextInspection();
 
+    if (nextInspectionDate == null || daysUntilNext == null) {
+      return const SizedBox.shrink();
+    }
+
     return NextInfoDue(
       title: localizations.payments_inspectionsData_nextDue,
-      nextDueDate: nextInspectionDate,
-      daysRemaining: daysUntilNext,
+      nextDueDate: nextInspectionDate as DateTime,
+      daysRemaining: daysUntilNext as int,
       daysLabel: localizations.days,
     );
   }

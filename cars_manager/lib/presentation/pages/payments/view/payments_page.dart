@@ -45,11 +45,11 @@ class PaymentsPage extends StatelessWidget {
               hasFineData: hasFineData,
             ),
             ExpensesByYearChart(car: car),
-            if (hasInsuranceData) InsuranceSection(car: car),
-            if (hasInspectionData) InspectionSection(car: car),
-            if (hasTaxData) TaxSection(car: car),
-            if (hasRepairData) RepairSection(car: car),
-            if (hasFineData) FineSection(car: car),
+            InsuranceSection(car: car),
+            InspectionSection(car: car),
+            TaxSection(car: car),
+            RepairSection(car: car),
+            FineSection(car: car),
           ];
 
           return ListView(

@@ -176,228 +176,6 @@ abstract class AppLocalizations {
   /// **'Car Inspection Date'**
   String get carData_carInspectionDate;
 
-  /// Title for the body specifications section
-  ///
-  /// In en, this message translates to:
-  /// **'Body Specifications'**
-  String get bodySpecs_title;
-
-  /// Label for the body type field (sedan, SUV, etc.)
-  ///
-  /// In en, this message translates to:
-  /// **'Body Type'**
-  String get bodySpecs_type;
-
-  /// Label for the number of doors field
-  ///
-  /// In en, this message translates to:
-  /// **'Doors'**
-  String get bodySpecs_doors;
-
-  /// Label for the number of seats field
-  ///
-  /// In en, this message translates to:
-  /// **'Seats'**
-  String get bodySpecs_seats;
-
-  /// Label for the trunk capacity field
-  ///
-  /// In en, this message translates to:
-  /// **'Trunk Capacity'**
-  String get bodySpecs_trunkCapacity;
-
-  /// Label for the fuel tank capacity field
-  ///
-  /// In en, this message translates to:
-  /// **'Fuel Tank Capacity'**
-  String get bodySpecs_fuelTankCapacity;
-
-  /// Label for the car weight field
-  ///
-  /// In en, this message translates to:
-  /// **'Weight'**
-  String get bodySpecs_weight;
-
-  /// Label for the maximum towing weight field
-  ///
-  /// In en, this message translates to:
-  /// **'Max Towing Weight'**
-  String get bodySpecs_maxTowingWeight;
-
-  /// Label for the car length field
-  ///
-  /// In en, this message translates to:
-  /// **'Length'**
-  String get bodySpecs_length;
-
-  /// Label for the car width field
-  ///
-  /// In en, this message translates to:
-  /// **'Width'**
-  String get bodySpecs_width;
-
-  /// Label for the car height field
-  ///
-  /// In en, this message translates to:
-  /// **'Height'**
-  String get bodySpecs_height;
-
-  /// Label for the wheelbase measurement field
-  ///
-  /// In en, this message translates to:
-  /// **'Wheelbase'**
-  String get bodySpecs_wheelbase;
-
-  /// Title for the engine specifications section
-  ///
-  /// In en, this message translates to:
-  /// **'Engine Specifications'**
-  String get engineSpecs_title;
-
-  /// Label for the engine type field
-  ///
-  /// In en, this message translates to:
-  /// **'Engine Type'**
-  String get engineSpecs_type;
-
-  /// Label for the engine displacement field
-  ///
-  /// In en, this message translates to:
-  /// **'Displacement'**
-  String get engineSpecs_displacement;
-
-  /// Label for the fuel type field
-  ///
-  /// In en, this message translates to:
-  /// **'Fuel Type'**
-  String get engineSpecs_fuelType;
-
-  /// Label for the maximum power output field
-  ///
-  /// In en, this message translates to:
-  /// **'Maximum Power'**
-  String get engineSpecs_maxPower;
-
-  /// Label for the horsepower field
-  ///
-  /// In en, this message translates to:
-  /// **'Horsepower'**
-  String get engineSpecs_horsePower;
-
-  /// Label for the engine speed field
-  ///
-  /// In en, this message translates to:
-  /// **'Engine Speed'**
-  String get engineSpecs_engineSpeed;
-
-  /// Label for the maximum torque field
-  ///
-  /// In en, this message translates to:
-  /// **'Maximum Torque'**
-  String get engineSpecs_maxTorque;
-
-  /// Label for the drive type field (FWD, RWD, AWD, etc.)
-  ///
-  /// In en, this message translates to:
-  /// **'Drive Type'**
-  String get engineSpecs_driveType;
-
-  /// Label for the transmission type field
-  ///
-  /// In en, this message translates to:
-  /// **'Transmission Type'**
-  String get engineSpecs_transmissionType;
-
-  /// Label for the number of transmission gears field
-  ///
-  /// In en, this message translates to:
-  /// **'Number of Gears'**
-  String get engineSpecs_gears;
-
-  /// Title for the performance specifications section
-  ///
-  /// In en, this message translates to:
-  /// **'Performance'**
-  String get performanceSpecs_title;
-
-  /// Label for the maximum speed field
-  ///
-  /// In en, this message translates to:
-  /// **'Maximum Speed'**
-  String get performanceSpecs_maxSpeed;
-
-  /// Label for the acceleration time from 0 to 100 km/h
-  ///
-  /// In en, this message translates to:
-  /// **'0-100 km/h'**
-  String get performanceSpecs_zeroToHundred;
-
-  /// Label for the CO₂ emissions field
-  ///
-  /// In en, this message translates to:
-  /// **'CO₂ Emissions'**
-  String get performanceSpecs_co2Emissions;
-
-  /// Label for the emission standard field (Euro 6, etc.)
-  ///
-  /// In en, this message translates to:
-  /// **'Emission Standard'**
-  String get performanceSpecs_emissionStandard;
-
-  /// Title for the fuel consumption section
-  ///
-  /// In en, this message translates to:
-  /// **'Fuel Consumption'**
-  String get fuelConsumption_title;
-
-  /// Label for the urban fuel consumption field
-  ///
-  /// In en, this message translates to:
-  /// **'Urban Consumption'**
-  String get fuelConsumption_urban;
-
-  /// Label for the extra-urban (highway) fuel consumption field
-  ///
-  /// In en, this message translates to:
-  /// **'Extra-Urban Consumption'**
-  String get fuelConsumption_extraUrban;
-
-  /// Label for the combined fuel consumption field
-  ///
-  /// In en, this message translates to:
-  /// **'Combined Consumption'**
-  String get fuelConsumption_combined;
-
-  /// Label for 4-cylinder inline engine type
-  ///
-  /// In en, this message translates to:
-  /// **'4-cylinder inline'**
-  String get engineType_fourCylinderInline;
-
-  /// Label for 6-cylinder inline engine type
-  ///
-  /// In en, this message translates to:
-  /// **'6-cylinder inline'**
-  String get engineType_sixCylinderInline;
-
-  /// Label for V6 engine type
-  ///
-  /// In en, this message translates to:
-  /// **'V6'**
-  String get engineType_v6;
-
-  /// Label for V8 engine type
-  ///
-  /// In en, this message translates to:
-  /// **'V8'**
-  String get engineType_v8;
-
-  /// Label for V12 engine type
-  ///
-  /// In en, this message translates to:
-  /// **'V12'**
-  String get engineType_v12;
-
   /// Label for petrol/gasoline fuel type
   ///
   /// In en, this message translates to:
@@ -421,6 +199,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hybrid'**
   String get fuelType_hybrid;
+
+  /// Label for LPG fuel type
+  ///
+  /// In en, this message translates to:
+  /// **'LPG'**
+  String get fuelType_lpg;
 
   /// Label for front-wheel drive type
   ///
@@ -757,6 +541,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get total;
+
+  /// Generic add action label
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get common_add;
+
+  /// Generic pick/select action label
+  ///
+  /// In en, this message translates to:
+  /// **'Pick'**
+  String get common_pick;
+
+  /// Generic delete action label
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get common_delete;
+
+  /// Generic cancel action label
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get common_cancel;
+
+  /// Suffix for optional fields
+  ///
+  /// In en, this message translates to:
+  /// **'optional'**
+  String get common_optional;
+
+  /// Start label
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get common_start;
+
+  /// End label
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get common_end;
+
+  /// Generic description label
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get common_description;
+
+  /// Generic notes label
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get common_notes;
+
+  /// Add an entity by name
+  ///
+  /// In en, this message translates to:
+  /// **'Add {entity}'**
+  String common_addEntity(String entity);
+
+  /// Title for an actions sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get common_actions;
+
+  /// Snackbar message after deletion
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted'**
+  String get common_deleted;
+
+  /// Title for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Delete entry?'**
+  String get common_deleteConfirmTitle;
+
+  /// Body for delete confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone.'**
+  String get common_deleteConfirmBody;
+
+  /// Title for fuel entries section
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Entries'**
+  String get fuel_entries_title;
+
+  /// Empty state for fuel entries
+  ///
+  /// In en, this message translates to:
+  /// **'No fuel entries yet. Tap Add to create one.'**
+  String get fuel_entries_empty;
+
+  /// Title for add fuel entry sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Add Fuel Entry'**
+  String get fuel_addEntry_title;
+
+  /// Label for fuel type field
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel type'**
+  String get fuel_fuelType_label;
+
+  /// Label for fuel amount in liters
+  ///
+  /// In en, this message translates to:
+  /// **'Liters'**
+  String get fuel_amount_liters_label;
+
+  /// Label for fuel amount in kWh
+  ///
+  /// In en, this message translates to:
+  /// **'kWh'**
+  String get fuel_amount_kwh_label;
+
+  /// Label for price per liter
+  ///
+  /// In en, this message translates to:
+  /// **'Price / L'**
+  String get fuel_price_per_l_label;
+
+  /// Label for price per kWh
+  ///
+  /// In en, this message translates to:
+  /// **'Price / kWh'**
+  String get fuel_price_per_kwh_label;
+
+  /// Label for total cost
+  ///
+  /// In en, this message translates to:
+  /// **'Total cost'**
+  String get fuel_total_cost_label;
+
+  /// Title for fuel expense distribution chart
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Expense Distribution'**
+  String get fuel_expenseDistribution_title;
+
+  /// Title for fuel expenses by year chart
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel Expenses by Year'**
+  String get fuel_expensesByYear_title;
+
+  /// Title for fuel average price per unit by year chart
+  ///
+  /// In en, this message translates to:
+  /// **'Avg price per unit by Year'**
+  String get fuel_avgPriceByYear_title;
+
+  /// Title for fuel total amount by year chart
+  ///
+  /// In en, this message translates to:
+  /// **'Total amount by Year'**
+  String get fuel_amountByYear_title;
+
+  /// Validation message for required field
+  ///
+  /// In en, this message translates to:
+  /// **'{field} is required'**
+  String validation_required(String field);
+
+  /// Validation message for positive numbers
+  ///
+  /// In en, this message translates to:
+  /// **'{field} must be a number > 0'**
+  String validation_number_gt_zero(String field);
+
+  /// Validation message for non-negative numbers
+  ///
+  /// In en, this message translates to:
+  /// **'{field} must be a number ≥ 0'**
+  String validation_number_gte_zero(String field);
 }
 
 class _AppLocalizationsDelegate

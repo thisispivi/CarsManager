@@ -6,12 +6,14 @@ class SectionHeader extends StatelessWidget {
     super.key,
     required this.title,
     this.icon,
+    this.trailing,
     this.horizontalPadding = 0,
     this.verticalPadding = 0,
   });
 
   final String title;
   final Widget? icon;
+  final Widget? trailing;
   final double horizontalPadding;
   final double verticalPadding;
   static const double iconTitleSpacing = 10.0;
@@ -27,7 +29,8 @@ class SectionHeader extends StatelessWidget {
         children: [
           if (icon != null) icon!,
           if (icon != null) const SizedBox(width: iconTitleSpacing),
-          _buildTitleText(context),
+          Expanded(child: _buildTitleText(context)),
+          if (trailing != null) trailing!,
         ],
       ),
     );

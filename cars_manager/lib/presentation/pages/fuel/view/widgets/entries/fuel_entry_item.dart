@@ -1,4 +1,5 @@
-import 'package:cars_manager/models/repair_data.dart';
+import 'package:cars_manager/models/fuel_entry.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,25 +7,31 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cars_manager/main.dart';
 
-class RepairItem extends StatelessWidget {
-  final RepairData repair;
+class FuelEntryItem extends StatelessWidget {
+  final FuelEntry entry;
   final Locale locale;
   final bool isLast;
 
-  const RepairItem({
+  const FuelEntryItem({
     super.key,
-    required this.repair,
+    required this.entry,
     required this.locale,
     this.isLast = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
 
-    final description = repair.description.trim();
+    final isElectric = entry.fuelType == FuelType.electric;
+    final amountUnit = isElectric ? 'kWh' : 'L';
+    final priceUnit = isElectric ? '€/kWh' : '€/L';
+    final amountIcon = isElectric
+        ? Icons.bolt_outlined
+        : Icons.water_drop_outlined;
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
@@ -35,7 +42,7 @@ class RepairItem extends StatelessWidget {
             Provider.of<CarsManagerState>(
               context,
               listen: false,
-            ).removeRepairPayment(repair);
+            ).removeFuelEntry(entry);
           },
         );
       },
@@ -55,7 +62,7 @@ class RepairItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      dateFormat.format(repair.date),
+                      dateFormat.format(entry.date),
                       style: GoogleFonts.spaceGrotesk(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -83,7 +90,7 @@ class RepairItem extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          numberFormat.format(repair.amount),
+                          numberFormat.format(entry.totalCost),
                           style: GoogleFonts.spaceGrotesk(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -96,31 +103,59 @@ class RepairItem extends StatelessWidget {
                   ),
                 ],
               ),
-              if (description.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Divider(
-                    height: 1,
-                    color: colorScheme.outlineVariant.withValues(alpha: 0.3),
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Divider(
+                  height: 1,
+                  color: colorScheme.outlineVariant.withValues(alpha: 0.3),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _DetailItem(
-                        icon: Icons.build_rounded,
-                        value: description,
-                        colorScheme: colorScheme,
-                      ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: _DetailItem(
+                      icon: Icons.local_gas_station,
+                      value: _labelForFuelType(localizations, entry.fuelType),
+                      colorScheme: colorScheme,
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  Expanded(
+                    child: _DetailItem(
+                      icon: amountIcon,
+                      value: '${numberFormat.format(entry.liters)} $amountUnit',
+                      colorScheme: colorScheme,
+                    ),
+                  ),
+                  Expanded(
+                    child: _DetailItem(
+                      icon: Icons.price_change_rounded,
+                      value:
+                          '${numberFormat.format(entry.pricePerLiter)} $priceUnit',
+                      colorScheme: colorScheme,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+String _labelForFuelType(AppLocalizations localizations, FuelType fuelType) {
+  switch (fuelType) {
+    case FuelType.petrol:
+      return localizations.fuelType_petrol;
+    case FuelType.diesel:
+      return localizations.fuelType_diesel;
+    case FuelType.lpg:
+      return localizations.fuelType_lpg;
+    case FuelType.electric:
+      return localizations.fuelType_electric;
+    case FuelType.hybrid:
+      return localizations.fuelType_hybrid;
   }
 }
 

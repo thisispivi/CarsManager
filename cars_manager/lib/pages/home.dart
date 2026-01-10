@@ -36,6 +36,8 @@ class CarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 32, vertical: 24),
       color: Theme.of(context).cardColor,
@@ -69,46 +71,12 @@ class CarCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(AppLocalizations.of(context)!.bodySpecs_weight),
-                  Text('Year: ${car.yearOfManufacture}'),
-                  Text('License Plate: ${car.licensePlate}'),
-                  if (car.inspectionDatas != null &&
-                      car.inspectionDatas!.isNotEmpty)
-                    ...car.inspectionDatas!.map((inspection) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${inspection.date.toLocal()} - ${inspection.isPassed ? 'Passed' : 'Failed'}',
-                          ),
-                          if (inspection.amount != null)
-                            Text(
-                              'Amount: \$${inspection.amount!.toStringAsFixed(2)}',
-                            ),
-                          if (inspection.mileage != null)
-                            Text('Mileage: ${inspection.mileage} km'),
-                          SizedBox(height: 8),
-                        ],
-                      );
-                    }),
-                  if (car.inspectionDatas != null &&
-                      car.inspectionDatas!.isNotEmpty)
-                    Text(
-                      'Next Inspection: ${car.getNextInspectionDate()?.toLocal()}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  if (car.inspectionDatas != null &&
-                      car.inspectionDatas!.isNotEmpty)
-                    Text(
-                      'Days until next inspection: ${car.getDaysUntilNextInspection()}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
+                  Text(
+                    '${localizations.carData_yearOfManufacture}: ${car.yearOfManufacture}',
+                  ),
+                  Text(
+                    '${localizations.carData_licensePlate}: ${car.licensePlate}',
+                  ),
                 ],
               ),
             ),

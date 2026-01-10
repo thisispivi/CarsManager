@@ -1,7 +1,10 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
+import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../main.dart';
 import 'repair_item.dart';
@@ -21,6 +24,8 @@ class RepairSection extends StatelessWidget {
     );
     final locale = carsManagerState.locale ?? const Locale('en');
 
+    final items = car.repairDatas ?? const <RepairData>[];
+
     return PaymentSectionCard(
       title: localizations.payments_repairsData_title,
       icon: Icon(
@@ -28,14 +33,40 @@ class RepairSection extends StatelessWidget {
         size: 28,
         color: Theme.of(context).colorScheme.primary,
       ),
-      items: car.repairDatas!
+      trailing: TextButton.icon(
+        onPressed: () async {
+          final RepairData? data = await showModalBottomSheet<RepairData>(
+            context: context,
+            isScrollControlled: true,
+            backgroundColor: Colors.transparent,
+            builder: (context) =>
+                const AddPaymentBottomSheet(type: PaymentEntryType.repair),
+          );
+
+          if (data != null && context.mounted) {
+            Provider.of<CarsManagerState>(
+              context,
+              listen: false,
+            ).addRepairPayment(data);
+          }
+        },
+        icon: Icon(
+          Icons.add_circle_outline,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        label: Text(
+          localizations.common_add,
+          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+        ),
+      ),
+      items: items
           .asMap()
           .entries
           .map(
             (entry) => RepairItem(
               repair: entry.value,
               locale: locale,
-              isLast: entry.key == car.repairDatas!.length - 1,
+              isLast: entry.key == items.length - 1,
             ),
           )
           .toList(),

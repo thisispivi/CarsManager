@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class PaymentSectionCard extends StatelessWidget {
   final String title;
   final Widget? icon;
+  final Widget? trailing;
   final Widget? nextInfoDue;
   final double? verticalSpacing;
   final List<Widget> items;
@@ -13,6 +14,7 @@ class PaymentSectionCard extends StatelessWidget {
     super.key,
     required this.title,
     this.icon,
+    this.trailing,
     this.nextInfoDue,
     required this.items,
     this.verticalSpacing,
@@ -34,6 +36,7 @@ class PaymentSectionCard extends StatelessWidget {
             horizontalPadding: horizontalPadding,
             title: title,
             icon: icon,
+            trailing: trailing,
           ),
           SizedBox(height: verticalSpacing ?? 24),
           if (nextInfoDue != null) nextInfoDue!,

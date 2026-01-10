@@ -3,13 +3,19 @@ import 'package:cars_manager/data/car_data.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/l10n/l10n.dart';
 import 'package:cars_manager/pages/Home.dart';
-import 'package:cars_manager/pages/car_stats.dart';
+import 'package:cars_manager/presentation/pages/fuel/view/fuel_consumption_page.dart';
 import 'package:cars_manager/presentation/pages/payments/view/payments_page.dart';
 import 'package:cars_manager/pages/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
+import 'package:cars_manager/models/fuel_entry.dart';
+import 'package:cars_manager/models/insurance_data.dart';
+import 'package:cars_manager/models/tax_data.dart';
+import 'package:cars_manager/models/repair_data.dart';
+import 'package:cars_manager/models/inspection_data.dart';
+import 'package:cars_manager/models/fine_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,6 +87,78 @@ class CarsManagerState extends ChangeNotifier {
         : ThemeMode.light;
     notifyListeners();
   }
+
+  void addFuelEntry(FuelEntry entry) {
+    (car.fuel ??= []).add(entry);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void removeFuelEntry(FuelEntry entry) {
+    car.fuel?.remove(entry);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void addInsurancePayment(InsuranceData data) {
+    (car.insuranceDatas ??= []).add(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void removeInsurancePayment(InsuranceData data) {
+    car.insuranceDatas?.remove(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void addTaxPayment(TaxData data) {
+    (car.taxDatas ??= []).add(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void removeTaxPayment(TaxData data) {
+    car.taxDatas?.remove(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void addRepairPayment(RepairData data) {
+    (car.repairDatas ??= []).add(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void removeRepairPayment(RepairData data) {
+    car.repairDatas?.remove(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void addInspectionPayment(InspectionData data) {
+    (car.inspectionDatas ??= []).add(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void removeInspectionPayment(InspectionData data) {
+    car.inspectionDatas?.remove(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void addFinePayment(FineData data) {
+    (car.fineDatas ??= []).add(data);
+    notifyListeners();
+    saveCarData();
+  }
+
+  void removeFinePayment(FineData data) {
+    car.fineDatas?.remove(data);
+    notifyListeners();
+    saveCarData();
+  }
 }
 
 class DashboardPage extends StatefulWidget {
@@ -101,15 +179,12 @@ class _DashboardPageState extends State<DashboardPage> {
         page = HomePage();
         break;
       case 1:
-        page = CarStatsPage();
+        page = FuelConsumptionPage();
         break;
       case 2:
-        page = Placeholder();
-        break;
-      case 3:
         page = PaymentsPage();
         break;
-      case 4:
+      case 3:
         page = SettingsPage();
         break;
       default:
@@ -152,10 +227,6 @@ class _DashboardPageState extends State<DashboardPage> {
           },
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.directions_car),
-              label: 'Car Stats',
-            ),
             BottomNavigationBarItem(
               icon: Icon(Icons.local_gas_station),
               label: 'Fuel',

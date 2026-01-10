@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'dart:math' as math;
 
 class PieChartSection {
   final Color color;
@@ -52,6 +53,22 @@ class _DonutChartState extends State<DonutChart> {
   void initState() {
     super.initState();
     _enabled = List<bool>.filled(widget.sections.length, true);
+  }
+
+  @override
+  void didUpdateWidget(covariant DonutChart oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.sections.length == widget.sections.length) {
+      return;
+    }
+
+    final next = List<bool>.filled(widget.sections.length, true);
+    final common = math.min(_enabled.length, next.length);
+    for (var i = 0; i < common; i++) {
+      next[i] = _enabled[i];
+    }
+    _enabled = next;
   }
 
   @override
@@ -146,7 +163,7 @@ class _DonutChartState extends State<DonutChart> {
                   decoration: BoxDecoration(
                     color: _enabled[i]
                         ? section.color
-                        : section.color.withOpacity(0.25),
+                        : section.color.withValues(alpha: 0.25),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -160,7 +177,7 @@ class _DonutChartState extends State<DonutChart> {
                         ? Theme.of(context).colorScheme.onSurface
                         : Theme.of(
                             context,
-                          ).colorScheme.onSurface.withOpacity(0.55),
+                          ).colorScheme.onSurface.withValues(alpha: 0.55),
                     decoration: _enabled[i] ? null : TextDecoration.lineThrough,
                   ),
                 ),
@@ -194,7 +211,7 @@ class _DonutChartState extends State<DonutChart> {
       }
 
       return PieChartSectionData(
-        color: enabled ? section.color : section.color.withOpacity(0.25),
+        color: enabled ? section.color : section.color.withValues(alpha: 0.25),
         value: value,
         title: title,
         radius: widget.radius,

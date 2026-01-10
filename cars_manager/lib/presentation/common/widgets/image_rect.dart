@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-/// A widget that displays an image with a specified aspect ratio and handles
-/// loading and error states gracefully.
-///
-/// This widget is commonly used for displaying car images throughout the app.
 class ImageRect extends StatelessWidget {
-  /// Creates an ImageRect widget.
-  ///
-  /// The [aspectRatio], [backgroundColor], [borderRadius], and [primaryColor]
-  /// parameters are required.
+  final String? imageUrl;
+  final Alignment? imageAlignment;
+  final double aspectRatio;
+  final Color backgroundColor;
+  final BorderRadius borderRadius;
+  final Color primaryColor;
+
   const ImageRect({
     super.key,
     required this.imageUrl,
@@ -18,24 +17,6 @@ class ImageRect extends StatelessWidget {
     required this.borderRadius,
     required this.primaryColor,
   });
-
-  /// The URL of the image to display.
-  final String? imageUrl;
-
-  /// The alignment of the image within its container.
-  final Alignment? imageAlignment;
-
-  /// The aspect ratio (width/height) to use for the image container.
-  final double aspectRatio;
-
-  /// The background color to show while loading or on error.
-  final Color backgroundColor;
-
-  /// The border radius for the corners of the image.
-  final BorderRadius borderRadius;
-
-  /// The primary color used for loading indicators and error icons.
-  final Color primaryColor;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +29,6 @@ class ImageRect extends StatelessWidget {
     );
   }
 
-  /// Builds the image with proper loading and error handling.
   Widget _buildImageWithErrorHandling() {
     return Image.network(
       imageUrl ?? "",
@@ -60,7 +40,6 @@ class ImageRect extends StatelessWidget {
     );
   }
 
-  /// Builds the loading indicator when the image is being loaded.
   Widget _buildLoadingIndicator(
     BuildContext context,
     Widget child,
@@ -79,14 +58,12 @@ class ImageRect extends StatelessWidget {
     );
   }
 
-  /// Calculates the loading progress value for the progress indicator.
   double? _calculateLoadingProgress(ImageChunkEvent loadingProgress) {
     if (loadingProgress.expectedTotalBytes == null) return null;
     return loadingProgress.cumulativeBytesLoaded /
         loadingProgress.expectedTotalBytes!;
   }
 
-  /// Builds the error display when the image fails to load.
   Widget _buildErrorDisplay(
     BuildContext context,
     Object error,

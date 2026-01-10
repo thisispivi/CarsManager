@@ -2,10 +2,7 @@ import 'package:cars_manager/models/fine_data.dart';
 import 'package:cars_manager/models/inspection_data.dart';
 import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/models/manufacture.dart';
-import 'package:cars_manager/models/body_specs.dart';
-import 'package:cars_manager/models/engine_specs.dart';
-import 'package:cars_manager/models/performance_specs.dart';
-import 'package:cars_manager/models/fuel_consumption.dart';
+import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:flutter/painting.dart';
@@ -25,10 +22,8 @@ class Car {
 
   DateTime insuranceExpirationDate;
 
-  BodySpecs? bodySpecs;
-  EngineSpecs? engineSpecs;
-  PerformanceSpecs? performanceSpecs;
-  FuelConsumption? fuelConsumption;
+  FuelType? fuelType;
+  List<FuelEntry>? fuel;
 
   List<InsuranceData>? insuranceDatas;
   List<InspectionData>? inspectionDatas;
@@ -51,10 +46,8 @@ class Car {
 
     required this.insuranceExpirationDate,
 
-    this.bodySpecs,
-    this.engineSpecs,
-    this.performanceSpecs,
-    this.fuelConsumption,
+    this.fuelType,
+    this.fuel,
 
     this.inspectionDatas,
     this.insuranceDatas,
@@ -62,6 +55,30 @@ class Car {
     this.repairDatas,
     this.fineDatas,
   });
+
+  double calculateTotalFuelCost() {
+    final entries = fuel;
+    if (entries == null || entries.isEmpty) {
+      return 0;
+    }
+    return entries.fold(0, (sum, e) => sum + e.totalCost);
+  }
+
+  Map<FuelType, double> calculateFuelTotalCostByFuelType() {
+    final Map<FuelType, double> totals = {};
+
+    final entries = fuel;
+    if (entries == null) {
+      return totals;
+    }
+
+    for (final entry in entries) {
+      totals[entry.fuelType] = (totals[entry.fuelType] ?? 0) + entry.totalCost;
+    }
+
+    totals.removeWhere((k, v) => v <= 0);
+    return totals;
+  }
 
   InspectionData? _getLatestInspection() {
     if (inspectionDatas == null || inspectionDatas!.isEmpty) {

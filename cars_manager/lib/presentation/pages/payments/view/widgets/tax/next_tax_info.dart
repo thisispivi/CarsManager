@@ -15,10 +15,14 @@ class NextTaxInfo extends StatelessWidget {
     final nextTaxDate = car.getNextTaxDueDate();
     final daysUntilNext = car.getDaysUntilNextTaxDue();
 
+    if (nextTaxDate == null || daysUntilNext == null) {
+      return const SizedBox.shrink();
+    }
+
     return NextInfoDue(
       title: localizations.payments_taxesData_nextDue,
-      nextDueDate: nextTaxDate,
-      daysRemaining: daysUntilNext,
+      nextDueDate: nextTaxDate as DateTime,
+      daysRemaining: daysUntilNext as int,
       daysLabel: localizations.days,
     );
   }

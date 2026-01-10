@@ -35,6 +35,17 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
     final locale = carsManagerState.locale ?? const Locale('en');
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
 
+    final hasAny =
+        hasInsuranceData ||
+        hasInspectionData ||
+        hasTaxData ||
+        hasRepairData ||
+        hasFineData;
+
+    if (!hasAny) {
+      return const SizedBox();
+    }
+
     return PaymentSectionCard(
       title:
           AppLocalizations.of(context)?.payments_expenseDistribution_title ??

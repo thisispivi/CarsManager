@@ -48,117 +48,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get carData_carInspectionDate => 'Data Revisione';
 
   @override
-  String get bodySpecs_title => 'Specifiche Carrozzeria';
-
-  @override
-  String get bodySpecs_type => 'Tipo di Carrozzeria';
-
-  @override
-  String get bodySpecs_doors => 'Porte';
-
-  @override
-  String get bodySpecs_seats => 'Posti';
-
-  @override
-  String get bodySpecs_trunkCapacity => 'Capacità Bagagliaio';
-
-  @override
-  String get bodySpecs_fuelTankCapacity => 'Capacità Serbatoio';
-
-  @override
-  String get bodySpecs_weight => 'Peso';
-
-  @override
-  String get bodySpecs_maxTowingWeight => 'Peso Massimo Trainabile';
-
-  @override
-  String get bodySpecs_length => 'Lunghezza';
-
-  @override
-  String get bodySpecs_width => 'Larghezza';
-
-  @override
-  String get bodySpecs_height => 'Altezza';
-
-  @override
-  String get bodySpecs_wheelbase => 'Passo';
-
-  @override
-  String get engineSpecs_title => 'Specifiche Motore';
-
-  @override
-  String get engineSpecs_type => 'Tipo di Motore';
-
-  @override
-  String get engineSpecs_displacement => 'Cilindrata';
-
-  @override
-  String get engineSpecs_fuelType => 'Tipo di Carburante';
-
-  @override
-  String get engineSpecs_maxPower => 'Potenza Massima';
-
-  @override
-  String get engineSpecs_horsePower => 'Cavalli';
-
-  @override
-  String get engineSpecs_engineSpeed => 'Regime Motore';
-
-  @override
-  String get engineSpecs_maxTorque => 'Coppia Massima';
-
-  @override
-  String get engineSpecs_driveType => 'Tipo di Trazione';
-
-  @override
-  String get engineSpecs_transmissionType => 'Tipo di Trasmissione';
-
-  @override
-  String get engineSpecs_gears => 'Numero di Marce';
-
-  @override
-  String get performanceSpecs_title => 'Prestazioni';
-
-  @override
-  String get performanceSpecs_maxSpeed => 'Velocità Massima';
-
-  @override
-  String get performanceSpecs_zeroToHundred => '0-100 km/h';
-
-  @override
-  String get performanceSpecs_co2Emissions => 'Emissioni CO₂';
-
-  @override
-  String get performanceSpecs_emissionStandard => 'Normativa Emissioni';
-
-  @override
-  String get fuelConsumption_title => 'Consumo Carburante';
-
-  @override
-  String get fuelConsumption_urban => 'Consumo Urbano';
-
-  @override
-  String get fuelConsumption_extraUrban => 'Consumo Extraurbano';
-
-  @override
-  String get fuelConsumption_combined => 'Consumo Combinato';
-
-  @override
-  String get engineType_fourCylinderInline => '4 cilindri in linea';
-
-  @override
-  String get engineType_sixCylinderInline => '6 cilindri in linea';
-
-  @override
-  String get engineType_v6 => 'V6';
-
-  @override
-  String get engineType_v8 => 'V8';
-
-  @override
-  String get engineType_v12 => 'V12';
-
-  @override
   String get fuelType_petrol => 'Benzina';
 
   @override
@@ -169,6 +58,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get fuelType_hybrid => 'Ibrida';
+
+  @override
+  String get fuelType_lpg => 'GPL';
 
   @override
   String get driveType_fwd => 'Trazione anteriore';
@@ -367,4 +259,104 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get total => 'Totale';
+
+  @override
+  String get common_add => 'Aggiungi';
+
+  @override
+  String get common_pick => 'Scegli';
+
+  @override
+  String get common_delete => 'Elimina';
+
+  @override
+  String get common_cancel => 'Annulla';
+
+  @override
+  String get common_optional => 'opzionale';
+
+  @override
+  String get common_start => 'Inizio';
+
+  @override
+  String get common_end => 'Fine';
+
+  @override
+  String get common_description => 'Descrizione';
+
+  @override
+  String get common_notes => 'Note';
+
+  @override
+  String common_addEntity(String entity) {
+    return 'Aggiungi $entity';
+  }
+
+  @override
+  String get common_actions => 'Azioni';
+
+  @override
+  String get common_deleted => 'Eliminato';
+
+  @override
+  String get common_deleteConfirmTitle => 'Eliminare elemento?';
+
+  @override
+  String get common_deleteConfirmBody =>
+      'Questa azione non può essere annullata.';
+
+  @override
+  String get fuel_entries_title => 'Rifornimenti';
+
+  @override
+  String get fuel_entries_empty =>
+      'Nessun rifornimento. Tocca Aggiungi per crearne uno.';
+
+  @override
+  String get fuel_addEntry_title => 'Aggiungi rifornimento';
+
+  @override
+  String get fuel_fuelType_label => 'Tipo di carburante';
+
+  @override
+  String get fuel_amount_liters_label => 'Litri';
+
+  @override
+  String get fuel_amount_kwh_label => 'kWh';
+
+  @override
+  String get fuel_price_per_l_label => 'Prezzo / L';
+
+  @override
+  String get fuel_price_per_kwh_label => 'Prezzo / kWh';
+
+  @override
+  String get fuel_total_cost_label => 'Costo totale';
+
+  @override
+  String get fuel_expenseDistribution_title => 'Distribuzione spese carburante';
+
+  @override
+  String get fuel_expensesByYear_title => 'Spese carburante per anno';
+
+  @override
+  String get fuel_avgPriceByYear_title => 'Prezzo medio per unità per anno';
+
+  @override
+  String get fuel_amountByYear_title => 'Quantità totale per anno';
+
+  @override
+  String validation_required(String field) {
+    return '$field è obbligatorio';
+  }
+
+  @override
+  String validation_number_gt_zero(String field) {
+    return '$field deve essere un numero > 0';
+  }
+
+  @override
+  String validation_number_gte_zero(String field) {
+    return '$field deve essere un numero ≥ 0';
+  }
 }

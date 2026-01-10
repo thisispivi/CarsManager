@@ -15,10 +15,14 @@ class NextInsuranceInfo extends StatelessWidget {
     final nextInsuranceDate = car.getNextInsuranceExpirationDate();
     final daysUntilNext = car.getDaysUntilNextInsuranceExpiration();
 
+    if (nextInsuranceDate == null || daysUntilNext == null) {
+      return const SizedBox.shrink();
+    }
+
     return NextInfoDue(
       title: localizations.payments_insuranceData_nextDue,
-      nextDueDate: nextInsuranceDate,
-      daysRemaining: daysUntilNext,
+      nextDueDate: nextInsuranceDate as DateTime,
+      daysRemaining: daysUntilNext as int,
       daysLabel: localizations.days,
     );
   }
