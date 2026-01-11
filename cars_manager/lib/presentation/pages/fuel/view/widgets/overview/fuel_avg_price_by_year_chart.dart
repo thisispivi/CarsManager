@@ -54,7 +54,6 @@ class FuelAvgPriceByYearChart extends StatelessWidget {
     );
   }
 
-  /// Weighted average: totalCost / totalAmount
   Map<int, double> _avgPriceByYear(List<FuelEntry> entries) {
     final sums = <int, ({double cost, double amount})>{};
 

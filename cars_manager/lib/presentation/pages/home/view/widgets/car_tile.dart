@@ -126,45 +126,56 @@ class CarTile extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        PopupMenuButton<String>(
-                          icon: Icon(
-                            Icons.more_vert,
-                            color: cs.onSurfaceVariant,
-                          ),
-                          tooltip: MaterialLocalizations.of(
-                            context,
-                          ).moreButtonTooltip,
-                          position: PopupMenuPosition.over,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          onSelected: (value) {
-                            switch (value) {
-                              case 'edit':
-                                onEdit();
-                                break;
-                              case 'remove':
-                                onDelete();
-                                break;
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            menuItem(
-                              value: 'edit',
-                              icon: Icons.edit_outlined,
-                              label: l10n.common_edit,
-                              iconColor: cs.onSurface,
-                              textColor: cs.onSurface,
+                        Transform.translate(
+                          offset: const Offset(2, 0),
+                          child: PopupMenuButton<String>(
+                            padding: EdgeInsets.zero,
+                            tooltip: MaterialLocalizations.of(
+                              context,
+                            ).moreButtonTooltip,
+                            position: PopupMenuPosition.over,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
                             ),
-                            menuItem(
-                              value: 'remove',
-                              icon: Icons.delete_outline,
-                              label: l10n.common_delete,
-                              iconColor: cs.error,
-                              textColor: cs.error,
+                            child: SizedBox(
+                              width: 32,
+                              height: 32,
+                              child: Align(
+                                alignment: Alignment.topCenter,
+                                child: Icon(
+                                  Icons.more_vert,
+                                  size: 20,
+                                  color: cs.onSurfaceVariant,
+                                ),
+                              ),
                             ),
-                          ],
+                            onSelected: (value) {
+                              switch (value) {
+                                case 'edit':
+                                  onEdit();
+                                  break;
+                                case 'remove':
+                                  onDelete();
+                                  break;
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              menuItem(
+                                value: 'edit',
+                                icon: Icons.edit_outlined,
+                                label: l10n.common_edit,
+                                iconColor: cs.onSurface,
+                                textColor: cs.onSurface,
+                              ),
+                              menuItem(
+                                value: 'remove',
+                                icon: Icons.delete_outline,
+                                label: l10n.common_delete,
+                                iconColor: cs.error,
+                                textColor: cs.error,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -228,6 +239,7 @@ class CarTile extends StatelessWidget {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 4),
                   ],
                 ),
               ),

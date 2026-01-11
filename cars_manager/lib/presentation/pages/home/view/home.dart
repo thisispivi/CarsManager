@@ -153,7 +153,6 @@ class CarsHomePage extends StatelessWidget {
                   );
                 }
 
-                // Multi-column grid (uniform row heights are expected here)
                 return GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
