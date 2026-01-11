@@ -7,6 +7,7 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/overview/s
 import 'package:cars_manager/presentation/pages/payments/view/widgets/repair/repair_section.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/tax/tax_section.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../main.dart';
 
@@ -18,7 +19,19 @@ class PaymentsPage extends StatelessWidget {
     return SafeArea(
       child: Consumer<CarsManagerState>(
         builder: (context, carState, child) {
-          final Car car = carState.car;
+          final Car? car = carState.activeCar;
+          if (car == null) {
+            return Center(
+              child: Text(
+                'Select a car to view payments.',
+                style: GoogleFonts.spaceGrotesk().copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            );
+          }
 
           final bool hasInspectionData =
               car.inspectionDatas != null && car.inspectionDatas!.isNotEmpty;

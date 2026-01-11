@@ -1,25 +1,65 @@
+import '../main.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/widgets/section_header.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../main.dart';
+import 'package:provider/provider.dart';
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class SettingsDrawer extends StatelessWidget {
+  const SettingsDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 16),
-          const LanguageSelector(),
-          const SizedBox(height: 16),
-        ],
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              child: Row(
+                children: [
+                  Text(
+                    'Settings',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    tooltip: 'Close',
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              ),
+            ),
+            const Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: SettingsContent(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class SettingsContent extends StatelessWidget {
+  const SettingsContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const SizedBox(height: 16),
+        const LanguageSelector(),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }

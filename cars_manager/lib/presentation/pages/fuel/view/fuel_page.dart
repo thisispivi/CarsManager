@@ -5,6 +5,7 @@ import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_avg_price_by_year_chart.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_by_year_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class FuelConsumptionPage extends StatelessWidget {
@@ -15,7 +16,19 @@ class FuelConsumptionPage extends StatelessWidget {
     return SafeArea(
       child: Consumer<CarsManagerState>(
         builder: (context, carState, child) {
-          final Car car = carState.car;
+          final Car? car = carState.activeCar;
+          if (car == null) {
+            return Center(
+              child: Text(
+                'Select a car to view fuel data.',
+                style: GoogleFonts.spaceGrotesk().copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            );
+          }
           final hasFuelData = car.fuel?.isNotEmpty ?? false;
 
           final sections = <Widget>[

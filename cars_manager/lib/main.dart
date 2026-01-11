@@ -1,21 +1,23 @@
+import 'dart:ui' as ui;
 import 'package:cars_manager/core/theme/app_theme.dart';
 import 'package:cars_manager/data/car_data.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/l10n/l10n.dart';
-import 'package:cars_manager/pages/Home.dart';
-import 'package:cars_manager/presentation/pages/fuel/view/fuel_consumption_page.dart';
-import 'package:cars_manager/presentation/pages/payments/view/payments_page.dart';
+import 'package:cars_manager/models/car.dart';
+import 'package:cars_manager/models/fine_data.dart';
+import 'package:cars_manager/models/fuel_entry.dart';
+import 'package:cars_manager/models/inspection_data.dart';
+import 'package:cars_manager/models/insurance_data.dart';
+import 'package:cars_manager/models/repair_data.dart';
+import 'package:cars_manager/models/tax_data.dart';
+import 'package:cars_manager/pages/car_stats.dart';
+import 'package:cars_manager/pages/home.dart';
 import 'package:cars_manager/pages/settings.dart';
+import 'package:cars_manager/presentation/pages/fuel/view/fuel_page.dart';
+import 'package:cars_manager/presentation/pages/payments/view/payments_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui' as ui;
-import 'package:cars_manager/models/fuel_entry.dart';
-import 'package:cars_manager/models/insurance_data.dart';
-import 'package:cars_manager/models/tax_data.dart';
-import 'package:cars_manager/models/repair_data.dart';
-import 'package:cars_manager/models/inspection_data.dart';
-import 'package:cars_manager/models/fine_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +39,7 @@ class CarsManager extends StatelessWidget {
           theme: AppTheme.getLightTheme(),
           darkTheme: AppTheme.getDarkTheme(),
           themeMode: state.themeMode,
-          home: DashboardPage(),
+          home: const CarDashboardPage(),
           supportedLocales: L10n.locals,
           localizationsDelegates: [
             AppLocalizations.delegate,
@@ -52,12 +54,9 @@ class CarsManager extends StatelessWidget {
 }
 
 class CarsManagerState extends ChangeNotifier {
-  var car = currentCar;
-
-  Locale? _locale;
-  ThemeMode _themeMode = ThemeMode.dark;
-
-  CarsManagerState() {
+  CarsManagerState()
+    : _cars = List<Car>.from(loadedCars),
+      _activeCarId = loadedActiveCarId {
     final systemLocale = ui.PlatformDispatcher.instance.locale;
     if (L10n.locals.contains(systemLocale)) {
       _locale = systemLocale;
@@ -68,13 +67,65 @@ class CarsManagerState extends ChangeNotifier {
       )) {
         _locale = languageLocale;
       } else {
-        _locale = Locale('en');
+        _locale = const Locale('en');
       }
     }
   }
 
+  final List<Car> _cars;
+  String? _activeCarId;
+
+  Locale? _locale;
+  ThemeMode _themeMode = ThemeMode.dark;
+
+  List<Car> get cars => List.unmodifiable(_cars);
+  String? get activeCarId => _activeCarId;
+
+  Car? get activeCar {
+    final id = _activeCarId;
+    if (id == null) return null;
+    for (final c in _cars) {
+      if (c.id == id) return c;
+    }
+    return null;
+  }
+
+  bool get hasActiveCar => activeCar != null;
+
   Locale? get locale => _locale;
   ThemeMode get themeMode => _themeMode;
+
+  void setActiveCar(String carId) {
+    _activeCarId = carId;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void addCar(Car car, {bool setActive = true}) {
+    _cars.add(car);
+    if (setActive) {
+      _activeCarId = car.id;
+    }
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void updateCar(Car updated) {
+    final index = _cars.indexWhere((c) => c.id == updated.id);
+    if (index == -1) return;
+    _cars[index] = updated;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void removeCar(String carId) {
+    _cars.removeWhere((c) => c.id == carId);
+    if (_activeCarId == carId) {
+      _activeCarId = _cars.isNotEmpty ? _cars.first.id : null;
+    }
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
 
   void setLocale(Locale locale) {
     _locale = locale;
@@ -89,159 +140,256 @@ class CarsManagerState extends ChangeNotifier {
   }
 
   void addFuelEntry(FuelEntry entry) {
+    final car = activeCar;
+    if (car == null) return;
     (car.fuel ??= []).add(entry);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void removeFuelEntry(FuelEntry entry) {
+    final car = activeCar;
+    if (car == null) return;
     car.fuel?.remove(entry);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void addInsurancePayment(InsuranceData data) {
+    final car = activeCar;
+    if (car == null) return;
     (car.insuranceDatas ??= []).add(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void removeInsurancePayment(InsuranceData data) {
+    final car = activeCar;
+    if (car == null) return;
     car.insuranceDatas?.remove(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void addTaxPayment(TaxData data) {
+    final car = activeCar;
+    if (car == null) return;
     (car.taxDatas ??= []).add(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void removeTaxPayment(TaxData data) {
+    final car = activeCar;
+    if (car == null) return;
     car.taxDatas?.remove(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void addRepairPayment(RepairData data) {
+    final car = activeCar;
+    if (car == null) return;
     (car.repairDatas ??= []).add(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void removeRepairPayment(RepairData data) {
+    final car = activeCar;
+    if (car == null) return;
     car.repairDatas?.remove(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void addInspectionPayment(InspectionData data) {
+    final car = activeCar;
+    if (car == null) return;
     (car.inspectionDatas ??= []).add(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void removeInspectionPayment(InspectionData data) {
+    final car = activeCar;
+    if (car == null) return;
     car.inspectionDatas?.remove(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void addFinePayment(FineData data) {
+    final car = activeCar;
+    if (car == null) return;
     (car.fineDatas ??= []).add(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void removeFinePayment(FineData data) {
+    final car = activeCar;
+    if (car == null) return;
     car.fineDatas?.remove(data);
     notifyListeners();
-    saveCarData();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 }
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({super.key});
+class CarDashboardPage extends StatefulWidget {
+  const CarDashboardPage({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<CarDashboardPage> createState() => _CarDashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
-  var selectedIndex = 3;
+class _CarDashboardPageState extends State<CarDashboardPage> {
+  int _selectedIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = HomePage();
-        break;
-      case 1:
-        page = FuelConsumptionPage();
-        break;
-      case 2:
-        page = PaymentsPage();
-        break;
-      case 3:
-        page = SettingsPage();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
+    return Consumer<CarsManagerState>(
+      builder: (context, state, child) {
+        final activeCar = state.activeCar;
 
-    return Scaffold(
-      body: Container(
-        color: Theme.of(context).colorScheme.surface,
-        child: page,
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).navigationBarTheme.backgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.1),
-              blurRadius: 6,
-              spreadRadius: 2,
+        final Widget page;
+        switch (_selectedIndex) {
+          case 0:
+            page = const CarsHomePage();
+            break;
+          case 1:
+            page = const FuelConsumptionPage();
+            break;
+          case 2:
+            page = const PaymentsPage();
+            break;
+          default:
+            page = const CarStatsPage();
+            break;
+        }
+
+        const appName = 'Cars Manager';
+
+        return Scaffold(
+          key: _scaffoldKey,
+          endDrawer: const SettingsDrawer(),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            titleSpacing: 16,
+            title: Row(
+              children: [
+                Text(appName),
+                const SizedBox(width: 12),
+
+                if (activeCar != null)
+                  Expanded(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 14,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          backgroundImage:
+                              (activeCar.imageUrl != null &&
+                                  activeCar.imageUrl!.isNotEmpty)
+                              ? NetworkImage(activeCar.imageUrl!)
+                              : null,
+                          child:
+                              (activeCar.imageUrl == null ||
+                                  activeCar.imageUrl!.isEmpty)
+                              ? Icon(
+                                  Icons.directions_car,
+                                  size: 16,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                )
+                              : null,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            activeCar.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
             ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.secondary,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: selectedIndex,
-          selectedFontSize: 14,
-          iconSize: 26,
-          unselectedFontSize: 12,
-          onTap: (value) {
-            setState(() {
-              selectedIndex = value;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_gas_station),
-              label: 'Fuel',
+            actions: [
+              IconButton(
+                tooltip: 'Settings',
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  _scaffoldKey.currentState?.openEndDrawer();
+                },
+              ),
+            ],
+          ),
+          body: Container(
+            color: Theme.of(context).colorScheme.surface,
+            child: page,
+          ),
+          bottomNavigationBar: Container(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 4.0,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.payment),
-              label: 'Payments',
+            decoration: BoxDecoration(
+              color: Theme.of(context).navigationBarTheme.backgroundColor,
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.1),
+                  blurRadius: 6,
+                  spreadRadius: 2,
+                ),
+              ],
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
+            child: BottomNavigationBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              selectedItemColor: Theme.of(context).colorScheme.primary,
+              unselectedItemColor: Theme.of(context).colorScheme.secondary,
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: _selectedIndex,
+              selectedFontSize: 14,
+              iconSize: 26,
+              unselectedFontSize: 12,
+              onTap: (value) {
+                setState(() {
+                  _selectedIndex = value;
+                });
+              },
+              items: [
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.home_rounded),
+                  label: 'Garage',
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.local_gas_station),
+                  label: 'Fuel',
+                ),
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.payment),
+                  label: 'Payments',
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

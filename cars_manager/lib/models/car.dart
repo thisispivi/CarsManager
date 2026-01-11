@@ -1,30 +1,23 @@
 import 'package:cars_manager/models/fine_data.dart';
+import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/models/inspection_data.dart';
 import 'package:cars_manager/models/insurance_data.dart';
-import 'package:cars_manager/models/manufacture.dart';
-import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:flutter/painting.dart';
 
 class Car {
+  String id;
   String name;
   String model;
-  String setUp;
-  Manufacture manufacture;
+  String manufacture;
   int yearOfManufacture;
-  int? originalPrice;
-  int? productionStartYear;
-  int? productionEndYear;
   String? imageUrl;
   Alignment? imageAlignment;
   String licensePlate;
-
   DateTime insuranceExpirationDate;
-
   FuelType? fuelType;
   List<FuelEntry>? fuel;
-
   List<InsuranceData>? insuranceDatas;
   List<InspectionData>? inspectionDatas;
   List<TaxData>? taxDatas;
@@ -32,23 +25,17 @@ class Car {
   List<FineData>? fineDatas;
 
   Car({
+    required this.id,
     required this.name,
     required this.model,
-    required this.setUp,
     required this.manufacture,
     required this.yearOfManufacture,
-    this.originalPrice,
-    this.productionStartYear,
-    this.productionEndYear,
     this.imageUrl,
     this.imageAlignment = Alignment.center,
     required this.licensePlate,
-
     required this.insuranceExpirationDate,
-
     this.fuelType,
     this.fuel,
-
     this.inspectionDatas,
     this.insuranceDatas,
     this.taxDatas,

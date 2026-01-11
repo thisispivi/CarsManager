@@ -1,12 +1,11 @@
-import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
-import 'package:cars_manager/presentation/common/widgets/section_header.dart';
+import '../main.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
+import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
+import 'package:cars_manager/presentation/common/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../main.dart';
 
 class CarStatsPage extends StatelessWidget {
   const CarStatsPage({super.key});
@@ -16,7 +15,10 @@ class CarStatsPage extends StatelessWidget {
     return SafeArea(
       child: Consumer<CarsManagerState>(
         builder: (context, carState, child) {
-          final Car car = carState.car;
+          final Car? car = carState.activeCar;
+          if (car == null) {
+            return const Center(child: Text('Select a car to view stats.'));
+          }
 
           final List<Widget Function()> sections = [
             () => const SizedBox(height: 16),
@@ -102,7 +104,7 @@ class CarDataBlock extends StatelessWidget {
               Divider(color: Theme.of(context).colorScheme.tertiary),
               DataRow(
                 label: AppLocalizations.of(context)!.carData_manufacture,
-                value: car.manufacture.name,
+                value: car.manufacture,
               ),
               Divider(color: Theme.of(context).colorScheme.tertiary),
               DataRow(
@@ -110,37 +112,13 @@ class CarDataBlock extends StatelessWidget {
                 value: car.model,
               ),
               Divider(color: Theme.of(context).colorScheme.tertiary),
-              DataRow(
-                label: AppLocalizations.of(context)!.carData_setUp,
-                value: car.setUp,
-              ),
               Divider(color: Theme.of(context).colorScheme.tertiary),
               DataRow(
                 label: AppLocalizations.of(context)!.carData_licensePlate,
                 value: car.licensePlate,
               ),
               Divider(color: Theme.of(context).colorScheme.tertiary),
-              DataRow(
-                label: AppLocalizations.of(context)!.carData_originalPrice,
-                value: car.originalPrice != null
-                    ? AppLocalizations.of(context)!.unit_currency(
-                        NumberFormat("#,###").format(car.originalPrice!),
-                        "€",
-                        " ",
-                      )
-                    : "-",
-              ),
               Divider(color: Theme.of(context).colorScheme.tertiary),
-              DataRow(
-                label: AppLocalizations.of(
-                  context,
-                )!.carData_productionRangeYears,
-                value:
-                    car.productionStartYear != null &&
-                        car.productionEndYear != null
-                    ? "${car.productionStartYear} - ${car.productionEndYear}"
-                    : "-",
-              ),
               Divider(color: Theme.of(context).colorScheme.tertiary),
               DataRow(
                 label: AppLocalizations.of(context)!.carData_yearOfManufacture,
