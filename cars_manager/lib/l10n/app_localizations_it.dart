@@ -217,6 +217,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get payments_inspectionsData_title => 'Dati Revisioni';
 
   @override
+  String get payments_inspectionsData_empty =>
+      'Nessuna revisione. Tocca Aggiungi per crearne una.';
+
+  @override
   String get payments_inspectionsData_nextDue => 'Prossima Revisione';
 
   @override
@@ -241,6 +245,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get payments_insuranceData_title => 'Dati Assicurazione';
 
   @override
+  String get payments_insuranceData_empty =>
+      'Nessuna assicurazione. Tocca Aggiungi per crearne una.';
+
+  @override
   String get payments_insuranceData_nextDue => 'Scadenza Assicurazione';
 
   @override
@@ -251,6 +259,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get payments_taxesData_title => 'Dati Bollo';
+
+  @override
+  String get payments_taxesData_empty =>
+      'Nessun bollo. Tocca Aggiungi per crearne uno.';
 
   @override
   String get payments_taxesData_nextDue => 'Prossimo Bollo';
@@ -272,6 +284,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get payments_repairsData_title => 'Dati Riparazioni';
+
+  @override
+  String get payments_repairsData_empty =>
+      'Nessuna riparazione. Tocca Aggiungi per crearne una.';
 
   @override
   String get payments_repairsData_shortTitle => 'Riparazioni';
@@ -302,6 +318,10 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get payments_finesData_title => 'Dati Multe';
+
+  @override
+  String get payments_finesData_empty =>
+      'Nessuna multa. Tocca Aggiungi per crearne una.';
 
   @override
   String get payments_fineData_shortTitle => 'Multa';

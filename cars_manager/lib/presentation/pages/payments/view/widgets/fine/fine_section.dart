@@ -62,17 +62,24 @@ class FineSection extends StatelessWidget {
           style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
         ),
       ),
-      items: items
-          .asMap()
-          .entries
-          .map(
+      items: [
+        if (items.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              localizations.payments_finesData_empty,
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+            ),
+          )
+        else
+          ...items.asMap().entries.map(
             (entry) => FineItem(
               fine: entry.value,
               locale: locale,
               isLast: entry.key == items.length - 1,
             ),
-          )
-          .toList(),
+          ),
+      ],
     );
   }
 }

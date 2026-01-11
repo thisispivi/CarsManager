@@ -212,6 +212,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payments_inspectionsData_title => 'Inspections Data';
 
   @override
+  String get payments_inspectionsData_empty =>
+      'No inspection entries yet. Tap Add to create one.';
+
+  @override
   String get payments_inspectionsData_nextDue => 'Next Inspection Due';
 
   @override
@@ -236,6 +240,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get payments_insuranceData_title => 'Insurance Data';
 
   @override
+  String get payments_insuranceData_empty =>
+      'No insurance entries yet. Tap Add to create one.';
+
+  @override
   String get payments_insuranceData_nextDue => 'Next Insurance Due';
 
   @override
@@ -246,6 +254,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get payments_taxesData_title => 'Tax Data';
+
+  @override
+  String get payments_taxesData_empty =>
+      'No tax entries yet. Tap Add to create one.';
 
   @override
   String get payments_taxesData_nextDue => 'Next Tax Due';
@@ -267,6 +279,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get payments_repairsData_title => 'Repairs Data';
+
+  @override
+  String get payments_repairsData_empty =>
+      'No repair entries yet. Tap Add to create one.';
 
   @override
   String get payments_repairsData_shortTitle => 'Repair';
@@ -297,6 +313,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get payments_finesData_title => 'Fines Data';
+
+  @override
+  String get payments_finesData_empty =>
+      'No fine entries yet. Tap Add to create one.';
 
   @override
   String get payments_fineData_shortTitle => 'Fine';

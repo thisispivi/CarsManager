@@ -332,6 +332,10 @@
   "@payments_inspectionsData_title": {
     "description": "Title for the car inspections data section"
   },
+  "payments_inspectionsData_empty": "Nessuna revisione. Tocca Aggiungi per crearne una.",
+  "@payments_inspectionsData_empty": {
+    "description": "Empty state message when there are no inspection entries in payments"
+  },
   "payments_inspectionsData_nextDue": "Prossima Revisione",
   "@payments_inspectionsData_nextDue": {
     "description": "Label for the next inspection due date field"
@@ -364,6 +368,10 @@
   "@payments_insuranceData_title": {
     "description": "Title for the car insurance data section"
   },
+  "payments_insuranceData_empty": "Nessuna assicurazione. Tocca Aggiungi per crearne una.",
+  "@payments_insuranceData_empty": {
+    "description": "Empty state message when there are no insurance entries in payments"
+  },
   "payments_insuranceData_nextDue": "Scadenza Assicurazione",
   "@payments_insuranceData_nextDue": {
     "description": "Label for the next insurance due date field"
@@ -379,6 +387,10 @@
   "payments_taxesData_title": "Dati Bollo",
   "@payments_taxesData_title": {
     "description": "Title for the car tax data section"
+  },
+  "payments_taxesData_empty": "Nessun bollo. Tocca Aggiungi per crearne uno.",
+  "@payments_taxesData_empty": {
+    "description": "Empty state message when there are no tax entries in payments"
   },
   "payments_taxesData_nextDue": "Prossimo Bollo",
   "@payments_taxesData_nextDue": {
@@ -407,6 +419,10 @@
   "payments_repairsData_title": "Dati Riparazioni",
   "@payments_repairsData_title": {
     "description": "Title for the repairs (mechanic) data section in payments"
+  },
+  "payments_repairsData_empty": "Nessuna riparazione. Tocca Aggiungi per crearne una.",
+  "@payments_repairsData_empty": {
+    "description": "Empty state message when there are no repair entries in payments"
   },
   "payments_repairsData_shortTitle": "Riparazioni",
   "@payments_repairsData_shortTitle": {
@@ -447,6 +463,10 @@
   "payments_finesData_title": "Dati Multe",
   "@payments_finesData_title": {
     "description": "Title for the fines data section"
+  },
+  "payments_finesData_empty": "Nessuna multa. Tocca Aggiungi per crearne una.",
+  "@payments_finesData_empty": {
+    "description": "Empty state message when there are no fine entries in payments"
   },
   "payments_fineData_shortTitle": "Multa",
   "@payments_fineData_shortTitle": {

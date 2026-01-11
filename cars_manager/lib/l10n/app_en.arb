@@ -332,6 +332,10 @@
   "@payments_inspectionsData_title": {
     "description": "Title for the inspections data section in payments"
   },
+  "payments_inspectionsData_empty": "No inspection entries yet. Tap Add to create one.",
+  "@payments_inspectionsData_empty": {
+    "description": "Empty state message when there are no inspection entries in payments"
+  },
   "payments_inspectionsData_nextDue": "Next Inspection Due",
   "@payments_inspectionsData_nextDue": {
     "description": "Label for the next inspection date field in payments"
@@ -364,6 +368,10 @@
   "@payments_insuranceData_title": {
     "description": "Title for the insurance data section in payments"
   },
+  "payments_insuranceData_empty": "No insurance entries yet. Tap Add to create one.",
+  "@payments_insuranceData_empty": {
+    "description": "Empty state message when there are no insurance entries in payments"
+  },
   "payments_insuranceData_nextDue": "Next Insurance Due",
   "@payments_insuranceData_nextDue": {
     "description": "Label for the next insurance due date field in payments"
@@ -379,6 +387,10 @@
   "payments_taxesData_title": "Tax Data",
   "@payments_taxesData_title": {
     "description": "Title for the car tax data section"
+  },
+  "payments_taxesData_empty": "No tax entries yet. Tap Add to create one.",
+  "@payments_taxesData_empty": {
+    "description": "Empty state message when there are no tax entries in payments"
   },
   "payments_taxesData_nextDue": "Next Tax Due",
   "@payments_taxesData_nextDue": {
@@ -407,6 +419,10 @@
   "payments_repairsData_title": "Repairs Data",
   "@payments_repairsData_title": {
     "description": "Title for the repairs (mechanic) data section in payments"
+  },
+  "payments_repairsData_empty": "No repair entries yet. Tap Add to create one.",
+  "@payments_repairsData_empty": {
+    "description": "Empty state message when there are no repair entries in payments"
   },
   "payments_repairsData_shortTitle": "Repair",
   "@payments_repairsData_shortTitle": {
@@ -447,6 +463,10 @@
   "payments_finesData_title": "Fines Data",
   "@payments_finesData_title": {
     "description": "Title for the fines data section in payments"
+  },
+  "payments_finesData_empty": "No fine entries yet. Tap Add to create one.",
+  "@payments_finesData_empty": {
+    "description": "Empty state message when there are no fine entries in payments"
   },
   "payments_fineData_shortTitle": "Fine",
   "@payments_fineData_shortTitle": {

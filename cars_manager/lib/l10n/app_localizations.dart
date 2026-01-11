@@ -440,6 +440,12 @@ abstract class AppLocalizations {
   /// **'Inspections Data'**
   String get payments_inspectionsData_title;
 
+  /// Empty state message when there are no inspection entries in payments
+  ///
+  /// In en, this message translates to:
+  /// **'No inspection entries yet. Tap Add to create one.'**
+  String get payments_inspectionsData_empty;
+
   /// Label for the next inspection date field in payments
   ///
   /// In en, this message translates to:
@@ -488,6 +494,12 @@ abstract class AppLocalizations {
   /// **'Insurance Data'**
   String get payments_insuranceData_title;
 
+  /// Empty state message when there are no insurance entries in payments
+  ///
+  /// In en, this message translates to:
+  /// **'No insurance entries yet. Tap Add to create one.'**
+  String get payments_insuranceData_empty;
+
   /// Label for the next insurance due date field in payments
   ///
   /// In en, this message translates to:
@@ -511,6 +523,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tax Data'**
   String get payments_taxesData_title;
+
+  /// Empty state message when there are no tax entries in payments
+  ///
+  /// In en, this message translates to:
+  /// **'No tax entries yet. Tap Add to create one.'**
+  String get payments_taxesData_empty;
 
   /// Label for the next tax due date field in payments
   ///
@@ -553,6 +571,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Repairs Data'**
   String get payments_repairsData_title;
+
+  /// Empty state message when there are no repair entries in payments
+  ///
+  /// In en, this message translates to:
+  /// **'No repair entries yet. Tap Add to create one.'**
+  String get payments_repairsData_empty;
 
   /// Short title for the repairs data section in payments
   ///
@@ -613,6 +637,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fines Data'**
   String get payments_finesData_title;
+
+  /// Empty state message when there are no fine entries in payments
+  ///
+  /// In en, this message translates to:
+  /// **'No fine entries yet. Tap Add to create one.'**
+  String get payments_finesData_empty;
 
   /// Short title for the fines data section in payments
   ///

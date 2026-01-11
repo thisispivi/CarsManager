@@ -11,7 +11,7 @@ import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:cars_manager/pages/car_stats.dart';
-import 'package:cars_manager/pages/home.dart';
+import 'package:cars_manager/presentation/pages/home/view/home.dart';
 import 'package:cars_manager/pages/settings.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/fuel_page.dart';
 import 'package:cars_manager/presentation/pages/payments/view/payments_page.dart';

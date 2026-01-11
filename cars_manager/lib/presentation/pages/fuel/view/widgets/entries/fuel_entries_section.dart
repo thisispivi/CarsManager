@@ -70,7 +70,7 @@ class FuelEntriesSection extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               localizations.fuel_entries_empty,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
             ),
           )
         else

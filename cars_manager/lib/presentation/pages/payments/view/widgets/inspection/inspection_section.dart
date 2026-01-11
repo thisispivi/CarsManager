@@ -65,18 +65,25 @@ class InspectionSection extends StatelessWidget {
           style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
         ),
       ),
-      nextInfoDue: NextInspectionInfo(car: car),
-      items: items
-          .asMap()
-          .entries
-          .map(
+      nextInfoDue: items.isNotEmpty ? NextInspectionInfo(car: car) : null,
+      items: [
+        if (items.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              localizations.payments_inspectionsData_empty,
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+            ),
+          )
+        else
+          ...items.asMap().entries.map(
             (entry) => InspectionItem(
               inspection: entry.value,
               locale: locale,
               isLast: entry.key == items.length - 1,
             ),
-          )
-          .toList(),
+          ),
+      ],
     );
   }
 }

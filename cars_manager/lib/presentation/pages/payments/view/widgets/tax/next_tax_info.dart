@@ -1,7 +1,7 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:flutter/material.dart';
-import '../common/next_info_due.dart';
+import 'package:cars_manager/presentation/common/widgets/next_info_due.dart';
 
 class NextTaxInfo extends StatelessWidget {
   final Car car;
