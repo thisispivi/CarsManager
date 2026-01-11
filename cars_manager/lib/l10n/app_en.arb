@@ -48,9 +48,59 @@
   "@carData_insuranceExpirationDate": {
     "description": "Label for the insurance expiration date field"
   },
+  "carData_photoUrl": "Photo URL",
+  "@carData_photoUrl": {
+    "description": "Label for the car photo URL field"
+  },
   "carData_carInspectionDate": "Car Inspection Date",
   "@carData_carInspectionDate": {
     "description": "Label for the car inspection date field"
+  },
+  "cars_car_shortTitle": "Car",
+  "@cars_car_shortTitle": {
+    "description": "Short entity name for a car"
+  },
+  "cars_emptyState": "No cars yet. Tap + to add one.",
+  "@cars_emptyState": {
+    "description": "Empty state message on the cars home page"
+  },
+  "cars_removeConfirmTitle": "Remove car?",
+  "@cars_removeConfirmTitle": {
+    "description": "Title for the car removal confirmation dialog"
+  },
+  "cars_removeConfirmBody": "Remove \"{name}\" from your collection?",
+  "@cars_removeConfirmBody": {
+    "description": "Body for the car removal confirmation dialog",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "My Car"
+      }
+    }
+  },
+  "cars_noCarsLeftTitle": "No cars left",
+  "@cars_noCarsLeftTitle": {
+    "description": "Title shown after removing the last car"
+  },
+  "cars_noCarsLeftBody": "Please add a new car to continue.",
+  "@cars_noCarsLeftBody": {
+    "description": "Body shown after removing the last car"
+  },
+  "cars_activeRemoved": "Active car removed. Please select another.",
+  "@cars_activeRemoved": {
+    "description": "Snackbar shown when the active car is removed"
+  },
+  "payments_selectCarHint": "Select a car to view payments.",
+  "@payments_selectCarHint": {
+    "description": "Empty state text when no car is selected on payments"
+  },
+  "fuel_selectCarHint": "Select a car to view fuel data.",
+  "@fuel_selectCarHint": {
+    "description": "Empty state text when no car is selected on fuel"
+  },
+  "stats_selectCarHint": "Select a car to view stats.",
+  "@stats_selectCarHint": {
+    "description": "Empty state text when no car is selected on stats"
   },
   "fuelType_petrol": "Petrol",
   "@fuelType_petrol": {
@@ -262,6 +312,18 @@
   "@settings_title": {
     "description": "Title for the settings section"
   },
+  "common_close": "Close",
+  "@common_close": {
+    "description": "Generic close action label"
+  },
+  "language_name_en": "English",
+  "@language_name_en": {
+    "description": "Language name for English"
+  },
+  "language_name_it": "Italian",
+  "@language_name_it": {
+    "description": "Language name for Italian"
+  },
   "language_selector_title": "Language",
   "@language_selector_title": {
     "description": "Title for the language selection dropdown"
@@ -398,6 +460,18 @@
   "@common_add": {
     "description": "Generic add action label"
   },
+  "common_edit": "Edit",
+  "@common_edit": {
+    "description": "Generic edit action label"
+  },
+  "common_save": "Save",
+  "@common_save": {
+    "description": "Generic save action label"
+  },
+  "common_ok": "OK",
+  "@common_ok": {
+    "description": "Generic OK/confirm action label"
+  },
   "common_pick": "Pick",
   "@common_pick": {
     "description": "Generic pick/select action label"
@@ -437,6 +511,16 @@
       "entity": {
         "type": "String",
         "example": "Insurance"
+      }
+    }
+  },
+  "common_editEntity": "Edit {entity}",
+  "@common_editEntity": {
+    "description": "Edit an entity by name",
+    "placeholders": {
+      "entity": {
+        "type": "String",
+        "example": "Car"
       }
     }
   },
@@ -517,6 +601,64 @@
         "example": "Amount"
       }
     }
+  },
+  "validation_minLength": "{field} must be at least {min} characters",
+  "@validation_minLength": {
+    "description": "Validation message for minimum string length",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Name"
+      },
+      "min": {
+        "type": "int",
+        "example": "2"
+      }
+    }
+  },
+  "validation_maxLength": "{field} must be at most {max} characters",
+  "@validation_maxLength": {
+    "description": "Validation message for maximum string length",
+    "placeholders": {
+      "field": {
+        "type": "String",
+        "example": "Name"
+      },
+      "max": {
+        "type": "int",
+        "example": "40"
+      }
+    }
+  },
+  "validation_invalidYear": "Please enter a valid year",
+  "@validation_invalidYear": {
+    "description": "Validation message for an invalid year"
+  },
+  "validation_yearBetween": "Year must be between {min} and {max}",
+  "@validation_yearBetween": {
+    "description": "Validation message for a year outside the allowed range",
+    "placeholders": {
+      "min": {
+        "type": "int",
+        "example": "1886"
+      },
+      "max": {
+        "type": "int",
+        "example": "2027"
+      }
+    }
+  },
+  "validation_licensePlateInvalid": "License plate looks invalid",
+  "@validation_licensePlateInvalid": {
+    "description": "Validation message for an invalid license plate"
+  },
+  "validation_urlInvalid": "Please enter a valid http(s) URL",
+  "@validation_urlInvalid": {
+    "description": "Validation message for an invalid URL"
+  },
+  "validation_dateNotPast": "Insurance expiration date cannot be in the past.",
+  "@validation_dateNotPast": {
+    "description": "Validation message shown when the insurance expiration date is in the past"
   },
   "validation_number_gt_zero": "{field} must be a number > 0",
   "@validation_number_gt_zero": {

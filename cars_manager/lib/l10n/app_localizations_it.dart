@@ -45,7 +45,47 @@ class AppLocalizationsIt extends AppLocalizations {
   String get carData_insuranceExpirationDate => 'Scadenza Assicurazione';
 
   @override
+  String get carData_photoUrl => 'URL Foto';
+
+  @override
   String get carData_carInspectionDate => 'Data Revisione';
+
+  @override
+  String get cars_car_shortTitle => 'Auto';
+
+  @override
+  String get cars_emptyState =>
+      'Nessuna auto ancora. Tocca + per aggiungerne una.';
+
+  @override
+  String get cars_removeConfirmTitle => 'Rimuovere l\'auto?';
+
+  @override
+  String cars_removeConfirmBody(String name) {
+    return 'Rimuovere \"$name\" dalla tua collezione?';
+  }
+
+  @override
+  String get cars_noCarsLeftTitle => 'Nessuna auto rimasta';
+
+  @override
+  String get cars_noCarsLeftBody => 'Aggiungi una nuova auto per continuare.';
+
+  @override
+  String get cars_activeRemoved =>
+      'Auto attiva rimossa. Selezionane un\'altra.';
+
+  @override
+  String get payments_selectCarHint =>
+      'Seleziona un\'auto per vedere i pagamenti.';
+
+  @override
+  String get fuel_selectCarHint =>
+      'Seleziona un\'auto per vedere i dati carburante.';
+
+  @override
+  String get stats_selectCarHint =>
+      'Seleziona un\'auto per vedere le statistiche.';
 
   @override
   String get fuelType_petrol => 'Benzina';
@@ -162,6 +202,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settings_title => 'Impostazioni';
 
   @override
+  String get common_close => 'Chiudi';
+
+  @override
+  String get language_name_en => 'Inglese';
+
+  @override
+  String get language_name_it => 'Italiano';
+
+  @override
   String get language_selector_title => 'Lingua';
 
   @override
@@ -264,6 +313,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get common_add => 'Aggiungi';
 
   @override
+  String get common_edit => 'Modifica';
+
+  @override
+  String get common_save => 'Salva';
+
+  @override
+  String get common_ok => 'OK';
+
+  @override
   String get common_pick => 'Scegli';
 
   @override
@@ -290,6 +348,11 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String common_addEntity(String entity) {
     return 'Aggiungi $entity';
+  }
+
+  @override
+  String common_editEntity(String entity) {
+    return 'Modifica $entity';
   }
 
   @override
@@ -349,6 +412,34 @@ class AppLocalizationsIt extends AppLocalizations {
   String validation_required(String field) {
     return '$field è obbligatorio';
   }
+
+  @override
+  String validation_minLength(String field, int min) {
+    return '$field deve contenere almeno $min caratteri';
+  }
+
+  @override
+  String validation_maxLength(String field, int max) {
+    return '$field deve contenere al massimo $max caratteri';
+  }
+
+  @override
+  String get validation_invalidYear => 'Inserisci un anno valido';
+
+  @override
+  String validation_yearBetween(int min, int max) {
+    return 'L\'anno deve essere tra $min e $max';
+  }
+
+  @override
+  String get validation_licensePlateInvalid => 'La targa non sembra valida';
+
+  @override
+  String get validation_urlInvalid => 'Inserisci un URL http(s) valido';
+
+  @override
+  String get validation_dateNotPast =>
+      'La data di scadenza dell\'assicurazione non può essere nel passato.';
 
   @override
   String validation_number_gt_zero(String field) {

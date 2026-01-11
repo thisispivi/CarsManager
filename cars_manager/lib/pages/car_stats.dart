@@ -17,7 +17,17 @@ class CarStatsPage extends StatelessWidget {
         builder: (context, carState, child) {
           final Car? car = carState.activeCar;
           if (car == null) {
-            return const Center(child: Text('Select a car to view stats.'));
+            final l10n = AppLocalizations.of(context)!;
+            return Center(
+              child: Text(
+                l10n.stats_selectCarHint,
+                style: GoogleFonts.spaceGrotesk().copyWith(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            );
           }
 
           final List<Widget Function()> sections = [

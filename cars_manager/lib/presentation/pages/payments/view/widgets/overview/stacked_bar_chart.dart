@@ -13,6 +13,7 @@ class ExpensesByYearChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final carsManagerState = Provider.of<CarsManagerState>(
       context,
       listen: false,
@@ -26,9 +27,7 @@ class ExpensesByYearChart extends StatelessWidget {
     }
 
     return PaymentSectionCard(
-      title:
-          AppLocalizations.of(context)?.payments_expensesByYear_title ??
-          'Expenses by Year',
+      title: l10n.payments_expensesByYear_title,
       nextInfoDue: null,
       items: [
         Padding(

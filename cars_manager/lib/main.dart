@@ -34,7 +34,7 @@ class CarsManager extends StatelessWidget {
       create: (context) => CarsManagerState(),
       child: Consumer<CarsManagerState>(
         builder: (context, state, child) => MaterialApp(
-          title: 'Cars Manager',
+          onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
           locale: state.locale,
           theme: AppTheme.getLightTheme(),
           darkTheme: AppTheme.getDarkTheme(),
@@ -251,6 +251,7 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
   Widget build(BuildContext context) {
     return Consumer<CarsManagerState>(
       builder: (context, state, child) {
+        final l10n = AppLocalizations.of(context)!;
         final activeCar = state.activeCar;
 
         final Widget page;
@@ -269,8 +270,6 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
             break;
         }
 
-        const appName = 'Cars Manager';
-
         return Scaffold(
           key: _scaffoldKey,
           endDrawer: const SettingsDrawer(),
@@ -279,7 +278,7 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
             titleSpacing: 16,
             title: Row(
               children: [
-                Text(appName),
+                Text(l10n.appTitle),
                 const SizedBox(width: 12),
 
                 if (activeCar != null)
@@ -328,7 +327,7 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
             ),
             actions: [
               IconButton(
-                tooltip: 'Settings',
+                tooltip: l10n.settings_title,
                 icon: const Icon(Icons.menu),
                 onPressed: () {
                   _scaffoldKey.currentState?.openEndDrawer();

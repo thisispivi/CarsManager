@@ -1,4 +1,5 @@
 import 'package:cars_manager/main.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/fuel_entries_section.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_amount_by_year_chart.dart';
@@ -18,9 +19,10 @@ class FuelConsumptionPage extends StatelessWidget {
         builder: (context, carState, child) {
           final Car? car = carState.activeCar;
           if (car == null) {
+            final l10n = AppLocalizations.of(context)!;
             return Center(
               child: Text(
-                'Select a car to view fuel data.',
+                l10n.fuel_selectCarHint,
                 style: GoogleFonts.spaceGrotesk().copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

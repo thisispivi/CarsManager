@@ -170,11 +170,77 @@ abstract class AppLocalizations {
   /// **'Insurance Expiration'**
   String get carData_insuranceExpirationDate;
 
+  /// Label for the car photo URL field
+  ///
+  /// In en, this message translates to:
+  /// **'Photo URL'**
+  String get carData_photoUrl;
+
   /// Label for the car inspection date field
   ///
   /// In en, this message translates to:
   /// **'Car Inspection Date'**
   String get carData_carInspectionDate;
+
+  /// Short entity name for a car
+  ///
+  /// In en, this message translates to:
+  /// **'Car'**
+  String get cars_car_shortTitle;
+
+  /// Empty state message on the cars home page
+  ///
+  /// In en, this message translates to:
+  /// **'No cars yet. Tap + to add one.'**
+  String get cars_emptyState;
+
+  /// Title for the car removal confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Remove car?'**
+  String get cars_removeConfirmTitle;
+
+  /// Body for the car removal confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Remove \"{name}\" from your collection?'**
+  String cars_removeConfirmBody(String name);
+
+  /// Title shown after removing the last car
+  ///
+  /// In en, this message translates to:
+  /// **'No cars left'**
+  String get cars_noCarsLeftTitle;
+
+  /// Body shown after removing the last car
+  ///
+  /// In en, this message translates to:
+  /// **'Please add a new car to continue.'**
+  String get cars_noCarsLeftBody;
+
+  /// Snackbar shown when the active car is removed
+  ///
+  /// In en, this message translates to:
+  /// **'Active car removed. Please select another.'**
+  String get cars_activeRemoved;
+
+  /// Empty state text when no car is selected on payments
+  ///
+  /// In en, this message translates to:
+  /// **'Select a car to view payments.'**
+  String get payments_selectCarHint;
+
+  /// Empty state text when no car is selected on fuel
+  ///
+  /// In en, this message translates to:
+  /// **'Select a car to view fuel data.'**
+  String get fuel_selectCarHint;
+
+  /// Empty state text when no car is selected on stats
+  ///
+  /// In en, this message translates to:
+  /// **'Select a car to view stats.'**
+  String get stats_selectCarHint;
 
   /// Label for petrol/gasoline fuel type
   ///
@@ -343,6 +409,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings_title;
+
+  /// Generic close action label
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get common_close;
+
+  /// Language name for English
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get language_name_en;
+
+  /// Language name for Italian
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get language_name_it;
 
   /// Title for the language selection dropdown
   ///
@@ -548,6 +632,24 @@ abstract class AppLocalizations {
   /// **'Add'**
   String get common_add;
 
+  /// Generic edit action label
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get common_edit;
+
+  /// Generic save action label
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get common_save;
+
+  /// Generic OK/confirm action label
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get common_ok;
+
   /// Generic pick/select action label
   ///
   /// In en, this message translates to:
@@ -601,6 +703,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add {entity}'**
   String common_addEntity(String entity);
+
+  /// Edit an entity by name
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {entity}'**
+  String common_editEntity(String entity);
 
   /// Title for an actions sheet
   ///
@@ -709,6 +817,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{field} is required'**
   String validation_required(String field);
+
+  /// Validation message for minimum string length
+  ///
+  /// In en, this message translates to:
+  /// **'{field} must be at least {min} characters'**
+  String validation_minLength(String field, int min);
+
+  /// Validation message for maximum string length
+  ///
+  /// In en, this message translates to:
+  /// **'{field} must be at most {max} characters'**
+  String validation_maxLength(String field, int max);
+
+  /// Validation message for an invalid year
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid year'**
+  String get validation_invalidYear;
+
+  /// Validation message for a year outside the allowed range
+  ///
+  /// In en, this message translates to:
+  /// **'Year must be between {min} and {max}'**
+  String validation_yearBetween(int min, int max);
+
+  /// Validation message for an invalid license plate
+  ///
+  /// In en, this message translates to:
+  /// **'License plate looks invalid'**
+  String get validation_licensePlateInvalid;
+
+  /// Validation message for an invalid URL
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid http(s) URL'**
+  String get validation_urlInvalid;
+
+  /// Validation message shown when the insurance expiration date is in the past
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance expiration date cannot be in the past.'**
+  String get validation_dateNotPast;
 
   /// Validation message for positive numbers
   ///

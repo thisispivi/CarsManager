@@ -1,4 +1,5 @@
 import 'package:cars_manager/models/car.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/fine/fine_section.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/inspection/inspection_section.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/insurance/insurance_section.dart';
@@ -21,9 +22,10 @@ class PaymentsPage extends StatelessWidget {
         builder: (context, carState, child) {
           final Car? car = carState.activeCar;
           if (car == null) {
+            final l10n = AppLocalizations.of(context)!;
             return Center(
               child: Text(
-                'Select a car to view payments.',
+                l10n.payments_selectCarHint,
                 style: GoogleFonts.spaceGrotesk().copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

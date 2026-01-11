@@ -1,5 +1,6 @@
 import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/presentation/common/utils/date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -189,13 +190,9 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                     ),
                     TextButton.icon(
                       onPressed: () async {
-                        final selected = await showDatePicker(
+                        final selected = await showCustomDatePicker(
                           context: context,
                           initialDate: _date,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime.now().add(
-                            const Duration(days: 3650),
-                          ),
                         );
                         if (selected != null) {
                           setState(() {

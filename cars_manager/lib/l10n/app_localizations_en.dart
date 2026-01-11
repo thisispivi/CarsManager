@@ -45,7 +45,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get carData_insuranceExpirationDate => 'Insurance Expiration';
 
   @override
+  String get carData_photoUrl => 'Photo URL';
+
+  @override
   String get carData_carInspectionDate => 'Car Inspection Date';
+
+  @override
+  String get cars_car_shortTitle => 'Car';
+
+  @override
+  String get cars_emptyState => 'No cars yet. Tap + to add one.';
+
+  @override
+  String get cars_removeConfirmTitle => 'Remove car?';
+
+  @override
+  String cars_removeConfirmBody(String name) {
+    return 'Remove \"$name\" from your collection?';
+  }
+
+  @override
+  String get cars_noCarsLeftTitle => 'No cars left';
+
+  @override
+  String get cars_noCarsLeftBody => 'Please add a new car to continue.';
+
+  @override
+  String get cars_activeRemoved => 'Active car removed. Please select another.';
+
+  @override
+  String get payments_selectCarHint => 'Select a car to view payments.';
+
+  @override
+  String get fuel_selectCarHint => 'Select a car to view fuel data.';
+
+  @override
+  String get stats_selectCarHint => 'Select a car to view stats.';
 
   @override
   String get fuelType_petrol => 'Petrol';
@@ -162,6 +197,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_title => 'Settings';
 
   @override
+  String get common_close => 'Close';
+
+  @override
+  String get language_name_en => 'English';
+
+  @override
+  String get language_name_it => 'Italian';
+
+  @override
   String get language_selector_title => 'Language';
 
   @override
@@ -264,6 +308,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get common_add => 'Add';
 
   @override
+  String get common_edit => 'Edit';
+
+  @override
+  String get common_save => 'Save';
+
+  @override
+  String get common_ok => 'OK';
+
+  @override
   String get common_pick => 'Pick';
 
   @override
@@ -290,6 +343,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String common_addEntity(String entity) {
     return 'Add $entity';
+  }
+
+  @override
+  String common_editEntity(String entity) {
+    return 'Edit $entity';
   }
 
   @override
@@ -348,6 +406,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String validation_required(String field) {
     return '$field is required';
   }
+
+  @override
+  String validation_minLength(String field, int min) {
+    return '$field must be at least $min characters';
+  }
+
+  @override
+  String validation_maxLength(String field, int max) {
+    return '$field must be at most $max characters';
+  }
+
+  @override
+  String get validation_invalidYear => 'Please enter a valid year';
+
+  @override
+  String validation_yearBetween(int min, int max) {
+    return 'Year must be between $min and $max';
+  }
+
+  @override
+  String get validation_licensePlateInvalid => 'License plate looks invalid';
+
+  @override
+  String get validation_urlInvalid => 'Please enter a valid http(s) URL';
+
+  @override
+  String get validation_dateNotPast =>
+      'Insurance expiration date cannot be in the past.';
 
   @override
   String validation_number_gt_zero(String field) {

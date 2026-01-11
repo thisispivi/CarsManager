@@ -4,6 +4,7 @@ import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/presentation/common/utils/date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -162,13 +163,9 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                       ),
                       TextButton.icon(
                         onPressed: () async {
-                          final selected = await showDatePicker(
+                          final selected = await showCustomDatePicker(
                             context: context,
                             initialDate: _insuranceStart,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now().add(
-                              const Duration(days: 3650),
-                            ),
                           );
                           if (selected != null) {
                             setState(() {
@@ -196,13 +193,9 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                       ),
                       TextButton.icon(
                         onPressed: () async {
-                          final selected = await showDatePicker(
+                          final selected = await showCustomDatePicker(
                             context: context,
                             initialDate: _insuranceEnd,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now().add(
-                              const Duration(days: 3650),
-                            ),
                           );
                           if (selected != null) {
                             setState(() {
@@ -231,13 +224,9 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                       ),
                       TextButton.icon(
                         onPressed: () async {
-                          final selected = await showDatePicker(
+                          final selected = await showCustomDatePicker(
                             context: context,
                             initialDate: _date,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now().add(
-                              const Duration(days: 3650),
-                            ),
                           );
                           if (selected != null) {
                             setState(() {
@@ -362,13 +351,9 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                       ),
                       TextButton.icon(
                         onPressed: () async {
-                          final selected = await showDatePicker(
+                          final selected = await showCustomDatePicker(
                             context: context,
                             initialDate: _date,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now().add(
-                              const Duration(days: 3650),
-                            ),
                           );
                           if (selected != null) {
                             setState(() {
@@ -430,13 +415,9 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                       ),
                       TextButton.icon(
                         onPressed: () async {
-                          final selected = await showDatePicker(
+                          final selected = await showCustomDatePicker(
                             context: context,
                             initialDate: _date,
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime.now().add(
-                              const Duration(days: 3650),
-                            ),
                           );
                           if (selected != null) {
                             setState(() {

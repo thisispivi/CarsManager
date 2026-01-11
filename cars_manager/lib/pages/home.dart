@@ -1,16 +1,18 @@
+import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/main.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
+import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:cars_manager/main.dart';
-import 'package:cars_manager/presentation/pages/car_form/car_form_page.dart';
 
 class CarsHomePage extends StatelessWidget {
   const CarsHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
@@ -19,6 +21,7 @@ class CarsHomePage extends StatelessWidget {
               context,
             ).push<Car>(MaterialPageRoute(builder: (_) => const CarFormPage()));
             if (created == null) return;
+            if (!context.mounted) return;
 
             final state = context.read<CarsManagerState>();
             state.addCar(created, setActive: true);
@@ -38,7 +41,7 @@ class CarsHomePage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(24),
                   child: Text(
-                    'No cars yet. Tap + to add one.',
+                    l10n.cars_emptyState,
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -95,20 +98,20 @@ class CarsHomePage extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text('Remove car?'),
+                              title: Text(l10n.cars_removeConfirmTitle),
                               content: Text(
-                                'Remove "${car.name}" from your collection?',
+                                l10n.cars_removeConfirmBody(car.name),
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(false),
-                                  child: const Text('Cancel'),
+                                  child: Text(l10n.common_cancel),
                                 ),
                                 FilledButton(
                                   onPressed: () =>
                                       Navigator.of(context).pop(true),
-                                  child: const Text('Remove'),
+                                  child: Text(l10n.common_delete),
                                 ),
                               ],
                             );
@@ -123,25 +126,19 @@ class CarsHomePage extends StatelessWidget {
                           await showDialog<void>(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('No cars left'),
-                              content: const Text(
-                                'Please add a new car to continue.',
-                              ),
+                              title: Text(l10n.cars_noCarsLeftTitle),
+                              content: Text(l10n.cars_noCarsLeftBody),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text('OK'),
+                                  child: Text(l10n.common_ok),
                                 ),
                               ],
                             ),
                           );
                         } else if (wasActive) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Active car removed. Please select another.',
-                              ),
-                            ),
+                            SnackBar(content: Text(l10n.cars_activeRemoved)),
                           );
                         }
                       },
@@ -255,10 +252,15 @@ class _CarTile extends StatelessWidget {
                       }
                     },
                     itemBuilder: (context) => [
-                      const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                      const PopupMenuItem(
+                      PopupMenuItem(
+                        value: 'edit',
+                        child: Text(AppLocalizations.of(context)!.common_edit),
+                      ),
+                      PopupMenuItem(
                         value: 'remove',
-                        child: Text('Remove'),
+                        child: Text(
+                          AppLocalizations.of(context)!.common_delete,
+                        ),
                       ),
                     ],
                   ),

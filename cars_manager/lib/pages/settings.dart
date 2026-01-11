@@ -11,6 +11,7 @@ class SettingsDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -21,12 +22,12 @@ class SettingsDrawer extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'Settings',
+                    l10n.settings_title,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const Spacer(),
                   IconButton(
-                    tooltip: 'Close',
+                    tooltip: l10n.common_close,
                     icon: const Icon(Icons.close),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
@@ -69,6 +70,7 @@ class LanguageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final appState = Provider.of<CarsManagerState>(context);
     final currentLocale = appState.locale;
     final isEnglish = currentLocale?.languageCode == 'en';
@@ -79,9 +81,7 @@ class LanguageSelector extends StatelessWidget {
       children: [
         SectionHeader(
           horizontalPadding: 32,
-          title:
-              AppLocalizations.of(context)?.language_selector_title ??
-              'Language',
+          title: l10n.language_selector_title,
           icon: Icon(
             Icons.translate,
             color: Theme.of(context).colorScheme.primary,
@@ -94,7 +94,7 @@ class LanguageSelector extends StatelessWidget {
             children: [
               Expanded(
                 child: _LanguageOption(
-                  title: 'English',
+                  title: l10n.language_name_en,
                   languageCode: 'en',
                   isSelected: isEnglish,
                   onTap: () {
@@ -107,7 +107,7 @@ class LanguageSelector extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: _LanguageOption(
-                  title: 'Italiano',
+                  title: l10n.language_name_it,
                   languageCode: 'it',
                   isSelected: isItalian,
                   onTap: () {
@@ -126,8 +126,7 @@ class LanguageSelector extends StatelessWidget {
           children: [
             SectionHeader(
               horizontalPadding: 32,
-              title:
-                  AppLocalizations.of(context)?.themeSelector_title ?? 'Theme',
+              title: l10n.themeSelector_title,
               icon: Icon(
                 Icons.translate,
                 color: Theme.of(context).colorScheme.primary,
@@ -139,8 +138,7 @@ class LanguageSelector extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppLocalizations.of(context)?.themeSelector_dark_mode ??
-                        'Dark Mode',
+                    l10n.themeSelector_dark_mode,
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

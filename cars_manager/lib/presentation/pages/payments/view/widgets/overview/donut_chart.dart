@@ -28,6 +28,7 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final carsManagerState = Provider.of<CarsManagerState>(
       context,
       listen: false,
@@ -47,14 +48,12 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
     }
 
     return PaymentSectionCard(
-      title:
-          AppLocalizations.of(context)?.payments_expenseDistribution_title ??
-          'Expense Distribution',
+      title: l10n.payments_expenseDistribution_title,
       nextInfoDue: null,
       verticalSpacing: 12,
       items: [
         DonutChart(
-          totalPrefix: "${AppLocalizations.of(context)?.total ?? 'Total'}: ",
+          totalPrefix: '${l10n.total}: ',
           totalSuffix: '€',
           totalTextStyle: GoogleFonts.spaceGrotesk(
             fontSize: 18,
@@ -67,79 +66,61 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
               PieChartSection(
                 color: Colors.blue,
                 value: car.calculateTotalPaidInsurances().toDouble(),
-                title: AppLocalizations.of(context)!.unit_currency(
+                title: l10n.unit_currency(
                   numberFormat.format(car.calculateTotalPaidInsurances()),
                   "€",
                   "",
                 ),
                 textColor: Colors.white,
-                label:
-                    AppLocalizations.of(
-                      context,
-                    )?.payments_insuranceData_shortTitle ??
-                    'Insurance',
+                label: l10n.payments_insuranceData_shortTitle,
               ),
             if (hasInspectionData)
               PieChartSection(
                 color: Colors.green,
                 value: car.calculateTotalPaidInspections().toDouble(),
-                title: AppLocalizations.of(context)!.unit_currency(
+                title: l10n.unit_currency(
                   numberFormat.format(car.calculateTotalPaidInspections()),
                   "€",
                   "",
                 ),
                 textColor: Colors.white,
-                label:
-                    AppLocalizations.of(
-                      context,
-                    )?.payments_inspectionData_shortTitle ??
-                    'Inspection',
+                label: l10n.payments_inspectionData_shortTitle,
               ),
             if (hasTaxData)
               PieChartSection(
                 color: Colors.red,
                 value: car.calculateTotalPaidTaxes().toDouble(),
-                title: AppLocalizations.of(context)!.unit_currency(
+                title: l10n.unit_currency(
                   numberFormat.format(car.calculateTotalPaidTaxes()),
                   "€",
                   "",
                 ),
                 textColor: Colors.white,
-                label:
-                    AppLocalizations.of(context)?.payments_taxData_shortTitle ??
-                    'Tax',
+                label: l10n.payments_taxData_shortTitle,
               ),
             if (hasRepairData)
               PieChartSection(
                 color: Colors.purple,
                 value: car.calculateTotalPaidRepairs().toDouble(),
-                title: AppLocalizations.of(context)!.unit_currency(
+                title: l10n.unit_currency(
                   numberFormat.format(car.calculateTotalPaidRepairs()),
                   "€",
                   "",
                 ),
                 textColor: Colors.white,
-                label:
-                    AppLocalizations.of(
-                      context,
-                    )?.payments_repairsData_shortTitle ??
-                    'Repair',
+                label: l10n.payments_repairsData_shortTitle,
               ),
             if (hasFineData)
               PieChartSection(
                 color: Colors.orange,
                 value: car.calculateTotalPaidFines().toDouble(),
-                title: AppLocalizations.of(context)!.unit_currency(
+                title: l10n.unit_currency(
                   numberFormat.format(car.calculateTotalPaidFines()),
                   "€",
                   "",
                 ),
                 textColor: Colors.white,
-                label:
-                    AppLocalizations.of(
-                      context,
-                    )?.payments_fineData_shortTitle ??
-                    'Fine',
+                label: l10n.payments_fineData_shortTitle,
               ),
           ],
         ),
