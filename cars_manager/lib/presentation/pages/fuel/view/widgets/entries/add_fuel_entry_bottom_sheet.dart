@@ -7,8 +7,13 @@ import 'package:intl/intl.dart';
 
 class AddFuelEntryBottomSheet extends StatefulWidget {
   final FuelType? lockedFuelType;
+  final FuelEntry? initialEntry;
 
-  const AddFuelEntryBottomSheet({super.key, this.lockedFuelType});
+  const AddFuelEntryBottomSheet({
+    super.key,
+    this.lockedFuelType,
+    this.initialEntry,
+  });
 
   @override
   State<AddFuelEntryBottomSheet> createState() =>
@@ -25,9 +30,21 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
 
   DateTime _date = DateTime.now();
 
+  bool _isAutoUpdating = false;
+
   @override
   void initState() {
     super.initState();
+
+    final initial = widget.initialEntry;
+    if (initial != null) {
+      _fuelType = initial.fuelType;
+      _litersController.text = initial.liters.toString();
+      _pricePerLiterController.text = initial.pricePerLiter.toString();
+      _totalCostController.text = initial.totalCost.toString();
+      _date = initial.date;
+    }
+
     if (widget.lockedFuelType != null) {
       _fuelType = widget.lockedFuelType!;
     }
@@ -44,6 +61,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final isEdit = widget.initialEntry != null;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final dateFormat = DateFormat('dd MMM yyyy');
@@ -56,6 +74,10 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
         ? localizations.fuel_price_per_kwh_label
         : localizations.fuel_price_per_l_label;
 
+    final title = isEdit
+        ? localizations.common_editEntity(localizations.fuel_entry_shortTitle)
+        : localizations.fuel_addEntry_title;
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -65,7 +87,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
           color: theme.cardColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: SafeArea(
           top: false,
           child: Form(
@@ -78,7 +100,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                   children: [
                     Expanded(
                       child: Text(
-                        localizations.fuel_addEntry_title,
+                        title,
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -142,6 +164,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
+                        onChanged: (_) => _tryAutoCalculate(),
                         validator: (v) =>
                             _validateDouble(localizations, v, amountLabel),
                       ),
@@ -157,6 +180,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
+                        onChanged: (_) => _tryAutoCalculate(),
                         validator: (v) =>
                             _validateDouble(localizations, v, priceLabel),
                       ),
@@ -173,6 +197,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
+                  onChanged: (_) => _tryAutoCalculate(),
                   validator: (v) => _validateDouble(
                     localizations,
                     v,
@@ -221,7 +246,11 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    label: Text(localizations.common_add),
+                    label: Text(
+                      isEdit
+                          ? localizations.common_save
+                          : localizations.common_add,
+                    ),
                   ),
                 ),
               ],
@@ -230,6 +259,50 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
         ),
       ),
     );
+  }
+
+  double? _tryParsePositive(String raw) {
+    final v = raw.trim();
+    if (v.isEmpty) return null;
+    final parsed = double.tryParse(v.replaceAll(',', '.'));
+    if (parsed == null || parsed <= 0) return null;
+    return parsed;
+  }
+
+  void _tryAutoCalculate() {
+    if (_isAutoUpdating) return;
+
+    final litersRaw = _litersController.text;
+    final priceRaw = _pricePerLiterController.text;
+    final totalRaw = _totalCostController.text;
+
+    final liters = _tryParsePositive(litersRaw);
+    final price = _tryParsePositive(priceRaw);
+    final total = _tryParsePositive(totalRaw);
+
+    final litersEmpty = litersRaw.trim().isEmpty;
+    final priceEmpty = priceRaw.trim().isEmpty;
+    final totalEmpty = totalRaw.trim().isEmpty;
+
+    final validCount =
+        (liters != null ? 1 : 0) +
+        (price != null ? 1 : 0) +
+        (total != null ? 1 : 0);
+    if (validCount < 2) return;
+    if (validCount == 3) return;
+
+    _isAutoUpdating = true;
+    try {
+      if (totalEmpty && liters != null && price != null) {
+        _totalCostController.text = (liters * price).toStringAsFixed(2);
+      } else if (priceEmpty && liters != null && total != null) {
+        _pricePerLiterController.text = (total / liters).toStringAsFixed(3);
+      } else if (litersEmpty && price != null && total != null) {
+        _litersController.text = (total / price).toStringAsFixed(3);
+      }
+    } finally {
+      _isAutoUpdating = false;
+    }
   }
 
   String? _validateDouble(

@@ -26,6 +26,9 @@ class FuelEntriesSection extends StatelessWidget {
     final entries = [...(car.fuel ?? const <FuelEntry>[])]
       ..sort((a, b) => b.date.compareTo(a.date));
 
+    final lockedFuelType =
+        car.fuelType ?? (entries.isNotEmpty ? entries.first.fuelType : null);
+
     return PaymentSectionCard(
       title: localizations.fuel_entries_title,
       icon: Icon(
@@ -35,10 +38,6 @@ class FuelEntriesSection extends StatelessWidget {
       ),
       trailing: TextButton.icon(
         onPressed: () async {
-          final lockedFuelType =
-              car.fuelType ??
-              (entries.isNotEmpty ? entries.first.fuelType : null);
-
           final FuelEntry? entry = await showModalBottomSheet<FuelEntry>(
             context: context,
             isScrollControlled: true,
@@ -79,6 +78,7 @@ class FuelEntriesSection extends StatelessWidget {
               entry: e.value,
               locale: locale,
               isLast: e.key == entries.length - 1,
+              lockedFuelType: lockedFuelType,
             ),
           ),
       ],

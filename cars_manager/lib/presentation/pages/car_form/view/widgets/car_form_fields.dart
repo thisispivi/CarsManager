@@ -1,4 +1,5 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:flutter/material.dart';
 
 class CarFormFields extends StatelessWidget {
@@ -9,13 +10,13 @@ class CarFormFields extends StatelessWidget {
     required this.modelController,
     required this.yearController,
     required this.licensePlateController,
-    required this.imageUrlController,
+    required this.fuelType,
+    required this.onFuelTypeChanged,
     required this.textStyle,
     required this.decorationBuilder,
     required this.validateRequired,
     required this.validateYear,
     required this.validateLicensePlate,
-    required this.validateImageUrl,
     required this.l10n,
   });
 
@@ -24,7 +25,9 @@ class CarFormFields extends StatelessWidget {
   final TextEditingController modelController;
   final TextEditingController yearController;
   final TextEditingController licensePlateController;
-  final TextEditingController imageUrlController;
+
+  final FuelType? fuelType;
+  final ValueChanged<FuelType?> onFuelTypeChanged;
 
   final TextStyle textStyle;
   final InputDecoration Function(String label) decorationBuilder;
@@ -34,7 +37,6 @@ class CarFormFields extends StatelessWidget {
 
   final String? Function(String? value) validateYear;
   final String? Function(String? value) validateLicensePlate;
-  final String? Function(String? value) validateImageUrl;
 
   final AppLocalizations l10n;
 
@@ -81,13 +83,41 @@ class CarFormFields extends StatelessWidget {
           validator: validateLicensePlate,
         ),
         const SizedBox(height: 16),
-        TextFormField(
-          controller: imageUrlController,
-          style: textStyle,
-          decoration: decorationBuilder(l10n.carData_photoUrl),
-          validator: validateImageUrl,
+        DropdownButtonFormField<FuelType>(
+          initialValue: fuelType,
+          decoration: decorationBuilder(l10n.carData_fuelType),
+          items: FuelType.values
+              .map(
+                (t) => DropdownMenuItem(
+                  value: t,
+                  child: Text(_labelForFuelType(l10n, t), style: textStyle),
+                ),
+              )
+              .toList(),
+          onChanged: onFuelTypeChanged,
+          validator: (v) {
+            if (v == null) {
+              return l10n.validation_required(l10n.carData_fuelType);
+            }
+            return null;
+          },
         ),
       ],
     );
+  }
+}
+
+String _labelForFuelType(AppLocalizations l10n, FuelType fuelType) {
+  switch (fuelType) {
+    case FuelType.petrol:
+      return l10n.fuelType_petrol;
+    case FuelType.diesel:
+      return l10n.fuelType_diesel;
+    case FuelType.lpg:
+      return l10n.fuelType_lpg;
+    case FuelType.electric:
+      return l10n.fuelType_electric;
+    case FuelType.hybrid:
+      return l10n.fuelType_hybrid;
   }
 }

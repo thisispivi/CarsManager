@@ -170,6 +170,18 @@ abstract class AppLocalizations {
   /// **'Photo URL'**
   String get carData_photoUrl;
 
+  /// Label for the car photo field
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get carData_photo;
+
+  /// Label for the car fuel type field
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel type'**
+  String get carData_fuelType;
+
   /// Label for the car inspection date field
   ///
   /// In en, this message translates to:
@@ -181,6 +193,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Car'**
   String get cars_car_shortTitle;
+
+  /// Short entity name for a fuel entry
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel entry'**
+  String get fuel_entry_shortTitle;
 
   /// Empty state message on the cars home page
   ///

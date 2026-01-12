@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class ImageRect extends StatelessWidget {
   final String? imageUrl;
+  final String? imageBase64;
   final Alignment? imageAlignment;
   final double aspectRatio;
   final Color backgroundColor;
@@ -11,6 +14,7 @@ class ImageRect extends StatelessWidget {
   const ImageRect({
     super.key,
     required this.imageUrl,
+    this.imageBase64,
     required this.imageAlignment,
     required this.aspectRatio,
     required this.backgroundColor,
@@ -30,6 +34,17 @@ class ImageRect extends StatelessWidget {
   }
 
   Widget _buildImageWithErrorHandling() {
+    final b64 = imageBase64;
+    if (b64 != null && b64.trim().isNotEmpty) {
+      return Image.memory(
+        base64Decode(b64),
+        width: double.infinity,
+        fit: BoxFit.cover,
+        alignment: imageAlignment ?? Alignment.center,
+        errorBuilder: _buildErrorDisplay,
+      );
+    }
+
     return Image.network(
       imageUrl ?? "",
       width: double.infinity,

@@ -10,13 +10,14 @@ import 'package:cars_manager/models/inspection_data.dart';
 import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
-import 'package:cars_manager/pages/car_stats.dart';
 import 'package:cars_manager/presentation/pages/home/view/home.dart';
-import 'package:cars_manager/pages/settings.dart';
+import 'package:cars_manager/presentation/pages/settings.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/fuel_page.dart';
-import 'package:cars_manager/presentation/pages/payments/view/payments_page.dart';
+import 'package:cars_manager/presentation/common/widgets/payments_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -57,19 +58,13 @@ class CarsManagerState extends ChangeNotifier {
   CarsManagerState()
     : _cars = List<Car>.from(loadedCars),
       _activeCarId = loadedActiveCarId {
-    final systemLocale = ui.PlatformDispatcher.instance.locale;
-    if (L10n.locals.contains(systemLocale)) {
-      _locale = systemLocale;
-    } else {
-      final languageLocale = Locale(systemLocale.languageCode);
-      if (L10n.locals.any(
-        (locale) => locale.languageCode == systemLocale.languageCode,
-      )) {
-        _locale = languageLocale;
-      } else {
-        _locale = const Locale('en');
-      }
-    }
+    _locale = _resolveInitialLocale();
+    _themeMode = _resolveInitialThemeMode();
+
+    setLoadedPreferences(
+      localeCode: _locale?.languageCode,
+      themeMode: _themeMode.name,
+    );
   }
 
   final List<Car> _cars;
@@ -77,6 +72,43 @@ class CarsManagerState extends ChangeNotifier {
 
   Locale? _locale;
   ThemeMode _themeMode = ThemeMode.dark;
+
+  Locale _resolveInitialLocale() {
+    final stored = loadedLocaleCode?.trim();
+    if (stored != null && stored.isNotEmpty) {
+      final candidate = Locale(stored);
+      if (L10n.locals.any((l) => l.languageCode == candidate.languageCode)) {
+        return candidate;
+      }
+    }
+
+    final systemLocale = ui.PlatformDispatcher.instance.locale;
+    if (L10n.locals.contains(systemLocale)) {
+      return systemLocale;
+    }
+
+    final languageLocale = Locale(systemLocale.languageCode);
+    if (L10n.locals.any(
+      (locale) => locale.languageCode == systemLocale.languageCode,
+    )) {
+      return languageLocale;
+    }
+
+    return const Locale('en');
+  }
+
+  ThemeMode _resolveInitialThemeMode() {
+    final stored = loadedThemeMode?.trim();
+    switch (stored) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      case 'system':
+        return ThemeMode.system;
+    }
+    return ThemeMode.dark;
+  }
 
   List<Car> get cars => List.unmodifiable(_cars);
   String? get activeCarId => _activeCarId;
@@ -130,6 +162,12 @@ class CarsManagerState extends ChangeNotifier {
   void setLocale(Locale locale) {
     _locale = locale;
     notifyListeners();
+
+    setLoadedPreferences(
+      localeCode: _locale?.languageCode,
+      themeMode: _themeMode.name,
+    );
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void toggleThemeMode() {
@@ -137,6 +175,27 @@ class CarsManagerState extends ChangeNotifier {
         ? ThemeMode.dark
         : ThemeMode.light;
     notifyListeners();
+
+    setLoadedPreferences(
+      localeCode: _locale?.languageCode,
+      themeMode: _themeMode.name,
+    );
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void updateFuelEntry({
+    required FuelEntry oldEntry,
+    required FuelEntry entry,
+  }) {
+    final car = activeCar;
+    if (car == null) return;
+    final list = car.fuel;
+    if (list == null) return;
+    final index = list.indexOf(oldEntry);
+    if (index == -1) return;
+    list[index] = entry;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void addFuelEntry(FuelEntry entry) {
@@ -234,6 +293,75 @@ class CarsManagerState extends ChangeNotifier {
     notifyListeners();
     saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
+
+  void updateInsurancePayment({
+    required InsuranceData oldData,
+    required InsuranceData data,
+  }) {
+    final car = activeCar;
+    if (car == null) return;
+    final list = car.insuranceDatas;
+    if (list == null) return;
+    final index = list.indexOf(oldData);
+    if (index == -1) return;
+    list[index] = data;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void updateInspectionPayment({
+    required InspectionData oldData,
+    required InspectionData data,
+  }) {
+    final car = activeCar;
+    if (car == null) return;
+    final list = car.inspectionDatas;
+    if (list == null) return;
+    final index = list.indexOf(oldData);
+    if (index == -1) return;
+    list[index] = data;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void updateTaxPayment({required TaxData oldData, required TaxData data}) {
+    final car = activeCar;
+    if (car == null) return;
+    final list = car.taxDatas;
+    if (list == null) return;
+    final index = list.indexOf(oldData);
+    if (index == -1) return;
+    list[index] = data;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void updateRepairPayment({
+    required RepairData oldData,
+    required RepairData data,
+  }) {
+    final car = activeCar;
+    if (car == null) return;
+    final list = car.repairDatas;
+    if (list == null) return;
+    final index = list.indexOf(oldData);
+    if (index == -1) return;
+    list[index] = data;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void updateFinePayment({required FineData oldData, required FineData data}) {
+    final car = activeCar;
+    if (car == null) return;
+    final list = car.fineDatas;
+    if (list == null) return;
+    final index = list.indexOf(oldData);
+    if (index == -1) return;
+    list[index] = data;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
 }
 
 class CarDashboardPage extends StatefulWidget {
@@ -266,10 +394,9 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
             page = const PaymentsPage();
             break;
           default:
-            page = const CarStatsPage();
+            page = const CarsHomePage();
             break;
         }
-
         return Scaffold(
           key: _scaffoldKey,
           endDrawer: const SettingsDrawer(),
@@ -278,26 +405,47 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
             titleSpacing: 16,
             title: Row(
               children: [
-                Text(l10n.appTitle),
+                SvgPicture.asset(
+                  'assets/icons/cars_manager_logo.svg',
+                  height: 28,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  l10n.appTitle,
+                  style: GoogleFonts.spaceGrotesk(
+                    fontWeight: FontWeight.w800,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
                 const SizedBox(width: 12),
 
                 if (activeCar != null)
                   Expanded(
-                    child: Row(
-                      children: [
-                        CircleAvatar(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Chip(
+                        avatar: CircleAvatar(
                           radius: 14,
                           backgroundColor: Theme.of(
                             context,
                           ).colorScheme.primary,
                           backgroundImage:
-                              (activeCar.imageUrl != null &&
-                                  activeCar.imageUrl!.isNotEmpty)
+                              (activeCar.imageBase64 != null &&
+                                  activeCar.imageBase64!.isNotEmpty)
+                              ? MemoryImage(
+                                  Uri.parse(
+                                    'data:image/png;base64,${activeCar.imageBase64}',
+                                  ).data!.contentAsBytes(),
+                                )
+                              : (activeCar.imageUrl != null &&
+                                    activeCar.imageUrl!.isNotEmpty)
                               ? NetworkImage(activeCar.imageUrl!)
                               : null,
                           child:
-                              (activeCar.imageUrl == null ||
-                                  activeCar.imageUrl!.isEmpty)
+                              (activeCar.imageBase64 == null ||
+                                      activeCar.imageBase64!.isEmpty) &&
+                                  (activeCar.imageUrl == null ||
+                                      activeCar.imageUrl!.isEmpty)
                               ? Icon(
                                   Icons.directions_car,
                                   size: 16,
@@ -307,20 +455,21 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
                                 )
                               : null,
                         ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            activeCar.name,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                ),
+                        label: Text(
+                          activeCar.name,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.spaceGrotesk(
+                            fontWeight: FontWeight.w700,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
-                      ],
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
                     ),
                   ),
               ],

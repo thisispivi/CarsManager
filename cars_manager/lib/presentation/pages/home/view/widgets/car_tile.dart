@@ -93,7 +93,9 @@ class CarTile extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (car.imageUrl != null)
+                  if ((car.imageBase64 != null &&
+                          car.imageBase64!.isNotEmpty) ||
+                      (car.imageUrl != null && car.imageUrl!.isNotEmpty))
                     Container(
                       decoration: BoxDecoration(
                         color: cardColor,
@@ -107,7 +109,8 @@ class CarTile extends StatelessWidget {
                           child: ImageRect(
                             aspectRatio: 1 / 1,
                             imageUrl: car.imageUrl,
-                            imageAlignment: Alignment.center,
+                            imageBase64: car.imageBase64,
+                            imageAlignment: car.imageAlignment,
                             backgroundColor: cs.surfaceContainerHighest,
                             borderRadius: BorderRadius.zero,
                             primaryColor: cs.primary,
@@ -115,7 +118,10 @@ class CarTile extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (car.imageUrl != null) const SizedBox(width: 12),
+                  if ((car.imageBase64 != null &&
+                          car.imageBase64!.isNotEmpty) ||
+                      (car.imageUrl != null && car.imageUrl!.isNotEmpty))
+                    const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

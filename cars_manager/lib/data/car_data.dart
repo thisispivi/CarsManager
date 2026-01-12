@@ -12,12 +12,21 @@ import 'package:flutter/painting.dart';
 class CarsDataSnapshot {
   final List<Car> cars;
   final String? activeCarId;
+  final String? localeCode;
+  final String? themeMode;
 
-  const CarsDataSnapshot({required this.cars, required this.activeCarId});
+  const CarsDataSnapshot({
+    required this.cars,
+    required this.activeCarId,
+    required this.localeCode,
+    required this.themeMode,
+  });
 }
 
 List<Car> loadedCars = <Car>[];
 String? loadedActiveCarId;
+String? loadedLocaleCode;
+String? loadedThemeMode;
 
 final Map<String, Map<String, dynamic>> _carJsonCacheById = {};
 
@@ -28,9 +37,13 @@ Future<void> loadCarData() async {
     final CarsDataSnapshot? snapshot = _parseCarsSnapshot(root);
     loadedCars = snapshot?.cars ?? [];
     loadedActiveCarId = snapshot?.activeCarId;
+    loadedLocaleCode = snapshot?.localeCode;
+    loadedThemeMode = snapshot?.themeMode;
   } catch (e) {
     loadedCars = [];
     loadedActiveCarId = null;
+    loadedLocaleCode = null;
+    loadedThemeMode = null;
   }
 }
 
@@ -45,7 +58,11 @@ Future<void> saveCarData({
     return merged;
   }).toList();
 
-  final root = {'activeCarId': activeCarId, 'cars': mergedCarsJson};
+  final root = {
+    'activeCarId': activeCarId,
+    'cars': mergedCarsJson,
+    'preferences': {'locale': loadedLocaleCode, 'themeMode': loadedThemeMode},
+  };
 
   await CarStorage.saveJson(jsonEncode(root));
 }
@@ -68,11 +85,23 @@ CarsDataSnapshot? _parseCarsSnapshot(dynamic root) {
       _carJsonCacheById[car.id] = cached;
     }
 
-    return CarsDataSnapshot(cars: cars, activeCarId: cars.first.id);
+    return CarsDataSnapshot(
+      cars: cars,
+      activeCarId: cars.isNotEmpty ? cars.first.id : null,
+      localeCode: null,
+      themeMode: null,
+    );
   }
 
   if (root is Map<String, dynamic>) {
     final String? activeCarId = root['activeCarId']?.toString();
+    final prefs = root['preferences'];
+    final String? localeCode = (prefs is Map)
+        ? prefs['locale']?.toString()
+        : null;
+    final String? themeMode = (prefs is Map)
+        ? prefs['themeMode']?.toString()
+        : null;
     final List<dynamic> carsList = (root['cars'] is List)
         ? (root['cars'] as List)
         : const [];
@@ -93,9 +122,19 @@ CarsDataSnapshot? _parseCarsSnapshot(dynamic root) {
         ? activeCarId
         : (cars.isNotEmpty ? cars.first.id : null);
 
-    return CarsDataSnapshot(cars: cars, activeCarId: resolvedActiveId);
+    return CarsDataSnapshot(
+      cars: cars,
+      activeCarId: resolvedActiveId,
+      localeCode: localeCode,
+      themeMode: themeMode,
+    );
   }
   return null;
+}
+
+void setLoadedPreferences({String? localeCode, String? themeMode}) {
+  loadedLocaleCode = localeCode;
+  loadedThemeMode = themeMode;
 }
 
 String _generateCarId() {
@@ -120,7 +159,15 @@ Car _carFromJson(Map<String, dynamic> json) {
         ? DateTime.parse(json['insuranceExpirationDate'])
         : DateTime.now(),
     imageUrl: json['imageUrl'],
+    imageBase64: (json['imageBase64'] ?? json['image_base64'])?.toString(),
+    imageOriginalBase64:
+        (json['imageOriginalBase64'] ?? json['image_original_base64'])
+            ?.toString(),
     imageAlignment: _parseAlignment(json['imageAlignment']),
+    fuelType:
+        (json['fuelType'] == null || json['fuelType'].toString().trim().isEmpty)
+        ? null
+        : _parseFuelType(json['fuelType'].toString()),
     fuel: json['fuel'] != null ? _fuelEntriesFromJson(json['fuel']) : null,
     inspectionDatas: json['inspectionDatas'] != null
         ? _inspectionDataFromJson(json['inspectionDatas'])
@@ -148,9 +195,12 @@ Map<String, dynamic> _carToJson(Car car) {
     'manufacture': car.manufacture,
     'yearOfManufacture': car.yearOfManufacture,
     'imageUrl': car.imageUrl,
+    'imageBase64': car.imageBase64,
+    'imageOriginalBase64': car.imageOriginalBase64,
     'imageAlignment': _alignmentToString(car.imageAlignment),
     'licensePlate': car.licensePlate,
     'insuranceExpirationDate': car.insuranceExpirationDate.toIso8601String(),
+    'fuelType': car.fuelType?.name,
     'fuel': car.fuel?.map(_fuelEntryToJson).toList(),
     'inspectionDatas': car.inspectionDatas
         ?.map(

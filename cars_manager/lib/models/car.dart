@@ -13,6 +13,8 @@ class Car {
   String manufacture;
   int yearOfManufacture;
   String? imageUrl;
+  String? imageBase64;
+  String? imageOriginalBase64;
   Alignment? imageAlignment;
   String licensePlate;
   DateTime insuranceExpirationDate;
@@ -31,6 +33,8 @@ class Car {
     required this.manufacture,
     required this.yearOfManufacture,
     this.imageUrl,
+    this.imageBase64,
+    this.imageOriginalBase64,
     this.imageAlignment = Alignment.center,
     required this.licensePlate,
     required this.insuranceExpirationDate,

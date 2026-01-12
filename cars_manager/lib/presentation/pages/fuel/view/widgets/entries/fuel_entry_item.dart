@@ -1,6 +1,7 @@
 import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
+import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/add_fuel_entry_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -11,11 +12,13 @@ class FuelEntryItem extends StatelessWidget {
   final FuelEntry entry;
   final Locale locale;
   final bool isLast;
+  final FuelType? lockedFuelType;
 
   const FuelEntryItem({
     super.key,
     required this.entry,
     required this.locale,
+    required this.lockedFuelType,
     this.isLast = false,
   });
 
@@ -38,6 +41,24 @@ class FuelEntryItem extends StatelessWidget {
       onLongPress: () {
         showEntryActionsSheet(
           context: context,
+          onEdit: () async {
+            final updated = await showModalBottomSheet<FuelEntry>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) => AddFuelEntryBottomSheet(
+                lockedFuelType: lockedFuelType,
+                initialEntry: entry,
+              ),
+            );
+
+            if (updated != null && context.mounted) {
+              Provider.of<CarsManagerState>(
+                context,
+                listen: false,
+              ).updateFuelEntry(oldEntry: entry, entry: updated);
+            }
+          },
           onDelete: () {
             Provider.of<CarsManagerState>(
               context,

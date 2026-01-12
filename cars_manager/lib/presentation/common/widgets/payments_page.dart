@@ -10,7 +10,7 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/tax/tax_se
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import '../../../../main.dart';
+import '../../../main.dart';
 
 class PaymentsPage extends StatelessWidget {
   const PaymentsPage({super.key});

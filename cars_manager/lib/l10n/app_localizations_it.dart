@@ -45,10 +45,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get carData_photoUrl => 'URL Foto';
 
   @override
+  String get carData_photo => 'Foto';
+
+  @override
+  String get carData_fuelType => 'Tipo carburante';
+
+  @override
   String get carData_carInspectionDate => 'Data Revisione';
 
   @override
   String get cars_car_shortTitle => 'Auto';
+
+  @override
+  String get fuel_entry_shortTitle => 'Rifornimento';
 
   @override
   String get cars_emptyState =>

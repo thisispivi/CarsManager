@@ -48,6 +48,14 @@
   "@carData_photoUrl": {
     "description": "Label for the car photo URL field"
   },
+  "carData_photo": "Photo",
+  "@carData_photo": {
+    "description": "Label for the car photo field"
+  },
+  "carData_fuelType": "Fuel type",
+  "@carData_fuelType": {
+    "description": "Label for the car fuel type field"
+  },
   "carData_carInspectionDate": "Car Inspection Date",
   "@carData_carInspectionDate": {
     "description": "Label for the car inspection date field"
@@ -55,6 +63,10 @@
   "cars_car_shortTitle": "Car",
   "@cars_car_shortTitle": {
     "description": "Short entity name for a car"
+  },
+  "fuel_entry_shortTitle": "Fuel entry",
+  "@fuel_entry_shortTitle": {
+    "description": "Short entity name for a fuel entry"
   },
   "cars_emptyState": "No cars yet. Tap + to add one.",
   "@cars_emptyState": {

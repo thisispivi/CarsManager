@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Future<void> showEntryActionsSheet({
   required BuildContext context,
+  VoidCallback? onEdit,
   required VoidCallback onDelete,
 }) async {
   final l10n = AppLocalizations.of(context)!;
@@ -33,6 +34,24 @@ Future<void> showEntryActionsSheet({
                   ),
                 ),
               ),
+              if (onEdit != null)
+                ListTile(
+                  leading: Icon(
+                    Icons.edit_outlined,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  title: Text(
+                    l10n.common_edit,
+                    style: GoogleFonts.spaceGrotesk(
+                      fontWeight: FontWeight.w700,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(sheetContext).pop();
+                    onEdit();
+                  },
+                ),
               ListTile(
                 leading: Icon(
                   Icons.delete_outline,
