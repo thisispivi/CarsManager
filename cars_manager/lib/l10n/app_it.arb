@@ -476,6 +476,18 @@
   "@payments_finesData_empty": {
     "description": "Empty state message when there are no fine entries in payments"
   },
+  "payments_fines_chart_countByYear_title": "Multe per anno",
+  "@payments_fines_chart_countByYear_title": {
+    "description": "Title for the fines count by year chart"
+  },
+  "payments_fines_chart_amountByYear_title": "Totale importo multe per anno",
+  "@payments_fines_chart_amountByYear_title": {
+    "description": "Title for the total fine amount by year chart"
+  },
+  "payments_fines_chart_byType_title": "Multe per tipo",
+  "@payments_fines_chart_byType_title": {
+    "description": "Title for the fines by type chart"
+  },
   "payments_fineData_shortTitle": "Multa",
   "@payments_fineData_shortTitle": {
     "description": "Short title for the fines data section in payments"

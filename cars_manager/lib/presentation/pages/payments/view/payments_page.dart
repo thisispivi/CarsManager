@@ -1,5 +1,6 @@
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/fine/fine_charts.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/fine/fine_section.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/inspection/inspection_section.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/insurance/insurance_section.dart';
@@ -60,6 +61,11 @@ class PaymentsPage extends StatelessWidget {
               hasFineData: hasFineData,
             ),
             ExpensesByYearChart(car: car),
+            if (hasFineData) ...[
+              FinesCountByYearChart(car: car),
+              FinesAmountByYearChart(car: car),
+              FinesByTypeChart(car: car),
+            ],
             InsuranceSection(car: car),
             InspectionSection(car: car),
             TaxSection(car: car),

@@ -325,6 +325,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'No fine entries yet. Tap Add to create one.';
 
   @override
+  String get payments_fines_chart_countByYear_title => 'Fines per year';
+
+  @override
+  String get payments_fines_chart_amountByYear_title =>
+      'Total fine amount by year';
+
+  @override
+  String get payments_fines_chart_byType_title => 'Fines by type';
+
+  @override
   String get payments_fineData_shortTitle => 'Fine';
 
   @override

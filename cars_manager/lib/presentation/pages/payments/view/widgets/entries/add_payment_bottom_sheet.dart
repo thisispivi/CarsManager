@@ -4,6 +4,7 @@ import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/presentation/common/utils/date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,9 +13,14 @@ import 'package:intl/intl.dart';
 enum PaymentEntryType { insurance, inspection, tax, repair, fine }
 
 class AddPaymentBottomSheet extends StatefulWidget {
-  const AddPaymentBottomSheet({super.key, required this.type});
+  const AddPaymentBottomSheet({
+    super.key,
+    required this.type,
+    this.initialData,
+  });
 
   final PaymentEntryType type;
+  final Object? initialData;
 
   @override
   State<AddPaymentBottomSheet> createState() => _AddPaymentBottomSheetState();
@@ -38,6 +44,49 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
   FineType _fineType = FineType.other;
 
   @override
+  void initState() {
+    super.initState();
+
+    final initial = widget.initialData;
+    if (initial == null) return;
+
+    switch (widget.type) {
+      case PaymentEntryType.insurance:
+        final data = initial as InsuranceData;
+        _amountController.text = data.premiumAmount.toString();
+        _insuranceCompanyController.text = data.insuranceCompany;
+        _policyNumberController.text = data.policyNumber;
+        _insuranceStart = data.startDate;
+        _insuranceEnd = data.endDate;
+        return;
+      case PaymentEntryType.inspection:
+        final data = initial as InspectionData;
+        _date = data.date;
+        _inspectionPassed = data.isPassed;
+        _amountController.text = data.amount?.toString() ?? '';
+        _mileageController.text = data.mileage?.toString() ?? '';
+        return;
+      case PaymentEntryType.tax:
+        final data = initial as TaxData;
+        _date = data.date;
+        _amountController.text = data.amount.toString();
+        return;
+      case PaymentEntryType.repair:
+        final data = initial as RepairData;
+        _date = data.date;
+        _amountController.text = data.amount.toString();
+        _descriptionController.text = data.description;
+        return;
+      case PaymentEntryType.fine:
+        final data = initial as FineData;
+        _date = data.date;
+        _amountController.text = data.amount.toString();
+        _fineType = data.type;
+        return;
+    }
+  }
+
+  @override
   void dispose() {
     _amountController.dispose();
     _descriptionController.dispose();
@@ -54,23 +103,21 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
     final localizations = AppLocalizations.of(context)!;
     final dateFormat = DateFormat('dd MMM yyyy');
 
-    final title = switch (widget.type) {
-      PaymentEntryType.insurance => localizations.common_addEntity(
+    final isEdit = widget.initialData != null;
+
+    final entityTitle = switch (widget.type) {
+      PaymentEntryType.insurance =>
         localizations.payments_insuranceData_shortTitle,
-      ),
-      PaymentEntryType.inspection => localizations.common_addEntity(
+      PaymentEntryType.inspection =>
         localizations.payments_inspectionData_shortTitle,
-      ),
-      PaymentEntryType.tax => localizations.common_addEntity(
-        localizations.payments_taxData_shortTitle,
-      ),
-      PaymentEntryType.repair => localizations.common_addEntity(
-        localizations.payments_repairsData_shortTitle,
-      ),
-      PaymentEntryType.fine => localizations.common_addEntity(
-        localizations.payments_fineData_shortTitle,
-      ),
+      PaymentEntryType.tax => localizations.payments_taxData_shortTitle,
+      PaymentEntryType.repair => localizations.payments_repairsData_shortTitle,
+      PaymentEntryType.fine => localizations.payments_fineData_shortTitle,
     };
+
+    final title = isEdit
+        ? localizations.common_editEntity(entityTitle)
+        : localizations.common_addEntity(entityTitle);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -81,7 +128,10 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
           color: theme.cardColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.bottomSheetHorizontalPadding,
+          vertical: AppDimensions.bottomSheetVerticalPadding,
+        ),
         child: SafeArea(
           top: false,
           child: Form(
@@ -448,7 +498,11 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    label: Text(localizations.common_add),
+                    label: Text(
+                      isEdit
+                          ? localizations.common_save
+                          : localizations.common_add,
+                    ),
                   ),
                 ),
               ],

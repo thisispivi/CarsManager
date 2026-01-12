@@ -656,6 +656,24 @@ abstract class AppLocalizations {
   /// **'No fine entries yet. Tap Add to create one.'**
   String get payments_finesData_empty;
 
+  /// Title for the fines count by year chart
+  ///
+  /// In en, this message translates to:
+  /// **'Fines per year'**
+  String get payments_fines_chart_countByYear_title;
+
+  /// Title for the total fine amount by year chart
+  ///
+  /// In en, this message translates to:
+  /// **'Total fine amount by year'**
+  String get payments_fines_chart_amountByYear_title;
+
+  /// Title for the fines by type chart
+  ///
+  /// In en, this message translates to:
+  /// **'Fines by type'**
+  String get payments_fines_chart_byType_title;
+
   /// Short title for the fines data section in payments
   ///
   /// In en, this message translates to:

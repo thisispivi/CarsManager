@@ -2,6 +2,7 @@ import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/fine_data.dart';
 import 'package:cars_manager/presentation/common/extensions/fine_data_extensions.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -32,6 +33,26 @@ class FineItem extends StatelessWidget {
       onLongPress: () {
         showEntryActionsSheet(
           context: context,
+          onEdit: () {
+            () async {
+              final updated = await showModalBottomSheet<FineData>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => AddPaymentBottomSheet(
+                  type: PaymentEntryType.fine,
+                  initialData: fine,
+                ),
+              );
+
+              if (updated != null && context.mounted) {
+                Provider.of<CarsManagerState>(
+                  context,
+                  listen: false,
+                ).updateFinePayment(oldData: fine, data: updated);
+              }
+            }();
+          },
           onDelete: () {
             Provider.of<CarsManagerState>(
               context,

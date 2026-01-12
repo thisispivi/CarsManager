@@ -1,5 +1,6 @@
 import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/presentation/common/utils/date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -87,7 +88,10 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
           color: theme.cardColor,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.bottomSheetHorizontalPadding,
+          vertical: AppDimensions.bottomSheetVerticalPadding,
+        ),
         child: SafeArea(
           top: false,
           child: Form(
@@ -161,10 +165,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                                 : Icons.water_drop_outlined,
                           ),
                         ),
-                        keyboardType: const TextInputType.numberWithOptions(
-                          decimal: true,
-                        ),
-                        onChanged: (_) => _tryAutoCalculate(),
+                        enabled: false,
                         validator: (v) =>
                             _validateDouble(localizations, v, amountLabel),
                       ),
@@ -180,7 +181,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
-                        onChanged: (_) => _tryAutoCalculate(),
+                        onChanged: (_) => _recalculateAmountFromPrice(),
                         validator: (v) =>
                             _validateDouble(localizations, v, priceLabel),
                       ),
@@ -197,7 +198,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onChanged: (_) => _tryAutoCalculate(),
+                  onChanged: (_) => _recalculateAmountFromPrice(),
                   validator: (v) => _validateDouble(
                     localizations,
                     v,
@@ -269,37 +270,28 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
     return parsed;
   }
 
-  void _tryAutoCalculate() {
+  void _recalculateAmountFromPrice() {
     if (_isAutoUpdating) return;
 
-    final litersRaw = _litersController.text;
     final priceRaw = _pricePerLiterController.text;
     final totalRaw = _totalCostController.text;
 
-    final liters = _tryParsePositive(litersRaw);
     final price = _tryParsePositive(priceRaw);
     final total = _tryParsePositive(totalRaw);
 
-    final litersEmpty = litersRaw.trim().isEmpty;
-    final priceEmpty = priceRaw.trim().isEmpty;
-    final totalEmpty = totalRaw.trim().isEmpty;
-
-    final validCount =
-        (liters != null ? 1 : 0) +
-        (price != null ? 1 : 0) +
-        (total != null ? 1 : 0);
-    if (validCount < 2) return;
-    if (validCount == 3) return;
+    if (price == null || total == null) {
+      _isAutoUpdating = true;
+      try {
+        _litersController.text = '';
+      } finally {
+        _isAutoUpdating = false;
+      }
+      return;
+    }
 
     _isAutoUpdating = true;
     try {
-      if (totalEmpty && liters != null && price != null) {
-        _totalCostController.text = (liters * price).toStringAsFixed(2);
-      } else if (priceEmpty && liters != null && total != null) {
-        _pricePerLiterController.text = (total / liters).toStringAsFixed(3);
-      } else if (litersEmpty && price != null && total != null) {
-        _litersController.text = (total / price).toStringAsFixed(3);
-      }
+      _litersController.text = (total / price).toStringAsFixed(3);
     } finally {
       _isAutoUpdating = false;
     }

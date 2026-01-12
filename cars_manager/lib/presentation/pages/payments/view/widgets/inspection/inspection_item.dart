@@ -1,6 +1,7 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/inspection_data.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -31,6 +32,26 @@ class InspectionItem extends StatelessWidget {
       onLongPress: () {
         showEntryActionsSheet(
           context: context,
+          onEdit: () {
+            () async {
+              final updated = await showModalBottomSheet<InspectionData>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => AddPaymentBottomSheet(
+                  type: PaymentEntryType.inspection,
+                  initialData: inspection,
+                ),
+              );
+
+              if (updated != null && context.mounted) {
+                Provider.of<CarsManagerState>(
+                  context,
+                  listen: false,
+                ).updateInspectionPayment(oldData: inspection, data: updated);
+              }
+            }();
+          },
           onDelete: () {
             Provider.of<CarsManagerState>(
               context,

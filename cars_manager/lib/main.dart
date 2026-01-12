@@ -19,6 +19,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:cars_manager/core/theme/app_dimensions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -401,6 +402,7 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
           key: _scaffoldKey,
           endDrawer: const SettingsDrawer(),
           appBar: AppBar(
+            toolbarHeight: AppDimensions.appBarHeight,
             automaticallyImplyLeading: false,
             titleSpacing: 16,
             title: Row(

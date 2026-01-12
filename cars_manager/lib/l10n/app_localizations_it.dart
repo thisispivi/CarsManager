@@ -330,6 +330,16 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nessuna multa. Tocca Aggiungi per crearne una.';
 
   @override
+  String get payments_fines_chart_countByYear_title => 'Multe per anno';
+
+  @override
+  String get payments_fines_chart_amountByYear_title =>
+      'Totale importo multe per anno';
+
+  @override
+  String get payments_fines_chart_byType_title => 'Multe per tipo';
+
+  @override
   String get payments_fineData_shortTitle => 'Multa';
 
   @override

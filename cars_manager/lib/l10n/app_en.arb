@@ -476,6 +476,18 @@
   "@payments_finesData_empty": {
     "description": "Empty state message when there are no fine entries in payments"
   },
+  "payments_fines_chart_countByYear_title": "Fines per year",
+  "@payments_fines_chart_countByYear_title": {
+    "description": "Title for the fines count by year chart"
+  },
+  "payments_fines_chart_amountByYear_title": "Total fine amount by year",
+  "@payments_fines_chart_amountByYear_title": {
+    "description": "Title for the total fine amount by year chart"
+  },
+  "payments_fines_chart_byType_title": "Fines by type",
+  "@payments_fines_chart_byType_title": {
+    "description": "Title for the fines by type chart"
+  },
   "payments_fineData_shortTitle": "Fine",
   "@payments_fineData_shortTitle": {
     "description": "Short title for the fines data section in payments"

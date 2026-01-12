@@ -28,4 +28,11 @@ class AppDimensions {
 
   // Card dimensions
   static const double cardElevation = 2.0;
+
+  // App bar
+  static const double appBarHeight = 88.0;
+
+  // Bottom sheets / forms
+  static const double bottomSheetHorizontalPadding = paddingLarge;
+  static const double bottomSheetVerticalPadding = paddingDefault;
 }

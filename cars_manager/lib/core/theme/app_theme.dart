@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
+import 'app_dimensions.dart';
 
 class AppTheme {
   static ThemeData getDarkTheme() {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      textTheme: GoogleFonts.spaceGroteskTextTheme(
+        ThemeData(brightness: Brightness.dark).textTheme,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        floatingLabelStyle: GoogleFonts.spaceGrotesk(
+          fontWeight: FontWeight.w700,
+        ),
+        labelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+        hintStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
+      ),
       splashFactory: NoSplash.splashFactory,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -32,6 +44,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.surfaceDark,
         elevation: 0,
+        toolbarHeight: AppDimensions.appBarHeight,
         iconTheme: IconThemeData(color: AppColors.primaryDark),
         titleTextStyle: TextStyle(
           color: AppColors.primaryDark,
@@ -55,6 +68,16 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
+      textTheme: GoogleFonts.spaceGroteskTextTheme(
+        ThemeData(brightness: Brightness.light).textTheme,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        floatingLabelStyle: GoogleFonts.spaceGrotesk(
+          fontWeight: FontWeight.w700,
+        ),
+        labelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+        hintStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w500),
+      ),
       splashFactory: NoSplash.splashFactory,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -81,6 +104,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.surfaceLight,
         elevation: 0,
+        toolbarHeight: AppDimensions.appBarHeight,
         iconTheme: IconThemeData(color: AppColors.primaryLight),
         titleTextStyle: TextStyle(
           color: AppColors.primaryLight,
