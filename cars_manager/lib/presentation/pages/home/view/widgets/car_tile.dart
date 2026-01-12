@@ -87,163 +87,174 @@ class CarTile extends StatelessWidget {
         child: InkWell(
           borderRadius: radius,
           onTap: onSelect,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (car.imageUrl != null)
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(14),
-                    topRight: Radius.circular(14),
-                  ),
-                  child: ImageRect(
-                    imageUrl: car.imageUrl,
-                    imageAlignment: car.imageAlignment,
-                    aspectRatio: 16 / 9,
-                    backgroundColor: cs.surfaceContainerHighest,
-                    borderRadius: BorderRadius.zero,
-                    primaryColor: cs.primary,
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 14, 12, 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            car.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.spaceGrotesk(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: cs.primary,
-                              height: 1.1,
-                            ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (car.imageUrl != null)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: SizedBox(
+                          width: 170,
+                          height: 170,
+                          child: ImageRect(
+                            aspectRatio: 1 / 1,
+                            imageUrl: car.imageUrl,
+                            imageAlignment: Alignment.center,
+                            backgroundColor: cs.surfaceContainerHighest,
+                            borderRadius: BorderRadius.zero,
+                            primaryColor: cs.primary,
                           ),
                         ),
-                        Transform.translate(
-                          offset: const Offset(2, 0),
-                          child: PopupMenuButton<String>(
-                            padding: EdgeInsets.zero,
-                            tooltip: MaterialLocalizations.of(
-                              context,
-                            ).moreButtonTooltip,
-                            position: PopupMenuPosition.over,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: SizedBox(
-                              width: 32,
-                              height: 32,
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Icon(
-                                  Icons.more_vert,
-                                  size: 20,
-                                  color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                  if (car.imageUrl != null) const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                car.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.spaceGrotesk(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w700,
+                                  color: cs.primary,
+                                  height: 1.05,
                                 ),
                               ),
                             ),
-                            onSelected: (value) {
-                              switch (value) {
-                                case 'edit':
-                                  onEdit();
-                                  break;
-                                case 'remove':
-                                  onDelete();
-                                  break;
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              menuItem(
-                                value: 'edit',
-                                icon: Icons.edit_outlined,
-                                label: l10n.common_edit,
-                                iconColor: cs.onSurface,
-                                textColor: cs.onSurface,
+                            Transform.translate(
+                              offset: const Offset(2, 0),
+                              child: PopupMenuButton<String>(
+                                padding: EdgeInsets.zero,
+                                tooltip: MaterialLocalizations.of(
+                                  context,
+                                ).moreButtonTooltip,
+                                position: PopupMenuPosition.over,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: SizedBox(
+                                  width: 32,
+                                  height: 32,
+                                  child: Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Icon(
+                                      Icons.more_vert,
+                                      size: 20,
+                                      color: cs.onSurfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                                onSelected: (value) {
+                                  switch (value) {
+                                    case 'edit':
+                                      onEdit();
+                                      break;
+                                    case 'remove':
+                                      onDelete();
+                                      break;
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  menuItem(
+                                    value: 'edit',
+                                    icon: Icons.edit_outlined,
+                                    label: l10n.common_edit,
+                                    iconColor: cs.onSurface,
+                                    textColor: cs.onSurface,
+                                  ),
+                                  menuItem(
+                                    value: 'remove',
+                                    icon: Icons.delete_outline,
+                                    label: l10n.common_delete,
+                                    iconColor: cs.error,
+                                    textColor: cs.error,
+                                  ),
+                                ],
                               ),
-                              menuItem(
-                                value: 'remove',
-                                icon: Icons.delete_outline,
-                                label: l10n.common_delete,
-                                iconColor: cs.error,
-                                textColor: cs.error,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '${car.manufacture} • ${car.model}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: cs.onSurface.withValues(alpha: 0.85),
-                        height: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${car.yearOfManufacture} • ${car.licensePlate}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w600,
-                        color: cs.onSurfaceVariant,
-                        height: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        DueDatePill(
-                          icon: Icons.description_outlined,
-                          tooltip: l10n.payments_insuranceData_nextDue,
-                          dueDate: nextInsuranceDate,
-                          daysRemaining: daysUntilInsurance,
-                          daysLabel: l10n.days,
-                        ),
-                        DueDatePill(
-                          leading: SvgPicture.asset(
-                            'assets/icons/inspection.svg',
-                            width: 16,
-                            height: 16,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.white,
-                              BlendMode.srcIn,
                             ),
-                          ),
-                          tooltip: l10n.payments_inspectionsData_nextDue,
-                          dueDate: nextInspectionDate,
-                          daysRemaining: daysUntilInspection,
-                          daysLabel: l10n.days,
+                          ],
                         ),
-                        DueDatePill(
-                          icon: Icons.paid_outlined,
-                          tooltip: l10n.payments_taxesData_nextDue,
-                          dueDate: nextTaxDate,
-                          daysRemaining: daysUntilTax,
-                          daysLabel: l10n.days,
+                        const SizedBox(height: 6),
+                        Text(
+                          '${car.manufacture} • ${car.model}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 13.5,
+                            fontWeight: FontWeight.w600,
+                            color: cs.onSurface.withValues(alpha: 0.85),
+                            height: 1.1,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${car.yearOfManufacture} • ${car.licensePlate}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: cs.onSurfaceVariant,
+                            height: 1.1,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: [
+                            DueDatePill(
+                              icon: Icons.description_outlined,
+                              tooltip: l10n.payments_insuranceData_nextDue,
+                              dueDate: nextInsuranceDate,
+                              daysRemaining: daysUntilInsurance,
+                              daysLabel: l10n.days,
+                            ),
+                            DueDatePill(
+                              leading: SvgPicture.asset(
+                                'assets/icons/inspection.svg',
+                                width: 16,
+                                height: 16,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              tooltip: l10n.payments_inspectionsData_nextDue,
+                              dueDate: nextInspectionDate,
+                              daysRemaining: daysUntilInspection,
+                              daysLabel: l10n.days,
+                            ),
+                            DueDatePill(
+                              icon: Icons.paid_outlined,
+                              tooltip: l10n.payments_taxesData_nextDue,
+                              dueDate: nextTaxDate,
+                              daysRemaining: daysUntilTax,
+                              daysLabel: l10n.days,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

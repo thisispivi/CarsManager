@@ -42,9 +42,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get carData_acquisitionDate => 'Data di Acquisizione';
 
   @override
-  String get carData_insuranceExpirationDate => 'Scadenza Assicurazione';
-
-  @override
   String get carData_photoUrl => 'URL Foto';
 
   @override

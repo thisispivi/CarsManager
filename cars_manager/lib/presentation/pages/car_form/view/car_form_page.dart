@@ -1,7 +1,6 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/widgets/car_form_fields.dart';
-import 'package:cars_manager/presentation/pages/car_form/view/widgets/insurance_expiration_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -233,15 +232,6 @@ class _CarFormPageState extends State<CarFormPage> {
                   validateLicensePlate: (v) => _validateLicensePlate(v, l10n),
                   validateImageUrl: (v) => _validateImageUrl(v, l10n),
                   l10n: l10n,
-                ),
-                const SizedBox(height: 16),
-                InsuranceExpirationTile(
-                  date: _insuranceExpirationDate,
-                  onChanged: (picked) {
-                    setState(() {
-                      _insuranceExpirationDate = picked;
-                    });
-                  },
                 ),
               ],
             ),

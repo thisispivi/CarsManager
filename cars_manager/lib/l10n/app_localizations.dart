@@ -164,12 +164,6 @@ abstract class AppLocalizations {
   /// **'Acquisition Date'**
   String get carData_acquisitionDate;
 
-  /// Label for the insurance expiration date field
-  ///
-  /// In en, this message translates to:
-  /// **'Insurance Expiration'**
-  String get carData_insuranceExpirationDate;
-
   /// Label for the car photo URL field
   ///
   /// In en, this message translates to:

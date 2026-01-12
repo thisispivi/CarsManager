@@ -44,10 +44,6 @@
   "@carData_acquisitionDate": {
     "description": "Label for the date when the car was acquired"
   },
-  "carData_insuranceExpirationDate": "Scadenza Assicurazione",
-  "@carData_insuranceExpirationDate": {
-    "description": "Label for the insurance expiration date field"
-  },
   "carData_photoUrl": "URL Foto",
   "@carData_photoUrl": {
     "description": "Label for the car photo URL field"
