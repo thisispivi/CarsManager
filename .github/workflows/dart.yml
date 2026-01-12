@@ -7,9 +7,9 @@ name: Dart
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
@@ -24,7 +24,24 @@ jobs:
       # - uses: dart-lang/setup-dart@v1
       - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
 
+      - name: Locate pubspec.yaml
+        id: locate
+        shell: bash
+        run: |
+          set -euo pipefail
+          PUBSPEC="$(git ls-files '**/pubspec.yaml' | head -n 1 || true)"
+          if [ -z "$PUBSPEC" ]; then
+            echo "No pubspec.yaml found; skipping Dart steps."
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "Using pubspec: $PUBSPEC"
+          echo "found=true" >> "$GITHUB_OUTPUT"
+          echo "dir=$(dirname "$PUBSPEC")" >> "$GITHUB_OUTPUT"
+
       - name: Install dependencies
+        if: steps.locate.outputs.found == 'true'
+        working-directory: ${{ steps.locate.outputs.dir }}
         run: dart pub get
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
@@ -33,10 +50,14 @@ jobs:
 
       # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
+        if: steps.locate.outputs.found == 'true'
+        working-directory: ${{ steps.locate.outputs.dir }}
         run: dart analyze
 
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
       - name: Run tests
+        if: steps.locate.outputs.found == 'true'
+        working-directory: ${{ steps.locate.outputs.dir }}
         run: dart test
