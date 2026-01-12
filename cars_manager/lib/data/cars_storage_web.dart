@@ -1,7 +1,7 @@
 import 'package:web/web.dart' as web;
 import 'package:flutter/services.dart' show rootBundle;
 
-class CarStorage {
+class CarsStorage {
   static const String _assetPath = 'assets/data/cars.json';
   static const String _storageKey = 'cars_manager.cars_json';
 

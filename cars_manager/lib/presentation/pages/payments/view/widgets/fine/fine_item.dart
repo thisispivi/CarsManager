@@ -1,6 +1,6 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/fine_data.dart';
-import 'package:cars_manager/presentation/common/extensions/fine_data_exxtensions.dart';
+import 'package:cars_manager/presentation/common/extensions/fine_data_extensions.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

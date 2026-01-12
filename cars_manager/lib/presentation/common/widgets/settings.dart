@@ -1,4 +1,4 @@
-import '../../main.dart';
+import '../../../main.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/widgets/section_header.dart';
 import 'package:country_flags/country_flags.dart';

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 
-class CarStorage {
+class CarsStorage {
   static const String _fileName = 'cars.json';
   static const String _assetPath = 'assets/data/cars.json';
 
