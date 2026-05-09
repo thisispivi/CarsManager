@@ -61,10 +61,16 @@ class CarsManagerState extends ChangeNotifier {
       _activeCarId = loadedActiveCarId {
     _locale = _resolveInitialLocale();
     _themeMode = _resolveInitialThemeMode();
+    _notificationsEnabled = loadedNotificationsEnabled ?? true;
+    _units = loadedUnits ?? 'metric';
+    _currency = loadedCurrency ?? 'EUR';
 
     setLoadedPreferences(
       localeCode: _locale?.languageCode,
       themeMode: _themeMode.name,
+      notificationsEnabled: _notificationsEnabled,
+      units: _units,
+      currency: _currency,
     );
   }
 
@@ -73,6 +79,9 @@ class CarsManagerState extends ChangeNotifier {
 
   Locale? _locale;
   ThemeMode _themeMode = ThemeMode.dark;
+  bool _notificationsEnabled = true;
+  String _units = 'metric';
+  String _currency = 'EUR';
 
   Locale _resolveInitialLocale() {
     final stored = loadedLocaleCode?.trim();
@@ -127,6 +136,9 @@ class CarsManagerState extends ChangeNotifier {
 
   Locale? get locale => _locale;
   ThemeMode get themeMode => _themeMode;
+  bool get notificationsEnabled => _notificationsEnabled;
+  String get units => _units;
+  String get currency => _currency;
 
   void setActiveCar(String carId) {
     _activeCarId = carId;
@@ -167,6 +179,9 @@ class CarsManagerState extends ChangeNotifier {
     setLoadedPreferences(
       localeCode: _locale?.languageCode,
       themeMode: _themeMode.name,
+      notificationsEnabled: _notificationsEnabled,
+      units: _units,
+      currency: _currency,
     );
     saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
@@ -180,8 +195,57 @@ class CarsManagerState extends ChangeNotifier {
     setLoadedPreferences(
       localeCode: _locale?.languageCode,
       themeMode: _themeMode.name,
+      notificationsEnabled: _notificationsEnabled,
+      units: _units,
+      currency: _currency,
     );
     saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void setNotificationsEnabled(bool enabled) {
+    _notificationsEnabled = enabled;
+    notifyListeners();
+    setLoadedPreferences(
+      localeCode: _locale?.languageCode,
+      themeMode: _themeMode.name,
+      notificationsEnabled: _notificationsEnabled,
+      units: _units,
+      currency: _currency,
+    );
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void setUnits(String units) {
+    _units = units;
+    notifyListeners();
+    setLoadedPreferences(
+      localeCode: _locale?.languageCode,
+      themeMode: _themeMode.name,
+      notificationsEnabled: _notificationsEnabled,
+      units: _units,
+      currency: _currency,
+    );
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void setCurrency(String currency) {
+    _currency = currency;
+    notifyListeners();
+    setLoadedPreferences(
+      localeCode: _locale?.languageCode,
+      themeMode: _themeMode.name,
+      notificationsEnabled: _notificationsEnabled,
+      units: _units,
+      currency: _currency,
+    );
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  Future<void> resetAllData() async {
+    _cars.clear();
+    _activeCarId = null;
+    notifyListeners();
+    await saveCarData(cars: _cars, activeCarId: _activeCarId);
   }
 
   void updateFuelEntry({
@@ -400,7 +464,6 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
         }
         return Scaffold(
           key: _scaffoldKey,
-          endDrawer: const SettingsDrawer(),
           appBar: AppBar(
             toolbarHeight: AppDimensions.appBarHeight,
             automaticallyImplyLeading: false,
@@ -479,9 +542,28 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
             actions: [
               IconButton(
                 tooltip: l10n.settings_title,
-                icon: const Icon(Icons.menu),
+                icon: const Icon(Icons.person),
                 onPressed: () {
-                  _scaffoldKey.currentState?.openEndDrawer();
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => DraggableScrollableSheet(
+                      expand: false,
+                      initialChildSize: 0.9,
+                      maxChildSize: 0.9,
+                      builder: (context, scrollController) => Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(28),
+                          ),
+                        ),
+                        child: SettingsContent(
+                          scrollController: scrollController,
+                        ),
+                      ),
+                    ),
+                  );
                 },
               ),
             ],

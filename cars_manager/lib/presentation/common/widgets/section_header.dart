@@ -27,10 +27,10 @@ class SectionHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          if (icon != null) icon!,
+          ?icon,
           if (icon != null) const SizedBox(width: iconTitleSpacing),
           Expanded(child: _buildTitleText(context)),
-          if (trailing != null) trailing!,
+          ?trailing,
         ],
       ),
     );

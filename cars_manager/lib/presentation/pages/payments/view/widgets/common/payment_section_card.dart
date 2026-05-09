@@ -39,7 +39,7 @@ class PaymentSectionCard extends StatelessWidget {
             trailing: trailing,
           ),
           SizedBox(height: verticalSpacing ?? 24),
-          if (nextInfoDue != null) nextInfoDue!,
+          ?nextInfoDue,
           if (nextInfoDue != null) SizedBox(height: verticalSpacing ?? 24),
           ...items,
         ],

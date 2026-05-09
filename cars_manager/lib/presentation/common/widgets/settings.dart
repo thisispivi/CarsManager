@@ -34,12 +34,10 @@ class SettingsDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            const Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: SettingsContent(),
-                ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: SettingsContent(),
               ),
             ),
           ],
@@ -50,17 +48,174 @@ class SettingsDrawer extends StatelessWidget {
 }
 
 class SettingsContent extends StatelessWidget {
-  const SettingsContent({super.key});
+  final ScrollController? scrollController;
+  const SettingsContent({super.key, this.scrollController});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    final state = Provider.of<CarsManagerState>(context);
+
+    return ListView(
+      controller: scrollController,
+      padding: EdgeInsets.zero,
       children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Profile & Settings', // Use a temporary title or localized one
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 16),
+        // Language & Theme
         const LanguageSelector(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 32),
+
+        // Preferences Section
+        SectionHeader(
+          horizontalPadding: 32,
+          title: 'Preferences',
+          icon: Icon(
+            Icons.settings,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        _SettingsRow(
+          title: 'Notifications',
+          trailing: Switch(
+            value: state.notificationsEnabled,
+            onChanged: (val) => state.setNotificationsEnabled(val),
+          ),
+        ),
+        _SettingsRow(
+          title: 'Units',
+          trailing: DropdownButton<String>(
+            value: state.units,
+            items: const [
+              DropdownMenuItem(value: 'metric', child: Text('Metric (km, L)')),
+              DropdownMenuItem(
+                value: 'imperial',
+                child: Text('Imperial (mi, gal)'),
+              ),
+            ],
+            onChanged: (val) {
+              if (val != null) state.setUnits(val);
+            },
+          ),
+        ),
+        _SettingsRow(
+          title: 'Currency',
+          trailing: DropdownButton<String>(
+            value: state.currency,
+            items: const [
+              DropdownMenuItem(value: 'EUR', child: Text('EUR (€)')),
+              DropdownMenuItem(value: 'USD', child: Text('USD (\$)')),
+              DropdownMenuItem(value: 'GBP', child: Text('GBP (£)')),
+            ],
+            onChanged: (val) {
+              if (val != null) state.setCurrency(val);
+            },
+          ),
+        ),
+        const SizedBox(height: 32),
+
+        // Data Management Section
+        SectionHeader(
+          horizontalPadding: 32,
+          title: 'Data Management',
+          icon: Icon(
+            Icons.storage,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Data exported to JSON (Simulation)'),
+                ),
+              );
+            },
+            icon: const Icon(Icons.download),
+            label: const Text('Export Data / Backup'),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+          child: OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(foregroundColor: Colors.red),
+            onPressed: () async {
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Reset All Data?'),
+                  content: const Text(
+                    'This will delete all your cars and entries. This action cannot be undone.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(true),
+                      child: const Text(
+                        'Reset',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+              if (confirm == true) {
+                await state.resetAllData();
+                if (context.mounted) Navigator.of(context).pop();
+              }
+            },
+            icon: const Icon(Icons.delete_forever),
+            label: const Text('Reset All Data'),
+          ),
+        ),
+        const SizedBox(height: 32),
       ],
+    );
+  }
+}
+
+class _SettingsRow extends StatelessWidget {
+  final String title;
+  final Widget trailing;
+  const _SettingsRow({required this.title, required this.trailing});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: GoogleFonts.spaceGrotesk(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          trailing,
+        ],
+      ),
     );
   }
 }

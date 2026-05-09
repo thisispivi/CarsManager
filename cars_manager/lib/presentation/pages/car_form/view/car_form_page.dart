@@ -8,7 +8,7 @@ import 'package:cars_manager/presentation/pages/car_form/view/widgets/car_form_f
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart' as fp;
 import 'package:google_fonts/google_fonts.dart';
 
 class CarFormPage extends StatefulWidget {
@@ -299,10 +299,7 @@ class _CarFormPageState extends State<CarFormPage> {
   }
 
   Future<void> _pickAndCropImage() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-      withData: true,
-    );
+    final result = await fp.FilePicker.pickFiles(type: fp.FileType.image);
 
     final bytes = result?.files.single.bytes;
     if (bytes == null) return;

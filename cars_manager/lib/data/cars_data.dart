@@ -14,12 +14,18 @@ class CarsDataSnapshot {
   final String? activeCarId;
   final String? localeCode;
   final String? themeMode;
+  final bool? notificationsEnabled;
+  final String? units; // 'metric' or 'imperial' or similar
+  final String? currency;
 
   const CarsDataSnapshot({
     required this.cars,
     required this.activeCarId,
     required this.localeCode,
     required this.themeMode,
+    this.notificationsEnabled,
+    this.units,
+    this.currency,
   });
 }
 
@@ -27,6 +33,9 @@ List<Car> loadedCars = <Car>[];
 String? loadedActiveCarId;
 String? loadedLocaleCode;
 String? loadedThemeMode;
+bool? loadedNotificationsEnabled;
+String? loadedUnits;
+String? loadedCurrency;
 
 final Map<String, Map<String, dynamic>> _carJsonCacheById = {};
 
@@ -39,11 +48,17 @@ Future<void> loadCarData() async {
     loadedActiveCarId = snapshot?.activeCarId;
     loadedLocaleCode = snapshot?.localeCode;
     loadedThemeMode = snapshot?.themeMode;
+    loadedNotificationsEnabled = snapshot?.notificationsEnabled;
+    loadedUnits = snapshot?.units;
+    loadedCurrency = snapshot?.currency;
   } catch (e) {
     loadedCars = [];
     loadedActiveCarId = null;
     loadedLocaleCode = null;
     loadedThemeMode = null;
+    loadedNotificationsEnabled = null;
+    loadedUnits = null;
+    loadedCurrency = null;
   }
 }
 
@@ -61,7 +76,13 @@ Future<void> saveCarData({
   final root = {
     'activeCarId': activeCarId,
     'cars': mergedCarsJson,
-    'preferences': {'locale': loadedLocaleCode, 'themeMode': loadedThemeMode},
+    'preferences': {
+      'locale': loadedLocaleCode,
+      'themeMode': loadedThemeMode,
+      'notificationsEnabled': loadedNotificationsEnabled,
+      'units': loadedUnits,
+      'currency': loadedCurrency,
+    },
   };
 
   await CarsStorage.saveJson(jsonEncode(root));
@@ -102,6 +123,13 @@ CarsDataSnapshot? _parseCarsSnapshot(dynamic root) {
     final String? themeMode = (prefs is Map)
         ? prefs['themeMode']?.toString()
         : null;
+    final bool? notificationsEnabled = (prefs is Map)
+        ? (prefs['notificationsEnabled'] as bool?)
+        : null;
+    final String? units = (prefs is Map) ? prefs['units']?.toString() : null;
+    final String? currency = (prefs is Map)
+        ? prefs['currency']?.toString()
+        : null;
     final List<dynamic> carsList = (root['cars'] is List)
         ? (root['cars'] as List)
         : const [];
@@ -127,14 +155,36 @@ CarsDataSnapshot? _parseCarsSnapshot(dynamic root) {
       activeCarId: resolvedActiveId,
       localeCode: localeCode,
       themeMode: themeMode,
+      notificationsEnabled: notificationsEnabled,
+      units: units,
+      currency: currency,
     );
   }
   return null;
 }
 
-void setLoadedPreferences({String? localeCode, String? themeMode}) {
-  loadedLocaleCode = localeCode;
-  loadedThemeMode = themeMode;
+void setLoadedPreferences({
+  String? localeCode,
+  String? themeMode,
+  bool? notificationsEnabled,
+  String? units,
+  String? currency,
+}) {
+  if (localeCode != null) {
+    loadedLocaleCode = localeCode;
+  }
+  if (themeMode != null) {
+    loadedThemeMode = themeMode;
+  }
+  if (notificationsEnabled != null) {
+    loadedNotificationsEnabled = notificationsEnabled;
+  }
+  if (units != null) {
+    loadedUnits = units;
+  }
+  if (currency != null) {
+    loadedCurrency = currency;
+  }
 }
 
 String _generateCarId() {
