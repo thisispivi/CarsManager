@@ -53,7 +53,7 @@ class NextInfoDue extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  dateFormat.format(nextDueDate),
+                  "Due: ${dateFormat.format(nextDueDate)}",
                   style: GoogleFonts.spaceGrotesk(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -65,7 +65,8 @@ class NextInfoDue extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
             padding: const EdgeInsets.symmetric(
               vertical: 4.0,
               horizontal: 10.0,
@@ -75,7 +76,7 @@ class NextInfoDue extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              "$daysRemaining $daysLabel",
+              "$daysRemaining $daysLabel left",
               style: GoogleFonts.spaceGrotesk(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,

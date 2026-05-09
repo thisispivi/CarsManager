@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../../main.dart';
+import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 
 class FineSection extends StatelessWidget {
   final Car car;
@@ -64,12 +65,34 @@ class FineSection extends StatelessWidget {
       ),
       items: [
         if (items.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              localizations.payments_finesData_empty,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+          EmptyStateWidget(
+            message: localizations.payments_finesData_empty,
+            actionLabel: localizations.common_add,
+            iconWidget: SvgPicture.asset(
+              "assets/icons/fine.svg",
+              width: 48,
+              height: 48,
+              colorFilter: ColorFilter.mode(
+                colorScheme.primary.withValues(alpha: 0.5),
+                BlendMode.srcIn,
+              ),
             ),
+            onAction: () async {
+              final FineData? data = await showModalBottomSheet<FineData>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) =>
+                    const AddPaymentBottomSheet(type: PaymentEntryType.fine),
+              );
+
+              if (data != null && context.mounted) {
+                Provider.of<CarsManagerState>(
+                  context,
+                  listen: false,
+                ).addFinePayment(data);
+              }
+            },
           )
         else
           ...items.asMap().entries.map(

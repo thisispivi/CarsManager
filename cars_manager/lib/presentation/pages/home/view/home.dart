@@ -4,8 +4,8 @@ import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
 import 'package:cars_manager/presentation/pages/home/view/widgets/car_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 
 class CarsHomePage extends StatelessWidget {
   const CarsHomePage({super.key});
@@ -48,14 +48,25 @@ class CarsHomePage extends StatelessWidget {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(24),
-                  child: Text(
-                    l10n.cars_emptyState,
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: EmptyStateWidget(
+                    message: l10n.cars_emptyState,
+                    actionLabel: l10n.common_add,
+                    icon: Icons.directions_car_outlined,
+                    onAction: () async {
+                      final created = await Navigator.of(context).push<Car>(
+                        MaterialPageRoute(builder: (_) => const CarFormPage()),
+                      );
+                      if (created == null) return;
+                      if (!context.mounted) return;
+
+                      final state = context.read<CarsManagerState>();
+                      state.addCar(created, setActive: true);
+
+                      if (!context.mounted) return;
+                      Navigator.of(
+                        context,
+                      ).push(_noTransitionRoute(const CarDashboardPage()));
+                    },
                   ),
                 ),
               );

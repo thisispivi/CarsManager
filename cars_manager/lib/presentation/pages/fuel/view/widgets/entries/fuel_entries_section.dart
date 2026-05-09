@@ -8,6 +8,7 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/common/pay
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 
 class FuelEntriesSection extends StatelessWidget {
   final Car car;
@@ -65,12 +66,26 @@ class FuelEntriesSection extends StatelessWidget {
       nextInfoDue: null,
       items: [
         if (entries.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              localizations.fuel_entries_empty,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
-            ),
+          EmptyStateWidget(
+            message: localizations.fuel_entries_empty,
+            actionLabel: localizations.common_add,
+            icon: Icons.local_gas_station,
+            onAction: () async {
+              final FuelEntry? entry = await showModalBottomSheet<FuelEntry>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) =>
+                    AddFuelEntryBottomSheet(lockedFuelType: lockedFuelType),
+              );
+
+              if (entry != null && context.mounted) {
+                Provider.of<CarsManagerState>(
+                  context,
+                  listen: false,
+                ).addFuelEntry(entry);
+              }
+            },
           )
         else
           ...entries.asMap().entries.map(

@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../../main.dart';
+import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 import 'next_inspection_info.dart';
 import 'inspection_item.dart';
 
@@ -68,12 +69,36 @@ class InspectionSection extends StatelessWidget {
       nextInfoDue: items.isNotEmpty ? NextInspectionInfo(car: car) : null,
       items: [
         if (items.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              localizations.payments_inspectionsData_empty,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+          EmptyStateWidget(
+            message: localizations.payments_inspectionsData_empty,
+            actionLabel: localizations.common_add,
+            iconWidget: SvgPicture.asset(
+              "assets/icons/inspection.svg",
+              width: 48,
+              height: 48,
+              colorFilter: ColorFilter.mode(
+                colorScheme.primary.withValues(alpha: 0.5),
+                BlendMode.srcIn,
+              ),
             ),
+            onAction: () async {
+              final InspectionData? data =
+                  await showModalBottomSheet<InspectionData>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const AddPaymentBottomSheet(
+                      type: PaymentEntryType.inspection,
+                    ),
+                  );
+
+              if (data != null && context.mounted) {
+                Provider.of<CarsManagerState>(
+                  context,
+                  listen: false,
+                ).addInspectionPayment(data);
+              }
+            },
           )
         else
           ...items.asMap().entries.map(

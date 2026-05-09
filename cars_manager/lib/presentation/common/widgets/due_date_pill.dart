@@ -31,14 +31,17 @@ class DueDatePill extends StatelessWidget {
     final int safeDays = daysRemaining ?? -1;
     final Color color = dueDateColorForDays(safeDays);
 
-    final String dateText = dueDate == null ? '—' : format.format(dueDate!);
+    final String dateText = dueDate == null
+        ? '—'
+        : 'Due: ${format.format(dueDate!)}';
     final String trailing = daysRemaining == null
         ? ''
-        : ' · $safeDays $daysLabel';
+        : ' · $safeDays $daysLabel left';
 
     return Tooltip(
       message: tooltip,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: color,

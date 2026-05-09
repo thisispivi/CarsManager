@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../../../../../../main.dart';
 import '../entries/add_payment_bottom_sheet.dart';
 import '../common/payment_section_card.dart';
+import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 import 'next_tax_info.dart';
 import 'tax_item.dart';
 
@@ -63,12 +64,26 @@ class TaxSection extends StatelessWidget {
       nextInfoDue: items.isNotEmpty ? NextTaxInfo(car: car) : null,
       items: [
         if (items.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              localizations.payments_taxesData_empty,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
-            ),
+          EmptyStateWidget(
+            message: localizations.payments_taxesData_empty,
+            actionLabel: localizations.common_add,
+            icon: Icons.paid_outlined,
+            onAction: () async {
+              final TaxData? data = await showModalBottomSheet<TaxData>(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) =>
+                    const AddPaymentBottomSheet(type: PaymentEntryType.tax),
+              );
+
+              if (data != null && context.mounted) {
+                Provider.of<CarsManagerState>(
+                  context,
+                  listen: false,
+                ).addTaxPayment(data);
+              }
+            },
           )
         else
           ...items.asMap().entries.map(

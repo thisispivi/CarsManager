@@ -4,6 +4,8 @@ import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/presentation/common/widgets/simple_year_bar_chart.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
+import 'package:cars_manager/presentation/common/widgets/chart_title.dart';
+import 'package:cars_manager/presentation/common/extensions/fuel_type_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,9 +33,14 @@ class FuelAmountByYearChart extends StatelessWidget {
     final unit = isElectric ? 'kWh' : 'L';
 
     return PaymentSectionCard(
-      title:
-          AppLocalizations.of(context)?.fuel_amountByYear_title ??
-          'Total amount by year',
+      customTitle: ChartTitle(
+        title:
+            AppLocalizations.of(context)?.fuel_amountByYear_title ??
+            'Total amount by year',
+        unit: unit,
+        subtitle:
+            '${car.name} (${fuelType.localized(AppLocalizations.of(context)!)})',
+      ),
       nextInfoDue: null,
       verticalSpacing: 12,
       items: [

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../../../../../main.dart';
+import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 import 'next_insurance_info.dart';
 import 'insurance_item.dart';
 
@@ -63,12 +64,28 @@ class InsuranceSection extends StatelessWidget {
       nextInfoDue: items.isNotEmpty ? NextInsuranceInfo(car: car) : null,
       items: [
         if (items.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              localizations.payments_insuranceData_empty,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
-            ),
+          EmptyStateWidget(
+            message: localizations.payments_insuranceData_empty,
+            actionLabel: localizations.common_add,
+            icon: Icons.description_outlined,
+            onAction: () async {
+              final InsuranceData? data =
+                  await showModalBottomSheet<InsuranceData>(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) => const AddPaymentBottomSheet(
+                      type: PaymentEntryType.insurance,
+                    ),
+                  );
+
+              if (data != null && context.mounted) {
+                Provider.of<CarsManagerState>(
+                  context,
+                  listen: false,
+                ).addInsurancePayment(data);
+              }
+            },
           )
         else
           ...items.asMap().entries.map(

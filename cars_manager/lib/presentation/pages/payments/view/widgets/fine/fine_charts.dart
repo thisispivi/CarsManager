@@ -6,6 +6,7 @@ import 'package:cars_manager/presentation/common/extensions/fine_data_extensions
 import 'package:cars_manager/presentation/common/widgets/donut_chart.dart';
 import 'package:cars_manager/presentation/common/widgets/simple_year_bar_chart.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
+import 'package:cars_manager/presentation/common/widgets/chart_title.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -30,7 +31,10 @@ class FinesCountByYearChart extends StatelessWidget {
     if (data.isEmpty) return const SizedBox();
 
     return PaymentSectionCard(
-      title: l10n.payments_fines_chart_countByYear_title,
+      customTitle: ChartTitle(
+        title: l10n.payments_fines_chart_countByYear_title,
+        subtitle: car.name,
+      ),
       nextInfoDue: null,
       verticalSpacing: 12,
       items: [
@@ -77,7 +81,11 @@ class FinesAmountByYearChart extends StatelessWidget {
     if (data.isEmpty) return const SizedBox();
 
     return PaymentSectionCard(
-      title: l10n.payments_fines_chart_amountByYear_title,
+      customTitle: ChartTitle(
+        title: l10n.payments_fines_chart_amountByYear_title,
+        unit: '€',
+        subtitle: car.name,
+      ),
       nextInfoDue: null,
       verticalSpacing: 12,
       items: [
@@ -143,7 +151,11 @@ class FinesByTypeChart extends StatelessWidget {
     if (sums.isEmpty) return const SizedBox();
 
     return PaymentSectionCard(
-      title: l10n.payments_fines_chart_byType_title,
+      customTitle: ChartTitle(
+        title: l10n.payments_fines_chart_byType_title,
+        unit: '€',
+        subtitle: car.name,
+      ),
       nextInfoDue: null,
       verticalSpacing: 12,
       items: [

@@ -14,12 +14,11 @@ import 'package:cars_manager/presentation/pages/home/view/home.dart';
 import 'package:cars_manager/presentation/common/widgets/settings.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/fuel_page.dart';
 import 'package:cars_manager/presentation/pages/payments/view/payments_page.dart';
+import 'package:cars_manager/presentation/common/widgets/car_switcher_header.dart';
+import 'package:cars_manager/presentation/widgets/notification_center.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:cars_manager/core/theme/app_dimensions.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -445,7 +444,6 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
     return Consumer<CarsManagerState>(
       builder: (context, state, child) {
         final l10n = AppLocalizations.of(context)!;
-        final activeCar = state.activeCar;
 
         final Widget page;
         switch (_selectedIndex) {
@@ -465,81 +463,11 @@ class _CarDashboardPageState extends State<CarDashboardPage> {
         return Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
-            toolbarHeight: AppDimensions.appBarHeight,
             automaticallyImplyLeading: false,
             titleSpacing: 16,
-            title: Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/cars_manager_logo.svg',
-                  height: 28,
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  l10n.appTitle,
-                  style: GoogleFonts.spaceGrotesk(
-                    fontWeight: FontWeight.w800,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-
-                if (activeCar != null)
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Chip(
-                        avatar: CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                          backgroundImage:
-                              (activeCar.imageBase64 != null &&
-                                  activeCar.imageBase64!.isNotEmpty)
-                              ? MemoryImage(
-                                  Uri.parse(
-                                    'data:image/png;base64,${activeCar.imageBase64}',
-                                  ).data!.contentAsBytes(),
-                                )
-                              : (activeCar.imageUrl != null &&
-                                    activeCar.imageUrl!.isNotEmpty)
-                              ? NetworkImage(activeCar.imageUrl!)
-                              : null,
-                          child:
-                              (activeCar.imageBase64 == null ||
-                                      activeCar.imageBase64!.isEmpty) &&
-                                  (activeCar.imageUrl == null ||
-                                      activeCar.imageUrl!.isEmpty)
-                              ? Icon(
-                                  Icons.directions_car,
-                                  size: 16,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                )
-                              : null,
-                        ),
-                        label: Text(
-                          activeCar.name,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w700,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerHighest,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+            title: const CarSwitcherHeader(),
             actions: [
+              const NotificationCenter(),
               IconButton(
                 tooltip: l10n.settings_title,
                 icon: const Icon(Icons.person),

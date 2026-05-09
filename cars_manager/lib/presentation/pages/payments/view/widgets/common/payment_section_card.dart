@@ -2,7 +2,8 @@ import 'package:cars_manager/presentation/common/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 
 class PaymentSectionCard extends StatelessWidget {
-  final String title;
+  final String? title;
+  final Widget? customTitle;
   final Widget? icon;
   final Widget? trailing;
   final Widget? nextInfoDue;
@@ -12,13 +13,14 @@ class PaymentSectionCard extends StatelessWidget {
 
   const PaymentSectionCard({
     super.key,
-    required this.title,
+    this.title,
+    this.customTitle,
     this.icon,
     this.trailing,
     this.nextInfoDue,
     required this.items,
     this.verticalSpacing,
-  });
+  }) : assert(title != null || customTitle != null);
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +34,20 @@ class PaymentSectionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SectionHeader(
-            horizontalPadding: horizontalPadding,
-            title: title,
-            icon: icon,
-            trailing: trailing,
-          ),
+          if (customTitle != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+              ),
+              child: customTitle!,
+            )
+          else if (title != null)
+            SectionHeader(
+              horizontalPadding: horizontalPadding,
+              title: title!,
+              icon: icon,
+              trailing: trailing,
+            ),
           SizedBox(height: verticalSpacing ?? 24),
           ?nextInfoDue,
           if (nextInfoDue != null) SizedBox(height: verticalSpacing ?? 24),

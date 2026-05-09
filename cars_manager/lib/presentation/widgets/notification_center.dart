@@ -29,7 +29,7 @@ class _NotificationCenterState extends State<NotificationCenter> {
     NotificationData(
       id: '1',
       title: 'Upcoming Due Date',
-      body: 'Your Stilo\'s insurance expires in 7 days',
+      body: 'Your Stilo\'s insurance has 7 days left',
       date: DateTime.now().add(const Duration(days: 7)),
     ),
   ];
@@ -42,24 +42,37 @@ class _NotificationCenterState extends State<NotificationCenter> {
       icon: Stack(
         children: [
           const Icon(Icons.notifications_none),
-          if (unreadCount > 0)
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                child: Text(
-                  '$unreadCount',
-                  style: const TextStyle(color: Colors.white, fontSize: 10),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) =>
+                  ScaleTransition(scale: animation, child: child),
+              child: unreadCount > 0
+                  ? Container(
+                      key: ValueKey(unreadCount),
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '$unreadCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
+          ),
         ],
       ),
       onOpened: () {
