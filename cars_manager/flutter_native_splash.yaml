@@ -1,0 +1,26 @@
+flutter_native_splash:
+  # Light theme splash
+  color: '#FFFFFF'
+  image: assets/icons/CarsManagerLogoTransparent.png
+  image_dark: assets/icons/CarsManagerLogoTransparent.png
+
+  # Dark theme splash
+  color_dark: '#0F1114'
+
+  # Ensure fullscreen
+  fullscreen: true
+
+  # Android 12+ themed splash
+  android_12:
+    color: '#FFFFFF'
+    color_dark: '#0F1114'
+    icon_background_color: '#FFFFFF'
+    icon_background_color_dark: '#1E2226'
+    image: assets/icons/CarsManagerLogoTransparent.png
+    image_dark: assets/icons/CarsManagerLogoTransparent.png
+
+  # iOS
+  ios: true
+
+  # Web — shows during initial load
+  web: false

@@ -1,5 +1,5 @@
 name: cars_manager
-description: "A Flutter application to manage car details and maintenance. This app allows users to add, edit, and delete car information, track maintenance schedules, and view car statistics."
+description: "CarsManager — the smart way to manage your vehicles. Track fuel consumption, maintenance, insurance, taxes, repairs, fines, and get reminders before due dates."
 
 publish_to: 'none' 
 
@@ -35,6 +35,8 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   husky: ^0.1.7
   lint_staged: ^0.5.1
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.3
 
 flutter:
   generate: true

@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+COMMITLINT="$REPO_ROOT/node_modules/.bin/commitlint"
+
+if [ ! -f "$COMMITLINT" ]; then
+  echo "⚠️  commitlint not installed — run 'npm install' at repo root to enable commit linting." >&2
+  exit 0
+fi
+
+"$COMMITLINT" --edit "$1"

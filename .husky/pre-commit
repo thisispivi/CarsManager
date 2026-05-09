@@ -1,26 +1,30 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
-# Ensure we run from the cars_manager package at repo root (handles .husky being one folder up)
-repo_root="$(git rev-parse --show-toplevel 2>/dev/null || true)"
-if [ -n "$repo_root" ]; then
-  cd "$repo_root/cars_manager" || {
-    echo "cars_manager folder not found under repo root: $repo_root" >&2
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+
+cd "$REPO_ROOT/cars_manager" || {
+  echo "cars_manager folder not found under repo root: $REPO_ROOT" >&2
+  exit 1
+}
+
+LINT_STAGED="$REPO_ROOT/node_modules/.bin/lint-staged"
+
+if [ -f "$LINT_STAGED" ]; then
+  "$LINT_STAGED" --config "$REPO_ROOT/.lintstagedrc.js" || {
+    echo "lint-staged failed, aborting commit." >&2
     exit 1
   }
 else
-  cd "$(dirname "$0")/../cars_manager" || {
-    echo "Could not change to cars_manager directory" >&2
+  echo "⚠️  lint-staged not installed — run 'npm install' at repo root to enable pre-commit linting." >&2
+  dart format --set-exit-if-changed lib/ || {
+    echo "dart format found issues, aborting commit." >&2
+    exit 1
+  }
+  dart analyze || {
+    echo "dart analyze failed, aborting commit." >&2
     exit 1
   }
 fi
-
-echo "Current directory: $(pwd)"
-
-npx lint-staged || {
-  echo "lint-staged failed, aborting commit." >&2
-  exit 1
-}
 
 flutter test || {
   echo "Tests failed, aborting commit." >&2

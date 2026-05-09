@@ -1,16 +1,18 @@
-# cars_manager
+# CarsManager — Flutter App
 
-A new Flutter project.
+This is the Flutter application source for CarsManager.
 
-## Getting Started
+For full documentation, see the [repository root](../README.md):
 
-This project is a starting point for a Flutter application.
+- [Architecture](../ARCHITECTURE.md)
+- [Design System](../DESIGN_SYSTEM.md)
+- [Environment Setup](../ENVIRONMENT_SETUP.md)
+- [Contributing](../CONTRIBUTING.md)
 
-A few resources to get you started if this is your first Flutter project:
+## Quick start
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+dart run build_runner build --delete-conflicting-outputs
+flutter run
+```
