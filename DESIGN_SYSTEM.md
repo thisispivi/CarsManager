@@ -237,5 +237,5 @@ Content columns:
 1. **Never use raw colour values** in widget code — always use `AppColors.*` tokens.
 2. **Never use raw `TextStyle`** — always use `AppTextStyles.*` tokens.
 3. **Never use raw numbers** for spacing — always use `AppSpacing.*` or `AppRadius.*`.
-4. **Shared components first** — before writing a custom widget, check `shared/widgets/` for an existing component.
+4. **Shared components first** — before writing a custom widget, check `presentation/common/widgets/` for an existing component.
 5. **Dark mode always** — every component must look correct in both light and dark mode. Test both.

@@ -1,10 +1,11 @@
-import '../../../main.dart';
+import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/widgets/section_header.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});
@@ -34,9 +35,9 @@ class SettingsDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(
+            const Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 16),
+                padding: EdgeInsets.only(bottom: 16),
                 child: SettingsContent(),
               ),
             ),
@@ -47,13 +48,13 @@ class SettingsDrawer extends StatelessWidget {
   }
 }
 
-class SettingsContent extends StatelessWidget {
+class SettingsContent extends ConsumerWidget {
   final ScrollController? scrollController;
   const SettingsContent({super.key, this.scrollController});
 
   @override
-  Widget build(BuildContext context) {
-    final state = Provider.of<CarsManagerState>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(appSettingsProvider);
 
     return ListView(
       controller: scrollController,
@@ -65,7 +66,7 @@ class SettingsContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Profile & Settings', // Use a temporary title or localized one
+                'Profile & Settings',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               IconButton(
@@ -76,11 +77,9 @@ class SettingsContent extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        // Language & Theme
         const LanguageSelector(),
         const SizedBox(height: 32),
 
-        // Preferences Section
         SectionHeader(
           horizontalPadding: 32,
           title: 'Preferences',
@@ -92,14 +91,16 @@ class SettingsContent extends StatelessWidget {
         _SettingsRow(
           title: 'Notifications',
           trailing: Switch(
-            value: state.notificationsEnabled,
-            onChanged: (val) => state.setNotificationsEnabled(val),
+            value: settings.notificationsEnabled,
+            onChanged: (val) => ref
+                .read(settingsControllerProvider.notifier)
+                .setNotificationsEnabled(val),
           ),
         ),
         _SettingsRow(
           title: 'Units',
           trailing: DropdownButton<String>(
-            value: state.units,
+            value: settings.units,
             items: const [
               DropdownMenuItem(value: 'metric', child: Text('Metric (km, L)')),
               DropdownMenuItem(
@@ -108,27 +109,30 @@ class SettingsContent extends StatelessWidget {
               ),
             ],
             onChanged: (val) {
-              if (val != null) state.setUnits(val);
+              if (val != null) {
+                ref.read(settingsControllerProvider.notifier).setUnits(val);
+              }
             },
           ),
         ),
         _SettingsRow(
           title: 'Currency',
           trailing: DropdownButton<String>(
-            value: state.currency,
+            value: settings.currency,
             items: const [
               DropdownMenuItem(value: 'EUR', child: Text('EUR (€)')),
               DropdownMenuItem(value: 'USD', child: Text('USD (\$)')),
               DropdownMenuItem(value: 'GBP', child: Text('GBP (£)')),
             ],
             onChanged: (val) {
-              if (val != null) state.setCurrency(val);
+              if (val != null) {
+                ref.read(settingsControllerProvider.notifier).setCurrency(val);
+              }
             },
           ),
         ),
         const SizedBox(height: 32),
 
-        // Data Management Section
         SectionHeader(
           horizontalPadding: 32,
           title: 'Data Management',
@@ -179,7 +183,7 @@ class SettingsContent extends StatelessWidget {
                 ),
               );
               if (confirm == true) {
-                await state.resetAllData();
+                await ref.read(carsControllerProvider.notifier).resetAllData();
                 if (context.mounted) Navigator.of(context).pop();
               }
             },
@@ -220,14 +224,14 @@ class _SettingsRow extends StatelessWidget {
   }
 }
 
-class LanguageSelector extends StatelessWidget {
+class LanguageSelector extends ConsumerWidget {
   const LanguageSelector({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final appState = Provider.of<CarsManagerState>(context);
-    final currentLocale = appState.locale;
+    final settings = ref.watch(appSettingsProvider);
+    final currentLocale = settings.locale;
     final isEnglish = currentLocale?.languageCode == 'en';
     final isItalian = currentLocale?.languageCode == 'it';
 
@@ -254,7 +258,9 @@ class LanguageSelector extends StatelessWidget {
                   isSelected: isEnglish,
                   onTap: () {
                     if (!isEnglish) {
-                      appState.setLocale(const Locale('en'));
+                      ref
+                          .read(settingsControllerProvider.notifier)
+                          .setLocale(const Locale('en'));
                     }
                   },
                 ),
@@ -267,7 +273,9 @@ class LanguageSelector extends StatelessWidget {
                   isSelected: isItalian,
                   onTap: () {
                     if (!isItalian) {
-                      appState.setLocale(const Locale('it'));
+                      ref
+                          .read(settingsControllerProvider.notifier)
+                          .setLocale(const Locale('it'));
                     }
                   },
                 ),
@@ -301,15 +309,10 @@ class LanguageSelector extends StatelessWidget {
                     ),
                   ),
                   Switch(
-                    value:
-                        Provider.of<CarsManagerState>(context).themeMode ==
-                        ThemeMode.light,
-                    onChanged: (value) {
-                      Provider.of<CarsManagerState>(
-                        context,
-                        listen: false,
-                      ).toggleThemeMode();
-                    },
+                    value: settings.themeMode == ThemeMode.light,
+                    onChanged: (_) => ref
+                        .read(settingsControllerProvider.notifier)
+                        .toggleThemeMode(),
                   ),
                 ],
               ),
@@ -336,7 +339,7 @@ class _LanguageOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double nonSelectedOpacity = 0.6;
+    const double nonSelectedOpacity = 0.6;
 
     return Material(
       color: isSelected

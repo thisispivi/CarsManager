@@ -1,6 +1,9 @@
-class TaxData {
-  final DateTime date;
-  final double amount;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  TaxData({required this.date, required this.amount});
+part 'tax_data.freezed.dart';
+
+@freezed
+abstract class TaxData with _$TaxData {
+  const factory TaxData({required DateTime date, required double amount}) =
+      _TaxData;
 }

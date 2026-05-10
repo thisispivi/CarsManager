@@ -1,7 +1,8 @@
+import 'package:cars_manager/core/services/preferences_service.dart';
+import 'package:cars_manager/models/car.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
-import 'preferences_service.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -16,11 +17,7 @@ class NotificationService {
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+    const iosSettings = DarwinInitializationSettings();
     const initSettings = InitializationSettings(
       android: androidSettings,
       iOS: iosSettings,
@@ -74,6 +71,44 @@ class NotificationService {
       // Or stored max intervals
       final notificationId = '${baseId}_$days'.hashCode;
       await _notificationsPlugin.cancel(id: notificationId);
+    }
+  }
+
+  Future<void> scheduleCarReminders({
+    required Car car,
+    required PreferencesService prefs,
+  }) async {
+    final insuranceDate = car.nextInsuranceExpirationDate;
+    if (insuranceDate != null) {
+      await scheduleDueDateNotification(
+        id: Object.hash(car.id, 'insurance'),
+        carName: car.name,
+        itemName: 'insurance',
+        dueDate: insuranceDate,
+        prefs: prefs,
+      );
+    }
+
+    final inspectionDate = car.nextInspectionDate;
+    if (inspectionDate != null) {
+      await scheduleDueDateNotification(
+        id: Object.hash(car.id, 'inspection'),
+        carName: car.name,
+        itemName: 'inspection',
+        dueDate: inspectionDate,
+        prefs: prefs,
+      );
+    }
+
+    final taxDate = car.nextTaxDueDate;
+    if (taxDate != null) {
+      await scheduleDueDateNotification(
+        id: Object.hash(car.id, 'tax'),
+        carName: car.name,
+        itemName: 'tax',
+        dueDate: taxDate,
+        prefs: prefs,
+      );
     }
   }
 }

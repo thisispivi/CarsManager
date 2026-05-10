@@ -46,7 +46,7 @@ class ImageRect extends StatelessWidget {
     }
 
     return Image.network(
-      imageUrl ?? "",
+      imageUrl ?? '',
       width: double.infinity,
       fit: BoxFit.cover,
       alignment: imageAlignment ?? Alignment.center,

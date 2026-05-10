@@ -2,10 +2,15 @@
 
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
 
-cd "$REPO_ROOT/cars_manager" || {
-  echo "cars_manager folder not found under repo root: $REPO_ROOT" >&2
+cd "$REPO_ROOT" || {
+  echo "Repository root not found: $REPO_ROOT" >&2
   exit 1
 }
+
+# Ensure Flutter and Dart are in PATH (Windows support)
+if ! command -v flutter &> /dev/null && [ -d "C:/Users/andre/Desktop/General/Flutter/flutter/bin" ]; then
+  export PATH="C:/Users/andre/Desktop/General/Flutter/flutter/bin:$PATH"
+fi
 
 LINT_STAGED="$REPO_ROOT/node_modules/.bin/lint-staged"
 
@@ -15,16 +20,19 @@ if [ -f "$LINT_STAGED" ]; then
     exit 1
   }
 else
-  echo "⚠️  lint-staged not installed — run 'npm install' at repo root to enable pre-commit linting." >&2
-  dart format --set-exit-if-changed lib/ || {
+  echo "lint-staged not installed; run 'npm install' at repo root to enable pre-commit linting." >&2
+  cd "$REPO_ROOT/cars_manager" || exit 1
+  dart format --set-exit-if-changed lib test || {
     echo "dart format found issues, aborting commit." >&2
     exit 1
   }
-  dart analyze || {
-    echo "dart analyze failed, aborting commit." >&2
+  flutter analyze --fatal-infos || {
+    echo "flutter analyze failed, aborting commit." >&2
     exit 1
   }
 fi
+
+cd "$REPO_ROOT/cars_manager" || exit 1
 
 flutter test || {
   echo "Tests failed, aborting commit." >&2

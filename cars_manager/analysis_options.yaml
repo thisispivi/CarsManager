@@ -19,7 +19,6 @@ linter:
     avoid_print: true
     avoid_unnecessary_containers: true
     prefer_const_constructors: true
-    prefer_const_widgets_creation: true
     use_super_parameters: true
     prefer_final_fields: true
     prefer_final_locals: true

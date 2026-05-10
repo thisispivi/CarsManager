@@ -1,39 +1,35 @@
+import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/inspection_data.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../../../../../../../main.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
-import 'next_inspection_info.dart';
-import 'inspection_item.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/inspection/next_inspection_info.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/inspection/inspection_item.dart';
 
-class InspectionSection extends StatelessWidget {
+class InspectionSection extends ConsumerWidget {
   final Car car;
 
   const InspectionSection({super.key, required this.car});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final localizations = AppLocalizations.of(context)!;
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
 
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
-
-    final items = car.inspectionDatas ?? const <InspectionData>[];
+    final items = car.inspectionDatas;
 
     return PaymentSectionCard(
       title: localizations.payments_inspectionsData_title,
       icon: SvgPicture.asset(
-        "assets/icons/inspection.svg",
+        'assets/icons/inspection.svg',
         width: 26,
         height: 26,
         colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
@@ -51,10 +47,7 @@ class InspectionSection extends StatelessWidget {
               );
 
           if (data != null && context.mounted) {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).addInspectionPayment(data);
+            ref.read(expensesControllerProvider.notifier).addInspection(data);
           }
         },
         icon: Icon(
@@ -73,7 +66,7 @@ class InspectionSection extends StatelessWidget {
             message: localizations.payments_inspectionsData_empty,
             actionLabel: localizations.common_add,
             iconWidget: SvgPicture.asset(
-              "assets/icons/inspection.svg",
+              'assets/icons/inspection.svg',
               width: 48,
               height: 48,
               colorFilter: ColorFilter.mode(
@@ -93,10 +86,9 @@ class InspectionSection extends StatelessWidget {
                   );
 
               if (data != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).addInspectionPayment(data);
+                ref
+                    .read(expensesControllerProvider.notifier)
+                    .addInspection(data);
               }
             },
           )

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appTitle": "Cars Manager",
+  "appTitle": "CarsManager",
   "@appTitle": {
     "description": "The title of the application"
   },

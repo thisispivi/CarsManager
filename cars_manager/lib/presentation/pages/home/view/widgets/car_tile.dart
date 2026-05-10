@@ -34,15 +34,14 @@ class CarTile extends StatelessWidget {
     ).colorScheme.primary.withAlpha(40);
     final cardColor = isActive ? selectedCardColor : baseCardColor;
 
-    final nextInsuranceDate = car.getNextInsuranceExpirationDate() as DateTime?;
-    final daysUntilInsurance =
-        car.getDaysUntilNextInsuranceExpiration() as int?;
+    final nextInsuranceDate = car.nextInsuranceExpirationDate;
+    final daysUntilInsurance = car.daysUntilNextInsuranceExpiration;
 
-    final nextInspectionDate = car.getNextInspectionDate() as DateTime?;
-    final daysUntilInspection = car.getDaysUntilNextInspection() as int?;
+    final nextInspectionDate = car.nextInspectionDate;
+    final daysUntilInspection = car.daysUntilNextInspection;
 
-    final nextTaxDate = car.getNextTaxDueDate() as DateTime?;
-    final daysUntilTax = car.getDaysUntilNextTaxDue() as int?;
+    final nextTaxDate = car.nextTaxDueDate;
+    final daysUntilTax = car.daysUntilNextTaxDue;
 
     PopupMenuItem<String> menuItem({
       required String value,
@@ -81,7 +80,6 @@ class CarTile extends StatelessWidget {
       shadowColor: Colors.black26,
       borderRadius: radius,
       clipBehavior: Clip.antiAlias,
-      shape: BoxShape.rectangle,
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(

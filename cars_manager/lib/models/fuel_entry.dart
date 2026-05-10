@@ -1,17 +1,16 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'fuel_entry.freezed.dart';
+
 enum FuelType { petrol, diesel, lpg, electric, hybrid }
 
-class FuelEntry {
-  final FuelType fuelType;
-  final double liters;
-  final double totalCost;
-  final double pricePerLiter;
-  final DateTime date;
-
-  const FuelEntry({
-    required this.fuelType,
-    required this.liters,
-    required this.totalCost,
-    required this.pricePerLiter,
-    required this.date,
-  });
+@freezed
+abstract class FuelEntry with _$FuelEntry {
+  const factory FuelEntry({
+    required FuelType fuelType,
+    required double liters,
+    required double totalCost,
+    required double pricePerLiter,
+    required DateTime date,
+  }) = _FuelEntry;
 }

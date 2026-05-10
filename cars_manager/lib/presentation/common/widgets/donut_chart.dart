@@ -88,7 +88,6 @@ class _DonutChartState extends State<DonutChart> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
                   width: constraints.maxWidth * 0.6,
@@ -196,7 +195,7 @@ class _DonutChartState extends State<DonutChart> {
   }
 
   List<PieChartSectionData> _buildSections(double enabledTotal) {
-    const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+    const shadows = [Shadow(blurRadius: 2)];
 
     return widget.sections.asMap().entries.map((entry) {
       final idx = entry.key;

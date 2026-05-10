@@ -2,6 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyles {
+  static const TextStyle displayLarge = TextStyle(
+    fontSize: 40,
+    fontWeight: FontWeight.w700,
+    height: 1.1,
+  );
+  static const TextStyle displayMedium = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    height: 1.15,
+  );
+  static const TextStyle headingLarge = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    height: 1.2,
+  );
+  static const TextStyle headingMedium = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    height: 1.25,
+  );
+  static const TextStyle headingSmall = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    height: 1.3,
+  );
+  static const TextStyle bodyLargeToken = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+  );
+  static const TextStyle bodyMediumToken = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+  );
+  static const TextStyle bodySmallToken = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+  );
+  static const TextStyle labelToken = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+    height: 1.4,
+  );
+  static const TextStyle caption = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+    letterSpacing: 0.2,
+  );
+  static const TextStyle buttonText = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w600,
+    height: 1,
+  );
+  static const TextStyle monospace = TextStyle(
+    fontFamily: 'monospace',
+    fontSize: 13,
+    height: 1.5,
+  );
+
   static TextStyle _baseStyle(double fontSize, FontWeight weight, Color color) {
     return GoogleFonts.spaceGrotesk(
       fontSize: fontSize,

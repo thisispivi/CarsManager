@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
-import 'app_dimensions.dart';
+import 'package:cars_manager/core/theme/app_colors.dart';
+import 'package:cars_manager/core/theme/app_dimensions.dart';
 
 class AppTheme {
   static ThemeData getDarkTheme() {
@@ -83,7 +83,6 @@ class AppTheme {
       highlightColor: Colors.transparent,
       hoverColor: Colors.transparent,
       colorScheme: const ColorScheme.light(
-        surface: AppColors.surfaceLight,
         surfaceContainerHighest: AppColors.surfaceContainerLight,
         primary: AppColors.primaryLight,
         secondary: AppColors.secondaryLight,

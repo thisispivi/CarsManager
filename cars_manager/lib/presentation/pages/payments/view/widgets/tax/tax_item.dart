@@ -1,13 +1,13 @@
+import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:cars_manager/main.dart';
 
-class TaxItem extends StatelessWidget {
+class TaxItem extends ConsumerWidget {
   final TaxData tax;
   final Locale locale;
   final bool isLast;
@@ -20,7 +20,7 @@ class TaxItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
@@ -43,18 +43,14 @@ class TaxItem extends StatelessWidget {
               );
 
               if (updated != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).updateTaxPayment(oldData: tax, data: updated);
+                ref
+                    .read(expensesControllerProvider.notifier)
+                    .updateTax(oldData: tax, data: updated);
               }
             }();
           },
           onDelete: () {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).removeTaxPayment(tax);
+            ref.read(expensesControllerProvider.notifier).removeTax(tax);
           },
         );
       },
@@ -67,7 +63,6 @@ class TaxItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Text(

@@ -1,31 +1,27 @@
+import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../../../../../../main.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
-import 'repair_item.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/repair/repair_item.dart';
 
-class RepairSection extends StatelessWidget {
+class RepairSection extends ConsumerWidget {
   final Car car;
 
   const RepairSection({super.key, required this.car});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
 
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
-
-    final items = car.repairDatas ?? const <RepairData>[];
+    final items = car.repairDatas;
 
     return PaymentSectionCard(
       title: localizations.payments_repairsData_title,
@@ -45,10 +41,7 @@ class RepairSection extends StatelessWidget {
           );
 
           if (data != null && context.mounted) {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).addRepairPayment(data);
+            ref.read(expensesControllerProvider.notifier).addRepair(data);
           }
         },
         icon: Icon(
@@ -76,10 +69,7 @@ class RepairSection extends StatelessWidget {
               );
 
               if (data != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).addRepairPayment(data);
+                ref.read(expensesControllerProvider.notifier).addRepair(data);
               }
             },
           )

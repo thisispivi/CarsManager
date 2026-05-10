@@ -31,6 +31,7 @@ npm install
 # Install Flutter dependencies
 cd cars_manager
 flutter pub get
+flutter gen-l10n
 dart run build_runner build --delete-conflicting-outputs
 ```
 
@@ -94,7 +95,7 @@ fix(fuel): fix negative consumption when liters is zero
 perf(charts): wrap fl_chart in RepaintBoundary to reduce repaints
 docs: update ENVIRONMENT_SETUP with Windows instructions
 ci: add Codecov upload step to test job
-chore(deps): bump flutter_riverpod to 2.6.1
+chore(deps): bump fl_chart to 1.1.0
 ```
 
 ### Breaking changes
@@ -121,6 +122,7 @@ Run the migration script before updating.
    dart format .
    flutter analyze
    flutter test
+   dart run build_runner build --delete-conflicting-outputs
    ```
 5. **Open a PR** against `develop` using the PR template.
 6. **Address review feedback** — all comments should be resolved or responded to.
@@ -145,7 +147,7 @@ Run the migration script before updating.
 
 | Test type | Where | Requirement |
 |-----------|-------|------------|
-| Unit tests | `test/unit/` | Required for all business logic, notifiers, repositories |
+| Unit tests | `test/unit/` | Required for business logic, models, and persistence helpers |
 | Widget tests | `test/widget/` | Required for shared components and screen smoke tests |
 | Integration tests | `integration_test/` | Key user flows (add car, add fuel entry) |
 

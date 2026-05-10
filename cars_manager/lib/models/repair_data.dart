@@ -1,11 +1,12 @@
-class RepairData {
-  final DateTime date;
-  final double amount;
-  final String description;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  RepairData({
-    required this.date,
-    required this.amount,
-    required this.description,
-  });
+part 'repair_data.freezed.dart';
+
+@freezed
+abstract class RepairData with _$RepairData {
+  const factory RepairData({
+    required DateTime date,
+    required double amount,
+    required String description,
+  }) = _RepairData;
 }

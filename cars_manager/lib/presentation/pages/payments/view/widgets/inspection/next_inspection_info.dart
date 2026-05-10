@@ -12,17 +12,17 @@ class NextInspectionInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    final nextInspectionDate = car.getNextInspectionDate();
-    final daysUntilNext = car.getDaysUntilNextInspection();
+    final nextInspectionDate = car.nextInspectionDate;
+    final daysUntilNext = car.daysUntilNextInspection;
 
     if (nextInspectionDate == null || daysUntilNext == null) {
-      return const SizedBox(height: 0);
+      return const SizedBox.shrink();
     }
 
     return NextInfoDue(
       title: localizations.payments_inspectionsData_nextDue,
-      nextDueDate: nextInspectionDate as DateTime,
-      daysRemaining: daysUntilNext as int,
+      nextDueDate: nextInspectionDate,
+      daysRemaining: daysUntilNext,
       daysLabel: localizations.days,
     );
   }

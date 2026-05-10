@@ -1,14 +1,14 @@
+import 'package:cars_manager/features/fuel/domain/fuel_notifier.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/add_fuel_entry_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:cars_manager/main.dart';
 
-class FuelEntryItem extends StatelessWidget {
+class FuelEntryItem extends ConsumerWidget {
   final FuelEntry entry;
   final Locale locale;
   final bool isLast;
@@ -23,7 +23,7 @@ class FuelEntryItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
@@ -53,17 +53,13 @@ class FuelEntryItem extends StatelessWidget {
             );
 
             if (updated != null && context.mounted) {
-              Provider.of<CarsManagerState>(
-                context,
-                listen: false,
-              ).updateFuelEntry(oldEntry: entry, entry: updated);
+              ref
+                  .read(fuelControllerProvider.notifier)
+                  .update(oldEntry: entry, entry: updated);
             }
           },
           onDelete: () {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).removeFuelEntry(entry);
+            ref.read(fuelControllerProvider.notifier).remove(entry);
           },
         );
       },
@@ -79,7 +75,6 @@ class FuelEntryItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Text(

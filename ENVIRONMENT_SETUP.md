@@ -68,7 +68,10 @@ npm install
 cd cars_manager
 flutter pub get
 
-# Generate code (Riverpod providers + Freezed models)
+# Optional: regenerate localizations after editing ARB files
+flutter gen-l10n
+
+# Optional: regenerate Freezed/JSON files after changing generated models
 dart run build_runner build --delete-conflicting-outputs
 ```
 
@@ -112,14 +115,13 @@ Install extensions:
 
 - **Flutter** (`dart-code.flutter`)
 - **Dart** (`dart-code.dart-code`)
-- **Riverpod Snippets** (`robert-brunhage.flutter-riverpod-snippets`)
 - **Error Lens** (`usernamehw.errorlens`)
 
 The `.vscode/launch.json` in the repository provides three run configurations:
 
-- `Cars Manager` — debug mode
-- `Cars Manager (profile mode)` — for performance profiling
-- `Cars Manager (release mode)` — as close to production as possible
+- `CarsManager` — debug mode
+- `CarsManager (profile mode)` — for performance profiling
+- `CarsManager (release mode)` — as close to production as possible
 
 ### Android Studio / IntelliJ
 
@@ -129,19 +131,20 @@ Install the **Flutter** plugin. Open the `cars_manager/` directory as the projec
 
 ## Code generation
 
-CarsManager uses `build_runner` for Riverpod and Freezed code generation.
+CarsManager uses Flutter's built-in gen-l10n workflow and build_runner for generated data models.
 
-After modifying any file annotated with `@riverpod`, `@freezed`, or `@JsonSerializable`:
+After modifying `.arb` files:
+
+```bash
+cd cars_manager
+flutter gen-l10n
+```
+
+After modifying files that use Freezed or json_serializable:
 
 ```bash
 cd cars_manager
 dart run build_runner build --delete-conflicting-outputs
-```
-
-For watch mode during active development:
-
-```bash
-dart run build_runner watch --delete-conflicting-outputs
 ```
 
 ---
@@ -191,13 +194,6 @@ Or run any `flutter` command with `--no-pub` — generation happens automaticall
 ---
 
 ## Troubleshooting
-
-**`build_runner` fails with conflicts:**
-
-```bash
-dart run build_runner clean
-dart run build_runner build --delete-conflicting-outputs
-```
 
 **`flutter pub get` fails:**
 

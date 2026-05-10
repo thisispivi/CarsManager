@@ -1,4 +1,5 @@
-import 'package:cars_manager/main.dart';
+import 'package:cars_manager/features/fuel/domain/fuel_notifier.dart';
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
@@ -6,26 +7,21 @@ import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/add_fu
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/fuel_entry_item.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 
-class FuelEntriesSection extends StatelessWidget {
+class FuelEntriesSection extends ConsumerWidget {
   final Car car;
 
   const FuelEntriesSection({super.key, required this.car});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
 
-    final entries = [...(car.fuel ?? const <FuelEntry>[])]
-      ..sort((a, b) => b.date.compareTo(a.date));
+    final entries = [...car.fuel]..sort((a, b) => b.date.compareTo(a.date));
 
     final lockedFuelType =
         car.fuelType ?? (entries.isNotEmpty ? entries.first.fuelType : null);
@@ -48,10 +44,7 @@ class FuelEntriesSection extends StatelessWidget {
           );
 
           if (entry != null && context.mounted) {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).addFuelEntry(entry);
+            ref.read(fuelControllerProvider.notifier).add(entry);
           }
         },
         icon: Icon(
@@ -63,7 +56,6 @@ class FuelEntriesSection extends StatelessWidget {
           style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
         ),
       ),
-      nextInfoDue: null,
       items: [
         if (entries.isEmpty)
           EmptyStateWidget(
@@ -80,10 +72,7 @@ class FuelEntriesSection extends StatelessWidget {
               );
 
               if (entry != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).addFuelEntry(entry);
+                ref.read(fuelControllerProvider.notifier).add(entry);
               }
             },
           )

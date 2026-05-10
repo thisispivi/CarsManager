@@ -5,210 +5,103 @@ import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:flutter/painting.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Car {
-  String id;
-  String name;
-  String model;
-  String manufacture;
-  int yearOfManufacture;
-  String? imageUrl;
-  String? imageBase64;
-  String? imageOriginalBase64;
-  Alignment? imageAlignment;
-  String licensePlate;
-  DateTime insuranceExpirationDate;
-  FuelType? fuelType;
-  List<FuelEntry>? fuel;
-  List<InsuranceData>? insuranceDatas;
-  List<InspectionData>? inspectionDatas;
-  List<TaxData>? taxDatas;
-  List<RepairData>? repairDatas;
-  List<FineData>? fineDatas;
+part 'car.freezed.dart';
 
-  Car({
-    required this.id,
-    required this.name,
-    required this.model,
-    required this.manufacture,
-    required this.yearOfManufacture,
-    this.imageUrl,
-    this.imageBase64,
-    this.imageOriginalBase64,
-    this.imageAlignment = Alignment.center,
-    required this.licensePlate,
-    required this.insuranceExpirationDate,
-    this.fuelType,
-    this.fuel,
-    this.inspectionDatas,
-    this.insuranceDatas,
-    this.taxDatas,
-    this.repairDatas,
-    this.fineDatas,
-  });
+@freezed
+abstract class Car with _$Car {
+  const Car._();
 
-  double calculateTotalFuelCost() {
-    final entries = fuel;
-    if (entries == null || entries.isEmpty) {
-      return 0;
-    }
-    return entries.fold(0, (sum, e) => sum + e.totalCost);
-  }
+  const factory Car({
+    required String id,
+    required String name,
+    required String model,
+    required String manufacture,
+    required int yearOfManufacture,
+    String? imageUrl,
+    String? imageBase64,
+    String? imageOriginalBase64,
+    @Default(Alignment.center) Alignment imageAlignment,
+    @Default('') String licensePlate,
+    required DateTime insuranceExpirationDate,
+    FuelType? fuelType,
+    @Default([]) List<FuelEntry> fuel,
+    @Default([]) List<InsuranceData> insuranceDatas,
+    @Default([]) List<InspectionData> inspectionDatas,
+    @Default([]) List<TaxData> taxDatas,
+    @Default([]) List<RepairData> repairDatas,
+    @Default([]) List<FineData> fineDatas,
+  }) = _Car;
 
-  Map<FuelType, double> calculateFuelTotalCostByFuelType() {
+  double get totalFuelCost => fuel.fold(0.0, (sum, e) => sum + e.totalCost);
+
+  Map<FuelType, double> get fuelCostByType {
     final Map<FuelType, double> totals = {};
-
-    final entries = fuel;
-    if (entries == null) {
-      return totals;
-    }
-
-    for (final entry in entries) {
+    for (final entry in fuel) {
       totals[entry.fuelType] = (totals[entry.fuelType] ?? 0) + entry.totalCost;
     }
-
-    totals.removeWhere((k, v) => v <= 0);
+    totals.removeWhere((_, v) => v <= 0);
     return totals;
   }
 
-  InspectionData? _getLatestInspection() {
-    if (inspectionDatas == null || inspectionDatas!.isEmpty) {
-      return null;
-    }
+  InspectionData? get _latestInspection => inspectionDatas.isEmpty
+      ? null
+      : inspectionDatas.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
 
-    return inspectionDatas!.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+  DateTime? get nextInspectionDate =>
+      _latestInspection?.date.add(const Duration(days: 365 * 2));
+
+  int? get daysUntilNextInspection {
+    final next = nextInspectionDate;
+    if (next == null) return null;
+    return next.difference(DateTime.now()).inDays;
   }
 
-  dynamic getNextInspectionDate() {
-    if (inspectionDatas == null || inspectionDatas!.isEmpty) {
-      return null;
-    }
+  int get totalPaidInspections =>
+      inspectionDatas.fold(0, (sum, d) => sum + (d.amount?.toInt() ?? 0));
 
-    final latestInspection = _getLatestInspection();
-    if (latestInspection == null) {
-      return null;
-    }
+  InsuranceData? get _latestInsurance => insuranceDatas.isEmpty
+      ? null
+      : insuranceDatas.reduce((a, b) => a.endDate.isAfter(b.endDate) ? a : b);
 
-    return latestInspection.date.add(Duration(days: 365 * 2));
+  DateTime? get nextInsuranceExpirationDate => _latestInsurance?.endDate;
+
+  int? get daysUntilNextInsuranceExpiration {
+    final next = nextInsuranceExpirationDate;
+    if (next == null) return null;
+    return next.difference(DateTime.now()).inDays;
   }
 
-  dynamic getDaysUntilNextInspection() {
-    final nextInspectionDate = getNextInspectionDate();
-    if (nextInspectionDate == null) {
-      return null;
-    }
+  int get totalPaidInsurances =>
+      insuranceDatas.fold(0, (sum, d) => sum + d.premiumAmount.toInt());
 
-    final now = DateTime.now();
-    return nextInspectionDate.difference(now).inDays;
+  TaxData? get _latestTax => taxDatas.isEmpty
+      ? null
+      : taxDatas.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+
+  DateTime? get nextTaxDueDate =>
+      _latestTax?.date.add(const Duration(days: 365));
+
+  int? get daysUntilNextTaxDue {
+    final next = nextTaxDueDate;
+    if (next == null) return null;
+    return next.difference(DateTime.now()).inDays;
   }
 
-  int calculateTotalPaidInspections() {
-    if (inspectionDatas == null || inspectionDatas!.isEmpty) {
-      return 0;
-    }
+  int get totalPaidTaxes =>
+      taxDatas.fold(0, (sum, d) => sum + d.amount.toInt());
 
-    return inspectionDatas!.fold(
-      0,
-      (sum, data) => sum + (data.amount?.toInt() ?? 0),
-    );
-  }
+  int get totalPaidFines =>
+      fineDatas.fold(0, (sum, d) => sum + d.amount.toInt());
 
-  InsuranceData? _getLatestInsurance() {
-    if (insuranceDatas == null || insuranceDatas!.isEmpty) {
-      return null;
-    }
+  int get totalPaidRepairs =>
+      repairDatas.fold(0, (sum, d) => sum + d.amount.toInt());
 
-    return insuranceDatas!.reduce(
-      (a, b) => a.endDate.isAfter(b.endDate) ? a : b,
-    );
-  }
-
-  dynamic getNextInsuranceExpirationDate() {
-    final latestInsurance = _getLatestInsurance();
-    if (latestInsurance == null) {
-      return null;
-    }
-
-    return latestInsurance.endDate;
-  }
-
-  dynamic getDaysUntilNextInsuranceExpiration() {
-    final nextInsuranceDate = getNextInsuranceExpirationDate();
-    if (nextInsuranceDate == null) {
-      return null;
-    }
-
-    final now = DateTime.now();
-    return nextInsuranceDate.difference(now).inDays;
-  }
-
-  int calculateTotalPaidInsurances() {
-    if (insuranceDatas == null || insuranceDatas!.isEmpty) {
-      return 0;
-    }
-
-    return insuranceDatas!.fold(
-      0,
-      (sum, data) => sum + (data.premiumAmount.toInt()),
-    );
-  }
-
-  TaxData? _getLatestTax() {
-    if (taxDatas == null || taxDatas!.isEmpty) {
-      return null;
-    }
-
-    return taxDatas!.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
-  }
-
-  dynamic getNextTaxDueDate() {
-    final latestTax = _getLatestTax();
-    if (latestTax == null) {
-      return null;
-    }
-
-    return latestTax.date.add(Duration(days: 365));
-  }
-
-  dynamic getDaysUntilNextTaxDue() {
-    final nextTaxDueDate = getNextTaxDueDate();
-    if (nextTaxDueDate == null) {
-      return null;
-    }
-
-    final now = DateTime.now();
-    return nextTaxDueDate.difference(now).inDays;
-  }
-
-  int calculateTotalPaidTaxes() {
-    if (taxDatas == null || taxDatas!.isEmpty) {
-      return 0;
-    }
-
-    return taxDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
-  }
-
-  int calculateTotalPaidFines() {
-    if (fineDatas == null || fineDatas!.isEmpty) {
-      return 0;
-    }
-
-    return fineDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
-  }
-
-  int calculateTotalPaidRepairs() {
-    if (repairDatas == null || repairDatas!.isEmpty) {
-      return 0;
-    }
-
-    return repairDatas!.fold(0, (sum, data) => sum + (data.amount.toInt()));
-  }
-
-  dynamic calculateTotalPaidExpenses() {
-    return calculateTotalPaidInspections() +
-        calculateTotalPaidInsurances() +
-        calculateTotalPaidTaxes() +
-        calculateTotalPaidRepairs() +
-        calculateTotalPaidFines();
-  }
+  int get totalPaidExpenses =>
+      totalPaidInspections +
+      totalPaidInsurances +
+      totalPaidTaxes +
+      totalPaidRepairs +
+      totalPaidFines;
 }

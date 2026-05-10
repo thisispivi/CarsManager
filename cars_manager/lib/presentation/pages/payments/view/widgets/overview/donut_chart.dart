@@ -1,14 +1,14 @@
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
-import 'package:cars_manager/main.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/presentation/common/widgets/donut_chart.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-class PaymentsOverviewDonutChart extends StatelessWidget {
+class PaymentsOverviewDonutChart extends ConsumerWidget {
   const PaymentsOverviewDonutChart({
     super.key,
     required this.hasInsuranceData,
@@ -27,13 +27,9 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
   final bool hasFineData;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
 
     final hasAny =
@@ -49,7 +45,6 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
 
     return PaymentSectionCard(
       title: l10n.payments_expenseDistribution_title,
-      nextInfoDue: null,
       verticalSpacing: 12,
       items: [
         DonutChart(
@@ -65,11 +60,11 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
             if (hasInsuranceData)
               PieChartSection(
                 color: Colors.blue,
-                value: car.calculateTotalPaidInsurances().toDouble(),
+                value: car.totalPaidInsurances.toDouble(),
                 title: l10n.unit_currency(
-                  numberFormat.format(car.calculateTotalPaidInsurances()),
-                  "€",
-                  "",
+                  numberFormat.format(car.totalPaidInsurances),
+                  '€',
+                  '',
                 ),
                 textColor: Colors.white,
                 label: l10n.payments_insuranceData_shortTitle,
@@ -77,11 +72,11 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
             if (hasInspectionData)
               PieChartSection(
                 color: Colors.green,
-                value: car.calculateTotalPaidInspections().toDouble(),
+                value: car.totalPaidInspections.toDouble(),
                 title: l10n.unit_currency(
-                  numberFormat.format(car.calculateTotalPaidInspections()),
-                  "€",
-                  "",
+                  numberFormat.format(car.totalPaidInspections),
+                  '€',
+                  '',
                 ),
                 textColor: Colors.white,
                 label: l10n.payments_inspectionData_shortTitle,
@@ -89,11 +84,11 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
             if (hasTaxData)
               PieChartSection(
                 color: Colors.red,
-                value: car.calculateTotalPaidTaxes().toDouble(),
+                value: car.totalPaidTaxes.toDouble(),
                 title: l10n.unit_currency(
-                  numberFormat.format(car.calculateTotalPaidTaxes()),
-                  "€",
-                  "",
+                  numberFormat.format(car.totalPaidTaxes),
+                  '€',
+                  '',
                 ),
                 textColor: Colors.white,
                 label: l10n.payments_taxData_shortTitle,
@@ -101,11 +96,11 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
             if (hasRepairData)
               PieChartSection(
                 color: Colors.purple,
-                value: car.calculateTotalPaidRepairs().toDouble(),
+                value: car.totalPaidRepairs.toDouble(),
                 title: l10n.unit_currency(
-                  numberFormat.format(car.calculateTotalPaidRepairs()),
-                  "€",
-                  "",
+                  numberFormat.format(car.totalPaidRepairs),
+                  '€',
+                  '',
                 ),
                 textColor: Colors.white,
                 label: l10n.payments_repairsData_shortTitle,
@@ -113,11 +108,11 @@ class PaymentsOverviewDonutChart extends StatelessWidget {
             if (hasFineData)
               PieChartSection(
                 color: Colors.orange,
-                value: car.calculateTotalPaidFines().toDouble(),
+                value: car.totalPaidFines.toDouble(),
                 title: l10n.unit_currency(
-                  numberFormat.format(car.calculateTotalPaidFines()),
-                  "€",
-                  "",
+                  numberFormat.format(car.totalPaidFines),
+                  '€',
+                  '',
                 ),
                 textColor: Colors.white,
                 label: l10n.payments_fineData_shortTitle,

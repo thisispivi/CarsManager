@@ -195,12 +195,12 @@ class _CarFormPageState extends State<CarFormPage> {
       licensePlate: _licensePlateController.text.trim().toUpperCase(),
       insuranceExpirationDate: _insuranceExpirationDate,
       fuelType: _fuelType,
-      fuel: existing?.fuel,
-      inspectionDatas: existing?.inspectionDatas,
-      insuranceDatas: existing?.insuranceDatas,
-      taxDatas: existing?.taxDatas,
-      repairDatas: existing?.repairDatas,
-      fineDatas: existing?.fineDatas,
+      fuel: existing?.fuel ?? [],
+      inspectionDatas: existing?.inspectionDatas ?? [],
+      insuranceDatas: existing?.insuranceDatas ?? [],
+      taxDatas: existing?.taxDatas ?? [],
+      repairDatas: existing?.repairDatas ?? [],
+      fineDatas: existing?.fineDatas ?? [],
     );
 
     Navigator.of(context).pop(car);
@@ -480,7 +480,6 @@ class _ImageCropBottomSheetState extends State<_ImageCropBottomSheet> {
                   image: widget.imageBytes,
                   controller: _controller,
                   aspectRatio: 1,
-                  withCircleUi: false,
                   baseColor: theme.colorScheme.surface,
                   maskColor: Colors.black.withValues(alpha: 0.4),
                   onCropped: (result) {

@@ -9,7 +9,7 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get appTitle => 'Gestore Auto';
+  String get appTitle => 'CarsManager';
 
   @override
   String get carData_title => 'Dati Auto';

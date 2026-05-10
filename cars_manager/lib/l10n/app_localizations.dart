@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// The title of the application
   ///
   /// In en, this message translates to:
-  /// **'Cars Manager'**
+  /// **'CarsManager'**
   String get appTitle;
 
   /// Title for the car data section

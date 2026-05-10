@@ -4,7 +4,17 @@
   "private": true,
   "description": "Root package for CarsManager monorepo tooling (commit linting, pre-commit hooks).",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "cd cars_manager && dart format .",
+    "format:check": "cd cars_manager && dart format --set-exit-if-changed .",
+    "analyze": "cd cars_manager && flutter analyze --fatal-infos",
+    "generate": "cd cars_manager && dart run build_runner build --delete-conflicting-outputs",
+    "test": "cd cars_manager && flutter test",
+    "build:android": "cd cars_manager && flutter build apk --release --split-per-abi",
+    "build:web": "cd cars_manager && flutter build web --release",
+    "commitlint": "commitlint --edit",
+    "lint-staged": "lint-staged --config .lintstagedrc.js",
+    "verify": "npm run format:check && npm run analyze && npm test"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",

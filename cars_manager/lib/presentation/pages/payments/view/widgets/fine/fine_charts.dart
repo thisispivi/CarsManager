@@ -1,5 +1,5 @@
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
-import 'package:cars_manager/main.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fine_data.dart';
 import 'package:cars_manager/presentation/common/extensions/fine_data_extensions.dart';
@@ -8,25 +8,21 @@ import 'package:cars_manager/presentation/common/widgets/simple_year_bar_chart.d
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:cars_manager/presentation/common/widgets/chart_title.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
-class FinesCountByYearChart extends StatelessWidget {
+class FinesCountByYearChart extends ConsumerWidget {
   final Car car;
 
   const FinesCountByYearChart({super.key, required this.car});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
 
-    final fines = car.fineDatas ?? const <FineData>[];
+    final fines = car.fineDatas;
     final data = _countByYear(fines);
     if (data.isEmpty) return const SizedBox();
 
@@ -35,7 +31,6 @@ class FinesCountByYearChart extends StatelessWidget {
         title: l10n.payments_fines_chart_countByYear_title,
         subtitle: car.name,
       ),
-      nextInfoDue: null,
       verticalSpacing: 12,
       items: [
         SimpleYearBarChart(
@@ -62,21 +57,17 @@ class FinesCountByYearChart extends StatelessWidget {
   }
 }
 
-class FinesAmountByYearChart extends StatelessWidget {
+class FinesAmountByYearChart extends ConsumerWidget {
   final Car car;
 
   const FinesAmountByYearChart({super.key, required this.car});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
 
-    final fines = car.fineDatas ?? const <FineData>[];
+    final fines = car.fineDatas;
     final data = _amountByYear(fines);
     if (data.isEmpty) return const SizedBox();
 
@@ -86,7 +77,6 @@ class FinesAmountByYearChart extends StatelessWidget {
         unit: '€',
         subtitle: car.name,
       ),
-      nextInfoDue: null,
       verticalSpacing: 12,
       items: [
         SimpleYearBarChart(
@@ -114,7 +104,7 @@ class FinesAmountByYearChart extends StatelessWidget {
   }
 }
 
-class FinesByTypeChart extends StatelessWidget {
+class FinesByTypeChart extends ConsumerWidget {
   final Car car;
 
   const FinesByTypeChart({super.key, required this.car});
@@ -129,17 +119,12 @@ class FinesByTypeChart extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
 
-    final fines = car.fineDatas ?? const <FineData>[];
+    final fines = car.fineDatas;
     if (fines.isEmpty) return const SizedBox();
 
     final sums = <FineType, double>{};
@@ -156,7 +141,6 @@ class FinesByTypeChart extends StatelessWidget {
         unit: '€',
         subtitle: car.name,
       ),
-      nextInfoDue: null,
       verticalSpacing: 12,
       items: [
         DonutChart(

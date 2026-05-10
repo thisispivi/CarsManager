@@ -1,7 +1,7 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
-import 'package:flutter/material.dart';
 import 'package:cars_manager/presentation/common/widgets/next_info_due.dart';
+import 'package:flutter/material.dart';
 
 class NextTaxInfo extends StatelessWidget {
   final Car car;
@@ -12,8 +12,8 @@ class NextTaxInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    final nextTaxDate = car.getNextTaxDueDate();
-    final daysUntilNext = car.getDaysUntilNextTaxDue();
+    final nextTaxDate = car.nextTaxDueDate;
+    final daysUntilNext = car.daysUntilNextTaxDue;
 
     if (nextTaxDate == null || daysUntilNext == null) {
       return const SizedBox.shrink();
@@ -21,8 +21,8 @@ class NextTaxInfo extends StatelessWidget {
 
     return NextInfoDue(
       title: localizations.payments_taxesData_nextDue,
-      nextDueDate: nextTaxDate as DateTime,
-      daysRemaining: daysUntilNext as int,
+      nextDueDate: nextTaxDate,
+      daysRemaining: daysUntilNext,
       daysLabel: localizations.days,
     );
   }

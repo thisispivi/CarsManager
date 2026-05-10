@@ -12,8 +12,8 @@ class NextInsuranceInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
-    final nextInsuranceDate = car.getNextInsuranceExpirationDate();
-    final daysUntilNext = car.getDaysUntilNextInsuranceExpiration();
+    final nextInsuranceDate = car.nextInsuranceExpirationDate;
+    final daysUntilNext = car.daysUntilNextInsuranceExpiration;
 
     if (nextInsuranceDate == null || daysUntilNext == null) {
       return const SizedBox.shrink();
@@ -21,8 +21,8 @@ class NextInsuranceInfo extends StatelessWidget {
 
     return NextInfoDue(
       title: localizations.payments_insuranceData_nextDue,
-      nextDueDate: nextInsuranceDate as DateTime,
-      daysRemaining: daysUntilNext as int,
+      nextDueDate: nextInsuranceDate,
+      daysRemaining: daysUntilNext,
       daysLabel: localizations.days,
     );
   }

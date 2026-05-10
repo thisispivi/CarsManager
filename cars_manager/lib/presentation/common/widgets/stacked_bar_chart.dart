@@ -46,8 +46,8 @@ class StackedBarChart extends StatefulWidget {
   static List<ExpensesByYear> generateFromCar(Car car) {
     final Map<int, ExpensesByYear> expensesByYearMap = {};
 
-    if (car.inspectionDatas != null) {
-      for (InspectionData inspection in car.inspectionDatas!) {
+    if (car.inspectionDatas.isNotEmpty) {
+      for (InspectionData inspection in car.inspectionDatas) {
         final year = inspection.date.year;
         if (!expensesByYearMap.containsKey(year)) {
           expensesByYearMap[year] = ExpensesByYear(
@@ -71,8 +71,8 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    if (car.insuranceDatas != null) {
-      for (InsuranceData insurance in car.insuranceDatas!) {
+    if (car.insuranceDatas.isNotEmpty) {
+      for (InsuranceData insurance in car.insuranceDatas) {
         final year = insurance.startDate.year;
         if (!expensesByYearMap.containsKey(year)) {
           expensesByYearMap[year] = ExpensesByYear(
@@ -96,8 +96,8 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    if (car.taxDatas != null) {
-      for (TaxData tax in car.taxDatas!) {
+    if (car.taxDatas.isNotEmpty) {
+      for (TaxData tax in car.taxDatas) {
         final year = tax.date.year;
         if (!expensesByYearMap.containsKey(year)) {
           expensesByYearMap[year] = ExpensesByYear(
@@ -120,8 +120,8 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    if (car.repairDatas != null) {
-      for (RepairData repair in car.repairDatas!) {
+    if (car.repairDatas.isNotEmpty) {
+      for (RepairData repair in car.repairDatas) {
         final year = repair.date.year;
         if (!expensesByYearMap.containsKey(year)) {
           expensesByYearMap[year] = ExpensesByYear(
@@ -144,8 +144,8 @@ class StackedBarChart extends StatefulWidget {
       }
     }
 
-    if (car.fineDatas != null) {
-      for (FineData fine in car.fineDatas!) {
+    if (car.fineDatas.isNotEmpty) {
+      for (FineData fine in car.fineDatas) {
         final year = fine.date.year;
         if (!expensesByYearMap.containsKey(year)) {
           expensesByYearMap[year] = ExpensesByYear(
@@ -220,7 +220,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
     final yMax = _calculateMaxY(data, yInterval);
 
     String fmt(double v) =>
-        localizations.unit_currency(numberFormat.format(v), "€", " ");
+        localizations.unit_currency(numberFormat.format(v), '€', ' ');
 
     return Column(
       children: [
@@ -229,7 +229,6 @@ class _StackedBarChartState extends State<StackedBarChart> {
           child: Wrap(
             alignment: WrapAlignment.center,
             spacing: 10,
-            runSpacing: 0,
             children: [
               _buildLegendItem(
                 context: context,
@@ -428,7 +427,6 @@ class _StackedBarChartState extends State<StackedBarChart> {
                 ),
               ),
               titlesData: FlTitlesData(
-                show: true,
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
@@ -474,16 +472,11 @@ class _StackedBarChartState extends State<StackedBarChart> {
                     reservedSize: 72,
                   ),
                 ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                topTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
+                rightTitles: const AxisTitles(),
+                topTitles: const AxisTitles(),
               ),
               borderData: FlBorderData(show: false),
               gridData: FlGridData(
-                show: true,
                 drawVerticalLine: false,
                 horizontalInterval: yInterval,
                 getDrawingHorizontalLine: (value) {

@@ -1,13 +1,13 @@
+import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:cars_manager/main.dart';
 
-class RepairItem extends StatelessWidget {
+class RepairItem extends ConsumerWidget {
   final RepairData repair;
   final Locale locale;
   final bool isLast;
@@ -20,7 +20,7 @@ class RepairItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
@@ -45,18 +45,14 @@ class RepairItem extends StatelessWidget {
               );
 
               if (updated != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).updateRepairPayment(oldData: repair, data: updated);
+                ref
+                    .read(expensesControllerProvider.notifier)
+                    .updateRepair(oldData: repair, data: updated);
               }
             }();
           },
           onDelete: () {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).removeRepairPayment(repair);
+            ref.read(expensesControllerProvider.notifier).removeRepair(repair);
           },
         );
       },
@@ -72,7 +68,6 @@ class RepairItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
                     child: Text(

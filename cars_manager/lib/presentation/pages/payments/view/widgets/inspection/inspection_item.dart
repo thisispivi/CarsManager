@@ -1,14 +1,14 @@
+import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/inspection_data.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:cars_manager/main.dart';
 
-class InspectionItem extends StatelessWidget {
+class InspectionItem extends ConsumerWidget {
   final InspectionData inspection;
   final Locale locale;
   final bool isLast;
@@ -21,7 +21,7 @@ class InspectionItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
@@ -45,18 +45,16 @@ class InspectionItem extends StatelessWidget {
               );
 
               if (updated != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).updateInspectionPayment(oldData: inspection, data: updated);
+                ref
+                    .read(expensesControllerProvider.notifier)
+                    .updateInspection(oldData: inspection, data: updated);
               }
             }();
           },
           onDelete: () {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).removeInspectionPayment(inspection);
+            ref
+                .read(expensesControllerProvider.notifier)
+                .removeInspection(inspection);
           },
         );
       },

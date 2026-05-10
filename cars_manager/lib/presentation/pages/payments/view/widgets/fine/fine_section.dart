@@ -1,3 +1,5 @@
+import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fine_data.dart';
@@ -5,34 +7,28 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/common/pay
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/fine/fine_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../../../../../../../main.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 
-class FineSection extends StatelessWidget {
+class FineSection extends ConsumerWidget {
   final Car car;
 
   const FineSection({super.key, required this.car});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final localizations = AppLocalizations.of(context)!;
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
 
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
-
-    final items = car.fineDatas ?? const <FineData>[];
+    final items = car.fineDatas;
 
     return PaymentSectionCard(
       title: localizations.payments_finesData_title,
       icon: SvgPicture.asset(
-        "assets/icons/fine.svg",
+        'assets/icons/fine.svg',
         width: 28,
         height: 28,
         colorFilter: ColorFilter.mode(colorScheme.primary, BlendMode.srcIn),
@@ -48,10 +44,7 @@ class FineSection extends StatelessWidget {
           );
 
           if (data != null && context.mounted) {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).addFinePayment(data);
+            ref.read(expensesControllerProvider.notifier).addFine(data);
           }
         },
         icon: Icon(
@@ -69,7 +62,7 @@ class FineSection extends StatelessWidget {
             message: localizations.payments_finesData_empty,
             actionLabel: localizations.common_add,
             iconWidget: SvgPicture.asset(
-              "assets/icons/fine.svg",
+              'assets/icons/fine.svg',
               width: 48,
               height: 48,
               colorFilter: ColorFilter.mode(
@@ -87,10 +80,7 @@ class FineSection extends StatelessWidget {
               );
 
               if (data != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).addFinePayment(data);
+                ref.read(expensesControllerProvider.notifier).addFine(data);
               }
             },
           )

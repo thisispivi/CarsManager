@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:cars_manager/data/cars_storage.dart';
+import 'package:cars_manager/core/storage/cars_storage.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fine_data.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
@@ -168,22 +168,22 @@ Car _carFromJson(Map<String, dynamic> json) {
         (json['fuelType'] == null || json['fuelType'].toString().trim().isEmpty)
         ? null
         : _parseFuelType(json['fuelType'].toString()),
-    fuel: json['fuel'] != null ? _fuelEntriesFromJson(json['fuel']) : null,
+    fuel: json['fuel'] != null ? _fuelEntriesFromJson(json['fuel']) : [],
     inspectionDatas: json['inspectionDatas'] != null
         ? _inspectionDataFromJson(json['inspectionDatas'])
-        : null,
+        : [],
     insuranceDatas: json['insuranceDatas'] != null
         ? _insuranceDataFromJson(json['insuranceDatas'])
-        : null,
+        : [],
     taxDatas: json['taxDatas'] != null
         ? _taxDataFromJson(json['taxDatas'])
-        : null,
+        : [],
     repairDatas: json['repairDatas'] != null
         ? _repairDataFromJson(json['repairDatas'])
-        : null,
+        : [],
     fineDatas: json['fineDatas'] != null
         ? _fineDataFromJson(json['fineDatas'])
-        : null,
+        : [],
   );
 }
 
@@ -201,9 +201,9 @@ Map<String, dynamic> _carToJson(Car car) {
     'licensePlate': car.licensePlate,
     'insuranceExpirationDate': car.insuranceExpirationDate.toIso8601String(),
     'fuelType': car.fuelType?.name,
-    'fuel': car.fuel?.map(_fuelEntryToJson).toList(),
+    'fuel': car.fuel.map(_fuelEntryToJson).toList(),
     'inspectionDatas': car.inspectionDatas
-        ?.map(
+        .map(
           (e) => {
             'date': e.date.toIso8601String(),
             'isPassed': e.isPassed,
@@ -213,7 +213,7 @@ Map<String, dynamic> _carToJson(Car car) {
         )
         .toList(),
     'insuranceDatas': car.insuranceDatas
-        ?.map(
+        .map(
           (e) => {
             'startDate': e.startDate.toIso8601String(),
             'endDate': e.endDate.toIso8601String(),
@@ -225,10 +225,10 @@ Map<String, dynamic> _carToJson(Car car) {
         )
         .toList(),
     'taxDatas': car.taxDatas
-        ?.map((e) => {'date': e.date.toIso8601String(), 'amount': e.amount})
+        .map((e) => {'date': e.date.toIso8601String(), 'amount': e.amount})
         .toList(),
     'repairDatas': car.repairDatas
-        ?.map(
+        .map(
           (e) => {
             'date': e.date.toIso8601String(),
             'amount': e.amount,
@@ -237,7 +237,7 @@ Map<String, dynamic> _carToJson(Car car) {
         )
         .toList(),
     'fineDatas': car.fineDatas
-        ?.map(
+        .map(
           (e) => {
             'date': e.date.toIso8601String(),
             'amount': e.amount,

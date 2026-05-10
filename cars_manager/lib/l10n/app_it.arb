@@ -1,6 +1,6 @@
 {
   "@@locale": "it",
-  "appTitle": "Gestore Auto",
+  "appTitle": "CarsManager",
   "@appTitle": {
     "description": "The title of the application"
   },

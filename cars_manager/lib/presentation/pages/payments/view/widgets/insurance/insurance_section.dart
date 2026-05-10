@@ -1,32 +1,28 @@
+import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
+import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import '../../../../../../../main.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
-import 'next_insurance_info.dart';
-import 'insurance_item.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/insurance/next_insurance_info.dart';
+import 'package:cars_manager/presentation/pages/payments/view/widgets/insurance/insurance_item.dart';
 
-class InsuranceSection extends StatelessWidget {
+class InsuranceSection extends ConsumerWidget {
   final Car car;
 
   const InsuranceSection({super.key, required this.car});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final localizations = AppLocalizations.of(context)!;
+    final locale = ref.watch(appSettingsProvider).locale ?? const Locale('en');
 
-    final carsManagerState = Provider.of<CarsManagerState>(
-      context,
-      listen: false,
-    );
-    final locale = carsManagerState.locale ?? const Locale('en');
-
-    final items = car.insuranceDatas ?? const <InsuranceData>[];
+    final items = car.insuranceDatas;
 
     return PaymentSectionCard(
       title: localizations.payments_insuranceData_title,
@@ -46,10 +42,7 @@ class InsuranceSection extends StatelessWidget {
           );
 
           if (data != null && context.mounted) {
-            Provider.of<CarsManagerState>(
-              context,
-              listen: false,
-            ).addInsurancePayment(data);
+            ref.read(expensesControllerProvider.notifier).addInsurance(data);
           }
         },
         icon: Icon(
@@ -80,10 +73,9 @@ class InsuranceSection extends StatelessWidget {
                   );
 
               if (data != null && context.mounted) {
-                Provider.of<CarsManagerState>(
-                  context,
-                  listen: false,
-                ).addInsurancePayment(data);
+                ref
+                    .read(expensesControllerProvider.notifier)
+                    .addInsurance(data);
               }
             },
           )

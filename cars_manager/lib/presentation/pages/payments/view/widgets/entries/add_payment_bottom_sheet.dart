@@ -570,7 +570,6 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
             policyNumber: _policyNumberController.text.trim(),
             startDate: _insuranceStart,
             endDate: _insuranceEnd,
-            extensionDate: null,
             premiumAmount: amount,
           ),
         );

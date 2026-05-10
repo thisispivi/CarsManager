@@ -1,18 +1,26 @@
-# CarsManager — Flutter App
+# CarsManager Flutter App
 
-This is the Flutter application source for CarsManager.
+This directory contains the Flutter application source for CarsManager.
 
-For full documentation, see the [repository root](../README.md):
+## Quick Start
 
+```bash
+flutter pub get
+flutter run
+```
+
+Useful checks:
+
+```bash
+dart format --set-exit-if-changed .
+flutter analyze --fatal-infos
+flutter test
+```
+
+For full repository documentation, see:
+
+- [Repository README](../README.md)
 - [Architecture](../ARCHITECTURE.md)
 - [Design System](../DESIGN_SYSTEM.md)
 - [Environment Setup](../ENVIRONMENT_SETUP.md)
 - [Contributing](../CONTRIBUTING.md)
-
-## Quick start
-
-```bash
-flutter pub get
-dart run build_runner build --delete-conflicting-outputs
-flutter run
-```

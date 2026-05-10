@@ -30,7 +30,7 @@ class FuelStackedBarChart extends StatefulWidget {
   static List<FuelExpensesByYear> generateFromCar(Car car) {
     final Map<int, Map<FuelType, double>> map = {};
 
-    final entries = car.fuel ?? const <FuelEntry>[];
+    final entries = car.fuel;
     for (final FuelEntry entry in entries) {
       final year = entry.date.year;
       final type = entry.fuelType;
@@ -202,7 +202,6 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
           child: Wrap(
             alignment: WrapAlignment.center,
             spacing: 10,
-            runSpacing: 0,
             children: [
               for (final t in sortedTypes)
                 _buildLegendItem(
@@ -324,7 +323,6 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
                 ),
               ),
               titlesData: FlTitlesData(
-                show: true,
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
@@ -370,16 +368,11 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
                     reservedSize: 72,
                   ),
                 ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
-                topTitles: AxisTitles(
-                  sideTitles: SideTitles(showTitles: false),
-                ),
+                rightTitles: const AxisTitles(),
+                topTitles: const AxisTitles(),
               ),
               borderData: FlBorderData(show: false),
               gridData: FlGridData(
-                show: true,
                 drawVerticalLine: false,
                 horizontalInterval: yInterval,
                 getDrawingHorizontalLine: (value) {
@@ -456,7 +449,6 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
           borderRadius: BorderRadius.circular(999),
           border: Border.all(
             color: enabled ? color : Theme.of(context).dividerColor,
-            width: 1,
           ),
         ),
         child: Row(

@@ -117,7 +117,6 @@ class SimpleYearBarChart extends StatelessWidget {
               ),
             ),
             titlesData: FlTitlesData(
-              show: true,
               bottomTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
@@ -163,16 +162,11 @@ class SimpleYearBarChart extends StatelessWidget {
                   reservedSize: 84,
                 ),
               ),
-              topTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
-              rightTitles: const AxisTitles(
-                sideTitles: SideTitles(showTitles: false),
-              ),
+              topTitles: const AxisTitles(),
+              rightTitles: const AxisTitles(),
             ),
             borderData: FlBorderData(show: false),
             gridData: FlGridData(
-              show: true,
               drawVerticalLine: false,
               horizontalInterval: interval,
               getDrawingHorizontalLine: (value) {

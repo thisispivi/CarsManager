@@ -1,4 +1,4 @@
-import 'package:cars_manager/main.dart';
+import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/fuel_entries_section.dart';
@@ -6,18 +6,18 @@ import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_avg_price_by_year_chart.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_by_year_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-class FuelConsumptionPage extends StatelessWidget {
+class FuelConsumptionPage extends ConsumerWidget {
   const FuelConsumptionPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Car? car = ref.watch(activeCarProvider);
     return SafeArea(
-      child: Consumer<CarsManagerState>(
-        builder: (context, carState, child) {
-          final Car? car = carState.activeCar;
+      child: Builder(
+        builder: (context) {
           if (car == null) {
             final l10n = AppLocalizations.of(context)!;
             return Center(
@@ -31,7 +31,7 @@ class FuelConsumptionPage extends StatelessWidget {
               ),
             );
           }
-          final hasFuelData = car.fuel?.isNotEmpty ?? false;
+          final hasFuelData = car.fuel.isNotEmpty;
 
           final sections = <Widget>[
             if (hasFuelData) FuelAvgPriceByYearChart(car: car),

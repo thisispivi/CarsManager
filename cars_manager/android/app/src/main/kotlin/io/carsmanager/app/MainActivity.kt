@@ -1,4 +1,4 @@
-package com.example.cars_manager
+package io.carsmanager.app
 
 import io.flutter.embedding.android.FlutterActivity
 

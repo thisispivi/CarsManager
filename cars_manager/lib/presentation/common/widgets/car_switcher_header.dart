@@ -1,18 +1,18 @@
+import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
-import 'package:cars_manager/main.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
-class CarSwitcherHeader extends StatefulWidget {
+class CarSwitcherHeader extends ConsumerStatefulWidget {
   const CarSwitcherHeader({super.key});
 
   @override
-  State<CarSwitcherHeader> createState() => _CarSwitcherHeaderState();
+  ConsumerState<CarSwitcherHeader> createState() => _CarSwitcherHeaderState();
 }
 
-class _CarSwitcherHeaderState extends State<CarSwitcherHeader>
+class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
     with SingleTickerProviderStateMixin {
   late final AnimationController _rotationController;
 
@@ -77,7 +77,9 @@ class _CarSwitcherHeaderState extends State<CarSwitcherHeader>
                         )
                       : null,
                   onTap: () {
-                    context.read<CarsManagerState>().setActiveCar(car.id);
+                    ref
+                        .read(activeCarControllerProvider.notifier)
+                        .select(car.id);
                     Navigator.pop(context);
                   },
                 ),
@@ -116,12 +118,13 @@ class _CarSwitcherHeaderState extends State<CarSwitcherHeader>
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CarsManagerState>();
-    final activeCar = state.activeCar;
+    final activeCar = ref.watch(activeCarProvider);
+    final cars = ref.watch(carsControllerProvider);
+    final activeCarId = ref.watch(activeCarControllerProvider);
 
     if (activeCar == null) {
       return Text(
-        AppLocalizations.of(context)?.appTitle ?? 'Cars Manager',
+        AppLocalizations.of(context)?.appTitle ?? 'CarsManager',
         style: GoogleFonts.spaceGrotesk(
           fontSize: 22,
           fontWeight: FontWeight.w800,
@@ -131,7 +134,7 @@ class _CarSwitcherHeaderState extends State<CarSwitcherHeader>
     }
 
     return InkWell(
-      onTap: () => _openCarSwitcher(context, state.cars, state.activeCarId),
+      onTap: () => _openCarSwitcher(context, cars, activeCarId),
       borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
