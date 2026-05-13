@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/inspection_data.dart';
@@ -307,23 +306,25 @@ class _StackedBarChartState extends State<StackedBarChart> {
                         children: [
                           TextSpan(
                             text: '● ',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: color,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12.5,
-                              height: 1.2,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: color,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12.5,
+                                  height: 1.2,
+                                ),
                           ),
                           TextSpan(
                             text: '$label: ${fmt(value)}\n',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.9,
-                              ),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12.5,
-                              height: 1.2,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.9,
+                                  ),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.5,
+                                  height: 1.2,
+                                ),
                           ),
                         ],
                       );
@@ -374,24 +375,25 @@ class _StackedBarChartState extends State<StackedBarChart> {
                           children: [
                             TextSpan(
                               text: '● ',
-                              style: GoogleFonts.spaceGrotesk(
-                                color: Colors.orange,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12.5,
-                                height: 1.2,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12.5,
+                                    height: 1.2,
+                                  ),
                             ),
                             TextSpan(
                               text:
                                   '${localizations.payments_fineData_shortTitle}: ${fmt(e.fines)}',
-                              style: GoogleFonts.spaceGrotesk(
-                                color: theme.colorScheme.onSurface.withValues(
-                                  alpha: 0.9,
-                                ),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12.5,
-                                height: 1.2,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.9),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.5,
+                                    height: 1.2,
+                                  ),
                             ),
                           ],
                         ),
@@ -400,7 +402,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
 
                     final totalSpan = TextSpan(
                       text: '  ${fmt(_totalFor(e))}',
-                      style: GoogleFonts.spaceGrotesk(
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.limeAccent,
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
@@ -410,7 +412,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
 
                     return BarTooltipItem(
                       '${e.year} - ',
-                      GoogleFonts.spaceGrotesk(
+                      Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
@@ -440,10 +442,11 @@ class _StackedBarChartState extends State<StackedBarChart> {
                         space: 4,
                         child: Text(
                           data[i].year.toString(),
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       );
                     },
@@ -460,12 +463,13 @@ class _StackedBarChartState extends State<StackedBarChart> {
                         space: 4,
                         child: Text(
                           '${numberFormat.format(value)}€',
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12,
-                            color: theme.colorScheme.onSurface.withValues(
-                              alpha: 0.75,
-                            ),
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 12,
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.75,
+                                ),
+                              ),
                         ),
                       );
                     },
@@ -576,7 +580,7 @@ class _StackedBarChartState extends State<StackedBarChart> {
             const SizedBox(width: 10),
             Text(
               label,
-              style: GoogleFonts.spaceGrotesk(
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: enabled

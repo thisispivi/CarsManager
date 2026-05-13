@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:cars_manager/core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
 
 class ProgressRing extends StatelessWidget {
@@ -21,7 +20,7 @@ class ProgressRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = color ?? AppColors.brandPrimary;
+    final effectiveColor = color ?? Theme.of(context).colorScheme.primary;
     final trackColor = effectiveColor.withValues(alpha: 0.12);
 
     return SizedBox.square(

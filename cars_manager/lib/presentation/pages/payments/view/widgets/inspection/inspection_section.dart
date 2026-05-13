@@ -8,7 +8,6 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/ad
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/inspection/next_inspection_info.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/inspection/inspection_item.dart';
@@ -56,7 +55,9 @@ class InspectionSection extends ConsumerWidget {
         ),
         label: Text(
           localizations.common_add,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       nextInfoDue: items.isNotEmpty ? NextInspectionInfo(car: car) : null,

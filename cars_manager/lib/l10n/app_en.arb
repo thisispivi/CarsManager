@@ -719,5 +719,36 @@
         "example": "Mileage"
       }
     }
-  }
+  },
+  "nav_garage": "Garage",
+  "nav_fuel": "Fuel",
+  "nav_expenses": "Expenses",
+  "nav_analytics": "Analytics",
+  "nav_reminders": "Reminders",
+  "nav_reminders_title": "Reminders",
+  "nav_switchCar": "Switch Car",
+  "analytics_title": "Analytics",
+  "analytics_totalExpenses": "Total expenses",
+  "analytics_fuelEntries": "Fuel entries",
+  "analytics_trackedVehicle": "Tracked vehicle",
+  "analytics_exportCsv": "Export CSV",
+  "analytics_exportFailed": "Export failed: {error}",
+  "@analytics_exportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Permission denied"
+      }
+    }
+  },
+  "settings_preferences": "Preferences",
+  "settings_dataManagement": "Data Management",
+  "settings_exportBackup": "Export Data / Backup",
+  "settings_resetData": "Reset All Data",
+  "settings_resetDataConfirm": "This will delete all your cars and entries. This action cannot be undone.",
+  "settings_resetDataTitle": "Reset All Data?",
+  "reminders_noReminders": "No due dates yet",
+  "reminders_insurance": "Insurance",
+  "reminders_inspection": "Inspection",
+  "reminders_tax": "Tax"
 }

@@ -6,7 +6,6 @@ import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class FineItem extends ConsumerWidget {
@@ -73,7 +72,7 @@ class FineItem extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       dateFormat.format(fine.date),
-                      style: GoogleFonts.spaceGrotesk(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: colorScheme.onSurface,
@@ -101,11 +100,12 @@ class FineItem extends ConsumerWidget {
                         const SizedBox(width: 4),
                         Text(
                           numberFormat.format(fine.amount),
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onPrimary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onPrimary,
+                              ),
                           textScaler: MediaQuery.textScalerOf(context),
                         ),
                       ],
@@ -159,7 +159,7 @@ class _DetailItem extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: GoogleFonts.spaceGrotesk(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: colorScheme.onSurface,

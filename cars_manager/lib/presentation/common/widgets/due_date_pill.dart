@@ -1,6 +1,5 @@
 import 'package:cars_manager/presentation/common/utils/due_date_color.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class DueDatePill extends StatelessWidget {
@@ -54,8 +53,7 @@ class DueDatePill extends StatelessWidget {
             const SizedBox(width: 6),
             Text(
               '$dateText$trailing',
-              style: GoogleFonts.spaceGrotesk(
-                fontSize: 12,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),

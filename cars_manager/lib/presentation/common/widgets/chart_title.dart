@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ChartTitle extends StatelessWidget {
   final String title;
@@ -18,7 +17,7 @@ class ChartTitle extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: GoogleFonts.spaceGrotesk(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: Theme.of(context).colorScheme.primary,
@@ -35,7 +34,7 @@ class ChartTitle extends StatelessWidget {
                 ),
                 child: Text(
                   unit!,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -48,7 +47,7 @@ class ChartTitle extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             subtitle!,
-            style: GoogleFonts.spaceGrotesk(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: Theme.of(context).colorScheme.onSurfaceVariant,

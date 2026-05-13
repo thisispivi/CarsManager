@@ -11,7 +11,6 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/repair/rep
 import 'package:cars_manager/presentation/pages/payments/view/widgets/tax/tax_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class PaymentsPage extends ConsumerWidget {
   const PaymentsPage({super.key});
@@ -27,7 +26,7 @@ class PaymentsPage extends ConsumerWidget {
             return Center(
               child: Text(
                 l10n.payments_selectCarHint,
-                style: GoogleFonts.spaceGrotesk().copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.primary,

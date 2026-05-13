@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class EmptyStateWidget extends StatelessWidget {
   final String message;
@@ -53,7 +52,7 @@ class EmptyStateWidget extends StatelessWidget {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: GoogleFonts.spaceGrotesk(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 15,
               fontWeight: FontWeight.w600,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -65,7 +64,9 @@ class EmptyStateWidget extends StatelessWidget {
             icon: const Icon(Icons.add),
             label: Text(
               actionLabel,
-              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
         ],

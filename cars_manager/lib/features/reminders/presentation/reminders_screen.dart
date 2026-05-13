@@ -1,3 +1,4 @@
+import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/shared/widgets/empty_state.dart';
@@ -21,30 +22,34 @@ class RemindersScreen extends ConsumerWidget {
 
     final reminders = <_ReminderItem>[
       if (car.nextInsuranceExpirationDate case final DateTime dueDate)
-        _ReminderItem('Insurance', dueDate),
+        _ReminderItem(l10n.reminders_insurance, dueDate),
       if (car.nextInspectionDate case final DateTime dueDate)
-        _ReminderItem('Inspection', dueDate),
+        _ReminderItem(l10n.reminders_inspection, dueDate),
       if (car.nextTaxDueDate case final DateTime dueDate)
-        _ReminderItem('Tax', dueDate),
+        _ReminderItem(l10n.reminders_tax, dueDate),
     ];
 
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        Text('Reminders', style: Theme.of(context).textTheme.headlineMedium),
+        Text(
+          l10n.nav_reminders_title,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
         const SizedBox(height: 16),
         if (reminders.isEmpty)
-          const EmptyState(
+          EmptyState(
             icon: Icons.event_available_rounded,
-            title: 'No due dates yet',
-            subtitle:
-                'Add insurance, inspection, or tax entries to schedule reminders.',
+            title: l10n.reminders_noReminders,
           )
         else
           for (final reminder in reminders)
             Card(
               child: ListTile(
-                leading: const Icon(Icons.notifications_active_rounded),
+                leading: Icon(
+                  Icons.notifications_active_rounded,
+                  color: _statusColor(reminder.dueDate),
+                ),
                 title: Text(reminder.label),
                 subtitle: Text(
                   MaterialLocalizations.of(
@@ -56,6 +61,17 @@ class RemindersScreen extends ConsumerWidget {
       ],
     );
   }
+}
+
+Color _statusColor(DateTime dueDate) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final normalizedDue = DateTime(dueDate.year, dueDate.month, dueDate.day);
+  final daysRemaining = normalizedDue.difference(today).inDays;
+
+  if (daysRemaining < 0) return AppColors.danger;
+  if (daysRemaining <= 30) return AppColors.warning;
+  return AppColors.success;
 }
 
 class _ReminderItem {

@@ -5,7 +5,6 @@ import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class FuelExpensesByYear {
@@ -256,23 +255,25 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
                         children: [
                           TextSpan(
                             text: '● ',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: color,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12.5,
-                              height: 1.2,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: color,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12.5,
+                                  height: 1.2,
+                                ),
                           ),
                           TextSpan(
                             text: '$label: ${fmt(value)}\n',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: theme.colorScheme.onSurface.withValues(
-                                alpha: 0.9,
-                              ),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12.5,
-                              height: 1.2,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.9,
+                                  ),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12.5,
+                                  height: 1.2,
+                                ),
                           ),
                         ],
                       );
@@ -296,7 +297,7 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
 
                     final totalSpan = TextSpan(
                       text: '  ${fmt(_totalFor(e))}',
-                      style: GoogleFonts.spaceGrotesk(
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.limeAccent,
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
@@ -306,7 +307,7 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
 
                     return BarTooltipItem(
                       '${e.year} - ',
-                      GoogleFonts.spaceGrotesk(
+                      Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.w800,
                         fontSize: 14,
@@ -336,10 +337,11 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
                         space: 4,
                         child: Text(
                           data[i].year.toString(),
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       );
                     },
@@ -356,12 +358,13 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
                         space: 4,
                         child: Text(
                           '${numberFormat.format(value)}€',
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12,
-                            color: theme.colorScheme.onSurface.withValues(
-                              alpha: 0.75,
-                            ),
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 12,
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.75,
+                                ),
+                              ),
                         ),
                       );
                     },
@@ -462,7 +465,7 @@ class _FuelStackedBarChartState extends State<FuelStackedBarChart> {
             const SizedBox(width: 6),
             Text(
               _labelForFuelType(fuelType),
-              style: GoogleFonts.spaceGrotesk(
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: Theme.of(context).colorScheme.onSurface,

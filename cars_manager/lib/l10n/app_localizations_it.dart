@@ -486,4 +486,76 @@ class AppLocalizationsIt extends AppLocalizations {
   String validation_number_gte_zero(String field) {
     return '$field deve essere un numero ≥ 0';
   }
+
+  @override
+  String get nav_garage => 'Garage';
+
+  @override
+  String get nav_fuel => 'Carburante';
+
+  @override
+  String get nav_expenses => 'Spese';
+
+  @override
+  String get nav_analytics => 'Analisi';
+
+  @override
+  String get nav_reminders => 'Promemoria';
+
+  @override
+  String get nav_reminders_title => 'Promemoria';
+
+  @override
+  String get nav_switchCar => 'Cambia auto';
+
+  @override
+  String get analytics_title => 'Analisi';
+
+  @override
+  String get analytics_totalExpenses => 'Spese totali';
+
+  @override
+  String get analytics_fuelEntries => 'Rifornimenti';
+
+  @override
+  String get analytics_trackedVehicle => 'Veicolo monitorato';
+
+  @override
+  String get analytics_exportCsv => 'Esporta CSV';
+
+  @override
+  String analytics_exportFailed(String error) {
+    return 'Esportazione non riuscita: $error';
+  }
+
+  @override
+  String get settings_preferences => 'Preferenze';
+
+  @override
+  String get settings_dataManagement => 'Gestione dati';
+
+  @override
+  String get settings_exportBackup => 'Esporta dati / Backup';
+
+  @override
+  String get settings_resetData => 'Reimposta tutti i dati';
+
+  @override
+  String get settings_resetDataConfirm =>
+      'Questo eliminerà tutte le auto e le voci. L\'azione non può essere annullata.';
+
+  @override
+  String get settings_resetDataTitle => 'Reimpostare tutti i dati?';
+
+  @override
+  String get reminders_noReminders => 'Nessuna scadenza ancora';
+
+  @override
+  String get reminders_insurance => 'Assicurazione';
+
+  @override
+  String get reminders_inspection => 'Revisione';
+
+  @override
+  String get reminders_tax => 'Bollo';
 }

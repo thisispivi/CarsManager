@@ -1,7 +1,6 @@
 import 'package:cars_manager/app/router/routes.dart';
 import 'package:cars_manager/features/analytics/presentation/analytics_screen.dart';
 import 'package:cars_manager/features/reminders/presentation/reminders_screen.dart';
-import 'package:cars_manager/presentation/common/widgets/settings.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/fuel_page.dart';
 import 'package:cars_manager/presentation/pages/home/view/home.dart';
@@ -23,7 +22,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/garage',
             name: AppRoutes.garage,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: CarsHomePage()),
+                const _FadeTransitionPage(child: CarsHomePage()),
             routes: [
               GoRoute(
                 path: 'add',
@@ -36,42 +35,48 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: '/fuel',
             name: AppRoutes.fuel,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: FuelConsumptionPage()),
+                const _FadeTransitionPage(child: FuelConsumptionPage()),
           ),
           GoRoute(
             path: '/expenses',
             name: AppRoutes.expenses,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: PaymentsPage()),
+                const _FadeTransitionPage(child: PaymentsPage()),
           ),
           GoRoute(
             path: '/analytics',
             name: AppRoutes.analytics,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: AnalyticsScreen()),
+                const _FadeTransitionPage(child: AnalyticsScreen()),
           ),
           GoRoute(
             path: '/reminders',
             name: AppRoutes.reminders,
             pageBuilder: (context, state) =>
-                const NoTransitionPage(child: RemindersScreen()),
+                const _FadeTransitionPage(child: RemindersScreen()),
           ),
         ],
-      ),
-      GoRoute(
-        path: '/settings',
-        name: AppRoutes.settings,
-        builder: (context, state) => const SettingsPage(),
       ),
     ],
   );
 });
 
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+class _FadeTransitionPage extends CustomTransitionPage<void> {
+  const _FadeTransitionPage({required super.child})
+    : super(
+        transitionsBuilder: _transitionsBuilder,
+        transitionDuration: const Duration(milliseconds: 180),
+      );
 
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: SafeArea(child: SettingsContent()));
+  static Widget _transitionsBuilder(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return FadeTransition(
+      opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+      child: child,
+    );
   }
 }

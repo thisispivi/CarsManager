@@ -7,5 +7,4 @@ class AppRoutes {
   static const expenses = 'expenses';
   static const analytics = 'analytics';
   static const reminders = 'reminders';
-  static const settings = 'settings';
 }

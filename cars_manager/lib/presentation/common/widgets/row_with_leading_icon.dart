@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RowWithLeadingIcon extends StatelessWidget {
   final Widget icon;
@@ -55,18 +54,18 @@ class RowWithLeadingIcon extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTitle(colorScheme),
+          _buildTitle(context, colorScheme),
           const SizedBox(height: 4),
-          ..._buildSubtitles(colorScheme),
+          ..._buildSubtitles(context, colorScheme),
         ],
       ),
     );
   }
 
-  Widget _buildTitle(ColorScheme colorScheme) {
+  Widget _buildTitle(BuildContext context, ColorScheme colorScheme) {
     return Text(
       title,
-      style: GoogleFonts.spaceGrotesk(
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: colorScheme.primary,
@@ -74,12 +73,12 @@ class RowWithLeadingIcon extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildSubtitles(ColorScheme colorScheme) {
+  List<Widget> _buildSubtitles(BuildContext context, ColorScheme colorScheme) {
     return filteredSubtitles
         .map(
           (subtitle) => Text(
             subtitle,
-            style: GoogleFonts.spaceGrotesk(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 14,
               color: colorScheme.onSurfaceVariant,
             ),

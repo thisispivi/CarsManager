@@ -24,7 +24,7 @@ Use it to manage multiple vehicles, track fuel entries, record insurance, inspec
 
 | Category | Details |
 |----------|---------|
-| Garage | Add multiple vehicles with photos, model details, fuel type, and license plate |
+| Garage | Add multiple vehicles with image-led cards, model details, fuel type, and license plate |
 | Fuel | Log fill-ups with amount, total cost, unit price, and yearly charts |
 | Payments | Track insurance, inspections, road tax, repairs, and traffic fines |
 | Reminders | Store upcoming due dates and notification preferences locally |
@@ -32,6 +32,12 @@ Use it to manage multiple vehicles, track fuel entries, record insurance, inspec
 | Localization | English and Italian |
 | Themes | Light and dark mode |
 | Web | Runs as a browser app/PWA |
+
+---
+
+## Design
+
+CarsManager uses a purple-indigo brand palette aligned with the PNG logo assets: `#6C3FE4` for primary actions, `#3D2AB8` → `#8B3FE8` for brand gradients, `#9B6FF5` for tonal accents, and `#4DCF82` for positive metrics. The garage presents taller visual vehicle cards with due-date pills over the image, while typography, form fields, navigation, buttons, and cards inherit the central Flutter theme.
 
 ---
 

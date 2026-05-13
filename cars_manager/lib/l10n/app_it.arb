@@ -719,5 +719,36 @@
         "example": "Chilometraggio"
       }
     }
-  }
+  },
+  "nav_garage": "Garage",
+  "nav_fuel": "Carburante",
+  "nav_expenses": "Spese",
+  "nav_analytics": "Analisi",
+  "nav_reminders": "Promemoria",
+  "nav_reminders_title": "Promemoria",
+  "nav_switchCar": "Cambia auto",
+  "analytics_title": "Analisi",
+  "analytics_totalExpenses": "Spese totali",
+  "analytics_fuelEntries": "Rifornimenti",
+  "analytics_trackedVehicle": "Veicolo monitorato",
+  "analytics_exportCsv": "Esporta CSV",
+  "analytics_exportFailed": "Esportazione non riuscita: {error}",
+  "@analytics_exportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Permesso negato"
+      }
+    }
+  },
+  "settings_preferences": "Preferenze",
+  "settings_dataManagement": "Gestione dati",
+  "settings_exportBackup": "Esporta dati / Backup",
+  "settings_resetData": "Reimposta tutti i dati",
+  "settings_resetDataConfirm": "Questo eliminerà tutte le auto e le voci. L'azione non può essere annullata.",
+  "settings_resetDataTitle": "Reimpostare tutti i dati?",
+  "reminders_noReminders": "Nessuna scadenza ancora",
+  "reminders_insurance": "Assicurazione",
+  "reminders_inspection": "Revisione",
+  "reminders_tax": "Bollo"
 }

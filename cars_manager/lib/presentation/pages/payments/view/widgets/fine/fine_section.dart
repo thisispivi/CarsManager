@@ -9,7 +9,6 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/fine/fine_
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
 
 class FineSection extends ConsumerWidget {
@@ -53,7 +52,9 @@ class FineSection extends ConsumerWidget {
         ),
         label: Text(
           localizations.common_add,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       items: [

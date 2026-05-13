@@ -3,6 +3,7 @@ import 'package:cars_manager/features/analytics/domain/analytics_provider.dart';
 import 'package:cars_manager/features/analytics/domain/export_service.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
+import 'package:cars_manager/shared/widgets/app_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -27,37 +28,42 @@ class AnalyticsScreen extends ConsumerWidget {
                 } catch (e) {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Export failed: $e')),
+                      SnackBar(
+                        content: Text(l10n.analytics_exportFailed('$e')),
+                      ),
                     );
                   }
                 }
               },
               icon: const Icon(Icons.download),
-              label: const Text('Export CSV'),
+              label: Text(l10n.analytics_exportCsv),
             )
           : null,
       body: ListView(
         padding: const EdgeInsets.all(AppDimensions.paddingLarge),
         children: [
-          Text('Analytics', style: Theme.of(context).textTheme.headlineMedium),
+          Text(
+            l10n.analytics_title,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
           const SizedBox(height: AppDimensions.spacing16),
           if (analytics.vehicleName == null)
             Text(l10n.stats_selectCarHint)
           else ...[
             _MetricCard(
-              label: 'Total expenses',
+              label: l10n.analytics_totalExpenses,
               value: analytics.totalExpenses.toString(),
               icon: Icons.payments_rounded,
             ),
             const SizedBox(height: AppDimensions.spacing12),
             _MetricCard(
-              label: 'Fuel entries',
+              label: l10n.analytics_fuelEntries,
               value: analytics.fuelEntryCount.toString(),
               icon: Icons.local_gas_station_rounded,
             ),
             const SizedBox(height: AppDimensions.spacing12),
             _MetricCard(
-              label: 'Tracked vehicle',
+              label: l10n.analytics_trackedVehicle,
               value: analytics.vehicleName!,
               icon: Icons.directions_car_filled_rounded,
             ),
@@ -81,25 +87,23 @@ class _MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.paddingLarge),
-        child: Row(
-          children: [
-            Icon(icon, size: 32),
-            const SizedBox(width: AppDimensions.spacing16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(label, style: Theme.of(context).textTheme.labelLarge),
-                  const SizedBox(height: AppDimensions.spacing4),
-                  Text(value, style: Theme.of(context).textTheme.headlineSmall),
-                ],
-              ),
+    return AppCard(
+      padding: const EdgeInsets.all(AppDimensions.paddingLarge),
+      child: Row(
+        children: [
+          Icon(icon, size: 32),
+          const SizedBox(width: AppDimensions.spacing16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: Theme.of(context).textTheme.labelLarge),
+                const SizedBox(height: AppDimensions.spacing4),
+                Text(value, style: Theme.of(context).textTheme.headlineSmall),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

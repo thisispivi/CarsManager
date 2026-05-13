@@ -5,7 +5,6 @@ import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/common/payment_section_card.dart';
 import 'package:cars_manager/presentation/common/widgets/empty_state_widget.dart';
@@ -51,7 +50,9 @@ class TaxSection extends ConsumerWidget {
         ),
         label: Text(
           localizations.common_add,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
         ),
       ),
       nextInfoDue: items.isNotEmpty ? NextTaxInfo(car: car) : null,

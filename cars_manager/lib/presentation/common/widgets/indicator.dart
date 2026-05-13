@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class Indicator extends StatelessWidget {
   const Indicator({
@@ -31,7 +30,7 @@ class Indicator extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           text,
-          style: GoogleFonts.spaceGrotesk(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             fontSize: 16,
             fontWeight: FontWeight.bold,
             color: textColor,

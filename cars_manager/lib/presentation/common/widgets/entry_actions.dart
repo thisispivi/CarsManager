@@ -1,6 +1,5 @@
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Future<void> showEntryActionsSheet({
   required BuildContext context,
@@ -27,7 +26,7 @@ Future<void> showEntryActionsSheet({
               ListTile(
                 title: Text(
                   l10n.common_actions,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                     color: theme.colorScheme.primary,
@@ -42,7 +41,7 @@ Future<void> showEntryActionsSheet({
                   ),
                   title: Text(
                     l10n.common_edit,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: theme.colorScheme.onSurface,
                     ),
@@ -59,7 +58,7 @@ Future<void> showEntryActionsSheet({
                 ),
                 title: Text(
                   l10n.common_delete,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     color: theme.colorScheme.error,
                   ),
@@ -73,15 +72,13 @@ Future<void> showEntryActionsSheet({
                       return AlertDialog(
                         title: Text(
                           l10n.common_deleteConfirmTitle,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w700,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         content: Text(
                           l10n.common_deleteConfirmBody,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w500),
                         ),
                         actions: [
                           TextButton(
@@ -89,9 +86,8 @@ Future<void> showEntryActionsSheet({
                                 Navigator.of(dialogContext).pop(false),
                             child: Text(
                               l10n.common_cancel,
-                              style: GoogleFonts.spaceGrotesk(
-                                fontWeight: FontWeight.w700,
-                              ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w700),
                             ),
                           ),
                           FilledButton(
@@ -100,9 +96,8 @@ Future<void> showEntryActionsSheet({
                             style: FilledButton.styleFrom(
                               backgroundColor: theme.colorScheme.error,
                               foregroundColor: theme.colorScheme.onError,
-                              textStyle: GoogleFonts.spaceGrotesk(
-                                fontWeight: FontWeight.w800,
-                              ),
+                              textStyle: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.w800),
                             ),
                             child: Text(l10n.common_delete),
                           ),
@@ -118,9 +113,8 @@ Future<void> showEntryActionsSheet({
                         SnackBar(
                           content: Text(
                             l10n.common_deleted,
-                            style: GoogleFonts.spaceGrotesk(
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w700),
                           ),
                         ),
                       );
@@ -132,7 +126,9 @@ Future<void> showEntryActionsSheet({
                 leading: const Icon(Icons.close),
                 title: Text(
                   l10n.common_cancel,
-                  style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 onTap: () => Navigator.of(sheetContext).pop(),
               ),

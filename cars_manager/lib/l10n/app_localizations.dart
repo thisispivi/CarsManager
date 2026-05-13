@@ -931,6 +931,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{field} must be a number ≥ 0'**
   String validation_number_gte_zero(String field);
+
+  /// No description provided for @nav_garage.
+  ///
+  /// In en, this message translates to:
+  /// **'Garage'**
+  String get nav_garage;
+
+  /// No description provided for @nav_fuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel'**
+  String get nav_fuel;
+
+  /// No description provided for @nav_expenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get nav_expenses;
+
+  /// No description provided for @nav_analytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get nav_analytics;
+
+  /// No description provided for @nav_reminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get nav_reminders;
+
+  /// No description provided for @nav_reminders_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get nav_reminders_title;
+
+  /// No description provided for @nav_switchCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Car'**
+  String get nav_switchCar;
+
+  /// No description provided for @analytics_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analytics_title;
+
+  /// No description provided for @analytics_totalExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Total expenses'**
+  String get analytics_totalExpenses;
+
+  /// No description provided for @analytics_fuelEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel entries'**
+  String get analytics_fuelEntries;
+
+  /// No description provided for @analytics_trackedVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracked vehicle'**
+  String get analytics_trackedVehicle;
+
+  /// No description provided for @analytics_exportCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Export CSV'**
+  String get analytics_exportCsv;
+
+  /// No description provided for @analytics_exportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed: {error}'**
+  String analytics_exportFailed(String error);
+
+  /// No description provided for @settings_preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get settings_preferences;
+
+  /// No description provided for @settings_dataManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'Data Management'**
+  String get settings_dataManagement;
+
+  /// No description provided for @settings_exportBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Data / Backup'**
+  String get settings_exportBackup;
+
+  /// No description provided for @settings_resetData.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset All Data'**
+  String get settings_resetData;
+
+  /// No description provided for @settings_resetDataConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This will delete all your cars and entries. This action cannot be undone.'**
+  String get settings_resetDataConfirm;
+
+  /// No description provided for @settings_resetDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset All Data?'**
+  String get settings_resetDataTitle;
+
+  /// No description provided for @reminders_noReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'No due dates yet'**
+  String get reminders_noReminders;
+
+  /// No description provided for @reminders_insurance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance'**
+  String get reminders_insurance;
+
+  /// No description provided for @reminders_inspection.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspection'**
+  String get reminders_inspection;
+
+  /// No description provided for @reminders_tax.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get reminders_tax;
 }
 
 class _AppLocalizationsDelegate

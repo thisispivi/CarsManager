@@ -7,7 +7,6 @@ import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/presentation/common/utils/date_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 enum PaymentEntryType { insurance, inspection, tax, repair, fine }
@@ -145,7 +144,7 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                     Expanded(
                       child: Text(
                         title,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                           color: colorScheme.primary,
@@ -226,9 +225,8 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                         icon: const Icon(Icons.calendar_today_outlined),
                         label: Text(
                           localizations.common_pick,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -256,9 +254,8 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                         icon: const Icon(Icons.calendar_today_outlined),
                         label: Text(
                           localizations.common_pick,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -287,9 +284,8 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                         icon: const Icon(Icons.calendar_today_outlined),
                         label: Text(
                           localizations.common_pick,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -299,7 +295,7 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       localizations.payments_inspectionsData_status_passed,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -414,9 +410,8 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                         icon: const Icon(Icons.calendar_today_outlined),
                         label: Text(
                           localizations.common_pick,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -478,9 +473,8 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                         icon: const Icon(Icons.calendar_today_outlined),
                         label: Text(
                           localizations.common_pick,
-                          style: GoogleFonts.spaceGrotesk(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -494,9 +488,8 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                     onPressed: _submit,
                     icon: const Icon(Icons.check),
                     style: ElevatedButton.styleFrom(
-                      textStyle: GoogleFonts.spaceGrotesk(
-                        fontWeight: FontWeight.w700,
-                      ),
+                      textStyle: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.w700),
                     ),
                     label: Text(
                       isEdit

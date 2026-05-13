@@ -26,15 +26,18 @@ CarsManager's design system is minimal, data-focused, and premium. Inspired by R
 
 ## Color palette
 
-Derived from the CarsManager logo gradient: `#004B9F` (deep blue) → `#63C83E` (vivid green).
+Derived from the current CarsManager PNG logo: deep indigo `#3D2AB8` into vivid purple `#8B3FE8`, with green retained only for positive states and healthy metrics.
 
 ### Brand tokens
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `brandPrimary` | `#1A56FF` | Primary actions, active states, links |
+| `brandPrimary` | `#6C3FE4` | Primary actions, active states, links |
 | `brandSecondary` | `#4DCF82` | Success states, positive metrics, brand accent |
-| `brandAccent` | `#5C7CFA` | Secondary actions, highlights |
+| `brandGradientStart` | `#3D2AB8` | Dark end of the logo gradient |
+| `brandGradientEnd` | `#8B3FE8` | Light end of the logo gradient |
+| `brandAccent` | `#9B6FF5` | Secondary tonal highlights |
+| `brandGradient` | start → end | Logo-aligned highlighted surfaces |
 
 ### Surface tokens (Light)
 
@@ -77,7 +80,7 @@ Derived from the CarsManager logo gradient: `#004B9F` (deep blue) → `#63C83E` 
 Order is intentional — most prominent category gets the first colour.
 
 ```
-1. #1A56FF  (blue)
+1. #6C3FE4  (purple-indigo)
 2. #4DCF82  (green)
 3. #FFB84C  (amber)
 4. #FF5858  (coral)
@@ -186,6 +189,13 @@ States: idle, hover (web), pressed, loading (shows `CircularProgressIndicator`),
 - Border radius: `md` (12 dp) by default, `lg` (16 dp) for hero cards
 - Shadow: `sm` by default
 - Padding: `lg` (16 dp) standard, `xl` (24 dp) for hero cards
+
+### Garage Car Tile
+
+- Vertical card with a full-width 16:9 image region and metadata below.
+- Due-date pills sit over the image on a transparent-to-black bottom gradient.
+- Active state uses a 2 px `brandPrimary` border and `AppShadows.brandGlow(brandPrimary)`.
+- Empty image state uses `brandGradient` and a centered car glyph.
 
 ### StatusPill
 

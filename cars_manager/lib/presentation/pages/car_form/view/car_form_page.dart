@@ -1,15 +1,14 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
+import 'package:cars_manager/presentation/pages/car_form/view/image_file_reader.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/widgets/car_form_fields.dart';
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:file_picker/file_picker.dart' as fp;
-import 'package:google_fonts/google_fonts.dart';
 
 class CarFormPage extends StatefulWidget {
   final Car? initialCar;
@@ -34,20 +33,6 @@ class _CarFormPageState extends State<CarFormPage> {
   FuelType? _fuelType;
   Uint8List? _imageOriginalBytes;
   Uint8List? _imageCroppedBytes;
-
-  TextStyle get _textStyle =>
-      GoogleFonts.spaceGrotesk(fontSize: 16, fontWeight: FontWeight.w500);
-
-  InputDecoration _decor(BuildContext context, String label) => InputDecoration(
-    labelText: label,
-    border: const OutlineInputBorder(),
-    labelStyle: GoogleFonts.spaceGrotesk(
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-    ),
-    errorStyle: GoogleFonts.spaceGrotesk(fontSize: 12),
-    helperStyle: GoogleFonts.spaceGrotesk(fontSize: 12),
-  );
 
   String? _validateRequired(
     String? rawValue,
@@ -112,12 +97,20 @@ class _CarFormPageState extends State<CarFormPage> {
 
     final originalB64 = car?.imageOriginalBase64;
     if (originalB64 != null && originalB64.trim().isNotEmpty) {
-      _imageOriginalBytes = base64Decode(originalB64);
+      try {
+        _imageOriginalBytes = base64Decode(originalB64);
+      } on FormatException {
+        _imageOriginalBytes = null;
+      }
     }
 
     final croppedB64 = car?.imageBase64;
     if (croppedB64 != null && croppedB64.trim().isNotEmpty) {
-      _imageCroppedBytes = base64Decode(croppedB64);
+      try {
+        _imageCroppedBytes = base64Decode(croppedB64);
+      } on FormatException {
+        _imageCroppedBytes = null;
+      }
     }
   }
 
@@ -143,7 +136,9 @@ class _CarFormPageState extends State<CarFormPage> {
         SnackBar(
           content: Text(
             l10n.validation_required(l10n.carData_fuelType),
-            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       );
@@ -165,7 +160,9 @@ class _CarFormPageState extends State<CarFormPage> {
         SnackBar(
           content: Text(
             l10n.validation_dateNotPast,
-            style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       );
@@ -215,12 +212,11 @@ class _CarFormPageState extends State<CarFormPage> {
         ? l10n.common_editEntity(l10n.cars_car_shortTitle)
         : l10n.common_addEntity(l10n.cars_car_shortTitle);
 
+    final textTheme = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          title,
-          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
-        ),
+        title: Text(title, style: textTheme.titleLarge),
         actions: [
           IconButton(
             icon: const Icon(Icons.check),
@@ -230,78 +226,101 @@ class _CarFormPageState extends State<CarFormPage> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-          child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            child: ListView(
-              padding: const EdgeInsets.only(top: 16),
-              children: [
-                _CarImagePickerCard(
-                  imageUrl: widget.initialCar?.imageUrl,
-                  imageBase64: _imageCroppedBytes == null
-                      ? widget.initialCar?.imageBase64
-                      : base64Encode(_imageCroppedBytes!),
-                  onPick: _pickAndCropImage,
-                  onRemove: () {
-                    setState(() {
-                      _imageOriginalBytes = null;
-                      _imageCroppedBytes = null;
-                    });
-                  },
-                  onReCrop: _imageOriginalBytes == null
-                      ? null
-                      : () async {
-                          final cropped = await _cropImage(
-                            originalBytes: _imageOriginalBytes!,
-                          );
-                          if (cropped == null) return;
-                          setState(() {
-                            _imageCroppedBytes = cropped;
-                          });
-                        },
-                  l10n: l10n,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final horizontalPadding = constraints.maxWidth >= 600 ? 40.0 : 24.0;
+            final fieldTextStyle = textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.w500,
+            );
+
+            return Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: 16,
+              ),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: ListView(
+                  padding: const EdgeInsets.only(top: 16),
+                  children: [
+                    _CarImagePickerCard(
+                      imageUrl: widget.initialCar?.imageUrl,
+                      imageBase64: _imageCroppedBytes == null
+                          ? widget.initialCar?.imageBase64
+                          : base64Encode(_imageCroppedBytes!),
+                      onPick: _pickAndCropImage,
+                      onRemove: () {
+                        setState(() {
+                          _imageOriginalBytes = null;
+                          _imageCroppedBytes = null;
+                        });
+                      },
+                      onReCrop: _imageOriginalBytes == null
+                          ? null
+                          : () async {
+                              final cropped = await _cropImage(
+                                originalBytes: _imageOriginalBytes!,
+                              );
+                              if (cropped == null) return;
+                              setState(() {
+                                _imageCroppedBytes = cropped;
+                              });
+                            },
+                      l10n: l10n,
+                    ),
+                    const SizedBox(height: 16),
+                    CarFormFields(
+                      nameController: _nameController,
+                      brandController: _brandController,
+                      modelController: _modelController,
+                      yearController: _yearController,
+                      licensePlateController: _licensePlateController,
+                      fuelType: _fuelType,
+                      onFuelTypeChanged: (v) {
+                        setState(() {
+                          _fuelType = v;
+                        });
+                      },
+                      textStyle: fieldTextStyle ?? const TextStyle(),
+                      decorationBuilder: (label) =>
+                          InputDecoration(labelText: label),
+                      validateRequired: (v, fieldLabel, {min = 1, int? max}) =>
+                          _validateRequired(
+                            v,
+                            fieldLabel,
+                            l10n,
+                            min: min,
+                            max: max,
+                          ),
+                      validateYear: (v) => _validateYear(v, l10n),
+                      validateLicensePlate: (v) =>
+                          _validateLicensePlate(v, l10n),
+                      l10n: l10n,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                CarFormFields(
-                  nameController: _nameController,
-                  brandController: _brandController,
-                  modelController: _modelController,
-                  yearController: _yearController,
-                  licensePlateController: _licensePlateController,
-                  fuelType: _fuelType,
-                  onFuelTypeChanged: (v) {
-                    setState(() {
-                      _fuelType = v;
-                    });
-                  },
-                  textStyle: _textStyle,
-                  decorationBuilder: (label) => _decor(context, label),
-                  validateRequired: (v, fieldLabel, {min = 1, int? max}) =>
-                      _validateRequired(
-                        v,
-                        fieldLabel,
-                        l10n,
-                        min: min,
-                        max: max,
-                      ),
-                  validateYear: (v) => _validateYear(v, l10n),
-                  validateLicensePlate: (v) => _validateLicensePlate(v, l10n),
-                  l10n: l10n,
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
   }
 
   Future<void> _pickAndCropImage() async {
-    final result = await fp.FilePicker.pickFiles(type: fp.FileType.image);
+    final result = await fp.FilePicker.pickFiles(
+      type: fp.FileType.image,
+      withData: true,
+    );
 
-    final bytes = result?.files.single.bytes;
+    final file = result?.files.single;
+    if (file == null) return;
+
+    Uint8List? bytes = file.bytes;
+    if (bytes == null && file.path != null && !kIsWeb) {
+      bytes = await readImageFileBytes(file.path!);
+    }
     if (bytes == null) return;
 
     final cropped = await _cropImage(originalBytes: bytes);
@@ -360,8 +379,7 @@ class _CarImagePickerCard extends StatelessWidget {
         children: [
           Text(
             l10n.carData_photo,
-            style: GoogleFonts.spaceGrotesk(
-              fontSize: 14,
+            style: theme.textTheme.labelLarge?.copyWith(
               fontWeight: FontWeight.w700,
               color: cs.primary,
             ),
@@ -392,7 +410,9 @@ class _CarImagePickerCard extends StatelessWidget {
                 icon: const Icon(Icons.photo_library_outlined),
                 label: Text(
                   l10n.common_pick,
-                  style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w700),
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               if (hasImage)
@@ -401,7 +421,7 @@ class _CarImagePickerCard extends StatelessWidget {
                   icon: const Icon(Icons.delete_outline),
                   label: Text(
                     l10n.common_delete,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -412,7 +432,7 @@ class _CarImagePickerCard extends StatelessWidget {
                   icon: const Icon(Icons.crop),
                   label: Text(
                     l10n.common_edit,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -459,8 +479,7 @@ class _ImageCropBottomSheetState extends State<_ImageCropBottomSheet> {
                   Expanded(
                     child: Text(
                       l10n.common_edit,
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 18,
+                      style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w800,
                         color: theme.colorScheme.primary,
                       ),
@@ -499,7 +518,7 @@ class _ImageCropBottomSheetState extends State<_ImageCropBottomSheet> {
                       onPressed: () => Navigator.of(context).pop(),
                       child: Text(
                         l10n.common_cancel,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: theme.textTheme.labelLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -513,7 +532,7 @@ class _ImageCropBottomSheetState extends State<_ImageCropBottomSheet> {
                       },
                       child: Text(
                         l10n.common_save,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: theme.textTheme.labelLarge?.copyWith(
                           fontWeight: FontWeight.w800,
                         ),
                       ),

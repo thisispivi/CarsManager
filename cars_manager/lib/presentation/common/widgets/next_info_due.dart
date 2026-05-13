@@ -1,6 +1,5 @@
 import 'package:cars_manager/presentation/common/utils/due_date_color.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class NextInfoDue extends StatelessWidget {
@@ -44,7 +43,7 @@ class NextInfoDue extends StatelessWidget {
               children: [
                 Text(
                   '$title:',
-                  style: GoogleFonts.spaceGrotesk(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 14,
                     color: colorScheme.onSurfaceVariant,
                   ),
@@ -53,7 +52,7 @@ class NextInfoDue extends StatelessWidget {
                 const SizedBox(height: 3),
                 Text(
                   'Due: ${dateFormat.format(nextDueDate)}',
-                  style: GoogleFonts.spaceGrotesk(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: colorScheme.onSurface,
@@ -76,7 +75,7 @@ class NextInfoDue extends StatelessWidget {
             ),
             child: Text(
               '$daysRemaining $daysLabel left',
-              style: GoogleFonts.spaceGrotesk(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,

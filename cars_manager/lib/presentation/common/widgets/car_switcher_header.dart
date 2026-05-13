@@ -1,9 +1,11 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CarSwitcherHeader extends ConsumerStatefulWidget {
   const CarSwitcherHeader({super.key});
@@ -36,6 +38,8 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
     List<Car> cars,
     String? activeCarId,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
     _rotationController.forward();
     showModalBottomSheet(
       context: context,
@@ -50,10 +54,9 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Switch Car',
-                  style: GoogleFonts.spaceGrotesk(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  l10n.nav_switchCar,
+                  style: textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -62,13 +65,13 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
                   leading: _buildCarAvatar(car, context),
                   title: Text(
                     car.name,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   subtitle: Text(
                     '${car.manufacture} ${car.model} • ${car.yearOfManufacture}',
-                    style: GoogleFonts.spaceGrotesk(fontSize: 12),
+                    style: textTheme.bodySmall,
                   ),
                   trailing: car.id == activeCarId
                       ? Icon(
@@ -93,21 +96,13 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
   }
 
   Widget _buildCarAvatar(Car car, BuildContext context) {
+    final imageProvider = _imageProviderFor(car);
+
     return CircleAvatar(
       radius: 20,
       backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-      backgroundImage: (car.imageBase64 != null && car.imageBase64!.isNotEmpty)
-          ? MemoryImage(
-              Uri.parse(
-                'data:image/png;base64,${car.imageBase64}',
-              ).data!.contentAsBytes(),
-            )
-          : (car.imageUrl != null && car.imageUrl!.isNotEmpty)
-          ? NetworkImage(car.imageUrl!)
-          : null,
-      child:
-          (car.imageBase64 == null || car.imageBase64!.isEmpty) &&
-              (car.imageUrl == null || car.imageUrl!.isEmpty)
+      backgroundImage: imageProvider,
+      child: imageProvider == null
           ? Icon(
               Icons.directions_car,
               color: Theme.of(context).colorScheme.primary,
@@ -116,20 +111,50 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
     );
   }
 
+  ImageProvider? _imageProviderFor(Car car) {
+    final b64 = car.imageBase64;
+    if (b64 != null && b64.trim().isNotEmpty) {
+      final bytes = _tryDecodeBase64(b64);
+      if (bytes != null) return MemoryImage(bytes);
+    }
+
+    final imageUrl = car.imageUrl;
+    if (imageUrl != null && imageUrl.trim().isNotEmpty) {
+      return NetworkImage(imageUrl);
+    }
+
+    return null;
+  }
+
+  Uint8List? _tryDecodeBase64(String value) {
+    try {
+      return base64Decode(value);
+    } on FormatException {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final activeCar = ref.watch(activeCarProvider);
     final cars = ref.watch(carsControllerProvider);
     final activeCarId = ref.watch(activeCarControllerProvider);
+    final textTheme = Theme.of(context).textTheme;
 
     if (activeCar == null) {
-      return Text(
-        AppLocalizations.of(context)?.appTitle ?? 'CarsManager',
-        style: GoogleFonts.spaceGrotesk(
-          fontSize: 22,
-          fontWeight: FontWeight.w800,
-          color: Theme.of(context).colorScheme.primary,
-        ),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset('assets/icons/CarsManagerLogo.png', height: 28),
+          const SizedBox(width: 8),
+          Text(
+            AppLocalizations.of(context)?.appTitle ?? 'CarsManager',
+            style: textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
       );
     }
 
@@ -150,8 +175,7 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
                 children: [
                   Text(
                     activeCar.name,
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 16,
+                    style: textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -160,8 +184,7 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
                   ),
                   Text(
                     '${activeCar.manufacture} ${activeCar.model} • ${activeCar.yearOfManufacture}',
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 12,
+                    style: textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),

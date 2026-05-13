@@ -145,7 +145,7 @@ class CarsHomePage extends ConsumerWidget {
                       crossAxisCount: crossAxisCount,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      childAspectRatio: 1.12,
+                      childAspectRatio: 0.85,
                     ),
                     itemCount: cars.length,
                     itemBuilder: (context, index) {

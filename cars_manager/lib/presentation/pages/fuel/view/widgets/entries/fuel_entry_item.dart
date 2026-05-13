@@ -5,7 +5,6 @@ import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/add_fuel_entry_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class FuelEntryItem extends ConsumerWidget {
@@ -79,7 +78,7 @@ class FuelEntryItem extends ConsumerWidget {
                   Expanded(
                     child: Text(
                       dateFormat.format(entry.date),
-                      style: GoogleFonts.spaceGrotesk(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: colorScheme.onSurface,
@@ -107,11 +106,12 @@ class FuelEntryItem extends ConsumerWidget {
                         const SizedBox(width: 4),
                         Text(
                           numberFormat.format(entry.totalCost),
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: colorScheme.onPrimary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: colorScheme.onPrimary,
+                              ),
                           textScaler: MediaQuery.textScalerOf(context),
                         ),
                       ],
@@ -195,7 +195,7 @@ class _DetailItem extends StatelessWidget {
         Expanded(
           child: Text(
             value,
-            style: GoogleFonts.spaceGrotesk(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: colorScheme.onSurface,

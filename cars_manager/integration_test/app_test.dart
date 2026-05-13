@@ -97,8 +97,8 @@ void main() {
     ) async {
       await pumpApp(tester);
 
-      // Open settings via the person icon in the AppBar
-      await tester.tap(find.byIcon(Icons.person));
+      // Open settings via the settings icon in the AppBar
+      await tester.tap(find.byIcon(Icons.settings_outlined));
       await tester.pumpAndSettle();
 
       // Find the dark mode switch and record its initial value

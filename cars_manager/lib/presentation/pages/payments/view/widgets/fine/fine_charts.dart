@@ -9,7 +9,6 @@ import 'package:cars_manager/presentation/pages/payments/view/widgets/common/pay
 import 'package:cars_manager/presentation/common/widgets/chart_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class FinesCountByYearChart extends ConsumerWidget {
@@ -146,7 +145,7 @@ class FinesByTypeChart extends ConsumerWidget {
         DonutChart(
           totalPrefix: '${l10n.total}: ',
           totalSuffix: '€',
-          totalTextStyle: GoogleFonts.spaceGrotesk(
+          totalTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).textTheme.bodyLarge?.color,

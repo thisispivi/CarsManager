@@ -91,6 +91,10 @@ cars_manager/lib/
 
 The app starts in `main.dart` with `ProviderScope(child: CarsManagerApp())`. `CarsManagerApp` lives in `lib/app/app.dart` and uses `MaterialApp.router`.
 
+## Theme Layer
+
+The visual system is intentionally layered. `AppColors` owns raw brand, surface, semantic, and chart tokens. `AppTheme` converts those tokens into Material 3 `ThemeData` for light and dark mode, including color scheme, input decorations, navigation, buttons, cards, and app bars. `CarsManagerApp` passes the resulting themes into `MaterialApp.router`, and screens consume them through `Theme.of(context)` instead of hardcoded fonts or colors. This keeps logo-aligned brand changes centralized and lets shared widgets inherit the active locale and brightness correctly.
+
 `CarsManagerState` in `lib/app/state/cars_manager_state.dart` is currently the central app state object. It is exposed through `carsManagerStateProvider`, a Riverpod `ChangeNotifierProvider`, while the older screens continue to read it through a compatibility scope during migration. It owns:
 
 - the vehicle list and active vehicle ID
@@ -114,8 +118,9 @@ GoRouter routes:
 /expenses     -> Expenses screen
 /analytics    -> Analytics screen
 /reminders    -> Reminders screen
-/settings     -> Settings screen
 ```
+
+Settings are presented from the app shell as a modal sheet rather than as a standalone route.
 
 ---
 

@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class SimpleYearBarChart extends StatelessWidget {
@@ -93,7 +92,7 @@ class SimpleYearBarChart extends StatelessWidget {
 
                   return BarTooltipItem(
                     '$year - ',
-                    GoogleFonts.spaceGrotesk(
+                    Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: theme.colorScheme.primary,
                       fontWeight: FontWeight.w800,
                       fontSize: 14,
@@ -102,7 +101,7 @@ class SimpleYearBarChart extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: formatValue(v, numberFormat),
-                        style: GoogleFonts.spaceGrotesk(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: theme.colorScheme.onSurface.withValues(
                             alpha: 0.9,
                           ),
@@ -130,7 +129,7 @@ class SimpleYearBarChart extends StatelessWidget {
                       space: 4,
                       child: Text(
                         years[i].toString(),
-                        style: GoogleFonts.spaceGrotesk(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -150,7 +149,7 @@ class SimpleYearBarChart extends StatelessWidget {
                       space: 4,
                       child: Text(
                         formatValue(value, numberFormat),
-                        style: GoogleFonts.spaceGrotesk(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontSize: 12,
                           color: theme.colorScheme.onSurface.withValues(
                             alpha: 0.75,

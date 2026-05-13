@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
@@ -120,7 +119,9 @@ class _DonutChartState extends State<DonutChart> {
                             '${widget.totalPrefix ?? ''} $total ${widget.totalSuffix ?? ''}',
                             style:
                                 widget.totalTextStyle ??
-                                GoogleFonts.spaceGrotesk(
+                                Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.copyWith(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -169,7 +170,7 @@ class _DonutChartState extends State<DonutChart> {
                 const SizedBox(width: 10),
                 Text(
                   section.label,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                     color: _enabled[i]
@@ -214,7 +215,7 @@ class _DonutChartState extends State<DonutChart> {
         value: value,
         title: title,
         radius: widget.radius,
-        titleStyle: GoogleFonts.spaceGrotesk(
+        titleStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontSize: 14,
           fontWeight: FontWeight.bold,
           color: section.textColor,

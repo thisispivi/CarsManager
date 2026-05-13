@@ -480,4 +480,76 @@ class AppLocalizationsEn extends AppLocalizations {
   String validation_number_gte_zero(String field) {
     return '$field must be a number ≥ 0';
   }
+
+  @override
+  String get nav_garage => 'Garage';
+
+  @override
+  String get nav_fuel => 'Fuel';
+
+  @override
+  String get nav_expenses => 'Expenses';
+
+  @override
+  String get nav_analytics => 'Analytics';
+
+  @override
+  String get nav_reminders => 'Reminders';
+
+  @override
+  String get nav_reminders_title => 'Reminders';
+
+  @override
+  String get nav_switchCar => 'Switch Car';
+
+  @override
+  String get analytics_title => 'Analytics';
+
+  @override
+  String get analytics_totalExpenses => 'Total expenses';
+
+  @override
+  String get analytics_fuelEntries => 'Fuel entries';
+
+  @override
+  String get analytics_trackedVehicle => 'Tracked vehicle';
+
+  @override
+  String get analytics_exportCsv => 'Export CSV';
+
+  @override
+  String analytics_exportFailed(String error) {
+    return 'Export failed: $error';
+  }
+
+  @override
+  String get settings_preferences => 'Preferences';
+
+  @override
+  String get settings_dataManagement => 'Data Management';
+
+  @override
+  String get settings_exportBackup => 'Export Data / Backup';
+
+  @override
+  String get settings_resetData => 'Reset All Data';
+
+  @override
+  String get settings_resetDataConfirm =>
+      'This will delete all your cars and entries. This action cannot be undone.';
+
+  @override
+  String get settings_resetDataTitle => 'Reset All Data?';
+
+  @override
+  String get reminders_noReminders => 'No due dates yet';
+
+  @override
+  String get reminders_insurance => 'Insurance';
+
+  @override
+  String get reminders_inspection => 'Inspection';
+
+  @override
+  String get reminders_tax => 'Tax';
 }

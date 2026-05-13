@@ -20,9 +20,13 @@ Versioning: [Semantic Versioning](https://semver.org/).
 - Strict `analysis_options.yaml` with 15+ lint rules
 
 ### Changed
+- Graphical overhaul: updated the brand palette from blue to purple-indigo, added logo-aligned gradient tokens, refreshed navigation, themed forms/buttons/cards, and redesigned garage vehicle cards.
+- Replaced hardcoded navigation, analytics, reminders, and settings strings with localization keys.
+- Removed screen-level `GoogleFonts.spaceGrotesk()` calls so typography flows through the app theme.
+- Hardened image handling for mobile file picking and corrupt base64 data.
 - Package identifier updated from `com.example.cars_manager` to `io.carsmanager.app`
 - App label changed from "Cars Manager" to "CarsManager" across all platforms
-- Web manifest: brand colours (`#1A56FF` primary, `#0F1114` background), correct product description
+- Web manifest: brand colours (`#6C3FE4` primary, `#0F1114` background), correct product description
 - Web `index.html`: proper title, description, theme-color, and `lang="en"` attribute
 - iOS `Info.plist`: display name and bundle name updated to "CarsManager"
 - `pubspec.yaml`: professional product description

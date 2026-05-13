@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Foundational dimensions for legacy screens that have not moved to tokens.
 class AppDimensions {
   // Spacing
   static const double spacing4 = 4.0;
@@ -39,6 +40,7 @@ class AppDimensions {
   static const double bottomSheetVerticalPadding = paddingDefault;
 }
 
+/// Spacing tokens for modern components.
 class AppSpacing {
   static const double xxs = 2;
   static const double xs = 4;
@@ -50,6 +52,7 @@ class AppSpacing {
   static const double xxxl = 48;
 }
 
+/// Radius tokens that keep cards, controls, and pills visually consistent.
 class AppRadius {
   static const double xs = 4;
   static const double sm = 8;
@@ -60,6 +63,7 @@ class AppRadius {
   static const double pill = 999;
 }
 
+/// Shadow recipes for subtle depth and brand-highlight states.
 class AppShadows {
   static const xs = [
     BoxShadow(color: Color(0x0A000000), blurRadius: 4, offset: Offset(0, 1)),
@@ -76,8 +80,19 @@ class AppShadows {
   static const lg = [
     BoxShadow(color: Color(0x1A000000), blurRadius: 32, offset: Offset(0, 8)),
   ];
+
+  /// Soft colored glow used to identify the active car card.
+  static List<BoxShadow> brandGlow(Color color) => [
+    BoxShadow(
+      color: color.withValues(alpha: 0.24),
+      blurRadius: 28,
+      spreadRadius: 1,
+      offset: const Offset(0, 10),
+    ),
+  ];
 }
 
+/// Shared animation timings and curves for polished motion.
 class AppAnimations {
   static const durationFast = Duration(milliseconds: 150);
   static const durationNormal = Duration(milliseconds: 250);

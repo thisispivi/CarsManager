@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Future<DateTime?> showCustomDatePicker({
   required BuildContext context,
@@ -18,10 +17,8 @@ Future<DateTime?> showCustomDatePicker({
       final base = Theme.of(context);
       return Theme(
         data: base.copyWith(
-          textTheme: GoogleFonts.spaceGroteskTextTheme(base.textTheme),
-          primaryTextTheme: GoogleFonts.spaceGroteskTextTheme(
-            base.primaryTextTheme,
-          ),
+          textTheme: base.textTheme,
+          primaryTextTheme: base.primaryTextTheme,
           colorScheme: base.colorScheme,
           dialogTheme: base.dialogTheme.copyWith(
             insetPadding: const EdgeInsets.symmetric(

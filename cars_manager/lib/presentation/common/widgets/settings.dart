@@ -5,7 +5,6 @@ import 'package:cars_manager/presentation/common/widgets/section_header.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});
@@ -55,6 +54,7 @@ class SettingsContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(appSettingsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return ListView(
       controller: scrollController,
@@ -66,7 +66,7 @@ class SettingsContent extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Profile & Settings',
+                l10n.settings_title,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               IconButton(
@@ -82,9 +82,9 @@ class SettingsContent extends ConsumerWidget {
 
         SectionHeader(
           horizontalPadding: 32,
-          title: 'Preferences',
+          title: l10n.settings_preferences,
           icon: Icon(
-            Icons.settings,
+            Icons.tune_rounded,
             color: Theme.of(context).colorScheme.primary,
           ),
         ),
@@ -135,7 +135,7 @@ class SettingsContent extends ConsumerWidget {
 
         SectionHeader(
           horizontalPadding: 32,
-          title: 'Data Management',
+          title: l10n.settings_dataManagement,
           icon: Icon(
             Icons.storage,
             color: Theme.of(context).colorScheme.primary,
@@ -146,13 +146,11 @@ class SettingsContent extends ConsumerWidget {
           child: ElevatedButton.icon(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Data exported to JSON (Simulation)'),
-                ),
+                SnackBar(content: Text(l10n.settings_exportBackup)),
               );
             },
             icon: const Icon(Icons.download),
-            label: const Text('Export Data / Backup'),
+            label: Text(l10n.settings_exportBackup),
           ),
         ),
         Padding(
@@ -163,20 +161,18 @@ class SettingsContent extends ConsumerWidget {
               final confirm = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Reset All Data?'),
-                  content: const Text(
-                    'This will delete all your cars and entries. This action cannot be undone.',
-                  ),
+                  title: Text(l10n.settings_resetDataTitle),
+                  content: Text(l10n.settings_resetDataConfirm),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('Cancel'),
+                      child: Text(l10n.common_cancel),
                     ),
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(true),
-                      child: const Text(
-                        'Reset',
-                        style: TextStyle(color: Colors.red),
+                      child: Text(
+                        l10n.settings_resetData,
+                        style: const TextStyle(color: Colors.red),
                       ),
                     ),
                   ],
@@ -188,7 +184,7 @@ class SettingsContent extends ConsumerWidget {
               }
             },
             icon: const Icon(Icons.delete_forever),
-            label: const Text('Reset All Data'),
+            label: Text(l10n.settings_resetData),
           ),
         ),
         const SizedBox(height: 32),
@@ -211,8 +207,7 @@ class _SettingsRow extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.spaceGrotesk(
-              fontSize: 16,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.w500,
               color: Theme.of(context).colorScheme.onSurface,
             ),
@@ -291,7 +286,7 @@ class LanguageSelector extends ConsumerWidget {
               horizontalPadding: 32,
               title: l10n.themeSelector_title,
               icon: Icon(
-                Icons.translate,
+                Icons.brightness_6_outlined,
                 color: Theme.of(context).colorScheme.primary,
               ),
             ),
@@ -302,8 +297,7 @@ class LanguageSelector extends ConsumerWidget {
                 children: [
                   Text(
                     l10n.themeSelector_dark_mode,
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 16,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
@@ -371,8 +365,7 @@ class _LanguageOption extends StatelessWidget {
                 opacity: isSelected ? 1.0 : nonSelectedOpacity,
                 child: Text(
                   title,
-                  style: GoogleFonts.spaceGrotesk(
-                    fontSize: 16,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: isSelected
                         ? FontWeight.bold
                         : FontWeight.normal,

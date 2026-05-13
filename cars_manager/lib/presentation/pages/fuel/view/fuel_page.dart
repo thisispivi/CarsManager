@@ -7,7 +7,6 @@ import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/overview/fuel_by_year_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class FuelConsumptionPage extends ConsumerWidget {
   const FuelConsumptionPage({super.key});
@@ -23,7 +22,7 @@ class FuelConsumptionPage extends ConsumerWidget {
             return Center(
               child: Text(
                 l10n.fuel_selectCarHint,
-                style: GoogleFonts.spaceGrotesk().copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Theme.of(context).colorScheme.primary,

@@ -26,13 +26,15 @@ else
     echo "dart format found issues, aborting commit." >&2
     exit 1
   }
-  flutter analyze --fatal-infos || {
-    echo "flutter analyze failed, aborting commit." >&2
-    exit 1
-  }
+  cd "$REPO_ROOT" || exit 1
 fi
 
 cd "$REPO_ROOT/cars_manager" || exit 1
+
+flutter analyze --fatal-infos || {
+  echo "flutter analyze failed, aborting commit." >&2
+  exit 1
+}
 
 flutter test || {
   echo "Tests failed, aborting commit." >&2
