@@ -19,7 +19,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
+          channel: 'stable'
           cache: true
 
       - name: Install dependencies
@@ -43,7 +43,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
+          channel: 'stable'
           cache: true
 
       - name: Install dependencies
@@ -74,7 +74,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
+          channel: 'stable'
           cache: true
 
       - name: Install dependencies
@@ -101,7 +101,7 @@ jobs:
 
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
+          channel: 'stable'
           cache: true
 
       - name: Install dependencies
@@ -118,3 +118,4 @@ jobs:
           name: web-build-${{ github.sha }}
           path: cars_manager/build/web/
           retention-days: 7
+
