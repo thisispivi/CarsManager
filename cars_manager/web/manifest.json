@@ -4,7 +4,7 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0F1114",
-  "theme_color": "#6C3FE4",
+  "theme_color": "#004B9F",
   "description": "The smart way to manage your vehicles — track fuel, expenses, maintenance, insurance, and more.",
   "orientation": "any",
   "prefer_related_applications": false,

@@ -10,13 +10,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:cars_manager/app/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('App builds smoke test', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({'hasSeenOnboarding': true});
+
     await tester.pumpWidget(const ProviderScope(child: CarsManagerApp()));
     await tester.pumpAndSettle();
 
     expect(find.byType(MaterialApp), findsOneWidget);
-    expect(find.text('Expenses'), findsOneWidget);
+    expect(find.text('Add your first car'), findsOneWidget);
   });
 }

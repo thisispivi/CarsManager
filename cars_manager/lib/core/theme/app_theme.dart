@@ -1,5 +1,6 @@
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/theme/theme_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -77,6 +78,43 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
+      extensions: [
+        AppColorScheme(
+          brandPrimary: AppColors.brandPrimary,
+          brandSecondary: isDark
+              ? AppColors.brandGradientEnd
+              : AppColors.brandSecondary,
+          brandGradientStart: AppColors.brandGradientStart,
+          brandGradientEnd: AppColors.brandGradientEnd,
+          brandAccent: isDark ? const Color(0xFF6BB5FF) : AppColors.brandAccent,
+          brandSubtle: isDark
+              ? const Color(0xFF0D2240)
+              : AppColors.tertiaryLight,
+          surfacePrimary: surface,
+          surfaceSecondary: surfaceAlt,
+          surfaceElevated: card,
+          surfaceOverlay: card.withValues(alpha: 0.95),
+          borderDefault: border,
+          borderSubtle: isDark
+              ? const Color(0xFF1E2226)
+              : const Color(0xFFF0F2F5),
+          borderStrong: isDark
+              ? const Color(0xFF3A4049)
+              : const Color(0xFFCBD1D8),
+          textPrimary: primaryText,
+          textSecondary: secondaryText,
+          textTertiary: isDark
+              ? const Color(0xFF5A6370)
+              : const Color(0xFF8B95A3),
+          textInverse: isDark
+              ? const Color(0xFF0D1117)
+              : const Color(0xFFFFFFFF),
+          success: isDark ? const Color(0xFF4DCF82) : AppColors.success,
+          warning: isDark ? const Color(0xFFFFB84C) : AppColors.warning,
+          danger: isDark ? const Color(0xFFFF5858) : AppColors.danger,
+          info: isDark ? const Color(0xFF55A1FF) : AppColors.info,
+        ),
+      ],
       textTheme: textTheme,
       inputDecorationTheme: InputDecorationTheme(
         filled: true,

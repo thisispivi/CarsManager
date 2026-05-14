@@ -48,6 +48,10 @@ class SettingsController extends _$SettingsController {
     ref.read(carsManagerStateProvider).toggleThemeMode();
   }
 
+  void setThemeMode(ThemeMode mode) {
+    ref.read(carsManagerStateProvider).setThemeMode(mode);
+  }
+
   void setNotificationsEnabled(bool enabled) {
     ref.read(carsManagerStateProvider).setNotificationsEnabled(enabled);
   }

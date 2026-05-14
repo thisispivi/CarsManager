@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 /// Central color tokens for the CarsManager design system.
 class AppColors {
-  /// Primary brand purple-indigo, matched to the PNG logo family.
-  static const Color brandPrimary = Color(0xFF6C3FE4);
+  /// Primary brand blue, derived from the new CarsManager logo gradient.
+  static const Color brandPrimary = Color(0xFF0062CC);
 
   /// Positive accent used for healthy metrics and success indicators.
-  static const Color brandSecondary = Color(0xFF4DCF82);
+  static const Color brandSecondary = Color(0xFF4AAD3A);
 
-  /// Deep indigo side of the CarsManager brand gradient.
-  static const Color brandGradientStart = Color(0xFF3D2AB8);
+  /// Deep ocean side of the CarsManager brand gradient.
+  static const Color brandGradientStart = Color(0xFF004B9F);
 
-  /// Vivid purple side of the CarsManager brand gradient.
-  static const Color brandGradientEnd = Color(0xFF8B3FE8);
+  /// Lime health side of the CarsManager brand gradient.
+  static const Color brandGradientEnd = Color(0xFF63C83E);
 
-  /// Lighter purple used for tonal accents.
-  static const Color brandAccent = Color(0xFF9B6FF5);
+  /// Lighter blue used for tonal accents and selected chips.
+  static const Color brandAccent = Color(0xFF3D8FE8);
 
   /// Logo-aligned brand gradient for hero surfaces and highlights.
   static const LinearGradient brandGradient = LinearGradient(
@@ -27,42 +27,43 @@ class AppColors {
   /// Light theme surfaces, borders, and foreground neutrals.
   static const Color surfaceLight = Color.fromRGBO(255, 255, 255, 1);
   static const Color surfaceAlt = Color(0xFFF7F8FA);
-  static const Color surfaceContainerLight = Color.fromRGBO(250, 250, 250, 1);
-  static const Color cardLight = Color.fromRGBO(240, 240, 240, 1);
+  static const Color surfaceContainerLight = Color(0xFFF0F2F5);
+  static const Color cardLight = Color(0xFFFFFFFF);
   static const Color borderLight = Color(0xFFE4E7EC);
-  static const Color tertiaryLight = Color.fromRGBO(220, 220, 220, 1);
-  static const Color secondaryLight = Color.fromRGBO(120, 120, 120, 1);
-  static const Color onSurfaceVariantLight = Color.fromRGBO(60, 60, 60, 1);
-  static const Color primaryLight = Color.fromRGBO(0, 0, 0, 1);
-  static const Color onTertiaryVariantLight = Color.fromRGBO(220, 220, 220, 1);
-  static const Color onSecondaryVariantLight = Color.fromRGBO(200, 200, 200, 1);
+  static const Color tertiaryLight = Color(0xFFE8F1FC);
+  static const Color secondaryLight = Color(0xFF5A6370);
+  static const Color onSurfaceVariantLight = Color(0xFF5A6370);
+  static const Color primaryLight = Color(0xFF0D1117);
+  static const Color onTertiaryVariantLight = Color(0xFF8B95A3);
+  static const Color onSecondaryVariantLight = Color(0xFFCBD1D8);
 
   /// Dark theme surfaces, borders, and foreground neutrals.
-  static const Color surfaceDark = Color.fromRGBO(19, 20, 22, 1);
-  static const Color surfaceAltDark = Color(0xFF181B1F);
-  static const Color surfaceContainerDark = Color.fromRGBO(19, 20, 22, 0.6);
-  static const Color cardDark = Color.fromRGBO(30, 33, 36, 1);
+  static const Color surfaceDark = Color(0xFF0F1114);
+  static const Color surfaceAltDark = Color(0xFF161A1E);
+  static const Color surfaceContainerDark = Color(0xFF1E2226);
+  static const Color cardDark = Color(0xFF1C2026);
   static const Color borderDark = Color(0xFF2A2E34);
   static const Color tertiaryDark = Color.fromRGBO(45, 53, 62, 1);
-  static const Color secondaryDark = Color.fromRGBO(158, 171, 184, 1);
-  static const Color onSurfaceVariantDark = Color.fromRGBO(163, 171, 178, 1);
-  static const Color primaryDark = Color.fromRGBO(255, 255, 255, 1);
-  static const Color onTertiaryVariantDark = Color.fromRGBO(61, 68, 74, 1);
-  static const Color onSecondaryVariantDark = Color.fromRGBO(43, 48, 54, 1);
+  static const Color secondaryDark = Color(0xFF8B95A3);
+  static const Color onSurfaceVariantDark = Color(0xFF8B95A3);
+  static const Color primaryDark = Color(0xFFF0F2F5);
+  static const Color onTertiaryVariantDark = Color(0xFF3A4049);
+  static const Color onSecondaryVariantDark = Color(0xFF2A2E34);
 
   /// Semantic status colors used across validation, alerts, and due dates.
-  static const Color success = Color.fromRGBO(77, 207, 130, 1);
-  static const Color warning = Color.fromRGBO(255, 184, 76, 1);
-  static const Color danger = Color.fromRGBO(255, 88, 88, 1);
-  static const Color error = Color.fromRGBO(255, 88, 88, 1);
-  static const Color info = Color.fromRGBO(85, 161, 255, 1);
+  static const Color success = Color(0xFF1EA85A);
+  static const Color warning = Color(0xFFE8960C);
+  static const Color danger = Color(0xFFDC3545);
+  static const Color error = Color(0xFFDC3545);
+  static const Color info = Color(0xFF0062CC);
 
   /// Ordered palette for charts; index 0 mirrors the brand primary token.
   static const List<Color> chartColors = [
     brandPrimary,
-    Color.fromRGBO(77, 207, 130, 1),
-    Color.fromRGBO(255, 184, 76, 1),
-    Color.fromRGBO(255, 88, 88, 1),
-    Color.fromRGBO(170, 130, 255, 1),
+    Color(0xFF1EA85A),
+    Color(0xFFE8960C),
+    Color(0xFFDC3545),
+    Color(0xFF8B5CF6),
+    Color(0xFF06B6D4),
   ];
 }

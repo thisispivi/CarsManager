@@ -152,6 +152,15 @@ class CarsManagerState extends ChangeNotifier {
     _themeMode = _themeMode == ThemeMode.light
         ? ThemeMode.dark
         : ThemeMode.light;
+    _savePreferences();
+  }
+
+  void setThemeMode(ThemeMode mode) {
+    _themeMode = mode;
+    _savePreferences();
+  }
+
+  void _savePreferences() {
     notifyListeners();
 
     setLoadedPreferences(

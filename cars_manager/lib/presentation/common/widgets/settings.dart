@@ -1,329 +1,498 @@
+import 'package:cars_manager/core/theme/app_colors.dart';
+import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/features/analytics/domain/export_service.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
-import 'package:cars_manager/presentation/common/widgets/section_header.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class SettingsDrawer extends StatelessWidget {
   const SettingsDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Drawer(
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: Row(
-                children: [
-                  Text(
-                    l10n.settings_title,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    tooltip: l10n.common_close,
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-            ),
-            const Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 16),
-                child: SettingsContent(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return const Drawer(child: SettingsContent());
   }
 }
 
 class SettingsContent extends ConsumerWidget {
+  const SettingsContent({
+    super.key,
+    this.scrollController,
+    this.showCloseButton = true,
+  });
+
   final ScrollController? scrollController;
-  const SettingsContent({super.key, this.scrollController});
+  final bool showCloseButton;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(appSettingsProvider);
     final l10n = AppLocalizations.of(context)!;
+    final settings = ref.watch(appSettingsProvider);
+    final cars = ref.watch(carsControllerProvider);
+    final theme = Theme.of(context);
 
-    return ListView(
-      controller: scrollController,
-      padding: EdgeInsets.zero,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    Future<void> exportData() async {
+      final csv = ExportService.carsToCSV(cars);
+      final filename =
+          'cars_export_${DateTime.now().millisecondsSinceEpoch}.csv';
+      try {
+        await ExportService.shareCSV(csv, filename);
+      } catch (error) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.analytics_exportFailed('$error'))),
+        );
+      }
+    }
+
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth >= 840;
+          final horizontalPadding = isWide ? AppSpacing.xxl : AppSpacing.lg;
+
+          return ListView(
+            controller: scrollController,
+            padding: EdgeInsets.all(horizontalPadding),
             children: [
-              Text(
-                l10n.settings_title,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        const LanguageSelector(),
-        const SizedBox(height: 32),
-
-        SectionHeader(
-          horizontalPadding: 32,
-          title: l10n.settings_preferences,
-          icon: Icon(
-            Icons.tune_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        _SettingsRow(
-          title: 'Notifications',
-          trailing: Switch(
-            value: settings.notificationsEnabled,
-            onChanged: (val) => ref
-                .read(settingsControllerProvider.notifier)
-                .setNotificationsEnabled(val),
-          ),
-        ),
-        _SettingsRow(
-          title: 'Units',
-          trailing: DropdownButton<String>(
-            value: settings.units,
-            items: const [
-              DropdownMenuItem(value: 'metric', child: Text('Metric (km, L)')),
-              DropdownMenuItem(
-                value: 'imperial',
-                child: Text('Imperial (mi, gal)'),
-              ),
-            ],
-            onChanged: (val) {
-              if (val != null) {
-                ref.read(settingsControllerProvider.notifier).setUnits(val);
-              }
-            },
-          ),
-        ),
-        _SettingsRow(
-          title: 'Currency',
-          trailing: DropdownButton<String>(
-            value: settings.currency,
-            items: const [
-              DropdownMenuItem(value: 'EUR', child: Text('EUR (€)')),
-              DropdownMenuItem(value: 'USD', child: Text('USD (\$)')),
-              DropdownMenuItem(value: 'GBP', child: Text('GBP (£)')),
-            ],
-            onChanged: (val) {
-              if (val != null) {
-                ref.read(settingsControllerProvider.notifier).setCurrency(val);
-              }
-            },
-          ),
-        ),
-        const SizedBox(height: 32),
-
-        SectionHeader(
-          horizontalPadding: 32,
-          title: l10n.settings_dataManagement,
-          icon: Icon(
-            Icons.storage,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.settings_exportBackup)),
-              );
-            },
-            icon: const Icon(Icons.download),
-            label: Text(l10n.settings_exportBackup),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-          child: OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(foregroundColor: Colors.red),
-            onPressed: () async {
-              final confirm = await showDialog<bool>(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(l10n.settings_resetDataTitle),
-                  content: Text(l10n.settings_resetDataConfirm),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
-                      child: Text(l10n.common_cancel),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.settings_title,
+                          style: theme.textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          'Preferences, reminders, data, and app details.',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(true),
-                      child: Text(
-                        l10n.settings_resetData,
-                        style: const TextStyle(color: Colors.red),
-                      ),
+                  ),
+                  if (showCloseButton)
+                    IconButton(
+                      tooltip: l10n.common_close,
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () {
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop();
+                        } else {
+                          context.go('/');
+                        }
+                      },
                     ),
-                  ],
-                ),
-              );
-              if (confirm == true) {
-                await ref.read(carsControllerProvider.notifier).resetAllData();
-                if (context.mounted) Navigator.of(context).pop();
-              }
-            },
-            icon: const Icon(Icons.delete_forever),
-            label: Text(l10n.settings_resetData),
-          ),
-        ),
-        const SizedBox(height: 32),
-      ],
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              _SettingsSection(
+                icon: Icons.account_circle_rounded,
+                title: 'Profile',
+                children: [
+                  _ProfileSummary(
+                    vehicles: cars.length,
+                    currency: settings.currency,
+                    units: settings.units,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              _SettingsSection(
+                icon: Icons.tune_rounded,
+                title: l10n.settings_preferences,
+                children: [
+                  _SettingsControl(
+                    title: l10n.themeSelector_title,
+                    subtitle: 'Choose how CarsManager appears.',
+                    control: SegmentedButton<ThemeMode>(
+                      segments: const [
+                        ButtonSegment(
+                          value: ThemeMode.system,
+                          icon: Icon(Icons.brightness_auto_rounded),
+                          label: Text('System'),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.light,
+                          icon: Icon(Icons.light_mode_rounded),
+                          label: Text('Light'),
+                        ),
+                        ButtonSegment(
+                          value: ThemeMode.dark,
+                          icon: Icon(Icons.dark_mode_rounded),
+                          label: Text('Dark'),
+                        ),
+                      ],
+                      selected: {settings.themeMode},
+                      onSelectionChanged: (selection) => ref
+                          .read(settingsControllerProvider.notifier)
+                          .setThemeMode(selection.single),
+                    ),
+                  ),
+                  const _SettingsDivider(),
+                  _LanguageSelector(settings: settings),
+                  const _SettingsDivider(),
+                  _SettingsControl(
+                    title: 'Units',
+                    subtitle: 'Distance and volume defaults.',
+                    control: SegmentedButton<String>(
+                      segments: const [
+                        ButtonSegment(
+                          value: 'metric',
+                          label: Text('Metric'),
+                          icon: Icon(Icons.speed_rounded),
+                        ),
+                        ButtonSegment(
+                          value: 'imperial',
+                          label: Text('Imperial'),
+                          icon: Icon(Icons.straighten_rounded),
+                        ),
+                      ],
+                      selected: {settings.units},
+                      onSelectionChanged: (selection) => ref
+                          .read(settingsControllerProvider.notifier)
+                          .setUnits(selection.single),
+                    ),
+                  ),
+                  const _SettingsDivider(),
+                  _SettingsControl(
+                    title: 'Currency',
+                    subtitle: 'Used for totals, charts, and exports.',
+                    control: DropdownButton<String>(
+                      value: settings.currency,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      items: const [
+                        DropdownMenuItem(value: 'EUR', child: Text('EUR (€)')),
+                        DropdownMenuItem(value: 'USD', child: Text('USD (\$)')),
+                        DropdownMenuItem(value: 'GBP', child: Text('GBP (£)')),
+                      ],
+                      onChanged: (value) {
+                        if (value == null) return;
+                        ref
+                            .read(settingsControllerProvider.notifier)
+                            .setCurrency(value);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              _SettingsSection(
+                icon: Icons.notifications_active_rounded,
+                title: 'Notifications',
+                children: [
+                  _SettingsControl(
+                    title: 'Enable reminders',
+                    subtitle: 'Surface insurance, inspection, and tax dates.',
+                    control: Switch(
+                      value: settings.notificationsEnabled,
+                      onChanged: (value) => ref
+                          .read(settingsControllerProvider.notifier)
+                          .setNotificationsEnabled(value),
+                    ),
+                  ),
+                  const _SettingsDivider(),
+                  const Wrap(
+                    spacing: AppSpacing.sm,
+                    runSpacing: AppSpacing.sm,
+                    children: [
+                      _ReminderChip(label: '90 days'),
+                      _ReminderChip(label: '30 days'),
+                      _ReminderChip(label: '7 days'),
+                      _ReminderChip(label: '1 day'),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              _SettingsSection(
+                icon: Icons.storage_rounded,
+                title: l10n.settings_dataManagement,
+                children: [
+                  _ActionRow(
+                    icon: Icons.download_rounded,
+                    title: l10n.settings_exportBackup,
+                    subtitle: 'Download a CSV snapshot of your garage.',
+                    onTap: exportData,
+                  ),
+                  const _SettingsDivider(),
+                  _ActionRow(
+                    icon: Icons.delete_forever_rounded,
+                    title: l10n.settings_resetData,
+                    subtitle: 'Delete all cars and entries from this device.',
+                    isDanger: true,
+                    onTap: () => _confirmReset(context, ref, l10n),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              const _SettingsSection(
+                icon: Icons.info_outline_rounded,
+                title: 'About',
+                children: [
+                  _InfoLine(label: 'Version', value: '1.0.0+1'),
+                  _SettingsDivider(),
+                  _InfoLine(
+                    label: 'Product',
+                    value: 'Every cost. Every service. Total clarity.',
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
     );
+  }
+
+  Future<void> _confirmReset(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+  ) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.settings_resetDataTitle),
+        content: Text(l10n.settings_resetDataConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.common_cancel),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppColors.danger),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.settings_resetData),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm != true) return;
+    await ref.read(carsControllerProvider.notifier).resetAllData();
+    if (context.mounted) context.go('/');
   }
 }
 
-class _SettingsRow extends StatelessWidget {
+class _SettingsSection extends StatelessWidget {
+  const _SettingsSection({
+    required this.icon,
+    required this.title,
+    required this.children,
+  });
+
+  final IconData icon;
   final String title;
-  final Widget trailing;
-  const _SettingsRow({required this.title, required this.trailing});
+  final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(AppRadius.xl),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
+        boxShadow: theme.brightness == Brightness.light ? AppShadows.sm : null,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: AppColors.brandPrimary.withValues(alpha: 0.1),
+                foregroundColor: AppColors.brandPrimary,
+                child: Icon(icon),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
           ),
-          trailing,
+          const SizedBox(height: AppSpacing.lg),
+          ...children,
         ],
       ),
     );
   }
 }
 
-class LanguageSelector extends ConsumerWidget {
-  const LanguageSelector({super.key});
+class _SettingsControl extends StatelessWidget {
+  const _SettingsControl({
+    required this.title,
+    required this.subtitle,
+    required this.control,
+  });
+
+  final String title;
+  final String subtitle;
+  final Widget control;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final settings = ref.watch(appSettingsProvider);
-    final currentLocale = settings.locale;
-    final isEnglish = currentLocale?.languageCode == 'en';
-    final isItalian = currentLocale?.languageCode == 'it';
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final stack = constraints.maxWidth < 560;
+        final label = Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            Text(
+              subtitle,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        );
+
+        if (stack) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              label,
+              const SizedBox(height: AppSpacing.md),
+              Align(alignment: Alignment.centerLeft, child: control),
+            ],
+          );
+        }
+
+        return Row(
+          children: [
+            Expanded(child: label),
+            const SizedBox(width: AppSpacing.lg),
+            control,
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ProfileSummary extends StatelessWidget {
+  const _ProfileSummary({
+    required this.vehicles,
+    required this.currency,
+    required this.units,
+  });
+
+  final int vehicles;
+  final String currency;
+  final String units;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
       children: [
-        SectionHeader(
-          horizontalPadding: 32,
-          title: l10n.language_selector_title,
-          icon: Icon(
-            Icons.translate,
-            color: Theme.of(context).colorScheme.primary,
+        Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            gradient: AppColors.brandGradient,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+          ),
+          child: const Icon(
+            Icons.directions_car_filled_rounded,
+            color: Colors.white,
           ),
         ),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Row(
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: _LanguageOption(
-                  title: l10n.language_name_en,
-                  languageCode: 'en',
-                  isSelected: isEnglish,
-                  onTap: () {
-                    if (!isEnglish) {
-                      ref
-                          .read(settingsControllerProvider.notifier)
-                          .setLocale(const Locale('en'));
-                    }
-                  },
+              Text(
+                'CarsManager',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _LanguageOption(
-                  title: l10n.language_name_it,
-                  languageCode: 'it',
-                  isSelected: isItalian,
-                  onTap: () {
-                    if (!isItalian) {
-                      ref
-                          .read(settingsControllerProvider.notifier)
-                          .setLocale(const Locale('it'));
-                    }
-                  },
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                '$vehicles ${vehicles == 1 ? 'vehicle' : 'vehicles'} • $currency • $units',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 32),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SectionHeader(
-              horizontalPadding: 32,
-              title: l10n.themeSelector_title,
-              icon: Icon(
-                Icons.brightness_6_outlined,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    l10n.themeSelector_dark_mode,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  Switch(
-                    value: settings.themeMode == ThemeMode.light,
-                    onChanged: (_) => ref
-                        .read(settingsControllerProvider.notifier)
-                        .toggleThemeMode(),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ],
     );
   }
 }
 
-class _LanguageOption extends StatelessWidget {
-  final String title;
-  final String languageCode;
-  final bool isSelected;
-  final VoidCallback onTap;
+class _LanguageSelector extends ConsumerWidget {
+  const _LanguageSelector({required this.settings});
 
+  final AppSettingsState settings;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final currentLocale = settings.locale;
+
+    return _SettingsControl(
+      title: l10n.language_selector_title,
+      subtitle: 'Controls labels, dates, and localized copy.',
+      control: Wrap(
+        spacing: AppSpacing.sm,
+        runSpacing: AppSpacing.sm,
+        children: [
+          _LanguageOption(
+            title: l10n.language_name_en,
+            languageCode: 'en',
+            isSelected: currentLocale?.languageCode == 'en',
+            onTap: () => ref
+                .read(settingsControllerProvider.notifier)
+                .setLocale(const Locale('en')),
+          ),
+          _LanguageOption(
+            title: l10n.language_name_it,
+            languageCode: 'it',
+            isSelected: currentLocale?.languageCode == 'it',
+            onTap: () => ref
+                .read(settingsControllerProvider.notifier)
+                .setLocale(const Locale('it')),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguageOption extends StatelessWidget {
   const _LanguageOption({
     required this.title,
     required this.languageCode,
@@ -331,54 +500,178 @@ class _LanguageOption extends StatelessWidget {
     required this.onTap,
   });
 
+  final String title;
+  final String languageCode;
+  final bool isSelected;
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
-    const double nonSelectedOpacity = 0.6;
-
+    final theme = Theme.of(context);
     return Material(
       color: isSelected
-          ? Theme.of(context).colorScheme.onTertiaryFixedVariant
-          : Theme.of(context).navigationBarTheme.backgroundColor,
-      borderRadius: BorderRadius.circular(8),
+          ? AppColors.brandPrimary.withValues(alpha: 0.12)
+          : theme.colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(AppRadius.pill),
       child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.sm,
+          ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Opacity(
-                opacity: isSelected ? 1.0 : nonSelectedOpacity,
-                child: SizedBox(
-                  width: 33,
-                  height: 22,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(3),
-                    child: CountryFlag.fromLanguageCode(languageCode),
-                  ),
+              SizedBox(
+                width: 24,
+                height: 16,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadius.xs),
+                  child: CountryFlag.fromLanguageCode(languageCode),
                 ),
               ),
-              const SizedBox(width: 10),
-              Opacity(
-                opacity: isSelected ? 1.0 : nonSelectedOpacity,
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: isSelected
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurface,
-                  ),
+              const SizedBox(width: AppSpacing.sm),
+              Text(
+                title,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: isSelected ? AppColors.brandPrimary : null,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ActionRow extends StatelessWidget {
+  const _ActionRow({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.isDanger = false,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+  final bool isDanger;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isDanger ? AppColors.danger : AppColors.brandPrimary;
+    final theme = Theme.of(context);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: color.withValues(alpha: 0.12),
+                foregroundColor: color,
+                child: Icon(icon),
+              ),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: isDanger ? AppColors.danger : null,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    Text(
+                      subtitle,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded, color: color),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ReminderChip extends StatelessWidget {
+  const _ReminderChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+      avatar: const Icon(Icons.schedule_rounded, size: 18),
+      label: Text(label),
+      side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+    );
+  }
+}
+
+class _InfoLine extends StatelessWidget {
+  const _InfoLine({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.right,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SettingsDivider extends StatelessWidget {
+  const _SettingsDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+      child: Divider(height: 1, color: Theme.of(context).dividerColor),
     );
   }
 }
