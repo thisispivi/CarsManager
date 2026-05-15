@@ -241,7 +241,7 @@ class SettingsContent extends ConsumerWidget {
                 icon: Icons.info_outline_rounded,
                 title: 'About',
                 children: [
-                  _InfoLine(label: 'Version', value: '1.0.0+1'),
+                  _InfoLine(label: 'Version', value: '2.0.0+1'),
                   _SettingsDivider(),
                   _InfoLine(
                     label: 'Product',

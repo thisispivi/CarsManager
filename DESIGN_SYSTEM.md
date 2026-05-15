@@ -1,251 +1,229 @@
 # Design System
 
-CarsManager's design system is minimal, data-focused, and premium. Inspired by Revolut, Linear, and Bolt — not traditional automotive UI.
+CarsManager v2 is minimal, data-forward, responsive, and calm. It should feel like a premium personal finance product for vehicles: fast to scan, easy to act on, and consistent across mobile, web, and desktop.
 
 ---
 
-## Brand identity
+## Brand Identity
 
-**Brand voice:** Intelligent. Clean. Efficient.
+**Positioning:** Your vehicle intelligence platform.
 
-**Do not use:**
-- Metallic or chrome textures
-- Racing aesthetics or speed motifs
-- Aggressive dark automotive themes
-- Skeuomorphic dashboards
-- Overly masculine or aggressive colour palettes
+**Tagline:** Every cost. Every service. Total clarity.
+
+**Brand feeling:** confident, calm, intelligent, premium, trustworthy.
 
 **Do use:**
-- Generous whitespace
-- Soft, rounded surfaces
-- Vibrant but restrained accent colours
-- Data-forward layouts
-- Subtle shadows, not heavy borders
+- Blue-to-green brand moments derived from the new logo
+- Soft surfaces, generous spacing, and clear data hierarchy
+- Semantic green/amber/red vehicle health states
+- Compact, glanceable insights before detailed data
+- Platform-specific navigation patterns
+
+**Do not use:**
+- Purple-indigo brand surfaces from v1
+- Racing, chrome, gauge-heavy, or skeuomorphic automotive motifs
+- Decorative gradients that do not communicate brand or state
+- Dense long-scroll screens where filters or tabs would clarify intent
 
 ---
 
-## Color palette
+## Color Tokens
 
-Derived from the current CarsManager PNG logo: deep indigo `#3D2AB8` into vivid purple `#8B3FE8`, with green retained only for positive states and healthy metrics.
+### Brand
 
-### Brand tokens
+| Token | Light | Dark | Usage |
+|-------|-------|------|-------|
+| `brandPrimary` | `#0062CC` | `#4A9EFF` | Primary actions, active navigation, links |
+| `brandSecondary` | `#4AAD3A` | `#63C83E` | Healthy states and positive trends |
+| `brandGradientStart` | `#004B9F` | `#004B9F` | Logo gradient start |
+| `brandGradientEnd` | `#63C83E` | `#63C83E` | Logo gradient end |
+| `brandAccent` | `#3D8FE8` | `#6BB5FF` | Selected chips, secondary highlights |
+| `brandSubtle` | `#E8F1FC` | `#0D2240` | Active rows, subtle selected states |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `brandPrimary` | `#6C3FE4` | Primary actions, active states, links |
-| `brandSecondary` | `#4DCF82` | Success states, positive metrics, brand accent |
-| `brandGradientStart` | `#3D2AB8` | Dark end of the logo gradient |
-| `brandGradientEnd` | `#8B3FE8` | Light end of the logo gradient |
-| `brandAccent` | `#9B6FF5` | Secondary tonal highlights |
-| `brandGradient` | start → end | Logo-aligned highlighted surfaces |
+### Surfaces
 
-### Surface tokens (Light)
+| Token | Light | Dark | Usage |
+|-------|-------|------|-------|
+| `surfacePrimary` | `#FFFFFF` | `#0F1114` | Page background |
+| `surfaceSecondary` | `#F7F8FA` | `#161A1E` | Alternate sections and sidebar |
+| `surfaceElevated` | `#FFFFFF` | `#1C2026` | Cards, panels, sheets |
+| `borderDefault` | `#E4E7EC` | `#2A2E34` | Cards, dividers, inputs |
+| `borderSubtle` | `#F0F2F5` | `#1E2226` | Quiet separators |
+| `borderStrong` | `#CBD1D8` | `#3A4049` | Focus and stronger outlines |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `surfaceLight` | `#FFFFFF` | Page background |
-| `surfaceAlt` | `#F7F8FA` | Alternate sections, sidebar |
-| `cardLight` | `#F0F2F5` | Card backgrounds |
-| `borderLight` | `#E4E7EC` | Dividers, input borders |
+### Text
 
-### Surface tokens (Dark)
+| Token | Light | Dark | Usage |
+|-------|-------|------|-------|
+| `textPrimary` | `#0D1117` | `#F0F2F5` | Headings and body |
+| `textSecondary` | `#5A6370` | `#8B95A3` | Captions and metadata |
+| `textTertiary` | `#8B95A3` | `#5A6370` | Placeholders and disabled text |
+| `textInverse` | `#FFFFFF` | `#0D1117` | Text on filled surfaces |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `surfaceDark` | `#0F1114` | Page background |
-| `surfaceAltDark` | `#181B1F` | Alternate sections, sidebar |
-| `cardDark` | `#1E2226` | Card backgrounds |
-| `borderDark` | `#2A2E34` | Dividers, input borders |
+### Semantic
 
-### Text tokens
+| Token | Light | Dark | Usage |
+|-------|-------|------|-------|
+| `success` | `#1EA85A` | `#4DCF82` | Valid, paid, healthy, positive |
+| `warning` | `#E8960C` | `#FFB84C` | Upcoming or needs attention |
+| `danger` | `#DC3545` | `#FF5858` | Overdue, destructive, errors |
+| `info` | `#0062CC` | `#55A1FF` | Neutral information |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `textPrimary` | `#0D1117` | Body text, headings (light mode) |
-| `textSecondary` | `#6B7280` | Secondary labels, captions |
-| `textDisabled` | `#B0B7C3` | Disabled states, placeholders |
-| `textInverse` | `#FFFFFF` | Text on dark backgrounds |
+### Charts
 
-### Semantic tokens
+Use chart colors in this order:
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `success` | `#4DCF82` | Paid, valid, good status |
-| `warning` | `#FFB84C` | Upcoming, needs attention |
-| `danger` | `#FF5858` | Overdue, error, critical |
-| `info` | `#55A1FF` | Informational, neutral |
-
-### Chart palette
-
-Order is intentional — most prominent category gets the first colour.
-
-```
-1. #6C3FE4  (purple-indigo)
-2. #4DCF82  (green)
-3. #FFB84C  (amber)
-4. #FF5858  (coral)
-5. #AA82FF  (violet)
+```text
+1. #0062CC  brand blue
+2. #1EA85A  green
+3. #E8960C  amber
+4. #DC3545  coral
+5. #8B5CF6  violet
+6. #06B6D4  cyan
 ```
 
 ---
 
 ## Typography
 
-**Font:** Space Grotesk (Google Fonts) — modern, humanist, highly legible.
+**Font:** Space Grotesk.
 
-### Type scale
+| Style | Size | Weight | Line Height | Usage |
+|-------|------|--------|-------------|-------|
+| `displayLarge` | 40 | 700 | 1.1 | Hero totals |
+| `displayMedium` | 32 | 700 | 1.15 | Dashboard metrics |
+| `headlineMedium` | 28 | 700 | 1.2 | Screen titles |
+| `titleLarge` | 22 | 700 | 1.25 | Major section headings |
+| `titleMedium` | 16 | 700 | 1.35 | Card titles |
+| `bodyLarge` | 16 | 400 | 1.5 | Primary body |
+| `bodyMedium` | 14 | 400 | 1.5 | Lists and secondary copy |
+| `bodySmall` | 12 | 400 | 1.5 | Metadata |
+| `labelLarge` | 14 | 700 | 1.4 | Buttons and controls |
+| `labelMedium` | 13 | 600 | 1.4 | Chips and tabs |
 
-| Style | Size | Weight | Line height | Letter spacing | Usage |
-|-------|------|--------|-------------|----------------|-------|
-| `displayLarge` | 40 | 700 | 1.1 | -1.2 | Hero numbers, empty state titles |
-| `displayMedium` | 32 | 700 | 1.15 | -0.8 | Dashboard metric values |
-| `headingLarge` | 24 | 700 | 1.2 | -0.4 | Screen titles |
-| `headingMedium` | 20 | 600 | 1.25 | -0.3 | Section titles |
-| `headingSmall` | 16 | 600 | 1.3 | -0.1 | Card titles, list headers |
-| `bodyLarge` | 16 | 400 | 1.5 | 0 | Primary body text |
-| `bodyMedium` | 14 | 400 | 1.5 | 0 | Secondary body, list items |
-| `bodySmall` | 12 | 400 | 1.5 | 0 | Captions, metadata |
-| `label` | 13 | 500 | 1.4 | 0.1 | Form labels, chip text |
-| `caption` | 11 | 400 | 1.4 | 0.2 | Timestamps, fine print |
-| `buttonText` | 15 | 600 | 1.0 | 0.1 | Button labels |
+Avoid negative letter spacing in compact controls. Let text wrap or stack at large accessibility text sizes.
 
 ---
 
 ## Spacing
 
-An 8-point baseline grid. Use only these values.
+An 8-point baseline grid:
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `xxs` | 2 dp | Fine adjustments, icon padding |
-| `xs` | 4 dp | Icon gaps, tight spacing |
-| `sm` | 8 dp | Between related items |
-| `md` | 12 dp | Inner card padding (compact) |
-| `lg` | 16 dp | Standard card padding, between sections |
-| `xl` | 24 dp | Between major sections |
-| `xxl` | 32 dp | Screen horizontal padding |
-| `xxxl` | 48 dp | Hero sections, large gaps |
+| `xxs` | 2 | Fine adjustments |
+| `xs` | 4 | Icon gaps |
+| `sm` | 8 | Related elements |
+| `md` | 12 | Compact inner padding |
+| `lg` | 16 | Standard card padding |
+| `xl` | 24 | Section spacing |
+| `xxl` | 32 | Tablet and desktop page padding |
+| `xxxl` | 48 | Large vertical rhythm |
 
 ---
 
-## Border radius
+## Radius
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `xs` | 4 dp | Small chips, badges |
-| `sm` | 8 dp | Input fields, small cards |
-| `md` | 12 dp | Standard cards |
-| `lg` | 16 dp | Large cards, bottom sheets |
-| `xl` | 24 dp | Hero cards |
-| `xxl` | 32 dp | Full-width hero sections |
-| `pill` | 999 dp | Status pills, circular buttons |
+| `xs` | 4 | Small badges |
+| `sm` | 8 | Inputs and compact controls |
+| `md` | 12 | Standard cards |
+| `lg` | 16 | Large cards and media |
+| `xl` | 24 | Hero cards, dialogs, sheets |
+| `xxl` | 32 | Onboarding and large brand surfaces |
+| `pill` | 999 | Pills and circular controls |
 
 ---
 
-## Elevation & shadows
+## Elevation
 
-Use shadows instead of border + background to separate layers.
+Use subtle shadows in light mode and borders in dark mode.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `xs` | blur 4, offset (0,1), opacity 4% | Subtle card lift |
-| `sm` | blur 8, offset (0,2), opacity 6% | Default card |
-| `md` | blur 16, offset (0,4), opacity 8% | Floating elements, dropdowns |
-| `lg` | blur 32, offset (0,8), opacity 10% | Modals, bottom sheets |
-
-Shadow color is always `#000000` (opacity varies). Never use hard borders as a substitute for elevation.
-
----
-
-## Animation
-
-| Token | Duration | Curve | Usage |
-|-------|----------|-------|-------|
-| `fast` | 150 ms | `easeOutCubic` | Hover states, small transitions |
-| `normal` | 250 ms | `easeOutCubic` | Screen transitions, modals |
-| `slow` | 400 ms | `easeOutCubic` | Hero transitions, onboarding |
-| `spring` | 600 ms | `elasticOut` | FAB entrance, success states |
+| Token | Light Usage |
+|-------|-------------|
+| `xs` | Subtle card lift |
+| `sm` | Default card |
+| `md` | Floating panels and menus |
+| `lg` | Dialogs and overlays |
+| `brandGlow` | Active vehicle and selected hero surfaces |
 
 ---
 
 ## Components
 
-### AppButton
+### Navigation
 
-Four variants:
+| Width | Pattern | Destinations |
+|-------|---------|--------------|
+| `< 600` | Bottom `NavigationBar` | Home, Garage, Analytics |
+| `600-1199` | `NavigationRail` | Home, Garage, Analytics, Settings |
+| `>= 1200` | Persistent sidebar | Logo, active car switcher, nav, theme toggle |
+
+### Cards
+
+- Standard content cards use `surfaceElevated`, a 1px border, `xl` radius for v2 feature surfaces, and `sm` shadow in light mode.
+- Vehicle cards use 16:9 media, bottom gradient overlays, and status pills.
+- Do not nest cards inside cards unless the inner element is a repeated list item with a clear interaction role.
+
+### Buttons
 
 | Variant | Appearance | Usage |
-|---------|-----------|-------|
-| `primary` | Filled, `brandPrimary` background | Main actions per screen |
-| `secondary` | Outlined, `brandPrimary` border | Secondary actions |
-| `ghost` | No background/border, `brandPrimary` text | Tertiary/inline actions |
-| `danger` | Filled, `danger` background | Destructive actions (delete, reset) |
+|---------|------------|-------|
+| Primary | Filled brand blue | Main action per view |
+| Secondary | Outlined brand blue | Secondary action |
+| Ghost | Text/icon only | Inline or tertiary action |
+| Danger | Filled red | Destructive actions |
+| Icon | Circular hit area | Search, close, edit, settings |
 
-States: idle, hover (web), pressed, loading (shows `CircularProgressIndicator`), disabled.
+Controls must keep at least a 48dp hit target.
 
-### AppCard
+### Status Pills
 
-- Background: `cardLight` / `cardDark`
-- Border radius: `md` (12 dp) by default, `lg` (16 dp) for hero cards
-- Shadow: `sm` by default
-- Padding: `lg` (16 dp) standard, `xl` (24 dp) for hero cards
+| State | Condition | Color |
+|-------|-----------|-------|
+| Healthy | More than 30 days remaining | `success` |
+| Upcoming | 0-30 days remaining | `warning` |
+| Overdue | Date is past | `danger` |
+| Missing | No data | `info` |
 
-### Garage Car Tile
+### Charts
 
-- Vertical card with a full-width 16:9 image region and metadata below.
-- Due-date pills sit over the image on a transparent-to-black bottom gradient.
-- Active state uses a 2 px `brandPrimary` border and `AppShadows.brandGlow(brandPrimary)`.
-- Empty image state uses `brandGradient` and a centered car glyph.
-
-### StatusPill
-
-Used for due date states across the app.
-
-| State | Color | Condition |
-|-------|-------|-----------|
-| `ok` | `success` (`#4DCF82`) | > 30 days remaining |
-| `upcoming` | `warning` (`#FFB84C`) | 0–30 days remaining |
-| `overdue` | `danger` (`#FF5858`) | Past due date |
-
-### EmptyState
-
-All empty states share this structure:
-1. Icon (48 dp, `textSecondary` colour)
-2. Title (`headingSmall`)
-3. Subtitle (`bodyMedium`, `textSecondary`)
-4. CTA button (`AppButton.primary`)
+- Lead with the insight, then show the chart.
+- Prefer horizontal bars for category ranking and compact bar/line views for trends.
+- Use semantic captions for charts so screen readers have a useful summary.
+- Always show an empty state when data is insufficient.
 
 ---
 
-## Iconography
+## Motion
 
-- **Source:** Material Icons (included with Flutter)
-- **Outlined style** preferred over filled for UI icons
-- **Sizes:** `xs` (16), default (24), `lg` (32) — from `AppDimensions`
-- **Colour:** inherit from context (matches text colour by default)
-- **Custom SVG icons:** located in `assets/icons/` for brand-specific elements (fine.svg, inspection.svg)
+| Token | Duration | Curve | Usage |
+|-------|----------|-------|-------|
+| `fast` | 150ms | `easeOutCubic` | Buttons, chips, hover |
+| `normal` | 250ms | `easeOutCubic` | Route and panel transitions |
+| `slow` | 400ms | `easeOutCubic` | Complex surfaces |
+| `emphasis` | 600ms | `elasticOut` | Success and delightful states |
 
----
-
-## Adaptive layout breakpoints
-
-| Breakpoint | Width | Navigation |
-|------------|-------|-----------|
-| Mobile | < 600 dp | `NavigationBar` (bottom) |
-| Tablet | 600–1199 dp | `NavigationRail` (left, compact) |
-| Desktop | ≥ 1200 dp | `NavigationDrawer` (left, persistent) |
-
-Content columns:
-- Mobile: 1 column (full width)
-- Tablet: 2 columns (grid)
-- Desktop: 3 columns (grid) + sidebar
+Respect `MediaQuery.disableAnimations` for custom motion.
 
 ---
 
-## Usage rules
+## Accessibility
 
-1. **Never use raw colour values** in widget code — always use `AppColors.*` tokens.
-2. **Never use raw `TextStyle`** — always use `AppTextStyles.*` tokens.
-3. **Never use raw numbers** for spacing — always use `AppSpacing.*` or `AppRadius.*`.
-4. **Shared components first** — before writing a custom widget, check `presentation/common/widgets/` for an existing component.
-5. **Dark mode always** — every component must look correct in both light and dark mode. Test both.
+- Normal text contrast must meet WCAG AA.
+- Every icon-only button needs a tooltip.
+- Charts and custom painters need semantic descriptions.
+- Interactive controls need at least a 48dp target.
+- Layouts must tolerate 200% text scale by stacking instead of clipping.
+- Do not communicate vehicle status by color alone; include text like `Overdue`, `14 d`, or `No data`.
+
+---
+
+## Implementation Rules
+
+1. Prefer theme tokens and `AppColorScheme` over raw colors.
+2. Prefer `AppSpacing`, `AppRadius`, and `AppShadows` over magic numbers.
+3. New primary UI belongs in `features/*` and shared primitives in `design_system/`.
+4. Legacy `presentation/` widgets may remain only while migration is active or where they are reused by v2 flows.
+5. Run `flutter analyze` and `flutter test` before release-facing changes.

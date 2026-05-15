@@ -1,22 +1,23 @@
 <div align="center">
-  <img src="cars_manager/assets/icons/CarsManagerLogoFull.png" alt="CarsManager" height="80" />
-  <h3>CarsManager</h3>
-  <p>The smart way to manage your vehicles.</p>
+  <img src="logos/CarsManagerLogo.svg" alt="CarsManager" height="96" />
+  <h1>CarsManager</h1>
+  <p><strong>Your vehicle intelligence platform.</strong></p>
+  <p>Every cost. Every service. Total clarity.</p>
 
   [![CI](https://github.com/apirasp/CarsManager/actions/workflows/ci.yml/badge.svg)](https://github.com/apirasp/CarsManager/actions/workflows/ci.yml)
   [![Release](https://img.shields.io/github/v/release/apirasp/CarsManager?include_prereleases&label=release)](https://github.com/apirasp/CarsManager/releases)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
   [![Flutter](https://img.shields.io/badge/Flutter-stable-02569B?logo=flutter)](https://flutter.dev)
-  [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20Web-brightgreen)](https://github.com/apirasp/CarsManager)
+  [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-brightgreen)](https://github.com/apirasp/CarsManager)
 </div>
 
 ---
 
 ## Overview
 
-CarsManager is a privacy-first vehicle management app built with Flutter. It stores data locally, with no account, cloud sync, or subscription required.
+CarsManager is a privacy-first vehicle management app built with Flutter. It keeps vehicle health, fuel history, expenses, reminders, and analytics in one local-first workspace.
 
-Use it to manage multiple vehicles, track fuel entries, record insurance, inspections, taxes, repairs, and fines, and keep an eye on due dates and yearly cost trends.
+The v2 experience reframes the app from a simple car utility into a personal vehicle intelligence platform: a glanceable dashboard, image-led garage, per-vehicle detail pages, cross-car analytics, search, onboarding, and responsive layouts for mobile, tablet, web, and desktop.
 
 ---
 
@@ -24,20 +25,32 @@ Use it to manage multiple vehicles, track fuel entries, record insurance, inspec
 
 | Category | Details |
 |----------|---------|
-| Garage | Add multiple vehicles with image-led cards, model details, fuel type, and license plate |
-| Fuel | Log fill-ups with amount, total cost, unit price, and yearly charts |
-| Payments | Track insurance, inspections, road tax, repairs, and traffic fines |
-| Reminders | Store upcoming due dates and notification preferences locally |
-| Analytics | Review yearly totals, category distribution, and fuel trends |
-| Localization | English and Italian |
-| Themes | Light and dark mode |
-| Web | Runs as a browser app/PWA |
+| Dashboard | Active vehicle hero, upcoming deadlines, recent activity, quick actions, monthly summary |
+| Garage | Responsive car list/grid with active vehicle state, imagery, status pills, edit/delete actions |
+| Vehicle Detail | Overview, Fuel, Expenses, and Timeline tabs per car |
+| Fuel | Period filters, spend/liter metrics, visible calculation flow, entry history |
+| Expenses | Insurance, inspection, tax, repair, and fine tracking with category filters |
+| Analytics | Cross-car insight cards, cost overview, category ranking, car comparison, monthly trend table |
+| Search | Global search for cars, fuel entries, and expenses with keyboard access |
+| Settings | Full settings page for theme, language, units, currency, notifications, export, and reset |
+| Onboarding | First-run product introduction stored with SharedPreferences |
+| Platform | Mobile bottom navigation, tablet rail, desktop sidebar, web URLs, light and dark themes |
 
 ---
 
 ## Design
 
-CarsManager uses a purple-indigo brand palette aligned with the PNG logo assets: `#6C3FE4` for primary actions, `#3D2AB8` → `#8B3FE8` for brand gradients, `#9B6FF5` for tonal accents, and `#4DCF82` for positive metrics. The garage presents taller visual vehicle cards with due-date pills over the image, while typography, form fields, navigation, buttons, and cards inherit the central Flutter theme.
+CarsManager v2 uses the new logo-led blue-to-green identity:
+
+- Brand gradient: `#004B9F` to `#63C83E`
+- Primary action blue: `#0062CC`
+- Health/success green: `#1EA85A`
+- Neutral surfaces: white/soft gray in light mode and `#0F1114`/`#1C2026` in dark mode
+- Typography: Space Grotesk across UI and data-heavy surfaces
+
+The interface favors soft cards, restrained shadows, compact insight blocks, accessible semantic colors, and platform-specific navigation rather than a mobile layout stretched onto desktop.
+
+See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) for tokens and component rules.
 
 ---
 
@@ -47,15 +60,16 @@ CarsManager uses a purple-indigo brand palette aligned with the PNG logo assets:
 |-------|------------|
 | Framework | Flutter stable |
 | Language | Dart 3.x |
-| State management | Flutter Riverpod 2.x with generated `@riverpod` feature providers |
-| Navigation | GoRouter with URL-backed tab routes |
+| State management | Flutter Riverpod 2.x with generated `@riverpod` providers |
+| Navigation | GoRouter with URL-backed routes |
+| Models | Freezed and json_serializable |
 | Storage | Local JSON file on native platforms, `localStorage` on web |
-| Code generation | build_runner, Freezed, json_serializable |
-| Charts | fl_chart |
-| Typography | Google Fonts |
+| Charts | fl_chart plus custom lightweight chart components |
+| Motion | flutter_animate and Material motion primitives |
+| Typography | Google Fonts / Space Grotesk |
 | Notifications | flutter_local_notifications |
-| CI/CD | GitHub Actions |
-| Repository tooling | Husky, lint-staged, commitlint |
+| Sharing | share_plus CSV export |
+| Tooling | GitHub Actions, Husky, lint-staged, commitlint |
 
 ---
 
@@ -64,7 +78,6 @@ CarsManager uses a purple-indigo brand palette aligned with the PNG logo assets:
 ```bash
 git clone https://github.com/apirasp/CarsManager.git
 cd CarsManager
-
 npm install
 
 cd cars_manager
@@ -75,7 +88,16 @@ flutter run
 For web:
 
 ```bash
+cd cars_manager
 flutter run -d chrome
+```
+
+Useful checks:
+
+```bash
+cd cars_manager
+flutter analyze
+flutter test
 ```
 
 See [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md) for full setup and troubleshooting.
@@ -86,44 +108,19 @@ See [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md) for full setup and troubleshoot
 
 ```text
 cars_manager/lib/
-├── app/                  # App root, GoRouter config, Riverpod app state
-├── core/                 # Theme tokens, app services, storage adapters
-├── data/                 # Seed data and persistence helpers
-├── features/             # Feature modules such as analytics
-├── l10n/                 # ARB files and generated localization classes
-├── models/               # Vehicle, fuel, payment, and settings models
-├── presentation/
-│   ├── common/           # Shared widgets, extensions, and UI utilities
-│   ├── pages/            # Home, car form, fuel, and payments screens
-│   └── widgets/          # Cross-page app widgets
-└── main.dart             # App bootstrap and CarsManagerState
+├── app/                  # App root and GoRouter configuration
+├── core/                 # Theme tokens, responsive helpers, services, storage
+├── design_system/        # Atoms, molecules, organisms, and chart wrappers
+├── features/             # Home, garage, vehicle detail, analytics, search, settings, onboarding
+├── l10n/                 # ARB files and generated localizations
+├── models/               # Vehicle, fuel, payment, and domain models
+├── presentation/         # Legacy pages/widgets still used during migration
+└── main.dart             # Bootstrap and ProviderScope
 ```
 
-The app now boots through `ProviderScope` and `MaterialApp.router`. Feature domains expose generated Riverpod providers while existing screens are migrated feature by feature. Storage is abstracted behind conditional imports so native builds use a JSON file and web builds use browser storage.
+The current migration keeps stable legacy form widgets where they are still useful, while routing and primary navigation now favor the v2 feature screens.
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for more detail.
-
----
-
-## CI/CD
-
-| Workflow | Trigger | Jobs |
-|----------|---------|------|
-| `ci.yml` | Push/PR to `main` and `develop` | Format, analyze, test, Android build, web build |
-| `release.yml` | Version tag push | Test, build APKs, build web, create GitHub Release |
-| `deploy-web.yml` | Successful release workflow | Publish the web artifact to GitHub Pages |
-
----
-
-## Contributing
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR. The short version:
-
-- Use conventional commits, enforced by commitlint.
-- Run `npm run verify` from the repository root before pushing.
-- Run `cd cars_manager && dart run build_runner build --delete-conflicting-outputs` after changing generated models.
-- Keep Flutter changes formatted with `dart format`.
-- Keep docs and release notes aligned with user-facing changes.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for deeper implementation notes.
 
 ---
 

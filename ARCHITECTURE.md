@@ -13,7 +13,8 @@ This document describes the current CarsManager architecture.
 | Navigation | GoRouter | Deep-linkable tab routes and web URL support |
 | Local storage | JSON file / web localStorage | Privacy-first persistence without a backend |
 | Code generation | Freezed + json_serializable | Immutable generated DTOs for new models |
-| Charts | fl_chart | Native Flutter charting with no web-only dependency |
+| Charts | fl_chart + custom wrappers | Native Flutter charting with consistent app styling |
+| Motion | flutter_animate | Declarative entrance and onboarding animations |
 | Localization | Flutter gen-l10n | Built-in ARB workflow for English and Italian |
 | Notifications | flutter_local_notifications | Local reminders and due-date notifications |
 
@@ -59,28 +60,41 @@ CarsManager/
 
 ```text
 cars_manager/lib/
+├── app/
+│   ├── app.dart                 # MaterialApp.router and theme wiring
+│   └── router/                  # GoRouter configuration and route names
 ├── core/
+│   ├── responsive/              # ScreenSize breakpoints and helpers
 │   ├── services/                # Preferences and notification services
 │   ├── storage/                 # Platform-conditional storage adapters
-│   └── theme/                   # Color, spacing, typography, and ThemeData
+│   └── theme/                   # Tokens, ThemeExtensions, and ThemeData
 ├── data/
 │   ├── car_data.dart            # Legacy single-car data helpers
 │   └── cars_data.dart           # App bootstrap persistence helpers
+├── design_system/
+│   ├── atoms/                   # Small primitives
+│   ├── molecules/               # Buttons, fields, pills, metric tiles
+│   ├── organisms/               # Scaffold, cards, states, layout surfaces
+│   └── charts/                  # Reusable chart primitives
 ├── features/
 │   ├── analytics/
 │       ├── data/models/         # Freezed analytics DTOs
 │       ├── domain/              # Riverpod providers
-│       └── presentation/        # Analytics screen
+│       └── presentation/        # Cross-car analytics screen
 │   ├── expenses/domain/         # Generated expense collection providers
 │   ├── fuel/domain/             # Generated fuel entry providers
 │   ├── garage/domain/           # Generated car and active-car providers
-│   ├── reminders/presentation/  # Reminder list screen
-│   └── settings/domain/         # Generated settings providers
+│   ├── home/presentation/       # v2 dashboard
+│   ├── onboarding/              # First-run onboarding gate and controller
+│   ├── reminders/presentation/  # Legacy reminders screen during migration
+│   ├── search/presentation/     # Global command/search overlay
+│   ├── settings/domain/         # Generated settings providers
+│   └── vehicle_detail/          # Per-car overview/fuel/expenses/timeline
 ├── l10n/                        # ARB files and generated localizations
 ├── models/                      # Hand-written app models
 ├── presentation/
-│   ├── common/                  # Shared widgets, extensions, and utilities
-│   ├── pages/                   # Home, car form, fuel, payments
+│   ├── common/                  # Legacy shared widgets and utilities
+│   ├── pages/                   # Legacy forms and migrated support widgets
 │   └── widgets/                 # Cross-page widgets
 └── main.dart                    # App bootstrap and CarsManagerState
 ```
@@ -93,7 +107,9 @@ The app starts in `main.dart` with `ProviderScope(child: CarsManagerApp())`. `Ca
 
 ## Theme Layer
 
-The visual system is intentionally layered. `AppColors` owns raw brand, surface, semantic, and chart tokens. `AppTheme` converts those tokens into Material 3 `ThemeData` for light and dark mode, including color scheme, input decorations, navigation, buttons, cards, and app bars. `CarsManagerApp` passes the resulting themes into `MaterialApp.router`, and screens consume them through `Theme.of(context)` instead of hardcoded fonts or colors. This keeps logo-aligned brand changes centralized and lets shared widgets inherit the active locale and brightness correctly.
+The visual system is intentionally layered. `AppColors` owns raw brand, surface, semantic, and chart tokens. `AppColorScheme` is a `ThemeExtension` that exposes adaptive v2 color tokens to widgets. `AppTheme` converts those tokens into Material 3 `ThemeData` for light and dark mode, including color scheme, input decorations, navigation, buttons, cards, and app bars.
+
+`CarsManagerApp` passes the resulting themes into `MaterialApp.router`, and screens consume them through `Theme.of(context)` or the extension instead of hardcoded fonts or colors. This keeps logo-aligned brand changes centralized and lets shared widgets inherit the active locale and brightness correctly.
 
 `CarsManagerState` in `lib/app/state/cars_manager_state.dart` is currently the central app state object. It is exposed through `carsManagerStateProvider`, a Riverpod `ChangeNotifierProvider`, while the older screens continue to read it through a compatibility scope during migration. It owns:
 
@@ -111,16 +127,21 @@ Widget event -> CarsManagerState mutation -> saveCarData -> storage adapter
 GoRouter routes:
 
 ```text
-/             -> /garage
-/garage       -> Garage screen
+/             -> Onboarding gate, then v2 dashboard
+/garage       -> v2 garage
 /garage/add   -> Car form
-/fuel         -> Fuel screen
-/expenses     -> Expenses screen
-/analytics    -> Analytics screen
-/reminders    -> Reminders screen
+/car/:id      -> Vehicle detail overview tab
+/car/:id/fuel -> Vehicle detail fuel tab
+/car/:id/expenses -> Vehicle detail expenses tab
+/car/:id/timeline -> Vehicle detail timeline tab
+/fuel         -> Redirect to active vehicle fuel tab
+/expenses     -> Redirect to active vehicle expenses tab
+/analytics    -> v2 cross-car analytics
+/reminders    -> Redirect to dashboard
+/settings     -> Full settings page
 ```
 
-Settings are presented from the app shell as a modal sheet rather than as a standalone route.
+The shell is responsive: mobile uses a three-item bottom navigation bar, tablet uses a rail, and desktop uses a persistent sidebar with logo, active-car switcher, navigation, and theme toggle. Search is available from the shell and through `Ctrl/Cmd + K`.
 
 ---
 
@@ -178,4 +199,4 @@ Current checks are intentionally lightweight:
 | Tests | `npm test` |
 | Full local verification | `npm run verify` |
 
-Current generated-code coverage includes the Freezed/json_serializable `ActiveCarAnalytics` model. Future work should broaden unit coverage around model serialization and widget coverage for the main vehicle, fuel, and payment flows.
+Current coverage includes model business logic, generated analytics serialization, Riverpod provider behavior, and shared widget smoke tests. Future work should add golden coverage for the v2 dashboard, garage, vehicle detail, analytics, and settings screens in light and dark mode.

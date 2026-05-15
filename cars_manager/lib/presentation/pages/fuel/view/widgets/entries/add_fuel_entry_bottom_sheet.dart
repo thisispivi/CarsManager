@@ -31,6 +31,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
   DateTime _date = DateTime.now();
 
   bool _isAutoUpdating = false;
+  String? _calculationText;
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
       _pricePerLiterController.text = initial.pricePerLiter.toString();
       _totalCostController.text = initial.totalCost.toString();
       _date = initial.date;
+      _updateCalculationText();
     }
 
     if (widget.lockedFuelType != null) {
@@ -164,7 +166,10 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                                 : Icons.water_drop_outlined,
                           ),
                         ),
-                        enabled: false,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        onChanged: (_) => _recalculateTotalFromAmount(),
                         validator: (v) =>
                             _validateDouble(localizations, v, amountLabel),
                       ),
@@ -180,7 +185,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
-                        onChanged: (_) => _recalculateAmountFromPrice(),
+                        onChanged: (_) => _recalculateTotalFromAmount(),
                         validator: (v) =>
                             _validateDouble(localizations, v, priceLabel),
                       ),
@@ -197,13 +202,23 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  onChanged: (_) => _recalculateAmountFromPrice(),
+                  onChanged: (_) => _recalculatePriceFromTotal(),
                   validator: (v) => _validateDouble(
                     localizations,
                     v,
                     localizations.fuel_total_cost_label,
                   ),
                 ),
+                if (_calculationText != null) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    _calculationText!,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 10),
                 Row(
                   children: [
@@ -212,6 +227,21 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                         '${localizations.date}: ${dateFormat.format(_date)}',
                         style: theme.textTheme.bodyMedium,
                       ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          final yesterday = DateTime.now().subtract(
+                            const Duration(days: 1),
+                          );
+                          _date = DateTime(
+                            yesterday.year,
+                            yesterday.month,
+                            yesterday.day,
+                          );
+                        });
+                      },
+                      child: const Text('Yesterday'),
                     ),
                     TextButton.icon(
                       onPressed: () async {
@@ -268,31 +298,60 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
     return parsed;
   }
 
-  void _recalculateAmountFromPrice() {
+  void _recalculateTotalFromAmount() {
     if (_isAutoUpdating) return;
 
+    final amount = _tryParsePositive(_litersController.text);
     final priceRaw = _pricePerLiterController.text;
-    final totalRaw = _totalCostController.text;
-
     final price = _tryParsePositive(priceRaw);
-    final total = _tryParsePositive(totalRaw);
 
-    if (price == null || total == null) {
-      _isAutoUpdating = true;
-      try {
-        _litersController.text = '';
-      } finally {
-        _isAutoUpdating = false;
-      }
+    if (amount == null || price == null) {
+      _updateCalculationText();
       return;
     }
 
     _isAutoUpdating = true;
     try {
-      _litersController.text = (total / price).toStringAsFixed(3);
+      _totalCostController.text = (amount * price).toStringAsFixed(2);
     } finally {
       _isAutoUpdating = false;
     }
+    _updateCalculationText();
+  }
+
+  void _recalculatePriceFromTotal() {
+    if (_isAutoUpdating) return;
+
+    final amount = _tryParsePositive(_litersController.text);
+    final total = _tryParsePositive(_totalCostController.text);
+
+    if (amount == null || total == null) {
+      _updateCalculationText();
+      return;
+    }
+
+    _isAutoUpdating = true;
+    try {
+      _pricePerLiterController.text = (total / amount).toStringAsFixed(3);
+    } finally {
+      _isAutoUpdating = false;
+    }
+    _updateCalculationText();
+  }
+
+  void _updateCalculationText() {
+    final amount = _tryParsePositive(_litersController.text);
+    final price = _tryParsePositive(_pricePerLiterController.text);
+    final total = _tryParsePositive(_totalCostController.text);
+
+    setState(() {
+      if (amount == null || price == null || total == null) {
+        _calculationText = null;
+        return;
+      }
+      _calculationText =
+          '${amount.toStringAsFixed(2)} x ${price.toStringAsFixed(3)} = ${total.toStringAsFixed(2)}';
+    });
   }
 
   String? _validateDouble(
@@ -315,13 +374,12 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
       return;
     }
 
-    final liters = double.parse(_litersController.text.replaceAll(',', '.'));
-    final pricePerLiter = double.parse(
-      _pricePerLiterController.text.replaceAll(',', '.'),
-    );
-    final totalCost = double.parse(
-      _totalCostController.text.replaceAll(',', '.'),
-    );
+    final liters = _tryParsePositive(_litersController.text);
+    final pricePerLiter = _tryParsePositive(_pricePerLiterController.text);
+    final totalCost = _tryParsePositive(_totalCostController.text);
+    if (liters == null || pricePerLiter == null || totalCost == null) {
+      return;
+    }
 
     final entry = FuelEntry(
       fuelType: _fuelType,

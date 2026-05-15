@@ -57,6 +57,7 @@ class VehicleDetailScreen extends ConsumerWidget {
     }
 
     return DefaultTabController(
+      key: ValueKey('vehicle-detail-$carId-$initialTabIndex'),
       length: 4,
       initialIndex: initialTabIndex,
       child: SafeArea(
@@ -383,18 +384,38 @@ class _OverviewTab extends StatelessWidget {
   }
 }
 
-class _FuelTab extends ConsumerWidget {
+class _FuelTab extends ConsumerStatefulWidget {
   const _FuelTab({required this.car, required this.currency});
 
   final Car car;
   final String currency;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final money = NumberFormat.simpleCurrency(name: currency);
-    final liters = car.fuel.fold<double>(0, (sum, entry) => sum + entry.liters);
-    final avgPrice = liters == 0 ? 0 : car.totalFuelCost / liters;
-    final entries = [...car.fuel]..sort((a, b) => b.date.compareTo(a.date));
+  ConsumerState<_FuelTab> createState() => _FuelTabState();
+}
+
+class _FuelTabState extends ConsumerState<_FuelTab> {
+  _FuelPeriod _period = _FuelPeriod.oneYear;
+
+  @override
+  Widget build(BuildContext context) {
+    final car = widget.car;
+    final money = NumberFormat.simpleCurrency(name: widget.currency);
+    final cutoff = _period.cutoffDate(DateTime.now());
+    final scopedEntries = car.fuel
+        .where((entry) => cutoff == null || !entry.date.isBefore(cutoff))
+        .toList();
+    final liters = scopedEntries.fold<double>(
+      0,
+      (sum, entry) => sum + entry.liters,
+    );
+    final fuelCost = scopedEntries.fold<double>(
+      0,
+      (sum, entry) => sum + entry.totalCost,
+    );
+    final avgPrice = liters == 0 ? 0 : fuelCost / liters;
+    final entries = [...scopedEntries]
+      ..sort((a, b) => b.date.compareTo(a.date));
 
     Future<void> addFuelEntry() async {
       final entry = await showModalBottomSheet<FuelEntry>(
@@ -416,6 +437,15 @@ class _FuelTab extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.zero,
       children: [
+        _SurfaceCard(
+          child: _PeriodSelector<_FuelPeriod>(
+            value: _period,
+            values: _FuelPeriod.values,
+            labelFor: (period) => period.label,
+            onChanged: (period) => setState(() => _period = period),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
         Wrap(
           spacing: AppSpacing.lg,
           runSpacing: AppSpacing.lg,
@@ -423,7 +453,7 @@ class _FuelTab extends ConsumerWidget {
             _MetricCard(
               icon: Icons.payments_rounded,
               label: 'Fuel spent',
-              value: money.format(car.totalFuelCost),
+              value: money.format(fuelCost),
             ),
             _MetricCard(
               icon: Icons.water_drop_rounded,
@@ -443,7 +473,7 @@ class _FuelTab extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _SectionHeading(
-                'Fuel history',
+                'Fuel history (${_period.label})',
                 actionLabel: 'Add fuel',
                 onAction: addFuelEntry,
               ),
@@ -469,14 +499,24 @@ class _FuelTab extends ConsumerWidget {
   }
 }
 
-class _ExpensesTab extends ConsumerWidget {
+class _ExpensesTab extends ConsumerStatefulWidget {
   const _ExpensesTab({required this.car, required this.currency});
 
   final Car car;
   final String currency;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_ExpensesTab> createState() => _ExpensesTabState();
+}
+
+class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
+  _ExpenseFilter _filter = _ExpenseFilter.all;
+
+  @override
+  Widget build(BuildContext context) {
+    final car = widget.car;
+    final currency = widget.currency;
+
     Future<void> addExpense() async {
       final type = await showModalBottomSheet<PaymentEntryType>(
         context: context,
@@ -520,13 +560,26 @@ class _ExpensesTab extends ConsumerWidget {
       padding: EdgeInsets.zero,
       children: [
         _SurfaceCard(
+          child: _PeriodSelector<_ExpenseFilter>(
+            value: _filter,
+            values: _ExpenseFilter.values,
+            labelFor: (filter) => filter.label,
+            onChanged: (filter) => setState(() => _filter = filter),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        _SurfaceCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _SectionHeading('Expense categories'),
+              _SectionHeading(
+                _filter == _ExpenseFilter.all
+                    ? 'Expense categories'
+                    : '${_filter.label} summary',
+              ),
               const SizedBox(height: AppSpacing.lg),
               _BreakdownBar(
-                items: [
+                items: _filter.applyBreakdown([
                   _BreakdownItem(
                     'Insurance',
                     car.totalPaidInsurances.toDouble(),
@@ -552,7 +605,7 @@ class _ExpensesTab extends ConsumerWidget {
                     car.totalPaidFines.toDouble(),
                     AppColors.danger,
                   ),
-                ],
+                ]),
                 currency: currency,
               ),
             ],
@@ -564,12 +617,14 @@ class _ExpensesTab extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _SectionHeading(
-                'Latest expenses',
+                _filter == _ExpenseFilter.all
+                    ? 'Latest expenses'
+                    : 'Latest ${_filter.label.toLowerCase()}',
                 actionLabel: 'Add expense',
                 onAction: addExpense,
               ),
               const SizedBox(height: AppSpacing.md),
-              ..._expenseRows(car, currency),
+              ..._expenseRows(car, currency, _filter),
             ],
           ),
         ),
@@ -950,6 +1005,48 @@ class _SectionHeading extends StatelessWidget {
   }
 }
 
+class _PeriodSelector<T> extends StatelessWidget {
+  const _PeriodSelector({
+    required this.value,
+    required this.values,
+    required this.labelFor,
+    required this.onChanged,
+  });
+
+  final T value;
+  final List<T> values;
+  final String Function(T value) labelFor;
+  final ValueChanged<T> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: AppSpacing.sm,
+      runSpacing: AppSpacing.sm,
+      children: [
+        for (final item in values)
+          ChoiceChip(
+            label: Text(labelFor(item)),
+            selected: item == value,
+            onSelected: (_) => onChanged(item),
+            selectedColor: AppColors.brandPrimary.withValues(alpha: 0.14),
+            labelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: item == value
+                  ? AppColors.brandPrimary
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w800,
+            ),
+            side: BorderSide(
+              color: item == value
+                  ? AppColors.brandPrimary.withValues(alpha: 0.4)
+                  : Theme.of(context).colorScheme.outlineVariant,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _ExpenseTypePicker extends StatelessWidget {
   const _ExpenseTypePicker();
 
@@ -1083,6 +1180,7 @@ class _TimelineEvent {
     required this.title,
     required this.date,
     required this.amount,
+    this.expenseFilter,
   });
 
   final IconData icon;
@@ -1090,16 +1188,26 @@ class _TimelineEvent {
   final String title;
   final DateTime date;
   final String amount;
+  final _ExpenseFilter? expenseFilter;
 }
 
-List<Widget> _expenseRows(Car car, String currency) {
-  final rows = _timelineEvents(
-    car,
-    currency,
-  ).where((event) => event.title != 'Fuel').take(10).toList();
+List<Widget> _expenseRows(Car car, String currency, _ExpenseFilter filter) {
+  final rows = _timelineEvents(car, currency)
+      .where((event) {
+        if (event.expenseFilter == null) return false;
+        return filter == _ExpenseFilter.all || event.expenseFilter == filter;
+      })
+      .take(10)
+      .toList();
 
   if (rows.isEmpty) {
-    return [const _EmptyTabLine('No expenses yet.')];
+    return [
+      _EmptyTabLine(
+        filter == _ExpenseFilter.all
+            ? 'No expenses yet.'
+            : 'No ${filter.label.toLowerCase()} expenses yet.',
+      ),
+    ];
   }
 
   return [
@@ -1134,6 +1242,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
         title: 'Insurance',
         date: entry.startDate,
         amount: money.format(entry.premiumAmount),
+        expenseFilter: _ExpenseFilter.insurance,
       ),
     for (final entry in car.inspectionDatas)
       _TimelineEvent(
@@ -1142,6 +1251,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
         title: 'Inspection',
         date: entry.date,
         amount: money.format(entry.amount ?? 0),
+        expenseFilter: _ExpenseFilter.inspection,
       ),
     for (final entry in car.taxDatas)
       _TimelineEvent(
@@ -1150,6 +1260,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
         title: 'Vehicle tax',
         date: entry.date,
         amount: money.format(entry.amount),
+        expenseFilter: _ExpenseFilter.tax,
       ),
     for (final entry in car.repairDatas)
       _TimelineEvent(
@@ -1158,6 +1269,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
         title: entry.description.isEmpty ? 'Repair' : entry.description,
         date: entry.date,
         amount: money.format(entry.amount),
+        expenseFilter: _ExpenseFilter.repair,
       ),
     for (final entry in car.fineDatas)
       _TimelineEvent(
@@ -1166,10 +1278,47 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
         title: 'Fine',
         date: entry.date,
         amount: money.format(entry.amount),
+        expenseFilter: _ExpenseFilter.fine,
       ),
   ]..sort((a, b) => b.date.compareTo(a.date));
 
   return events;
+}
+
+enum _FuelPeriod {
+  threeMonths('3M', 3),
+  sixMonths('6M', 6),
+  oneYear('1Y', 12),
+  all('All', null);
+
+  const _FuelPeriod(this.label, this.months);
+
+  final String label;
+  final int? months;
+
+  DateTime? cutoffDate(DateTime now) {
+    final value = months;
+    if (value == null) return null;
+    return DateTime(now.year, now.month - value + 1);
+  }
+}
+
+enum _ExpenseFilter {
+  all('All'),
+  insurance('Insurance'),
+  inspection('Inspection'),
+  tax('Tax'),
+  repair('Repair'),
+  fine('Fine');
+
+  const _ExpenseFilter(this.label);
+
+  final String label;
+
+  List<_BreakdownItem> applyBreakdown(List<_BreakdownItem> items) {
+    if (this == _ExpenseFilter.all) return items;
+    return items.where((item) => item.label == label).toList();
+  }
 }
 
 Color _statusColor(int? days) {

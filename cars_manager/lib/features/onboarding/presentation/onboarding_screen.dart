@@ -3,6 +3,7 @@ import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/features/onboarding/domain/onboarding_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -159,17 +160,25 @@ class _OnboardingPage extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xxxl),
           Container(
-            width: 156,
-            height: 156,
-            decoration: BoxDecoration(
-              gradient: AppColors.brandGradient,
-              borderRadius: BorderRadius.circular(AppRadius.xxl),
-              boxShadow: Theme.of(context).brightness == Brightness.light
-                  ? AppShadows.brandGlow(AppColors.brandPrimary)
-                  : null,
-            ),
-            child: Icon(data.icon, color: Colors.white, size: 72),
-          ),
+                width: 156,
+                height: 156,
+                decoration: BoxDecoration(
+                  gradient: AppColors.brandGradient,
+                  borderRadius: BorderRadius.circular(AppRadius.xxl),
+                  boxShadow: Theme.of(context).brightness == Brightness.light
+                      ? AppShadows.brandGlow(AppColors.brandPrimary)
+                      : null,
+                ),
+                child: Icon(data.icon, color: Colors.white, size: 72),
+              )
+              .animate()
+              .fadeIn(duration: 300.ms)
+              .scale(
+                begin: const Offset(0.96, 0.96),
+                end: const Offset(1, 1),
+                duration: 400.ms,
+                curve: AppAnimations.curveDefault,
+              ),
           const SizedBox(height: AppSpacing.xxxl),
           Text(
             data.title,
@@ -181,17 +190,25 @@ class _OnboardingPage extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: Text(
-              data.subtitle,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-                height: 1.4,
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Text(
+                  data.subtitle,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                    height: 1.4,
+                  ),
+                ),
+              )
+              .animate()
+              .fadeIn(delay: 120.ms, duration: 260.ms)
+              .slideY(
+                begin: 0.08,
+                end: 0,
+                duration: 260.ms,
+                curve: AppAnimations.curveDefault,
               ),
-            ),
-          ),
         ],
       ),
     );

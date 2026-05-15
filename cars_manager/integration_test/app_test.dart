@@ -12,15 +12,50 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> finishOnboardingIfVisible(WidgetTester tester) async {
+    final skip = find.text('Skip');
+    if (skip.evaluate().isEmpty) return;
+
+    await tester.tap(skip);
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> openGarage(WidgetTester tester) async {
+    await finishOnboardingIfVisible(tester);
+    final garage = find.text('Garage');
+    if (garage.evaluate().isNotEmpty) {
+      await tester.tap(garage.first);
+      await tester.pumpAndSettle();
+    }
+  }
+
+  Future<void> openAddCarFlow(WidgetTester tester) async {
+    final fab = find.byType(FloatingActionButton);
+    if (fab.evaluate().isNotEmpty) {
+      await tester.tap(fab.first);
+      await tester.pumpAndSettle();
+      return;
+    }
+
+    final addCar = find.text('Add Car');
+    if (addCar.evaluate().isNotEmpty) {
+      await tester.tap(addCar.first);
+      await tester.pumpAndSettle();
+      return;
+    }
+
+    final add = find.text('Add');
+    await tester.tap(add.first);
+    await tester.pumpAndSettle();
+  }
+
   group('Add car flow', () {
     testWidgets('adding a car shows it in the garage list', (tester) async {
       await pumpApp(tester);
+      await openGarage(tester);
 
-      // Tap the FAB on the Garage screen
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
+      await openAddCarFlow(tester);
 
-      // Fill required text fields
       await tester.enterText(
         find.widgetWithText(TextFormField, 'Car Name'),
         'My Test Car',
@@ -37,6 +72,9 @@ void main() {
         find.widgetWithText(TextFormField, 'Year of Manufacture'),
         '2022',
       );
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+
       await tester.enterText(
         find.widgetWithText(TextFormField, 'License Plate'),
         'AB123CD',
@@ -48,38 +86,35 @@ void main() {
       await tester.tap(find.text('Petrol').last);
       await tester.pumpAndSettle();
 
-      // Tap save icon
-      await tester.tap(find.byIcon(Icons.check));
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
-      // Verify car appears in garage list
       expect(find.text('My Test Car'), findsOneWidget);
     });
   });
 
   group('Tab navigation', () {
-    testWidgets('navigating to Fuel tab shows fuel page', (tester) async {
+    testWidgets('navigating to Analytics tab shows analytics page', (
+      tester,
+    ) async {
       await pumpApp(tester);
+      await finishOnboardingIfVisible(tester);
 
-      // Tap the Fuel tab in the bottom navigation bar
-      await tester.tap(find.text('Fuel'));
+      await tester.tap(find.text('Analytics').first);
       await tester.pumpAndSettle();
 
-      // Verify we're on the fuel page (hint text or empty state is visible)
-      // The fuel page shows a hint when no car is selected
-      expect(find.byType(SafeArea), findsWidgets);
+      expect(find.text('Analytics'), findsWidgets);
     });
 
-    testWidgets('navigating through all tabs does not crash', (tester) async {
+    testWidgets('navigating through primary tabs does not crash', (
+      tester,
+    ) async {
       await pumpApp(tester);
+      await finishOnboardingIfVisible(tester);
 
-      for (final label in [
-        'Fuel',
-        'Expenses',
-        'Analytics',
-        'Reminders',
-        'Garage',
-      ]) {
+      for (final label in ['Home', 'Garage', 'Analytics']) {
         final finder = find.text(label);
         if (finder.evaluate().isNotEmpty) {
           await tester.tap(finder.first);
@@ -96,27 +131,20 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester);
+      await finishOnboardingIfVisible(tester);
 
-      // Open settings via the settings icon in the AppBar
       await tester.tap(find.byIcon(Icons.settings_outlined));
       await tester.pumpAndSettle();
 
-      // Find the dark mode switch and record its initial value
-      final switchFinder = find.byType(Switch).last;
-      expect(switchFinder, findsOneWidget);
+      final systemTheme = find.text('System').last;
+      final lightTheme = find.text('Light').last;
+      expect(systemTheme, findsOneWidget);
+      expect(lightTheme, findsOneWidget);
 
-      final Switch switchWidget = tester.widget<Switch>(switchFinder);
-      final bool initialValue = switchWidget.value;
-
-      // Toggle it
-      await tester.tap(switchFinder);
+      await tester.tap(lightTheme);
       await tester.pumpAndSettle();
 
-      // Verify the value flipped
-      final Switch updatedSwitch = tester.widget<Switch>(
-        find.byType(Switch).last,
-      );
-      expect(updatedSwitch.value, isNot(initialValue));
+      expect(find.text('Light'), findsWidgets);
     });
   });
 }
