@@ -119,3 +119,4 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 .claude/settings.local.json
 node_modules/
+.claude/launch.json

@@ -467,27 +467,34 @@ class _CarFormPageState extends State<CarFormPage> {
   }
 
   Future<void> _pickAndCropImage() async {
-    final result = await fp.FilePicker.pickFiles(
-      type: fp.FileType.image,
-      withData: true,
-    );
+    try {
+      final result = await fp.FilePicker.pickFiles(
+        type: fp.FileType.image,
+        withData: true,
+      );
 
-    final file = result?.files.single;
-    if (file == null) return;
+      final file = result?.files.single;
+      if (file == null) return;
 
-    Uint8List? bytes = file.bytes;
-    if (bytes == null && file.path != null && !kIsWeb) {
-      bytes = await readImageFileBytes(file.path!);
+      Uint8List? bytes = file.bytes;
+      if (bytes == null && file.path != null && !kIsWeb) {
+        bytes = await readImageFileBytes(file.path!);
+      }
+      if (bytes == null || !mounted) return;
+
+      final cropped = await _cropImage(originalBytes: bytes);
+      if (cropped == null || !mounted) return;
+
+      setState(() {
+        _imageOriginalBytes = bytes;
+        _imageCroppedBytes = cropped;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not open image picker: $e')),
+      );
     }
-    if (bytes == null) return;
-
-    final cropped = await _cropImage(originalBytes: bytes);
-    if (cropped == null) return;
-
-    setState(() {
-      _imageOriginalBytes = bytes;
-      _imageCroppedBytes = cropped;
-    });
   }
 
   Future<Uint8List?> _cropImage({required Uint8List originalBytes}) {

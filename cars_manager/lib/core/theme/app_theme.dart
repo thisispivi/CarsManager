@@ -82,13 +82,13 @@ class AppTheme {
         AppColorScheme(
           brandPrimary: AppColors.brandPrimary,
           brandSecondary: isDark
-              ? AppColors.brandGradientEnd
+              ? const Color(0xFFBB7EF9)
               : AppColors.brandSecondary,
           brandGradientStart: AppColors.brandGradientStart,
           brandGradientEnd: AppColors.brandGradientEnd,
-          brandAccent: isDark ? const Color(0xFF6BB5FF) : AppColors.brandAccent,
+          brandAccent: isDark ? const Color(0xFFA78BFA) : AppColors.brandAccent,
           brandSubtle: isDark
-              ? const Color(0xFF0D2240)
+              ? const Color(0xFF1A1240)
               : AppColors.tertiaryLight,
           surfacePrimary: surface,
           surfaceSecondary: surfaceAlt,
@@ -112,7 +112,7 @@ class AppTheme {
           success: isDark ? const Color(0xFF4DCF82) : AppColors.success,
           warning: isDark ? const Color(0xFFFFB84C) : AppColors.warning,
           danger: isDark ? const Color(0xFFFF5858) : AppColors.danger,
-          info: isDark ? const Color(0xFF55A1FF) : AppColors.info,
+          info: isDark ? const Color(0xFF7B9FFF) : AppColors.info,
         ),
       ],
       textTheme: textTheme,
@@ -156,7 +156,7 @@ class AppTheme {
         brightness: brightness,
         primary: AppColors.brandPrimary,
         onPrimary: Colors.white,
-        primaryContainer: AppColors.brandAccent.withValues(alpha: 0.18),
+        primaryContainer: AppColors.brandPrimary.withValues(alpha: 0.16),
         onPrimaryContainer: AppColors.brandPrimary,
         secondary: AppColors.brandSecondary,
         onSecondary: Colors.white,

@@ -26,8 +26,9 @@ class HomeScreen extends ConsumerWidget {
       final created = await Navigator.of(
         context,
       ).push<Car>(MaterialPageRoute(builder: (_) => const CarFormPage()));
-      if (created == null) return;
+      if (created == null || !context.mounted) return;
       ref.read(carsControllerProvider.notifier).add(created);
+      context.go('/car/${created.id}');
     }
 
     if (cars.isEmpty || activeCar == null) {
@@ -80,7 +81,10 @@ class HomeScreen extends ConsumerWidget {
                               onAddCar: openAddForm,
                             ),
                             const SizedBox(height: AppSpacing.xl),
-                            _RecentActivity(items: dashboard.recentActivity),
+                            _RecentActivity(
+                              items: dashboard.recentActivity,
+                              carId: activeCar.id,
+                            ),
                             const SizedBox(height: AppSpacing.xl),
                             _MonthlySummary(data: dashboard),
                           ],
@@ -99,7 +103,10 @@ class HomeScreen extends ConsumerWidget {
                       const SizedBox(height: AppSpacing.xl),
                       _UpcomingSection(items: dashboard.upcoming),
                       const SizedBox(height: AppSpacing.xl),
-                      _RecentActivity(items: dashboard.recentActivity),
+                      _RecentActivity(
+                        items: dashboard.recentActivity,
+                        carId: activeCar.id,
+                      ),
                       const SizedBox(height: AppSpacing.xl),
                       _MonthlySummary(data: dashboard),
                     ],
@@ -107,17 +114,7 @@ class HomeScreen extends ConsumerWidget {
 
             return ListView(
               padding: EdgeInsets.all(isWide ? AppSpacing.xxl : AppSpacing.lg),
-              children: [
-                Text(
-                  'Every cost. Every service. Total clarity.',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    height: 1.1,
-                  ),
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                content,
-              ],
+              children: [content],
             );
           },
         ),
@@ -142,7 +139,7 @@ class _ActiveCarHero extends StatelessWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(AppRadius.xl),
-      onTap: () => context.go('/car/${car.id}'),
+      onTap: () => context.push('/car/${car.id}'),
       child: _DashboardCard(
         padding: EdgeInsets.zero,
         child: ClipRRect(
@@ -219,14 +216,24 @@ class _ActiveCarHero extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Wrap(
-                  spacing: AppSpacing.sm,
-                  runSpacing: AppSpacing.sm,
-                  children: [
-                    _StatusChip(label: 'Insurance', days: data.insuranceDays),
-                    _StatusChip(label: 'Inspection', days: data.inspectionDays),
-                    _StatusChip(label: 'Tax', days: data.taxDays),
-                  ],
+                child: Builder(
+                  builder: (context) {
+                    int urgency(int? d) =>
+                        d == null ? 9999 : (d < 0 ? -9999 : d);
+                    final chips = [
+                      ('Insurance', data.insuranceDays),
+                      ('Inspection', data.inspectionDays),
+                      ('Tax', data.taxDays),
+                    ]..sort((a, b) => urgency(a.$2).compareTo(urgency(b.$2)));
+                    return Wrap(
+                      spacing: AppSpacing.sm,
+                      runSpacing: AppSpacing.sm,
+                      children: [
+                        for (final c in chips)
+                          _StatusChip(label: c.$1, days: c.$2),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],
@@ -258,16 +265,16 @@ class _QuickActions extends StatelessWidget {
               _ActionButton(
                 icon: Icons.local_gas_station_rounded,
                 label: 'Fuel',
-                onTap: () => context.go('/car/${activeCar.id}/fuel'),
+                onTap: () => context.push('/car/${activeCar.id}/fuel'),
               ),
               _ActionButton(
                 icon: Icons.receipt_long_rounded,
                 label: 'Expense',
-                onTap: () => context.go('/car/${activeCar.id}/expenses'),
+                onTap: () => context.push('/car/${activeCar.id}/expenses'),
               ),
               _ActionButton(
                 icon: Icons.directions_car_filled_rounded,
-                label: 'Car',
+                label: 'Add Car',
                 onTap: onAddCar,
               ),
               _ActionButton(
@@ -313,9 +320,10 @@ class _UpcomingSection extends StatelessWidget {
 }
 
 class _RecentActivity extends StatelessWidget {
-  const _RecentActivity({required this.items});
+  const _RecentActivity({required this.items, required this.carId});
 
   final List<_ActivityItem> items;
+  final String carId;
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +331,21 @@ class _RecentActivity extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionTitle(title: 'Recent activity'),
+          Row(
+            children: [
+              const Expanded(child: _SectionTitle(title: 'Recent activity')),
+              if (items.isNotEmpty)
+                TextButton(
+                  onPressed: () => context.push('/car/$carId/timeline'),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                    ),
+                  ),
+                  child: const Text('See all'),
+                ),
+            ],
+          ),
           const SizedBox(height: AppSpacing.md),
           if (items.isEmpty)
             const _MutedLine(
@@ -350,6 +372,12 @@ class _MonthlySummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final maxValue = math.max(1, data.monthlySeries.reduce(math.max));
+    final now = DateTime.now();
+    final count = data.monthlySeries.length;
+    final monthDates = List.generate(
+      count,
+      (i) => DateTime(now.year, now.month - (count - 1) + i),
+    );
 
     return _DashboardCard(
       child: Column(
@@ -373,15 +401,16 @@ class _MonthlySummary extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.lg),
           SizedBox(
-            height: 86,
+            height: 104,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 for (var i = 0; i < data.monthlySeries.length; i++) ...[
                   Expanded(
-                    child: _MiniBar(
+                    child: _MiniBarWithLabel(
                       heightFactor: data.monthlySeries[i] / maxValue,
                       isActive: i == data.monthlySeries.length - 1,
+                      label: DateFormat.MMM().format(monthDates[i]),
                     ),
                   ),
                   if (i != data.monthlySeries.length - 1)
@@ -528,6 +557,7 @@ class _DueRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = _statusColor(item.days);
+    final daysText = item.days < 0 ? 'Overdue' : '${item.days}d';
     return Row(
       children: [
         CircleAvatar(
@@ -556,7 +586,23 @@ class _DueRow extends StatelessWidget {
             ],
           ),
         ),
-        _StatusChip(label: 'Due', days: item.days),
+        Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: AppSpacing.xs,
+          ),
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(AppRadius.pill),
+          ),
+          child: Text(
+            daysText,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -634,28 +680,51 @@ class _MutedLine extends StatelessWidget {
   }
 }
 
-class _MiniBar extends StatelessWidget {
-  const _MiniBar({required this.heightFactor, required this.isActive});
+class _MiniBarWithLabel extends StatelessWidget {
+  const _MiniBarWithLabel({
+    required this.heightFactor,
+    required this.isActive,
+    required this.label,
+  });
 
   final double heightFactor;
   final bool isActive;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: FractionallySizedBox(
-        heightFactor: math.max(0.08, heightFactor),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: FractionallySizedBox(
+              heightFactor: math.max(0.08, heightFactor),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? AppColors.brandPrimary
+                      : AppColors.brandPrimary.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(AppRadius.xs),
+                ),
+                child: const SizedBox.expand(),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
             color: isActive
                 ? AppColors.brandPrimary
-                : AppColors.brandPrimary.withValues(alpha: 0.18),
-            borderRadius: BorderRadius.circular(AppRadius.xs),
+                : Theme.of(context).colorScheme.onSurfaceVariant,
+            fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
           ),
-          child: const SizedBox.expand(),
+          textAlign: TextAlign.center,
         ),
-      ),
+      ],
     );
   }
 }

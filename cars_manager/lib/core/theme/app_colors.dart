@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 /// Central color tokens for the CarsManager design system.
 class AppColors {
-  /// Primary brand blue, derived from the new CarsManager logo gradient.
-  static const Color brandPrimary = Color(0xFF0062CC);
+  /// Primary brand blue, derived from the CarsManager logo gradient.
+  static const Color brandPrimary = Color(0xFF4361EE);
 
-  /// Positive accent used for healthy metrics and success indicators.
-  static const Color brandSecondary = Color(0xFF4AAD3A);
+  /// Secondary brand purple, the right-side of the logo gradient.
+  static const Color brandSecondary = Color(0xFF9333EA);
 
-  /// Deep ocean side of the CarsManager brand gradient.
-  static const Color brandGradientStart = Color(0xFF004B9F);
+  /// Blue side of the CarsManager brand gradient (top-left of logo).
+  static const Color brandGradientStart = Color(0xFF4361EE);
 
-  /// Lime health side of the CarsManager brand gradient.
-  static const Color brandGradientEnd = Color(0xFF63C83E);
+  /// Purple side of the CarsManager brand gradient (bottom-right of logo).
+  static const Color brandGradientEnd = Color(0xFF9333EA);
 
-  /// Lighter blue used for tonal accents and selected chips.
-  static const Color brandAccent = Color(0xFF3D8FE8);
+  /// Mid-point purple-blue used for tonal accents and selected chips.
+  static const Color brandAccent = Color(0xFF7B6EF7);
 
   /// Logo-aligned brand gradient for hero surfaces and highlights.
   static const LinearGradient brandGradient = LinearGradient(
@@ -30,7 +30,7 @@ class AppColors {
   static const Color surfaceContainerLight = Color(0xFFF0F2F5);
   static const Color cardLight = Color(0xFFFFFFFF);
   static const Color borderLight = Color(0xFFE4E7EC);
-  static const Color tertiaryLight = Color(0xFFE8F1FC);
+  static const Color tertiaryLight = Color(0xFFEEEDFD);
   static const Color secondaryLight = Color(0xFF5A6370);
   static const Color onSurfaceVariantLight = Color(0xFF5A6370);
   static const Color primaryLight = Color(0xFF0D1117);
@@ -55,7 +55,7 @@ class AppColors {
   static const Color warning = Color(0xFFE8960C);
   static const Color danger = Color(0xFFDC3545);
   static const Color error = Color(0xFFDC3545);
-  static const Color info = Color(0xFF0062CC);
+  static const Color info = Color(0xFF4361EE);
 
   /// Ordered palette for charts; index 0 mirrors the brand primary token.
   static const List<Color> chartColors = [
@@ -63,7 +63,7 @@ class AppColors {
     Color(0xFF1EA85A),
     Color(0xFFE8960C),
     Color(0xFFDC3545),
-    Color(0xFF8B5CF6),
+    brandSecondary,
     Color(0xFF06B6D4),
   ];
 }

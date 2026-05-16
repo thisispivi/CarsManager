@@ -25,9 +25,9 @@ class CarsHomePage extends ConsumerWidget {
       final created = await Navigator.of(
         context,
       ).push<Car>(MaterialPageRoute(builder: (_) => const CarFormPage()));
-      if (created == null) return;
-      if (!context.mounted) return;
+      if (created == null || !context.mounted) return;
       ref.read(carsControllerProvider.notifier).add(created);
+      context.go('/car/${created.id}');
     }
 
     Widget buildTile(Car car) {
@@ -38,7 +38,7 @@ class CarsHomePage extends ConsumerWidget {
           isActive: isActive,
           onSelect: () {
             ref.read(activeCarControllerProvider.notifier).select(car.id);
-            context.go('/car/${car.id}');
+            context.push('/car/${car.id}');
           },
           onEdit: () async {
             final updated = await Navigator.of(context).push<Car>(
@@ -288,7 +288,7 @@ class _GarageHeader extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             InkWell(
               borderRadius: BorderRadius.circular(AppRadius.xl),
-              onTap: () => context.go('/car/${activeCar.id}'),
+              onTap: () => context.push('/car/${activeCar.id}'),
               child: Container(
                 decoration: BoxDecoration(
                   color: theme.cardColor,
@@ -407,20 +407,22 @@ class _ActiveCarCopy extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.md),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
-            children: [
-              _StatusChip(
-                label: 'Insurance',
-                days: car.daysUntilNextInsuranceExpiration,
-              ),
-              _StatusChip(
-                label: 'Inspection',
-                days: car.daysUntilNextInspection,
-              ),
-              _StatusChip(label: 'Tax', days: car.daysUntilNextTaxDue),
-            ],
+          Builder(
+            builder: (context) {
+              int urgency(int? d) => d == null ? 9999 : (d < 0 ? -9999 : d);
+              final chips = [
+                ('Insurance', car.daysUntilNextInsuranceExpiration),
+                ('Inspection', car.daysUntilNextInspection),
+                ('Tax', car.daysUntilNextTaxDue),
+              ]..sort((a, b) => urgency(a.$2).compareTo(urgency(b.$2)));
+              return Wrap(
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
+                children: [
+                  for (final c in chips) _StatusChip(label: c.$1, days: c.$2),
+                ],
+              );
+            },
           ),
         ],
       ),

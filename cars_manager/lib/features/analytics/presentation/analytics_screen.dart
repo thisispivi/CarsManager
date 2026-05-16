@@ -284,6 +284,9 @@ class _CarComparison extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Not useful as a "comparison" with only one vehicle.
+    if (data.carTotals.length <= 1) return const SizedBox.shrink();
+
     final maxValue = math.max(
       1,
       data.carTotals.map((item) => item.value).fold<double>(0, math.max),

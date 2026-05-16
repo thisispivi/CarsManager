@@ -21,7 +21,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class VehicleDetailScreen extends ConsumerWidget {
+class VehicleDetailScreen extends ConsumerStatefulWidget {
   const VehicleDetailScreen({
     super.key,
     required this.carId,
@@ -32,9 +32,42 @@ class VehicleDetailScreen extends ConsumerWidget {
   final int initialTabIndex;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<VehicleDetailScreen> createState() =>
+      _VehicleDetailScreenState();
+}
+
+class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      length: 4,
+      vsync: this,
+      initialIndex: widget.initialTabIndex,
+    );
+  }
+
+  @override
+  void didUpdateWidget(VehicleDetailScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialTabIndex != oldWidget.initialTabIndex) {
+      _tabController.animateTo(widget.initialTabIndex);
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final cars = ref.watch(carsControllerProvider);
-    final car = cars.where((item) => item.id == carId).firstOrNull;
+    final car = cars.where((item) => item.id == widget.carId).firstOrNull;
     final activeCarId = ref.watch(activeCarControllerProvider);
     final currency = ref.watch(appSettingsProvider).currency;
 
@@ -56,44 +89,43 @@ class VehicleDetailScreen extends ConsumerWidget {
       });
     }
 
-    return DefaultTabController(
-      key: ValueKey('vehicle-detail-$carId-$initialTabIndex'),
-      length: 4,
-      initialIndex: initialTabIndex,
-      child: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isWide = constraints.maxWidth >= 980;
-            final header = _VehicleHeader(car: car);
-            final tabs = _VehicleTabs(car: car, currency: currency);
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth >= 980;
+          final header = _VehicleHeader(car: car);
+          final tabs = _VehicleTabs(
+            car: car,
+            currency: currency,
+            controller: _tabController,
+          );
 
-            if (isWide) {
-              return Padding(
-                padding: const EdgeInsets.all(AppSpacing.xxl),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 380, child: header),
-                    const SizedBox(width: AppSpacing.xl),
-                    Expanded(child: tabs),
-                  ],
-                ),
-              );
-            }
-
-            return NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.lg),
-                    child: header,
-                  ),
-                ),
-              ],
-              body: tabs,
+          if (isWide) {
+            return Padding(
+              padding: const EdgeInsets.all(AppSpacing.xxl),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(width: 380, child: header),
+                  const SizedBox(width: AppSpacing.xl),
+                  Expanded(child: tabs),
+                ],
+              ),
             );
-          },
-        ),
+          }
+
+          return NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: header,
+                ),
+              ),
+            ],
+            body: tabs,
+          );
+        },
       ),
     );
   }
@@ -168,7 +200,13 @@ class _VehicleHeader extends ConsumerWidget {
                     child: _RoundIconButton(
                       icon: Icons.arrow_back_rounded,
                       tooltip: 'Back',
-                      onTap: () => context.go('/garage'),
+                      onTap: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/garage');
+                        }
+                      },
                     ),
                   ),
                   Positioned(
@@ -256,10 +294,15 @@ class _VehicleHeader extends ConsumerWidget {
 }
 
 class _VehicleTabs extends StatelessWidget {
-  const _VehicleTabs({required this.car, required this.currency});
+  const _VehicleTabs({
+    required this.car,
+    required this.currency,
+    required this.controller,
+  });
 
   final Car car;
   final String currency;
+  final TabController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -268,6 +311,7 @@ class _VehicleTabs extends StatelessWidget {
         _SurfaceCard(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
           child: TabBar(
+            controller: controller,
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             dividerColor: Colors.transparent,
@@ -275,16 +319,6 @@ class _VehicleTabs extends StatelessWidget {
             unselectedLabelColor: Theme.of(
               context,
             ).colorScheme.onSurfaceVariant,
-            onTap: (index) {
-              final basePath = '/car/${car.id}';
-              final paths = [
-                basePath,
-                '$basePath/fuel',
-                '$basePath/expenses',
-                '$basePath/timeline',
-              ];
-              context.go(paths[index]);
-            },
             tabs: const [
               Tab(text: 'Overview'),
               Tab(text: 'Fuel'),
@@ -296,6 +330,7 @@ class _VehicleTabs extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
         Expanded(
           child: TabBarView(
+            controller: controller,
             children: [
               _OverviewTab(car: car, currency: currency),
               _FuelTab(car: car, currency: currency),
@@ -396,6 +431,7 @@ class _FuelTab extends ConsumerStatefulWidget {
 
 class _FuelTabState extends ConsumerState<_FuelTab> {
   _FuelPeriod _period = _FuelPeriod.oneYear;
+  bool _showAll = false;
 
   @override
   Widget build(BuildContext context) {
@@ -442,7 +478,10 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
             value: _period,
             values: _FuelPeriod.values,
             labelFor: (period) => period.label,
-            onChanged: (period) => setState(() => _period = period),
+            onChanged: (period) => setState(() {
+              _period = period;
+              _showAll = false;
+            }),
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
@@ -480,17 +519,36 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
               const SizedBox(height: AppSpacing.md),
               if (entries.isEmpty)
                 const _EmptyTabLine('No fuel entries yet.')
-              else
-                for (final entry in entries.take(8)) ...[
+              else ...[
+                for (final entry
+                    in (_showAll ? entries : entries.take(8).toList())) ...[
                   _DataRowLine(
                     icon: Icons.local_gas_station_rounded,
-                    title: '${entry.liters.toStringAsFixed(1)} L',
-                    subtitle: DateFormat.yMMMd().format(entry.date),
+                    title: '${entry.liters.toStringAsFixed(2)} L',
+                    subtitle: entry.liters > 0
+                        ? '${DateFormat.yMMMd().format(entry.date)} · ${money.format(entry.totalCost / entry.liters)}/L'
+                        : DateFormat.yMMMd().format(entry.date),
                     trailing: money.format(entry.totalCost),
                     color: AppColors.success,
                   ),
-                  if (entry != entries.take(8).last) const Divider(height: 20),
+                  if (entry !=
+                      (_showAll ? entries : entries.take(8).toList()).last)
+                    const Divider(height: 20),
                 ],
+                if (entries.length > 8) ...[
+                  const Divider(height: 20),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => setState(() => _showAll = !_showAll),
+                      child: Text(
+                        _showAll
+                            ? 'Show less'
+                            : 'Show all ${entries.length} entries',
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ],
           ),
         ),
@@ -511,6 +569,7 @@ class _ExpensesTab extends ConsumerStatefulWidget {
 
 class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
   _ExpenseFilter _filter = _ExpenseFilter.all;
+  bool _showAll = false;
 
   @override
   Widget build(BuildContext context) {
@@ -564,7 +623,10 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
             value: _filter,
             values: _ExpenseFilter.values,
             labelFor: (filter) => filter.label,
-            onChanged: (filter) => setState(() => _filter = filter),
+            onChanged: (filter) => setState(() {
+              _filter = filter;
+              _showAll = false;
+            }),
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
@@ -624,7 +686,13 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
                 onAction: addExpense,
               ),
               const SizedBox(height: AppSpacing.md),
-              ..._expenseRows(car, currency, _filter),
+              ..._expenseRows(
+                car,
+                currency,
+                _filter,
+                showAll: _showAll,
+                onToggleShowAll: () => setState(() => _showAll = !_showAll),
+              ),
             ],
           ),
         ),
@@ -633,15 +701,24 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
   }
 }
 
-class _TimelineTab extends StatelessWidget {
+class _TimelineTab extends StatefulWidget {
   const _TimelineTab({required this.car, required this.currency});
 
   final Car car;
   final String currency;
 
   @override
+  State<_TimelineTab> createState() => _TimelineTabState();
+}
+
+class _TimelineTabState extends State<_TimelineTab> {
+  bool _showAll = false;
+
+  @override
   Widget build(BuildContext context) {
-    final events = _timelineEvents(car, currency);
+    final events = _timelineEvents(widget.car, widget.currency);
+    final visible = _showAll ? events : events.take(20).toList();
+
     return ListView(
       padding: EdgeInsets.zero,
       children: [
@@ -655,8 +732,8 @@ class _TimelineTab extends StatelessWidget {
                 const _EmptyTabLine(
                   'Fuel, service, and payment events will appear here.',
                 )
-              else
-                for (final event in events.take(20)) ...[
+              else ...[
+                for (final event in visible) ...[
                   _DataRowLine(
                     icon: event.icon,
                     title: event.title,
@@ -664,8 +741,22 @@ class _TimelineTab extends StatelessWidget {
                     trailing: event.amount,
                     color: event.color,
                   ),
-                  if (event != events.take(20).last) const Divider(height: 20),
+                  if (event != visible.last) const Divider(height: 20),
                 ],
+                if (events.length > 20) ...[
+                  const Divider(height: 20),
+                  Center(
+                    child: TextButton(
+                      onPressed: () => setState(() => _showAll = !_showAll),
+                      child: Text(
+                        _showAll
+                            ? 'Show less'
+                            : 'Show all ${events.length} events',
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ],
           ),
         ),
@@ -1191,16 +1282,19 @@ class _TimelineEvent {
   final _ExpenseFilter? expenseFilter;
 }
 
-List<Widget> _expenseRows(Car car, String currency, _ExpenseFilter filter) {
-  final rows = _timelineEvents(car, currency)
-      .where((event) {
-        if (event.expenseFilter == null) return false;
-        return filter == _ExpenseFilter.all || event.expenseFilter == filter;
-      })
-      .take(10)
-      .toList();
+List<Widget> _expenseRows(
+  Car car,
+  String currency,
+  _ExpenseFilter filter, {
+  bool showAll = false,
+  VoidCallback? onToggleShowAll,
+}) {
+  final all = _timelineEvents(car, currency).where((event) {
+    if (event.expenseFilter == null) return false;
+    return filter == _ExpenseFilter.all || event.expenseFilter == filter;
+  }).toList();
 
-  if (rows.isEmpty) {
+  if (all.isEmpty) {
     return [
       _EmptyTabLine(
         filter == _ExpenseFilter.all
@@ -1210,8 +1304,9 @@ List<Widget> _expenseRows(Car car, String currency, _ExpenseFilter filter) {
     ];
   }
 
+  final visible = showAll ? all : all.take(10).toList();
   return [
-    for (final event in rows) ...[
+    for (final event in visible) ...[
       _DataRowLine(
         icon: event.icon,
         title: event.title,
@@ -1219,7 +1314,18 @@ List<Widget> _expenseRows(Car car, String currency, _ExpenseFilter filter) {
         trailing: event.amount,
         color: event.color,
       ),
-      if (event != rows.last) const Divider(height: 20),
+      if (event != visible.last) const Divider(height: 20),
+    ],
+    if (all.length > 10 && onToggleShowAll != null) ...[
+      const Divider(height: 20),
+      Center(
+        child: TextButton(
+          onPressed: onToggleShowAll,
+          child: Text(
+            showAll ? 'Show less' : 'Show all ${all.length} expenses',
+          ),
+        ),
+      ),
     ],
   ];
 }

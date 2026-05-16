@@ -80,14 +80,22 @@ class AppScaffold extends ConsumerWidget {
           final screenSize = screenSizeForWidth(constraints.maxWidth);
           final isRail = !screenSize.isCompact;
           final isSidebar = screenSize.isDesktop;
-          final mobileSelectedIndex = selectedIndex > 2 ? 0 : selectedIndex;
+          final mobileSelectedIndex = selectedIndex.clamp(0, 2);
 
           final mobileDestinations = destinations.take(3).toList();
           final scaffold = Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
               titleSpacing: 16,
-              title: const CarSwitcherHeader(),
+              // On desktop the sidebar already has the logo + car switcher,
+              // so we show just the logo mark in the app bar to avoid duplication.
+              title: isSidebar
+                  ? Image.asset(
+                      'assets/icons/CarsManagerLogo.png',
+                      height: 28,
+                      alignment: Alignment.centerLeft,
+                    )
+                  : const CarSwitcherHeader(),
               actions: [
                 IconButton(
                   tooltip: 'Search',
@@ -95,11 +103,12 @@ class AppScaffold extends ConsumerWidget {
                   onPressed: () => showSearchOverlay(context),
                 ),
                 const NotificationCenter(),
-                IconButton(
-                  tooltip: l10n.settings_title,
-                  icon: const Icon(Icons.settings_outlined),
-                  onPressed: () => context.go('/settings'),
-                ),
+                if (!isSidebar)
+                  IconButton(
+                    tooltip: l10n.settings_title,
+                    icon: const Icon(Icons.settings_outlined),
+                    onPressed: () => context.go('/settings'),
+                  ),
               ],
             ),
             body: child,
@@ -164,16 +173,12 @@ class AppScaffold extends ConsumerWidget {
     final location = GoRouterState.of(context).uri.path;
     final vehicleMatch = RegExp(r'^/car/([^/]+)').firstMatch(location);
     if (vehicleMatch != null) {
-      final carId = vehicleMatch.group(1)!;
-      if (location.endsWith('/expenses')) {
-        context.go('/car/$carId/expenses');
-      } else {
-        context.go('/car/$carId/fuel');
-      }
+      // On vehicle detail: jump to fuel tab so user can add an entry
+      context.go('/car/${vehicleMatch.group(1)!}/fuel');
       return;
     }
-
-    context.go('/garage/add');
+    // Everywhere else: go to garage where the FAB is available
+    context.go('/garage');
   }
 }
 

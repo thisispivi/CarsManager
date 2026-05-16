@@ -135,370 +135,374 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
           top: false,
           child: Form(
             key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: colorScheme.primary,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: colorScheme.primary,
+                              ),
                         ),
                       ),
+                      IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  if (widget.type == PaymentEntryType.insurance) ...[
+                    TextFormField(
+                      controller: _amountController,
+                      decoration: InputDecoration(
+                        labelText: localizations.amount,
+                        prefixIcon: const Icon(Icons.euro_rounded),
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: (v) => _validateRequiredPositive(
+                        v,
+                        localizations.amount,
+                        localizations,
+                      ),
                     ),
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.close),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _insuranceCompanyController,
+                      decoration: InputDecoration(
+                        labelText:
+                            localizations.payments_insuranceData_provider,
+                        prefixIcon: const Icon(Icons.apartment_rounded),
+                      ),
+                      validator: (v) => _validateRequiredText(
+                        v,
+                        localizations.payments_insuranceData_provider,
+                        localizations,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _policyNumberController,
+                      decoration: InputDecoration(
+                        labelText:
+                            localizations.payments_insuranceData_policyNumber,
+                        prefixIcon: const Icon(Icons.badge_outlined),
+                      ),
+                      validator: (v) => _validateRequiredText(
+                        v,
+                        localizations.payments_insuranceData_policyNumber,
+                        localizations,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${localizations.common_start}: ${dateFormat.format(_insuranceStart)}',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {
+                            final selected = await showCustomDatePicker(
+                              context: context,
+                              initialDate: _insuranceStart,
+                            );
+                            if (selected != null) {
+                              setState(() {
+                                _insuranceStart = selected;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.calendar_today_outlined),
+                          label: Text(
+                            localizations.common_pick,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${localizations.common_end}: ${dateFormat.format(_insuranceEnd)}',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {
+                            final selected = await showCustomDatePicker(
+                              context: context,
+                              initialDate: _insuranceEnd,
+                            );
+                            if (selected != null) {
+                              setState(() {
+                                _insuranceEnd = selected;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.calendar_today_outlined),
+                          label: Text(
+                            localizations.common_pick,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ] else if (widget.type == PaymentEntryType.inspection) ...[
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${localizations.date}: ${dateFormat.format(_date)}',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {
+                            final selected = await showCustomDatePicker(
+                              context: context,
+                              initialDate: _date,
+                            );
+                            if (selected != null) {
+                              setState(() {
+                                _date = selected;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.calendar_today_outlined),
+                          label: Text(
+                            localizations.common_pick,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    SwitchListTile.adaptive(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        localizations.payments_inspectionsData_status_passed,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      value: _inspectionPassed,
+                      onChanged: (v) {
+                        setState(() {
+                          _inspectionPassed = v;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _amountController,
+                            decoration: InputDecoration(
+                              labelText:
+                                  '${localizations.amount} (${localizations.common_optional})',
+                              prefixIcon: const Icon(Icons.euro_rounded),
+                            ),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            validator: (v) => _validateOptionalNonNegative(
+                              v,
+                              localizations.amount,
+                              localizations,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _mileageController,
+                            decoration: InputDecoration(
+                              labelText:
+                                  '${localizations.payments_inspectionsData_mileage} (${localizations.common_optional})',
+                              prefixIcon: const Icon(Icons.speed_rounded),
+                            ),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            validator: (v) => _validateOptionalNonNegative(
+                              v,
+                              localizations.payments_inspectionsData_mileage,
+                              localizations,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ] else if (widget.type == PaymentEntryType.fine) ...[
+                    TextFormField(
+                      controller: _amountController,
+                      decoration: InputDecoration(
+                        labelText: localizations.amount,
+                        prefixIcon: const Icon(Icons.euro_rounded),
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: (v) => _validateRequiredPositive(
+                        v,
+                        localizations.amount,
+                        localizations,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    DropdownButtonFormField<FineType>(
+                      initialValue: _fineType,
+                      decoration: InputDecoration(
+                        labelText: localizations.payments_finesData_type,
+                        prefixIcon: const Icon(Icons.report_outlined),
+                      ),
+                      items: FineType.values
+                          .map(
+                            (t) => DropdownMenuItem(
+                              value: t,
+                              child: Text(_labelForFineType(t, localizations)),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (v) {
+                        if (v == null) return;
+                        setState(() {
+                          _fineType = v;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${localizations.date}: ${dateFormat.format(_date)}',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {
+                            final selected = await showCustomDatePicker(
+                              context: context,
+                              initialDate: _date,
+                            );
+                            if (selected != null) {
+                              setState(() {
+                                _date = selected;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.calendar_today_outlined),
+                          label: Text(
+                            localizations.common_pick,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ] else ...[
+                    TextFormField(
+                      controller: _amountController,
+                      decoration: InputDecoration(
+                        labelText: localizations.amount,
+                        prefixIcon: const Icon(Icons.euro_rounded),
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: (v) => _validateRequiredPositive(
+                        v,
+                        localizations.amount,
+                        localizations,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _descriptionController,
+                      decoration: InputDecoration(
+                        labelText: widget.type == PaymentEntryType.tax
+                            ? '${localizations.common_notes} (${localizations.common_optional})'
+                            : localizations.common_description,
+                        prefixIcon: const Icon(Icons.notes_rounded),
+                      ),
+                      validator: widget.type == PaymentEntryType.repair
+                          ? (v) => _validateRequiredText(
+                              v,
+                              localizations.common_description,
+                              localizations,
+                            )
+                          : null,
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${localizations.date}: ${dateFormat.format(_date)}',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {
+                            final selected = await showCustomDatePicker(
+                              context: context,
+                              initialDate: _date,
+                            );
+                            if (selected != null) {
+                              setState(() {
+                                _date = selected;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.calendar_today_outlined),
+                          label: Text(
+                            localizations.common_pick,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                const SizedBox(height: 12),
-                if (widget.type == PaymentEntryType.insurance) ...[
-                  TextFormField(
-                    controller: _amountController,
-                    decoration: InputDecoration(
-                      labelText: localizations.amount,
-                      prefixIcon: const Icon(Icons.euro_rounded),
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    validator: (v) => _validateRequiredPositive(
-                      v,
-                      localizations.amount,
-                      localizations,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _insuranceCompanyController,
-                    decoration: InputDecoration(
-                      labelText: localizations.payments_insuranceData_provider,
-                      prefixIcon: const Icon(Icons.apartment_rounded),
-                    ),
-                    validator: (v) => _validateRequiredText(
-                      v,
-                      localizations.payments_insuranceData_provider,
-                      localizations,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _policyNumberController,
-                    decoration: InputDecoration(
-                      labelText:
-                          localizations.payments_insuranceData_policyNumber,
-                      prefixIcon: const Icon(Icons.badge_outlined),
-                    ),
-                    validator: (v) => _validateRequiredText(
-                      v,
-                      localizations.payments_insuranceData_policyNumber,
-                      localizations,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${localizations.common_start}: ${dateFormat.format(_insuranceStart)}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
+
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _submit,
+                      icon: const Icon(Icons.check),
+                      style: ElevatedButton.styleFrom(
+                        textStyle: Theme.of(context).textTheme.bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
-                      TextButton.icon(
-                        onPressed: () async {
-                          final selected = await showCustomDatePicker(
-                            context: context,
-                            initialDate: _insuranceStart,
-                          );
-                          if (selected != null) {
-                            setState(() {
-                              _insuranceStart = selected;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.calendar_today_outlined),
-                        label: Text(
-                          localizations.common_pick,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${localizations.common_end}: ${dateFormat.format(_insuranceEnd)}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () async {
-                          final selected = await showCustomDatePicker(
-                            context: context,
-                            initialDate: _insuranceEnd,
-                          );
-                          if (selected != null) {
-                            setState(() {
-                              _insuranceEnd = selected;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.calendar_today_outlined),
-                        label: Text(
-                          localizations.common_pick,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
-                  ),
-                ] else if (widget.type == PaymentEntryType.inspection) ...[
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${localizations.date}: ${dateFormat.format(_date)}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () async {
-                          final selected = await showCustomDatePicker(
-                            context: context,
-                            initialDate: _date,
-                          );
-                          if (selected != null) {
-                            setState(() {
-                              _date = selected;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.calendar_today_outlined),
-                        label: Text(
-                          localizations.common_pick,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  SwitchListTile.adaptive(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      localizations.payments_inspectionsData_status_passed,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
+                      label: Text(
+                        isEdit
+                            ? localizations.common_save
+                            : localizations.common_add,
                       ),
                     ),
-                    value: _inspectionPassed,
-                    onChanged: (v) {
-                      setState(() {
-                        _inspectionPassed = v;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _amountController,
-                          decoration: InputDecoration(
-                            labelText:
-                                '${localizations.amount} (${localizations.common_optional})',
-                            prefixIcon: const Icon(Icons.euro_rounded),
-                          ),
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          validator: (v) => _validateOptionalNonNegative(
-                            v,
-                            localizations.amount,
-                            localizations,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _mileageController,
-                          decoration: InputDecoration(
-                            labelText:
-                                '${localizations.payments_inspectionsData_mileage} (${localizations.common_optional})',
-                            prefixIcon: const Icon(Icons.speed_rounded),
-                          ),
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          validator: (v) => _validateOptionalNonNegative(
-                            v,
-                            localizations.payments_inspectionsData_mileage,
-                            localizations,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ] else if (widget.type == PaymentEntryType.fine) ...[
-                  TextFormField(
-                    controller: _amountController,
-                    decoration: InputDecoration(
-                      labelText: localizations.amount,
-                      prefixIcon: const Icon(Icons.euro_rounded),
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    validator: (v) => _validateRequiredPositive(
-                      v,
-                      localizations.amount,
-                      localizations,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  DropdownButtonFormField<FineType>(
-                    initialValue: _fineType,
-                    decoration: InputDecoration(
-                      labelText: localizations.payments_finesData_type,
-                      prefixIcon: const Icon(Icons.report_outlined),
-                    ),
-                    items: FineType.values
-                        .map(
-                          (t) => DropdownMenuItem(
-                            value: t,
-                            child: Text(_labelForFineType(t, localizations)),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (v) {
-                      if (v == null) return;
-                      setState(() {
-                        _fineType = v;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${localizations.date}: ${dateFormat.format(_date)}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () async {
-                          final selected = await showCustomDatePicker(
-                            context: context,
-                            initialDate: _date,
-                          );
-                          if (selected != null) {
-                            setState(() {
-                              _date = selected;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.calendar_today_outlined),
-                        label: Text(
-                          localizations.common_pick,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
-                  ),
-                ] else ...[
-                  TextFormField(
-                    controller: _amountController,
-                    decoration: InputDecoration(
-                      labelText: localizations.amount,
-                      prefixIcon: const Icon(Icons.euro_rounded),
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    validator: (v) => _validateRequiredPositive(
-                      v,
-                      localizations.amount,
-                      localizations,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelText: widget.type == PaymentEntryType.tax
-                          ? '${localizations.common_notes} (${localizations.common_optional})'
-                          : localizations.common_description,
-                      prefixIcon: const Icon(Icons.notes_rounded),
-                    ),
-                    validator: widget.type == PaymentEntryType.repair
-                        ? (v) => _validateRequiredText(
-                            v,
-                            localizations.common_description,
-                            localizations,
-                          )
-                        : null,
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${localizations.date}: ${dateFormat.format(_date)}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () async {
-                          final selected = await showCustomDatePicker(
-                            context: context,
-                            initialDate: _date,
-                          );
-                          if (selected != null) {
-                            setState(() {
-                              _date = selected;
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.calendar_today_outlined),
-                        label: Text(
-                          localizations.common_pick,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
                   ),
                 ],
-
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: _submit,
-                    icon: const Icon(Icons.check),
-                    style: ElevatedButton.styleFrom(
-                      textStyle: Theme.of(context).textTheme.bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    label: Text(
-                      isEdit
-                          ? localizations.common_save
-                          : localizations.common_add,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),
