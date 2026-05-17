@@ -1,9 +1,9 @@
-import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/presentation/common/widgets/due_date_pill.dart';
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
+import 'package:cars_manager/shared/widgets/vehicle_visual_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -29,7 +29,7 @@ class CarTile extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final cs = Theme.of(context).colorScheme;
-    final radius = BorderRadius.circular(AppRadius.lg);
+    final radius = BorderRadius.circular(AppRadius.cardLg);
     final cardColor = theme.cardColor;
 
     final nextInsuranceDate = car.nextInsuranceExpirationDate;
@@ -113,11 +113,11 @@ class CarTile extends StatelessWidget {
         color: cardColor,
         borderRadius: radius,
         border: Border.all(
-          color: isActive ? AppColors.brandPrimary : cs.outlineVariant,
-          width: isActive ? 2 : 1,
+          color: isActive ? cs.primary : cs.outline,
+          width: isActive ? 1.5 : 0.5,
         ),
         boxShadow: isActive
-            ? AppShadows.brandGlow(AppColors.brandPrimary)
+            ? AppShadows.brandGlow(cs.primary)
             : (theme.brightness == Brightness.light ? AppShadows.xs : null),
       ),
       child: Material(
@@ -146,16 +146,7 @@ class CarTile extends StatelessWidget {
                           primaryColor: cs.primary,
                         )
                       else
-                        Container(
-                          decoration: const BoxDecoration(
-                            gradient: AppColors.brandGradient,
-                          ),
-                          child: Icon(
-                            Icons.directions_car_filled_rounded,
-                            color: Colors.white.withValues(alpha: 0.9),
-                            size: 56,
-                          ),
-                        ),
+                        VehicleVisualCard(car: car, borderRadius: 0),
                       const Positioned.fill(
                         child: DecoratedBox(
                           decoration: BoxDecoration(

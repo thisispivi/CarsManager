@@ -339,7 +339,7 @@ class _SearchResults {
         ]))
           _SearchResult(
             icon: Icons.directions_car_filled_rounded,
-            color: AppColors.brandPrimary,
+            color: AppColors.accentLight,
             title: car.name,
             subtitle:
                 '${car.manufacture} ${car.model} • ${car.licensePlate.isEmpty ? car.yearOfManufacture : car.licensePlate}',
@@ -361,7 +361,7 @@ class _SearchResults {
           ]))
             _SearchResult(
               icon: Icons.local_gas_station_rounded,
-              color: AppColors.success,
+              color: AppColors.categoryFuel,
               title: 'Fuel entry',
               subtitle: '${car.name} • ${date.format(entry.date)}',
               trailing: money.format(entry.totalCost),
@@ -378,7 +378,7 @@ class _SearchResults {
           ]))
             _SearchResult(
               icon: Icons.description_outlined,
-              color: AppColors.info,
+              color: AppColors.categoryInsurance,
               title: 'Insurance',
               subtitle: '${car.name} • ${date.format(entry.startDate)}',
               trailing: money.format(entry.premiumAmount),
@@ -394,7 +394,7 @@ class _SearchResults {
           ]))
             _SearchResult(
               icon: Icons.fact_check_outlined,
-              color: AppColors.warning,
+              color: AppColors.warnLight,
               title: 'Inspection',
               subtitle: '${car.name} • ${date.format(entry.date)}',
               trailing: money.format(entry.amount ?? 0),
@@ -410,7 +410,7 @@ class _SearchResults {
           ]))
             _SearchResult(
               icon: Icons.paid_outlined,
-              color: const Color(0xFF06B6D4),
+              color: AppColors.categoryTax,
               title: 'Vehicle tax',
               subtitle: '${car.name} • ${date.format(entry.date)}',
               trailing: money.format(entry.amount),
@@ -427,7 +427,7 @@ class _SearchResults {
           ]))
             _SearchResult(
               icon: Icons.build_rounded,
-              color: const Color(0xFF8B5CF6),
+              color: AppColors.categoryRepair,
               title: entry.description.isEmpty ? 'Repair' : entry.description,
               subtitle: '${car.name} • ${date.format(entry.date)}',
               trailing: money.format(entry.amount),
@@ -443,7 +443,7 @@ class _SearchResults {
           ]))
             _SearchResult(
               icon: Icons.report_gmailerrorred_rounded,
-              color: AppColors.danger,
+              color: AppColors.dangerLight,
               title: 'Fine',
               subtitle: '${car.name} • ${date.format(entry.date)}',
               trailing: money.format(entry.amount),

@@ -17,7 +17,7 @@ class AppBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     if (count <= 0) return child;
 
-    final badgeColor = color ?? AppColors.danger;
+    final badgeColor = color ?? AppColors.dangerLight;
 
     return Stack(
       clipBehavior: Clip.none,

@@ -69,12 +69,12 @@ class _InitialsAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: AppColors.brandPrimary.withValues(alpha: 0.15),
+      color: AppColors.accentLight.withValues(alpha: 0.15),
       child: Center(
         child: Text(
           initials,
           style: TextStyle(
-            color: AppColors.brandPrimary,
+            color: AppColors.accentLight,
             fontSize: size * 0.35,
             fontWeight: FontWeight.w700,
           ),

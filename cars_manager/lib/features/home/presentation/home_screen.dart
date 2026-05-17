@@ -3,11 +3,16 @@ import 'dart:math' as math;
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
+import 'package:cars_manager/features/search/presentation/search_overlay.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/models/car.dart';
+import 'package:cars_manager/presentation/common/widgets/car_switcher_header.dart';
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
+import 'package:cars_manager/presentation/widgets/notification_center.dart';
 import 'package:cars_manager/shared/widgets/empty_state.dart';
+import 'package:cars_manager/shared/widgets/section_header_row.dart';
+import 'package:cars_manager/shared/widgets/vehicle_visual_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -65,7 +70,12 @@ class HomeScreen extends ConsumerWidget {
                         flex: 3,
                         child: Column(
                           children: [
-                            _ActiveCarHero(car: activeCar, data: dashboard),
+                            _ActiveCarHero(
+                              car: activeCar,
+                              data: dashboard,
+                              onSwitchCar: () =>
+                                  showCarSwitcherSheet(context, ref),
+                            ),
                             const SizedBox(height: AppSpacing.xl),
                             _UpcomingSection(items: dashboard.upcoming),
                           ],
@@ -76,10 +86,7 @@ class HomeScreen extends ConsumerWidget {
                         flex: 2,
                         child: Column(
                           children: [
-                            _QuickActions(
-                              activeCar: activeCar,
-                              onAddCar: openAddForm,
-                            ),
+                            _QuickActions(activeCar: activeCar),
                             const SizedBox(height: AppSpacing.xl),
                             _RecentActivity(
                               items: dashboard.recentActivity,
@@ -94,12 +101,15 @@ class HomeScreen extends ConsumerWidget {
                   )
                 : Column(
                     children: [
-                      _ActiveCarHero(car: activeCar, data: dashboard),
-                      const SizedBox(height: AppSpacing.xl),
-                      _QuickActions(
-                        activeCar: activeCar,
-                        onAddCar: openAddForm,
+                      const _GreetingRow(),
+                      const SizedBox(height: AppSpacing.lg),
+                      _ActiveCarHero(
+                        car: activeCar,
+                        data: dashboard,
+                        onSwitchCar: () => showCarSwitcherSheet(context, ref),
                       ),
+                      const SizedBox(height: AppSpacing.xl),
+                      _QuickActions(activeCar: activeCar),
                       const SizedBox(height: AppSpacing.xl),
                       _UpcomingSection(items: dashboard.upcoming),
                       const SizedBox(height: AppSpacing.xl),
@@ -123,11 +133,54 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
+class _GreetingRow extends StatelessWidget {
+  const _GreetingRow();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final dateStr = DateFormat('EEE, MMM d').format(DateTime.now());
+
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                dateStr,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Welcome back',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.6,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const NotificationCenter(),
+      ],
+    );
+  }
+}
+
 class _ActiveCarHero extends StatelessWidget {
-  const _ActiveCarHero({required this.car, required this.data});
+  const _ActiveCarHero({
+    required this.car,
+    required this.data,
+    this.onSwitchCar,
+  });
 
   final Car car;
   final _DashboardData data;
+  final VoidCallback? onSwitchCar;
 
   @override
   Widget build(BuildContext context) {
@@ -138,22 +191,19 @@ class _ActiveCarHero extends StatelessWidget {
         (car.imageUrl != null && car.imageUrl!.isNotEmpty);
 
     return InkWell(
-      borderRadius: BorderRadius.circular(AppRadius.xl),
+      borderRadius: BorderRadius.circular(AppRadius.card),
       onTap: () => context.push('/car/${car.id}'),
       child: _DashboardCard(
         padding: EdgeInsets.zero,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(AppRadius.xl),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (hasImage)
-                      ImageRect(
+              SizedBox(
+                height: 150,
+                child: hasImage
+                    ? ImageRect(
                         aspectRatio: 16 / 9,
                         imageUrl: car.imageUrl,
                         imageBase64: car.imageBase64,
@@ -162,78 +212,53 @@ class _ActiveCarHero extends StatelessWidget {
                         borderRadius: BorderRadius.zero,
                         primaryColor: colors.primary,
                       )
-                    else
-                      Container(
-                        decoration: const BoxDecoration(
-                          gradient: AppColors.brandGradient,
-                        ),
-                        child: Icon(
-                          Icons.directions_car_filled_rounded,
-                          color: Colors.white.withValues(alpha: 0.9),
-                          size: 84,
-                        ),
-                      ),
-                    const DecoratedBox(
+                    : VehicleVisualCard(car: car, borderRadius: 0),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.md,
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Color(0xB0000000)],
+                        color: colors.primary,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Active · ${car.name}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: -0.1,
                         ),
                       ),
                     ),
-                    Positioned(
-                      left: AppSpacing.lg,
-                      right: AppSpacing.lg,
-                      bottom: AppSpacing.lg,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            car.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                            ),
+                    GestureDetector(
+                      onTap: onSwitchCar,
+                      behavior: HitTestBehavior.opaque,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.xs,
+                          vertical: AppSpacing.xs,
+                        ),
+                        child: Text(
+                          'Switch ›',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colors.primary,
+                            fontWeight: FontWeight.w600,
                           ),
-                          const SizedBox(height: AppSpacing.xs),
-                          Text(
-                            '${car.manufacture} ${car.model} • ${car.yearOfManufacture}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: Colors.white.withValues(alpha: 0.78),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(AppSpacing.lg),
-                child: Builder(
-                  builder: (context) {
-                    int urgency(int? d) =>
-                        d == null ? 9999 : (d < 0 ? -9999 : d);
-                    final chips = [
-                      ('Insurance', data.insuranceDays),
-                      ('Inspection', data.inspectionDays),
-                      ('Tax', data.taxDays),
-                    ]..sort((a, b) => urgency(a.$2).compareTo(urgency(b.$2)));
-                    return Wrap(
-                      spacing: AppSpacing.sm,
-                      runSpacing: AppSpacing.sm,
-                      children: [
-                        for (final c in chips)
-                          _StatusChip(label: c.$1, days: c.$2),
-                      ],
-                    );
-                  },
                 ),
               ),
             ],
@@ -245,10 +270,9 @@ class _ActiveCarHero extends StatelessWidget {
 }
 
 class _QuickActions extends StatelessWidget {
-  const _QuickActions({required this.activeCar, required this.onAddCar});
+  const _QuickActions({required this.activeCar});
 
   final Car activeCar;
-  final VoidCallback onAddCar;
 
   @override
   Widget build(BuildContext context) {
@@ -256,31 +280,34 @@ class _QuickActions extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionTitle(title: 'Quick actions'),
-          const SizedBox(height: AppSpacing.md),
-          Wrap(
-            spacing: AppSpacing.sm,
-            runSpacing: AppSpacing.sm,
+          const SectionHeaderRow(title: 'Quick actions'),
+          Row(
             children: [
-              _ActionButton(
-                icon: Icons.local_gas_station_rounded,
-                label: 'Fuel',
-                onTap: () => context.push('/car/${activeCar.id}/fuel'),
+              Expanded(
+                child: _QuickActionCard(
+                  icon: Icons.local_gas_station_rounded,
+                  label: 'Fuel',
+                  color: AppColors.accentLight,
+                  onTap: () => context.push('/car/${activeCar.id}/fuel'),
+                ),
               ),
-              _ActionButton(
-                icon: Icons.receipt_long_rounded,
-                label: 'Expense',
-                onTap: () => context.push('/car/${activeCar.id}/expenses'),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: _QuickActionCard(
+                  icon: Icons.receipt_long_rounded,
+                  label: 'Expense',
+                  color: AppColors.categoryTax,
+                  onTap: () => context.push('/car/${activeCar.id}/expenses'),
+                ),
               ),
-              _ActionButton(
-                icon: Icons.directions_car_filled_rounded,
-                label: 'Add Car',
-                onTap: onAddCar,
-              ),
-              _ActionButton(
-                icon: Icons.grid_view_rounded,
-                label: 'All cars',
-                onTap: () => context.go('/garage'),
+              const SizedBox(width: AppSpacing.sm),
+              Expanded(
+                child: _QuickActionCard(
+                  icon: Icons.search_rounded,
+                  label: 'Search',
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  onTap: () => showSearchOverlay(context),
+                ),
               ),
             ],
           ),
@@ -301,8 +328,7 @@ class _UpcomingSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionTitle(title: 'Upcoming'),
-          const SizedBox(height: AppSpacing.md),
+          const SectionHeaderRow(title: 'Upcoming'),
           if (items.isEmpty)
             const _MutedLine(
               icon: Icons.check_circle_outline_rounded,
@@ -331,22 +357,13 @@ class _RecentActivity extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              const Expanded(child: _SectionTitle(title: 'Recent activity')),
-              if (items.isNotEmpty)
-                TextButton(
-                  onPressed: () => context.push('/car/$carId/timeline'),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm,
-                    ),
-                  ),
-                  child: const Text('See all'),
-                ),
-            ],
+          SectionHeaderRow(
+            title: 'Recent activity',
+            actionLabel: items.isNotEmpty ? 'See all' : null,
+            onAction: items.isNotEmpty
+                ? () => context.push('/car/$carId/timeline')
+                : null,
           ),
-          const SizedBox(height: AppSpacing.md),
           if (items.isEmpty)
             const _MutedLine(
               icon: Icons.history_rounded,
@@ -371,7 +388,7 @@ class _MonthlySummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final maxValue = math.max(1, data.monthlySeries.reduce(math.max));
+    final maxValue = math.max(1.0, data.monthlySeries.reduce(math.max));
     final now = DateTime.now();
     final count = data.monthlySeries.length;
     final monthDates = List.generate(
@@ -383,12 +400,13 @@ class _MonthlySummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionTitle(title: 'Monthly summary'),
-          const SizedBox(height: AppSpacing.lg),
+          const SectionHeaderRow(title: 'Monthly summary'),
           Text(
             data.formatMoney(data.currentMonthTotal),
             style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.8,
+              fontSize: 30,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
@@ -396,7 +414,7 @@ class _MonthlySummary extends StatelessWidget {
             'Spent this month across fuel and expenses',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -435,11 +453,11 @@ class _DashboardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: padding ?? const EdgeInsets.all(AppSpacing.lg),
+      padding: padding ?? const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
         boxShadow: theme.brightness == Brightness.light ? AppShadows.sm : null,
       ),
       child: child,
@@ -447,102 +465,53 @@ class _DashboardCard extends StatelessWidget {
   }
 }
 
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ActionButton extends StatelessWidget {
-  const _ActionButton({
+class _QuickActionCard extends StatelessWidget {
+  const _QuickActionCard({
     required this.icon,
     required this.label,
+    required this.color,
     required this.onTap,
   });
 
   final IconData icon;
   final String label;
+  final Color color;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return InkWell(
-      borderRadius: BorderRadius.circular(AppRadius.pill),
+      borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md,
-          vertical: AppSpacing.sm,
-        ),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.brandPrimary.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(AppRadius.pill),
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: theme.colorScheme.outline, width: 0.5),
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 18, color: AppColors.brandPrimary),
-            const SizedBox(width: AppSpacing.xs),
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: color, size: 18),
+            ),
+            const SizedBox(height: AppSpacing.md),
             Text(
               label,
-              style: theme.textTheme.labelLarge?.copyWith(
-                color: AppColors.brandPrimary,
-                fontWeight: FontWeight.w800,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.15,
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.label, required this.days});
-
-  final String label;
-  final int? days;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _statusColor(days);
-    final text = days == null
-        ? 'No data'
-        : days! < 0
-        ? 'Overdue'
-        : '$days d';
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-      ),
-      child: Text(
-        '$label • $text',
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: color,
-          fontWeight: FontWeight.w800,
         ),
       ),
     );
@@ -560,9 +529,13 @@ class _DueRow extends StatelessWidget {
     final daysText = item.days < 0 ? 'Overdue' : '${item.days}d';
     return Row(
       children: [
-        CircleAvatar(
-          radius: 18,
-          backgroundColor: color.withValues(alpha: 0.12),
+        Container(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Icon(item.icon, size: 18, color: color),
         ),
         const SizedBox(width: AppSpacing.md),
@@ -574,13 +547,13 @@ class _DueRow extends StatelessWidget {
                 item.title,
                 style: Theme.of(
                   context,
-                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
               ),
               Text(
                 item.subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -599,7 +572,7 @@ class _DueRow extends StatelessWidget {
             daysText,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
               color: color,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -617,9 +590,13 @@ class _ActivityRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 18,
-          backgroundColor: item.color.withValues(alpha: 0.12),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: item.color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Icon(item.icon, size: 18, color: item.color),
         ),
         const SizedBox(width: AppSpacing.md),
@@ -631,13 +608,13 @@ class _ActivityRow extends StatelessWidget {
                 item.title,
                 style: Theme.of(
                   context,
-                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
               ),
               Text(
                 DateFormat.yMMMd().format(item.date),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -647,7 +624,7 @@ class _ActivityRow extends StatelessWidget {
           item.amount,
           style: Theme.of(
             context,
-          ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+          ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -671,7 +648,7 @@ class _MutedLine extends StatelessWidget {
             text,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -704,8 +681,8 @@ class _MiniBarWithLabel extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: isActive
-                      ? AppColors.brandPrimary
-                      : AppColors.brandPrimary.withValues(alpha: 0.18),
+                      ? AppColors.accentLight
+                      : AppColors.accentLight.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(AppRadius.xs),
                 ),
                 child: const SizedBox.expand(),
@@ -718,9 +695,9 @@ class _MiniBarWithLabel extends StatelessWidget {
           label,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
             color: isActive
-                ? AppColors.brandPrimary
+                ? AppColors.accentLight
                 : Theme.of(context).colorScheme.onSurfaceVariant,
-            fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+            fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
           ),
           textAlign: TextAlign.center,
         ),
@@ -749,6 +726,11 @@ class _DashboardData {
   final List<_ActivityItem> recentActivity;
   final List<double> monthlySeries;
   final double currentMonthTotal;
+
+  bool get hasOverdue =>
+      (insuranceDays != null && insuranceDays! < 0) ||
+      (inspectionDays != null && inspectionDays! < 0) ||
+      (taxDays != null && taxDays! < 0);
 
   factory _DashboardData.fromCar(Car car, String currency) {
     final now = DateTime.now();
@@ -782,7 +764,7 @@ class _DashboardData {
       for (final entry in car.fuel)
         _ActivityItem(
           icon: Icons.local_gas_station_rounded,
-          color: AppColors.success,
+          color: AppColors.categoryFuel,
           title: 'Fuel entry',
           date: entry.date,
           amount: money.format(entry.totalCost),
@@ -790,7 +772,7 @@ class _DashboardData {
       for (final repair in car.repairDatas)
         _ActivityItem(
           icon: Icons.build_rounded,
-          color: const Color(0xFF8B5CF6),
+          color: AppColors.categoryRepair,
           title: 'Repair',
           date: repair.date,
           amount: money.format(repair.amount),
@@ -798,7 +780,7 @@ class _DashboardData {
       for (final fine in car.fineDatas)
         _ActivityItem(
           icon: Icons.report_gmailerrorred_rounded,
-          color: AppColors.danger,
+          color: AppColors.categoryFine,
           title: 'Fine',
           date: fine.date,
           amount: money.format(fine.amount),
@@ -806,7 +788,7 @@ class _DashboardData {
       for (final tax in car.taxDatas)
         _ActivityItem(
           icon: Icons.paid_outlined,
-          color: const Color(0xFF06B6D4),
+          color: AppColors.categoryTax,
           title: 'Vehicle tax',
           date: tax.date,
           amount: money.format(tax.amount),
@@ -814,7 +796,7 @@ class _DashboardData {
       for (final inspection in car.inspectionDatas)
         _ActivityItem(
           icon: Icons.fact_check_outlined,
-          color: AppColors.warning,
+          color: AppColors.categoryInspection,
           title: 'Inspection',
           date: inspection.date,
           amount: money.format(inspection.amount ?? 0),
@@ -822,7 +804,7 @@ class _DashboardData {
       for (final insurance in car.insuranceDatas)
         _ActivityItem(
           icon: Icons.description_outlined,
-          color: AppColors.info,
+          color: AppColors.categoryInsurance,
           title: 'Insurance',
           date: insurance.startDate,
           amount: money.format(insurance.premiumAmount),
@@ -905,8 +887,8 @@ class _ActivityItem {
 }
 
 Color _statusColor(int? days) {
-  if (days == null) return AppColors.info;
-  if (days < 0) return AppColors.danger;
-  if (days <= 30) return AppColors.warning;
-  return AppColors.success;
+  if (days == null) return AppColors.categoryInspection;
+  if (days < 0) return AppColors.dangerLight;
+  if (days <= 30) return AppColors.warnLight;
+  return AppColors.successLight;
 }

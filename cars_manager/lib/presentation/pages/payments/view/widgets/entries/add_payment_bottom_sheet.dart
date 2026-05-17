@@ -135,6 +135,7 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
           top: false,
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -368,26 +369,48 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    DropdownButtonFormField<FineType>(
-                      initialValue: _fineType,
-                      decoration: InputDecoration(
-                        labelText: localizations.payments_finesData_type,
-                        prefixIcon: const Icon(Icons.report_outlined),
-                      ),
-                      items: FineType.values
-                          .map(
-                            (t) => DropdownMenuItem(
-                              value: t,
-                              child: Text(_labelForFineType(t, localizations)),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (v) {
-                        if (v == null) return;
-                        setState(() {
-                          _fineType = v;
-                        });
-                      },
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          localizations.payments_finesData_type,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.sm),
+                        Wrap(
+                          spacing: AppSpacing.sm,
+                          runSpacing: AppSpacing.sm,
+                          children: [
+                            for (final type in FineType.values)
+                              ChoiceChip(
+                                label: Text(
+                                  _labelForFineType(type, localizations),
+                                ),
+                                selected: _fineType == type,
+                                onSelected: (_) =>
+                                    setState(() => _fineType = type),
+                                selectedColor: theme.colorScheme.primary
+                                    .withValues(alpha: 0.12),
+                                labelStyle: theme.textTheme.labelLarge
+                                    ?.copyWith(
+                                      color: _fineType == type
+                                          ? theme.colorScheme.primary
+                                          : theme.colorScheme.onSurfaceVariant,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                side: BorderSide(
+                                  color: _fineType == type
+                                      ? theme.colorScheme.primary
+                                      : theme.colorScheme.outline,
+                                  width: 0.5,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 10),
                     Row(
@@ -487,14 +510,22 @@ class _AddPaymentBottomSheetState extends State<AddPaymentBottomSheet> {
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton.icon(
+                    child: FilledButton(
                       onPressed: _submit,
-                      icon: const Icon(Icons.check),
-                      style: ElevatedButton.styleFrom(
-                        textStyle: Theme.of(context).textTheme.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.w700),
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.onSurface,
+                        foregroundColor: Theme.of(context).colorScheme.surface,
+                        minimumSize: const Size(double.infinity, 52),
+                        shape: const StadiumBorder(),
+                        textStyle: Theme.of(context).textTheme.titleSmall
+                            ?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: -0.1,
+                            ),
                       ),
-                      label: Text(
+                      child: Text(
                         isEdit
                             ? localizations.common_save
                             : localizations.common_add,

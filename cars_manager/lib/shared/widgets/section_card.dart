@@ -16,6 +16,8 @@ class SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return AppCard(
       padding: EdgeInsets.zero,
       child: Column(
@@ -30,9 +32,12 @@ class SectionCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    title.toUpperCase(),
+                    style: TextStyle(
+                      fontSize: 11,
                       fontWeight: FontWeight.w600,
+                      letterSpacing: 1.2,
+                      color: scheme.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -40,10 +45,11 @@ class SectionCard extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(height: 1),
+          Divider(height: 0.5, thickness: 0.5, color: scheme.outline),
           for (var i = 0; i < children.length; i++) ...[
             children[i],
-            if (i < children.length - 1) const Divider(height: 1),
+            if (i < children.length - 1)
+              Divider(height: 0.5, thickness: 0.5, color: scheme.outline),
           ],
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
@@ -7,6 +8,7 @@ import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
 import 'package:cars_manager/presentation/pages/home/view/widgets/car_tile.dart';
 import 'package:cars_manager/shared/widgets/empty_state.dart';
+import 'package:cars_manager/shared/widgets/vehicle_visual_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -62,7 +64,7 @@ class CarsHomePage extends ConsumerWidget {
                     ),
                     FilledButton(
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.danger,
+                        backgroundColor: AppColors.dangerLight,
                       ),
                       onPressed: () => Navigator.of(context).pop(true),
                       child: Text(l10n.common_delete),
@@ -92,9 +94,7 @@ class CarsHomePage extends ConsumerWidget {
                 ),
               );
             } else if (wasActive) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(l10n.cars_activeRemoved)));
+              AppSnackBar.show(context, l10n.cars_activeRemoved);
             }
           },
         ),
@@ -109,6 +109,9 @@ class CarsHomePage extends ConsumerWidget {
           final crossAxisCount = width >= 1180 ? 3 : (width >= 720 ? 2 : 1);
           final horizontalPadding = isWide ? AppSpacing.xxl : AppSpacing.lg;
           final contentMaxWidth = width >= 1600 ? 1400.0 : double.infinity;
+
+          // Active car is shown in the header — exclude it from the list below.
+          final otherCars = cars.where((car) => car.id != activeCarId).toList();
 
           if (cars.isEmpty) {
             return Center(
@@ -162,43 +165,44 @@ class CarsHomePage extends ConsumerWidget {
                           child: _GarageStats(cars: cars),
                         ),
                       ),
-                      if (crossAxisCount == 1)
-                        SliverPadding(
-                          padding: EdgeInsets.fromLTRB(
-                            horizontalPadding,
-                            0,
-                            horizontalPadding,
-                            AppSpacing.xxxl,
+                      if (otherCars.isNotEmpty)
+                        if (crossAxisCount == 1)
+                          SliverPadding(
+                            padding: EdgeInsets.fromLTRB(
+                              horizontalPadding,
+                              0,
+                              horizontalPadding,
+                              AppSpacing.xxxl,
+                            ),
+                            sliver: SliverList.separated(
+                              itemCount: otherCars.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: AppSpacing.lg),
+                              itemBuilder: (context, index) =>
+                                  buildTile(otherCars[index]),
+                            ),
+                          )
+                        else
+                          SliverPadding(
+                            padding: EdgeInsets.fromLTRB(
+                              horizontalPadding,
+                              0,
+                              horizontalPadding,
+                              AppSpacing.xxxl,
+                            ),
+                            sliver: SliverGrid.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: crossAxisCount,
+                                    crossAxisSpacing: AppSpacing.lg,
+                                    mainAxisSpacing: AppSpacing.lg,
+                                    childAspectRatio: 0.9,
+                                  ),
+                              itemCount: otherCars.length,
+                              itemBuilder: (context, index) =>
+                                  buildTile(otherCars[index]),
+                            ),
                           ),
-                          sliver: SliverList.separated(
-                            itemCount: cars.length,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: AppSpacing.lg),
-                            itemBuilder: (context, index) =>
-                                buildTile(cars[index]),
-                          ),
-                        )
-                      else
-                        SliverPadding(
-                          padding: EdgeInsets.fromLTRB(
-                            horizontalPadding,
-                            0,
-                            horizontalPadding,
-                            AppSpacing.xxxl,
-                          ),
-                          sliver: SliverGrid.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: crossAxisCount,
-                                  crossAxisSpacing: AppSpacing.lg,
-                                  mainAxisSpacing: AppSpacing.lg,
-                                  childAspectRatio: 0.9,
-                                ),
-                            itemCount: cars.length,
-                            itemBuilder: (context, index) =>
-                                buildTile(cars[index]),
-                          ),
-                        ),
                     ],
                   ),
                 ),
@@ -249,7 +253,8 @@ class _GarageHeader extends StatelessWidget {
             Text(
               'My Garage',
               style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.6,
                 height: 1.1,
               ),
             ),
@@ -264,10 +269,18 @@ class _GarageHeader extends StatelessWidget {
           ],
         );
 
-        final action = FilledButton.icon(
-          onPressed: onAddCar,
-          icon: const Icon(Icons.add_rounded),
-          label: const Text('Add Car'),
+        final action = InkWell(
+          borderRadius: BorderRadius.circular(21),
+          onTap: onAddCar,
+          child: Container(
+            width: 42,
+            height: 42,
+            decoration: const BoxDecoration(
+              color: AppColors.accentLight,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
+          ),
         );
 
         return Column(
@@ -293,9 +306,12 @@ class _GarageHeader extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: theme.cardColor,
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(color: theme.colorScheme.outlineVariant),
+                  border: Border.all(
+                    color: theme.colorScheme.outline,
+                    width: 0.5,
+                  ),
                   boxShadow: theme.brightness == Brightness.light
-                      ? AppShadows.brandGlow(AppColors.brandPrimary)
+                      ? AppShadows.brandGlow(theme.colorScheme.primary)
                       : null,
                 ),
                 child: ClipRRect(
@@ -350,18 +366,9 @@ class _ActiveCarImage extends StatelessWidget {
                 context,
               ).colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.zero,
-              primaryColor: AppColors.brandPrimary,
+              primaryColor: AppColors.accentLight,
             )
-          : Container(
-              decoration: const BoxDecoration(
-                gradient: AppColors.brandGradient,
-              ),
-              child: const Icon(
-                Icons.directions_car_filled_rounded,
-                color: Colors.white,
-                size: 64,
-              ),
-            ),
+          : VehicleVisualCard(car: car, borderRadius: 0),
     );
   }
 }
@@ -383,8 +390,8 @@ class _ActiveCarCopy extends StatelessWidget {
           Text(
             'Active vehicle',
             style: theme.textTheme.labelLarge?.copyWith(
-              color: AppColors.brandPrimary,
-              fontWeight: FontWeight.w800,
+              color: theme.colorScheme.primary,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: AppSpacing.xs),
@@ -467,19 +474,19 @@ class _GarageStats extends StatelessWidget {
           icon: Icons.notifications_active_rounded,
           label: 'Due soon',
           value: '$upcoming',
-          color: upcoming == 0 ? AppColors.success : AppColors.warning,
+          color: upcoming == 0 ? AppColors.successLight : AppColors.warnLight,
         ),
         _StatPill(
           icon: Icons.local_gas_station_rounded,
           label: 'Fuel entries',
           value: '$fuelEntries',
-          color: AppColors.success,
+          color: AppColors.successLight,
         ),
         _StatPill(
           icon: Icons.receipt_long_rounded,
           label: 'Expense events',
           value: '$totalEvents',
-          color: AppColors.brandPrimary,
+          color: AppColors.accentLight,
         ),
       ],
     );
@@ -510,7 +517,7 @@ class _StatPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(AppRadius.pill),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -573,8 +580,8 @@ class _StatusChip extends StatelessWidget {
 }
 
 Color _statusColor(int? days) {
-  if (days == null) return AppColors.info;
-  if (days < 0) return AppColors.danger;
-  if (days <= 30) return AppColors.warning;
-  return AppColors.success;
+  if (days == null) return AppColors.categoryInspection;
+  if (days < 0) return AppColors.dangerLight;
+  if (days <= 30) return AppColors.warnLight;
+  return AppColors.successLight;
 }

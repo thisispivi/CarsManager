@@ -50,16 +50,26 @@ class AppSpacing {
   static const double xl = 24;
   static const double xxl = 32;
   static const double xxxl = 48;
+
+  /// Standard horizontal page padding matching the design spec.
+  static const double page = 20.0;
 }
 
 /// Radius tokens that keep cards, controls, and pills visually consistent.
 class AppRadius {
   static const double xs = 4;
   static const double sm = 8;
-  static const double md = 12;
-  static const double lg = 16;
-  static const double xl = 24;
-  static const double xxl = 32;
+  static const double md = 14;
+  static const double lg = 18;
+  static const double xl = 20;
+  static const double xxl = 28;
+
+  /// Standard card border radius (20px).
+  static const double card = 20.0;
+
+  /// Larger card border radius for garage vehicle tiles (22px).
+  static const double cardLg = 22.0;
+
   static const double pill = 999;
 }
 

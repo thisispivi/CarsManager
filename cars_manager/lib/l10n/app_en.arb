@@ -750,5 +750,6 @@
   "reminders_noReminders": "No due dates yet",
   "reminders_insurance": "Insurance",
   "reminders_inspection": "Inspection",
-  "reminders_tax": "Tax"
+  "reminders_tax": "Tax",
+  "settings_testNotification": "Test Notification"
 }

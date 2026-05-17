@@ -1,69 +1,55 @@
 import 'package:flutter/material.dart';
 
 /// Central color tokens for the CarsManager design system.
+/// Warm Cream palette — coral accent, warm off-white background.
 class AppColors {
-  /// Primary brand blue, derived from the CarsManager logo gradient.
-  static const Color brandPrimary = Color(0xFF4361EE);
+  // ─── Warm Cream Light ────────────────────────────────────────
+  static const Color bgLight = Color(0xFFF6F2EC);
+  static const Color surfaceLight = Color(0xFFFFFFFF);
+  static const Color surface2Light = Color(0xFFFAF7F2);
+  static const Color borderLight = Color.fromRGBO(40, 30, 20, 0.08);
+  static const Color borderStrongLight = Color.fromRGBO(40, 30, 20, 0.14);
+  static const Color textLight = Color(0xFF1B1410);
+  static const Color textMutedLight = Color.fromRGBO(27, 20, 16, 0.62);
+  static const Color textFaintLight = Color.fromRGBO(27, 20, 16, 0.38);
+  static const Color accentLight = Color(0xFFE5734F);
+  static const Color accentInkLight = Color(0xFFFFFFFF);
+  static const Color successLight = Color(0xFF2C8C72);
+  static const Color warnLight = Color(0xFFC9A227);
+  static const Color dangerLight = Color(0xFFC04949);
+  static const Color chipBgLight = Color.fromRGBO(229, 115, 79, 0.10);
 
-  /// Secondary brand purple, the right-side of the logo gradient.
-  static const Color brandSecondary = Color(0xFF9333EA);
+  // ─── Warm Cream Dark ─────────────────────────────────────────
+  static const Color bgDark = Color(0xFF1A1612);
+  static const Color surfaceDark = Color(0xFF22201C);
+  static const Color surface2Dark = Color(0xFF2A2722);
+  static const Color borderDark = Color.fromRGBO(255, 245, 230, 0.08);
+  static const Color borderStrongDark = Color.fromRGBO(255, 245, 230, 0.16);
+  static const Color textDark = Color(0xFFFBF7F0);
+  static const Color textMutedDark = Color.fromRGBO(251, 247, 240, 0.66);
+  static const Color textFaintDark = Color.fromRGBO(251, 247, 240, 0.40);
+  static const Color accentDark = Color(0xFFEF8B6B);
+  static const Color accentInkDark = Color(0xFF1A1612);
+  static const Color successDark = Color(0xFF52B597);
+  static const Color warnDark = Color(0xFFE8C152);
+  static const Color dangerDark = Color(0xFFE07373);
+  static const Color chipBgDark = Color.fromRGBO(239, 139, 107, 0.16);
 
-  /// Blue side of the CarsManager brand gradient (top-left of logo).
-  static const Color brandGradientStart = Color(0xFF4361EE);
+  // ─── Category colors (theme-invariant) ───────────────────────
+  static const Color categoryFuel = Color(0xFFE5734F);
+  static const Color categoryInsurance = Color(0xFF2C8C72);
+  static const Color categoryInspection = Color(0xFF3D6FB5);
+  static const Color categoryTax = Color(0xFFC9A227);
+  static const Color categoryRepair = Color(0xFF8E5BC2);
+  static const Color categoryFine = Color(0xFFC04949);
 
-  /// Purple side of the CarsManager brand gradient (bottom-right of logo).
-  static const Color brandGradientEnd = Color(0xFF9333EA);
-
-  /// Mid-point purple-blue used for tonal accents and selected chips.
-  static const Color brandAccent = Color(0xFF7B6EF7);
-
-  /// Logo-aligned brand gradient for hero surfaces and highlights.
-  static const LinearGradient brandGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [brandGradientStart, brandGradientEnd],
-  );
-
-  /// Light theme surfaces, borders, and foreground neutrals.
-  static const Color surfaceLight = Color.fromRGBO(255, 255, 255, 1);
-  static const Color surfaceAlt = Color(0xFFF7F8FA);
-  static const Color surfaceContainerLight = Color(0xFFF0F2F5);
-  static const Color cardLight = Color(0xFFFFFFFF);
-  static const Color borderLight = Color(0xFFE4E7EC);
-  static const Color tertiaryLight = Color(0xFFEEEDFD);
-  static const Color secondaryLight = Color(0xFF5A6370);
-  static const Color onSurfaceVariantLight = Color(0xFF5A6370);
-  static const Color primaryLight = Color(0xFF0D1117);
-  static const Color onTertiaryVariantLight = Color(0xFF8B95A3);
-  static const Color onSecondaryVariantLight = Color(0xFFCBD1D8);
-
-  /// Dark theme surfaces, borders, and foreground neutrals.
-  static const Color surfaceDark = Color(0xFF0F1114);
-  static const Color surfaceAltDark = Color(0xFF161A1E);
-  static const Color surfaceContainerDark = Color(0xFF1E2226);
-  static const Color cardDark = Color(0xFF1C2026);
-  static const Color borderDark = Color(0xFF2A2E34);
-  static const Color tertiaryDark = Color.fromRGBO(45, 53, 62, 1);
-  static const Color secondaryDark = Color(0xFF8B95A3);
-  static const Color onSurfaceVariantDark = Color(0xFF8B95A3);
-  static const Color primaryDark = Color(0xFFF0F2F5);
-  static const Color onTertiaryVariantDark = Color(0xFF3A4049);
-  static const Color onSecondaryVariantDark = Color(0xFF2A2E34);
-
-  /// Semantic status colors used across validation, alerts, and due dates.
-  static const Color success = Color(0xFF1EA85A);
-  static const Color warning = Color(0xFFE8960C);
-  static const Color danger = Color(0xFFDC3545);
-  static const Color error = Color(0xFFDC3545);
-  static const Color info = Color(0xFF4361EE);
-
-  /// Ordered palette for charts; index 0 mirrors the brand primary token.
+  /// Ordered palette for charts — matches category order.
   static const List<Color> chartColors = [
-    brandPrimary,
-    Color(0xFF1EA85A),
-    Color(0xFFE8960C),
-    Color(0xFFDC3545),
-    brandSecondary,
-    Color(0xFF06B6D4),
+    categoryFuel,
+    categoryInsurance,
+    categoryInspection,
+    categoryTax,
+    categoryRepair,
+    categoryFine,
   ];
 }

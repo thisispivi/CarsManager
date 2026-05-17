@@ -111,4 +111,24 @@ class NotificationService {
       );
     }
   }
+
+  /// Fires an immediate notification so the user can preview how reminders
+  /// look on their device without waiting for a real due date.
+  Future<void> showTestNotification() async {
+    await _notificationsPlugin.show(
+      id: 0,
+      title: 'CarsManager',
+      body: 'Notifications are working! Your reminders will appear here.',
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'due_dates',
+          'Due Dates',
+          channelDescription: 'Reminders for car maintenance and renewals',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+      ),
+    );
+  }
 }

@@ -750,5 +750,6 @@
   "reminders_noReminders": "Nessuna scadenza ancora",
   "reminders_insurance": "Assicurazione",
   "reminders_inspection": "Revisione",
-  "reminders_tax": "Bollo"
+  "reminders_tax": "Bollo",
+  "settings_testNotification": "Notifica di test"
 }

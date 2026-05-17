@@ -1,13 +1,11 @@
+import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/core/responsive/screen_size.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/onboarding/domain/onboarding_controller.dart';
-import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/features/search/presentation/search_overlay.dart';
 import 'package:cars_manager/models/car.dart';
-import 'package:cars_manager/presentation/common/widgets/car_switcher_header.dart';
-import 'package:cars_manager/presentation/widgets/notification_center.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
@@ -23,13 +21,13 @@ class AppScaffold extends ConsumerWidget {
   final Widget child;
 
   static List<_AppDestination> _getDestinations(AppLocalizations l10n) => [
-    const _AppDestination('/', Icons.dashboard_rounded, 'Home'),
+    const _AppDestination('/', Icons.home_rounded, 'Home'),
     _AppDestination(
       '/garage',
       Icons.directions_car_filled_rounded,
       l10n.nav_garage,
     ),
-    _AppDestination('/analytics', Icons.insights_rounded, l10n.nav_analytics),
+    _AppDestination('/analytics', Icons.bar_chart_rounded, l10n.nav_analytics),
     _AppDestination('/settings', Icons.settings_rounded, l10n.settings_title),
   ];
 
@@ -80,51 +78,36 @@ class AppScaffold extends ConsumerWidget {
           final screenSize = screenSizeForWidth(constraints.maxWidth);
           final isRail = !screenSize.isCompact;
           final isSidebar = screenSize.isDesktop;
-          final mobileSelectedIndex = selectedIndex.clamp(0, 2);
+          final mobileSelectedIndex = selectedIndex.clamp(0, 3);
 
-          final mobileDestinations = destinations.take(3).toList();
+          final mobileDestinations = destinations;
           final scaffold = Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              titleSpacing: 16,
-              // On desktop the sidebar already has the logo + car switcher,
-              // so we show just the logo mark in the app bar to avoid duplication.
-              title: isSidebar
-                  ? Image.asset(
-                      'assets/icons/CarsManagerLogo.png',
-                      height: 28,
-                      alignment: Alignment.centerLeft,
-                    )
-                  : const CarSwitcherHeader(),
-              actions: [
-                IconButton(
-                  tooltip: 'Search',
-                  icon: const Icon(Icons.search_rounded),
-                  onPressed: () => showSearchOverlay(context),
-                ),
-                const NotificationCenter(),
-                if (!isSidebar)
-                  IconButton(
-                    tooltip: l10n.settings_title,
-                    icon: const Icon(Icons.settings_outlined),
-                    onPressed: () => context.go('/settings'),
-                  ),
-              ],
-            ),
             body: child,
             bottomNavigationBar: isRail
                 ? null
-                : NavigationBar(
-                    selectedIndex: mobileSelectedIndex,
-                    onDestinationSelected: (index) =>
-                        context.go(mobileDestinations[index].path),
-                    destinations: [
-                      for (final destination in mobileDestinations)
-                        NavigationDestination(
-                          icon: Icon(destination.icon),
-                          label: destination.label,
+                : DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.borderDark
+                              : AppColors.borderLight,
+                          width: 0.5,
                         ),
-                    ],
+                      ),
+                    ),
+                    child: NavigationBar(
+                      selectedIndex: mobileSelectedIndex,
+                      onDestinationSelected: (index) =>
+                          context.go(mobileDestinations[index].path),
+                      destinations: [
+                        for (final destination in mobileDestinations)
+                          NavigationDestination(
+                            icon: Icon(destination.icon),
+                            label: destination.label,
+                          ),
+                      ],
+                    ),
                   ),
           );
 
@@ -234,7 +217,6 @@ class _DesktopSidebar extends ConsumerWidget {
     final theme = Theme.of(context);
     final cars = ref.watch(carsControllerProvider);
     final activeCar = ref.watch(activeCarProvider);
-    final settings = ref.watch(appSettingsProvider);
 
     return Container(
       width: 252,
@@ -269,7 +251,6 @@ class _DesktopSidebar extends ConsumerWidget {
                 if (i == 2) const _SidebarDivider(),
               ],
               const Spacer(),
-              _ThemeModeTile(mode: settings.themeMode),
             ],
           ),
         ),
@@ -302,7 +283,7 @@ class _SidebarCarSwitcher extends ConsumerWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(AppRadius.lg),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
@@ -394,37 +375,6 @@ class _SidebarDestinationTile extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ThemeModeTile extends ConsumerWidget {
-  const _ThemeModeTile({required this.mode});
-
-  final ThemeMode mode;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return _SidebarDestinationTile(
-      destination: _AppDestination(
-        '/settings',
-        isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-        mode == ThemeMode.system
-            ? 'System theme'
-            : isDark
-            ? 'Dark theme'
-            : 'Light theme',
-      ),
-      selected: false,
-      onTap: () {
-        final next = switch (mode) {
-          ThemeMode.system => ThemeMode.light,
-          ThemeMode.light => ThemeMode.dark,
-          ThemeMode.dark => ThemeMode.system,
-        };
-        ref.read(settingsControllerProvider.notifier).setThemeMode(next);
-      },
     );
   }
 }

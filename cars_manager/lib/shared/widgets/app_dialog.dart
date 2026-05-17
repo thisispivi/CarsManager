@@ -80,7 +80,7 @@ Future<bool> showConfirmDialog({
       ),
       TextButton(
         style: TextButton.styleFrom(
-          foregroundColor: isDangerous ? AppColors.danger : null,
+          foregroundColor: isDangerous ? AppColors.dangerLight : null,
         ),
         onPressed: () => Navigator.of(context).pop(true),
         child: Text(confirmLabel),

@@ -1,7 +1,10 @@
 import 'package:cars_manager/core/theme/design_tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum AppButtonVariant { primary, secondary, ghost, danger }
+
+enum AppButtonSize { sm, md, lg }
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -10,18 +13,28 @@ class AppButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
     this.variant = AppButtonVariant.primary,
+    this.size = AppButtonSize.md,
     this.isLoading = false,
+    this.fullWidth = false,
   });
 
   final String label;
   final VoidCallback? onPressed;
   final IconData? icon;
   final AppButtonVariant variant;
+  final AppButtonSize size;
   final bool isLoading;
+  final bool fullWidth;
 
   @override
   Widget build(BuildContext context) {
     final colors = _colors(context);
+    final (height, hPad, radius) = switch (size) {
+      AppButtonSize.sm => (36.0, 14.0, 12.0),
+      AppButtonSize.md => (48.0, 18.0, AppRadius.md),
+      AppButtonSize.lg => (56.0, 22.0, 18.0),
+    };
+
     final child = isLoading
         ? SizedBox.square(
             dimension: 18,
@@ -41,43 +54,48 @@ class AppButton extends StatelessWidget {
             ],
           );
 
-    return FilledButton(
+    Widget button = FilledButton(
       style: FilledButton.styleFrom(
         backgroundColor: colors.background,
         foregroundColor: colors.foreground,
         disabledBackgroundColor: colors.background.withValues(alpha: 0.4),
         disabledForegroundColor: colors.foreground.withValues(alpha: 0.5),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.xl,
-          vertical: AppSpacing.lg,
-        ),
+        minimumSize: Size(0, height),
+        padding: EdgeInsets.symmetric(horizontal: hPad),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(radius),
         ),
-        textStyle: AppTextStyles.buttonText,
+        textStyle: GoogleFonts.inter(
+          fontSize: size == AppButtonSize.sm ? 14 : 15,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.1,
+        ),
       ),
       onPressed: isLoading ? null : onPressed,
       child: child,
     );
+
+    if (fullWidth) button = SizedBox(width: double.infinity, child: button);
+    return button;
   }
 
   _ButtonColors _colors(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return switch (variant) {
-      AppButtonVariant.primary => const _ButtonColors(
-        AppColors.brandPrimary,
-        Colors.white,
+      AppButtonVariant.primary => _ButtonColors(
+        scheme.primary,
+        scheme.onPrimary,
       ),
-      AppButtonVariant.secondary => const _ButtonColors(
-        AppColors.brandSecondary,
-        Colors.white,
+      AppButtonVariant.secondary => _ButtonColors(
+        scheme.primary.withValues(alpha: 0.12),
+        scheme.primary,
       ),
       AppButtonVariant.ghost => _ButtonColors(
-        scheme.surfaceContainerHighest,
+        Colors.transparent,
         scheme.onSurface,
       ),
       AppButtonVariant.danger => const _ButtonColors(
-        AppColors.danger,
+        AppColors.dangerLight,
         Colors.white,
       ),
     };

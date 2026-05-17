@@ -10,7 +10,7 @@ class TrendBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPositive = percent >= 0;
-    final color = isPositive ? AppColors.success : AppColors.danger;
+    final color = isPositive ? AppColors.successLight : AppColors.dangerLight;
     final icon = isPositive
         ? Icons.arrow_upward_rounded
         : Icons.arrow_downward_rounded;

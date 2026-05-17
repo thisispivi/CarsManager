@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/analytics/domain/export_service.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
@@ -30,8 +31,10 @@ class AnalyticsScreen extends ConsumerWidget {
         await ExportService.shareCSV(csv, filename);
       } catch (error) {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.analytics_exportFailed('$error'))),
+        AppSnackBar.show(
+          context,
+          l10n.analytics_exportFailed('$error'),
+          isError: true,
         );
       }
     }
@@ -97,43 +100,91 @@ class AnalyticsScreen extends ConsumerWidget {
           return ListView(
             padding: EdgeInsets.all(isWide ? AppSpacing.xxl : AppSpacing.lg),
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          l10n.analytics_title,
-                          style: Theme.of(context).textTheme.headlineMedium
-                              ?.copyWith(fontWeight: FontWeight.w800),
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          '${cars.length} ${cars.length == 1 ? 'vehicle' : 'vehicles'} tracked',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  FilledButton.icon(
-                    onPressed: exportData,
-                    icon: const Icon(Icons.download_rounded),
-                    label: Text(l10n.analytics_exportCsv),
-                  ),
-                ],
+              _HeroTotalCard(
+                data: data,
+                onExport: exportData,
+                carsCount: cars.length,
               ),
               const SizedBox(height: AppSpacing.xl),
               content,
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _HeroTotalCard extends StatelessWidget {
+  const _HeroTotalCard({
+    required this.data,
+    required this.onExport,
+    required this.carsCount,
+  });
+
+  final _AnalyticsData data;
+  final VoidCallback onExport;
+  final int carsCount;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final fg = cs.onInverseSurface;
+    final fgMuted = cs.onInverseSurface.withValues(alpha: 0.60);
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: cs.inverseSurface,
+        borderRadius: BorderRadius.circular(AppRadius.card),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'TOTAL TRACKED',
+                  style: TextStyle(
+                    color: fgMuted,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.2,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  data.money.format(data.totalSpend),
+                  style: TextStyle(
+                    color: fg,
+                    fontSize: 38,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -1,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$carsCount ${carsCount == 1 ? 'vehicle' : 'vehicles'} · last 12 months',
+                  style: TextStyle(
+                    color: fgMuted,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            onPressed: onExport,
+            icon: const Icon(Icons.download_rounded),
+            color: fg,
+            tooltip: 'Export CSV',
+          ),
+        ],
       ),
     );
   }
@@ -321,44 +372,76 @@ class _MonthlyTrendTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final headerStyle = theme.textTheme.labelMedium?.copyWith(
+      fontWeight: FontWeight.w800,
+      color: theme.colorScheme.onSurfaceVariant,
+    );
+    final cellStyle = theme.textTheme.bodySmall?.copyWith(
+      fontWeight: FontWeight.w700,
+    );
+    final mutedStyle = cellStyle?.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+    );
+
+    Widget row({
+      required String month,
+      required String fuel,
+      required String maint,
+      required String fixed,
+      required String total,
+      TextStyle? style,
+    }) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+        child: Row(
+          children: [
+            Expanded(flex: 2, child: Text(month, style: style)),
+            Expanded(
+              flex: 3,
+              child: Text(fuel, style: style, textAlign: TextAlign.right),
+            ),
+            Expanded(
+              flex: 3,
+              child: Text(maint, style: style, textAlign: TextAlign.right),
+            ),
+            Expanded(
+              flex: 3,
+              child: Text(fixed, style: style, textAlign: TextAlign.right),
+            ),
+            Expanded(
+              flex: 3,
+              child: Text(total, style: style, textAlign: TextAlign.right),
+            ),
+          ],
+        ),
+      );
+    }
+
     return _SurfaceCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _SectionHeader(title: 'Monthly trend'),
           const SizedBox(height: AppSpacing.md),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              headingTextStyle: Theme.of(context).textTheme.labelMedium
-                  ?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-              dataTextStyle: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700),
-              columns: const [
-                DataColumn(label: Text('Month')),
-                DataColumn(label: Text('Fuel'), numeric: true),
-                DataColumn(label: Text('Maintenance'), numeric: true),
-                DataColumn(label: Text('Fixed'), numeric: true),
-                DataColumn(label: Text('Total'), numeric: true),
-              ],
-              rows: [
-                for (final month in data.monthlyTotals.reversed)
-                  DataRow(
-                    cells: [
-                      DataCell(Text(DateFormat.MMM().format(month.month))),
-                      DataCell(Text(data.money.format(month.fuel))),
-                      DataCell(Text(data.money.format(month.maintenance))),
-                      DataCell(Text(data.money.format(month.fixed))),
-                      DataCell(Text(data.money.format(month.total))),
-                    ],
-                  ),
-              ],
-            ),
+          row(
+            month: 'Month',
+            fuel: 'Fuel',
+            maint: 'Maint.',
+            fixed: 'Fixed',
+            total: 'Total',
+            style: headerStyle,
           ),
+          const Divider(height: AppSpacing.md),
+          for (final month in data.monthlyTotals.reversed)
+            row(
+              month: DateFormat.MMM().format(month.month),
+              fuel: data.money.format(month.fuel),
+              maint: data.money.format(month.maintenance),
+              fixed: data.money.format(month.fixed),
+              total: data.money.format(month.total),
+              style: month == data.monthlyTotals.last ? cellStyle : mutedStyle,
+            ),
         ],
       ),
     );
@@ -374,11 +457,11 @@ class _SurfaceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
         boxShadow: theme.brightness == Brightness.light ? AppShadows.sm : null,
       ),
       child: child,
@@ -408,8 +491,8 @@ class _SectionHeader extends StatelessWidget {
           Text(
             trailing!,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AppColors.brandPrimary,
-              fontWeight: FontWeight.w800,
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w700,
             ),
           ),
       ],
@@ -441,8 +524,10 @@ class _MonthColumn extends StatelessWidget {
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   color: active
-                      ? AppColors.brandPrimary
-                      : AppColors.brandPrimary.withValues(alpha: 0.18),
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(AppRadius.xs),
                 ),
                 child: const SizedBox.expand(),
@@ -578,12 +663,16 @@ class _AnalyticsData {
     );
 
     final categories = [
-      _LabeledValue('Fuel', totalFuel, AppColors.success),
-      _LabeledValue('Insurance', totalInsurance, AppColors.info),
-      _LabeledValue('Inspection', totalInspection, AppColors.warning),
-      _LabeledValue('Tax', totalTax, const Color(0xFF06B6D4)),
-      _LabeledValue('Repairs', totalRepair, const Color(0xFF8B5CF6)),
-      _LabeledValue('Fines', totalFine, AppColors.danger),
+      _LabeledValue('Fuel', totalFuel, AppColors.categoryFuel),
+      _LabeledValue('Insurance', totalInsurance, AppColors.categoryInsurance),
+      _LabeledValue(
+        'Inspection',
+        totalInspection,
+        AppColors.categoryInspection,
+      ),
+      _LabeledValue('Tax', totalTax, AppColors.categoryTax),
+      _LabeledValue('Repairs', totalRepair, AppColors.categoryRepair),
+      _LabeledValue('Fines', totalFine, AppColors.categoryFine),
     ]..sort((a, b) => b.value.compareTo(a.value));
 
     final carTotals = [
@@ -607,7 +696,8 @@ class _AnalyticsData {
     );
     final topCategory = categories.firstWhere(
       (item) => item.value > 0,
-      orElse: () => const _LabeledValue('No spend yet', 0, AppColors.info),
+      orElse: () =>
+          const _LabeledValue('No spend yet', 0, AppColors.categoryInspection),
     );
     final upcomingCount = cars
         .expand(
@@ -636,13 +726,13 @@ class _AnalyticsData {
       insights: [
         _Insight(
           icon: Icons.payments_rounded,
-          color: AppColors.brandPrimary,
+          color: AppColors.accentLight,
           title: '${money.format(totalSpend)} tracked',
           subtitle: 'Across every vehicle and category',
         ),
         _Insight(
           icon: Icons.trending_up_rounded,
-          color: delta > 0 ? AppColors.warning : AppColors.success,
+          color: delta > 0 ? AppColors.warnLight : AppColors.successLight,
           title: previousMonth == 0
               ? 'This month is active'
               : '${delta.abs().toStringAsFixed(0)}% ${delta >= 0 ? 'up' : 'down'}',
@@ -658,7 +748,9 @@ class _AnalyticsData {
         ),
         _Insight(
           icon: Icons.notifications_active_rounded,
-          color: upcomingCount > 0 ? AppColors.warning : AppColors.success,
+          color: upcomingCount > 0
+              ? AppColors.warnLight
+              : AppColors.successLight,
           title: upcomingCount == 0
               ? 'No urgent deadlines'
               : '$upcomingCount deadlines soon',

@@ -7,6 +7,103 @@ import 'package:cars_manager/models/car.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// Opens the car-switcher bottom sheet from any screen.
+///
+/// Used by the Home screen's "Switch ›" button so the same sheet
+/// that was previously in the app-bar is accessible in-content.
+void showCarSwitcherSheet(BuildContext context, WidgetRef ref) {
+  final cars = ref.read(carsControllerProvider);
+  final activeCarId = ref.read(activeCarControllerProvider);
+  final l10n = AppLocalizations.of(context)!;
+  final textTheme = Theme.of(context).textTheme;
+
+  showModalBottomSheet<void>(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (sheetContext) {
+      return Consumer(
+        builder: (_, ref, _) {
+          return SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    l10n.nav_switchCar,
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                ...cars.map(
+                  (car) => ListTile(
+                    leading: _buildCarAvatarStatic(car, sheetContext),
+                    title: Text(
+                      car.name,
+                      style: textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '${car.manufacture} ${car.model} • ${car.yearOfManufacture}',
+                      style: textTheme.bodySmall,
+                    ),
+                    trailing: car.id == activeCarId
+                        ? Icon(
+                            Icons.check,
+                            color: Theme.of(sheetContext).colorScheme.primary,
+                          )
+                        : null,
+                    onTap: () {
+                      ref
+                          .read(activeCarControllerProvider.notifier)
+                          .select(car.id);
+                      Navigator.pop(sheetContext);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
+CircleAvatar _buildCarAvatarStatic(Car car, BuildContext context) {
+  ImageProvider? imageProvider;
+  final b64 = car.imageBase64;
+  if (b64 != null && b64.trim().isNotEmpty) {
+    try {
+      imageProvider = MemoryImage(base64Decode(b64));
+    } on FormatException {
+      imageProvider = null;
+    }
+  } else {
+    final url = car.imageUrl;
+    if (url != null && url.trim().isNotEmpty) {
+      imageProvider = NetworkImage(url);
+    }
+  }
+
+  return CircleAvatar(
+    radius: 20,
+    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+    backgroundImage: imageProvider,
+    child: imageProvider == null
+        ? Icon(
+            Icons.directions_car,
+            color: Theme.of(context).colorScheme.primary,
+          )
+        : null,
+  );
+}
+
 class CarSwitcherHeader extends ConsumerStatefulWidget {
   const CarSwitcherHeader({super.key});
 

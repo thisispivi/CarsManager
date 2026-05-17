@@ -1,3 +1,4 @@
+import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
@@ -109,15 +110,7 @@ Future<void> showEntryActionsSheet({
                   if (confirmed == true) {
                     onDelete();
                     if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            l10n.common_deleted,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      );
+                      AppSnackBar.show(context, l10n.common_deleted);
                     }
                   }
                 },

@@ -157,7 +157,7 @@ class _NotificationTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(AppSpacing.lg),
           decoration: BoxDecoration(
-            border: Border.all(color: theme.colorScheme.outlineVariant),
+            border: Border.all(color: theme.colorScheme.outline, width: 0.5),
             borderRadius: BorderRadius.circular(AppRadius.lg),
           ),
           child: Row(
@@ -249,7 +249,7 @@ class _EmptyNotifications extends StatelessWidget {
             const Icon(
               Icons.check_circle_outline_rounded,
               size: 44,
-              color: AppColors.success,
+              color: AppColors.successLight,
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
@@ -336,7 +336,7 @@ class _ReminderNotification {
 }
 
 Color _statusColor(int daysRemaining) {
-  if (daysRemaining < 0) return AppColors.danger;
-  if (daysRemaining <= 30) return AppColors.warning;
-  return AppColors.success;
+  if (daysRemaining < 0) return AppColors.dangerLight;
+  if (daysRemaining <= 30) return AppColors.warnLight;
+  return AppColors.successLight;
 }

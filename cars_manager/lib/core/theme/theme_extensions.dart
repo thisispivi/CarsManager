@@ -3,100 +3,81 @@ import 'package:flutter/material.dart';
 @immutable
 class AppColorScheme extends ThemeExtension<AppColorScheme> {
   const AppColorScheme({
-    required this.brandPrimary,
-    required this.brandSecondary,
-    required this.brandGradientStart,
-    required this.brandGradientEnd,
-    required this.brandAccent,
-    required this.brandSubtle,
+    required this.accent,
+    required this.accentInk,
+    required this.bg,
+    required this.surface2,
+    required this.chipBg,
     required this.surfacePrimary,
-    required this.surfaceSecondary,
     required this.surfaceElevated,
     required this.surfaceOverlay,
     required this.borderDefault,
     required this.borderSubtle,
     required this.borderStrong,
     required this.textPrimary,
-    required this.textSecondary,
-    required this.textTertiary,
-    required this.textInverse,
+    required this.textMuted,
+    required this.textFaint,
     required this.success,
     required this.warning,
     required this.danger,
-    required this.info,
   });
 
-  final Color brandPrimary;
-  final Color brandSecondary;
-  final Color brandGradientStart;
-  final Color brandGradientEnd;
-  final Color brandAccent;
-  final Color brandSubtle;
+  final Color accent;
+  final Color accentInk;
+  final Color bg;
+  final Color surface2;
+  final Color chipBg;
   final Color surfacePrimary;
-  final Color surfaceSecondary;
   final Color surfaceElevated;
   final Color surfaceOverlay;
   final Color borderDefault;
   final Color borderSubtle;
   final Color borderStrong;
   final Color textPrimary;
-  final Color textSecondary;
-  final Color textTertiary;
-  final Color textInverse;
+  final Color textMuted;
+  final Color textFaint;
   final Color success;
   final Color warning;
   final Color danger;
-  final Color info;
-
-  LinearGradient get brandGradient =>
-      LinearGradient(colors: [brandGradientStart, brandGradientEnd]);
 
   @override
   AppColorScheme copyWith({
-    Color? brandPrimary,
-    Color? brandSecondary,
-    Color? brandGradientStart,
-    Color? brandGradientEnd,
-    Color? brandAccent,
-    Color? brandSubtle,
+    Color? accent,
+    Color? accentInk,
+    Color? bg,
+    Color? surface2,
+    Color? chipBg,
     Color? surfacePrimary,
-    Color? surfaceSecondary,
     Color? surfaceElevated,
     Color? surfaceOverlay,
     Color? borderDefault,
     Color? borderSubtle,
     Color? borderStrong,
     Color? textPrimary,
-    Color? textSecondary,
-    Color? textTertiary,
-    Color? textInverse,
+    Color? textMuted,
+    Color? textFaint,
     Color? success,
     Color? warning,
     Color? danger,
-    Color? info,
   }) {
     return AppColorScheme(
-      brandPrimary: brandPrimary ?? this.brandPrimary,
-      brandSecondary: brandSecondary ?? this.brandSecondary,
-      brandGradientStart: brandGradientStart ?? this.brandGradientStart,
-      brandGradientEnd: brandGradientEnd ?? this.brandGradientEnd,
-      brandAccent: brandAccent ?? this.brandAccent,
-      brandSubtle: brandSubtle ?? this.brandSubtle,
+      accent: accent ?? this.accent,
+      accentInk: accentInk ?? this.accentInk,
+      bg: bg ?? this.bg,
+      surface2: surface2 ?? this.surface2,
+      chipBg: chipBg ?? this.chipBg,
       surfacePrimary: surfacePrimary ?? this.surfacePrimary,
-      surfaceSecondary: surfaceSecondary ?? this.surfaceSecondary,
       surfaceElevated: surfaceElevated ?? this.surfaceElevated,
       surfaceOverlay: surfaceOverlay ?? this.surfaceOverlay,
       borderDefault: borderDefault ?? this.borderDefault,
       borderSubtle: borderSubtle ?? this.borderSubtle,
       borderStrong: borderStrong ?? this.borderStrong,
       textPrimary: textPrimary ?? this.textPrimary,
-      textSecondary: textSecondary ?? this.textSecondary,
-      textTertiary: textTertiary ?? this.textTertiary,
-      textInverse: textInverse ?? this.textInverse,
+      textMuted: textMuted ?? this.textMuted,
+      textFaint: textFaint ?? this.textFaint,
       success: success ?? this.success,
       warning: warning ?? this.warning,
       danger: danger ?? this.danger,
-      info: info ?? this.info,
     );
   }
 
@@ -104,39 +85,23 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
   AppColorScheme lerp(ThemeExtension<AppColorScheme>? other, double t) {
     if (other is! AppColorScheme) return this;
     return AppColorScheme(
-      brandPrimary: Color.lerp(brandPrimary, other.brandPrimary, t)!,
-      brandSecondary: Color.lerp(brandSecondary, other.brandSecondary, t)!,
-      brandGradientStart: Color.lerp(
-        brandGradientStart,
-        other.brandGradientStart,
-        t,
-      )!,
-      brandGradientEnd: Color.lerp(
-        brandGradientEnd,
-        other.brandGradientEnd,
-        t,
-      )!,
-      brandAccent: Color.lerp(brandAccent, other.brandAccent, t)!,
-      brandSubtle: Color.lerp(brandSubtle, other.brandSubtle, t)!,
+      accent: Color.lerp(accent, other.accent, t)!,
+      accentInk: Color.lerp(accentInk, other.accentInk, t)!,
+      bg: Color.lerp(bg, other.bg, t)!,
+      surface2: Color.lerp(surface2, other.surface2, t)!,
+      chipBg: Color.lerp(chipBg, other.chipBg, t)!,
       surfacePrimary: Color.lerp(surfacePrimary, other.surfacePrimary, t)!,
-      surfaceSecondary: Color.lerp(
-        surfaceSecondary,
-        other.surfaceSecondary,
-        t,
-      )!,
       surfaceElevated: Color.lerp(surfaceElevated, other.surfaceElevated, t)!,
       surfaceOverlay: Color.lerp(surfaceOverlay, other.surfaceOverlay, t)!,
       borderDefault: Color.lerp(borderDefault, other.borderDefault, t)!,
       borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
       borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
       textPrimary: Color.lerp(textPrimary, other.textPrimary, t)!,
-      textSecondary: Color.lerp(textSecondary, other.textSecondary, t)!,
-      textTertiary: Color.lerp(textTertiary, other.textTertiary, t)!,
-      textInverse: Color.lerp(textInverse, other.textInverse, t)!,
+      textMuted: Color.lerp(textMuted, other.textMuted, t)!,
+      textFaint: Color.lerp(textFaint, other.textFaint, t)!,
       success: Color.lerp(success, other.success, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
       danger: Color.lerp(danger, other.danger, t)!,
-      info: Color.lerp(info, other.info, t)!,
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
@@ -135,39 +136,10 @@ class _CarFormPageState extends State<CarFormPage> {
     }
 
     if (_fuelType == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            l10n.validation_required(l10n.carData_fuelType),
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-          ),
-        ),
-      );
-      return;
-    }
-
-    final today = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    );
-    final pickedDay = DateTime(
-      _insuranceExpirationDate.year,
-      _insuranceExpirationDate.month,
-      _insuranceExpirationDate.day,
-    );
-    if (pickedDay.isBefore(today)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            l10n.validation_dateNotPast,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-          ),
-        ),
+      AppSnackBar.show(
+        context,
+        l10n.validation_required(l10n.carData_fuelType),
+        isError: true,
       );
       return;
     }
@@ -267,16 +239,7 @@ class _CarFormPageState extends State<CarFormPage> {
   }
 
   void _showValidationError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
+    AppSnackBar.show(context, message, isError: true);
   }
 
   @override
@@ -291,16 +254,7 @@ class _CarFormPageState extends State<CarFormPage> {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title, style: textTheme.titleLarge),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            tooltip: l10n.common_save,
-            onPressed: () => _save(l10n),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(title, style: textTheme.titleLarge)),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -536,8 +490,8 @@ class _CarFormProgress extends StatelessWidget {
                       horizontal: AppSpacing.sm,
                     ),
                     color: i < step
-                        ? AppColors.brandPrimary
-                        : theme.colorScheme.outlineVariant,
+                        ? AppColors.accentLight
+                        : theme.colorScheme.outline,
                   ),
                 ),
             ],
@@ -562,7 +516,7 @@ class _StepDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = isActive || isDone
-        ? AppColors.brandPrimary
+        ? AppColors.accentLight
         : Theme.of(context).colorScheme.onSurfaceVariant;
     return Column(
       children: [
@@ -572,7 +526,7 @@ class _StepDot extends StatelessWidget {
           height: 32,
           decoration: BoxDecoration(
             color: (isActive || isDone)
-                ? AppColors.brandPrimary.withValues(alpha: 0.12)
+                ? AppColors.accentLight.withValues(alpha: 0.12)
                 : Theme.of(context).colorScheme.surfaceContainerHighest,
             shape: BoxShape.circle,
             border: Border.all(color: color),
@@ -814,18 +768,21 @@ class _CarImagePickerCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          SizedBox(
-            height: 180,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: ImageRect(
-                aspectRatio: 16 / 9,
-                imageUrl: imageUrl,
-                imageBase64: imageBase64,
-                imageAlignment: Alignment.center,
-                backgroundColor: cs.surfaceContainerHighest,
-                borderRadius: BorderRadius.zero,
-                primaryColor: cs.primary,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+            child: SizedBox(
+              height: 180,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: ImageRect(
+                  aspectRatio: 16 / 9,
+                  imageUrl: imageUrl,
+                  imageBase64: imageBase64,
+                  imageAlignment: Alignment.center,
+                  backgroundColor: cs.surfaceContainerHighest,
+                  borderRadius: BorderRadius.zero,
+                  primaryColor: cs.primary,
+                ),
               ),
             ),
           ),
@@ -841,6 +798,7 @@ class _CarImagePickerCard extends StatelessWidget {
                   l10n.common_pick,
                   style: theme.textTheme.labelLarge?.copyWith(
                     fontWeight: FontWeight.w700,
+                    color: cs.onSecondaryContainer,
                   ),
                 ),
               ),
@@ -852,6 +810,7 @@ class _CarImagePickerCard extends StatelessWidget {
                     l10n.common_delete,
                     style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w700,
+                      color: cs.onSecondaryContainer,
                     ),
                   ),
                 ),
@@ -863,6 +822,7 @@ class _CarImagePickerCard extends StatelessWidget {
                     l10n.common_edit,
                     style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w700,
+                      color: cs.onSecondaryContainer,
                     ),
                   ),
                 ),

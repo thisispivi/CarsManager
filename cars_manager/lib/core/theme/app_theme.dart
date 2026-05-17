@@ -6,73 +6,80 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// Material theme factory for CarsManager.
 class AppTheme {
-  /// Builds the dark theme, wiring brand colors, typography, controls, and
-  /// bordered card surfaces into Material 3 defaults.
+  /// Builds the dark theme using the Warm Cream dark palette.
   static ThemeData getDarkTheme() {
-    final textTheme = GoogleFonts.spaceGroteskTextTheme(
+    final textTheme = GoogleFonts.interTextTheme(
       ThemeData(brightness: Brightness.dark).textTheme,
     );
 
     return _buildTheme(
       brightness: Brightness.dark,
       textTheme: textTheme,
+      bg: AppColors.bgDark,
       surface: AppColors.surfaceDark,
-      surfaceAlt: AppColors.surfaceAltDark,
-      surfaceContainer: AppColors.surfaceContainerDark,
-      card: AppColors.cardDark,
+      surface2: AppColors.surface2Dark,
       border: AppColors.borderDark,
-      primaryText: AppColors.primaryDark,
-      secondaryText: AppColors.secondaryDark,
-      tertiary: AppColors.tertiaryDark,
-      onSurfaceVariant: AppColors.onSurfaceVariantDark,
-      onTertiaryVariant: AppColors.onTertiaryVariantDark,
-      onSecondaryVariant: AppColors.onSecondaryVariantDark,
+      borderStrong: AppColors.borderStrongDark,
+      primaryText: AppColors.textDark,
+      mutedText: AppColors.textMutedDark,
+      faintText: AppColors.textFaintDark,
+      accent: AppColors.accentDark,
+      accentInk: AppColors.accentInkDark,
+      success: AppColors.successDark,
+      warn: AppColors.warnDark,
+      danger: AppColors.dangerDark,
+      chipBg: AppColors.chipBgDark,
     );
   }
 
-  /// Builds the light theme, wiring brand colors, typography, controls, and
-  /// bordered card surfaces into Material 3 defaults.
+  /// Builds the light theme using the Warm Cream light palette.
   static ThemeData getLightTheme() {
-    final textTheme = GoogleFonts.spaceGroteskTextTheme(
+    final textTheme = GoogleFonts.interTextTheme(
       ThemeData(brightness: Brightness.light).textTheme,
     );
 
     return _buildTheme(
       brightness: Brightness.light,
       textTheme: textTheme,
+      bg: AppColors.bgLight,
       surface: AppColors.surfaceLight,
-      surfaceAlt: AppColors.surfaceAlt,
-      surfaceContainer: AppColors.surfaceContainerLight,
-      card: AppColors.cardLight,
+      surface2: AppColors.surface2Light,
       border: AppColors.borderLight,
-      primaryText: AppColors.primaryLight,
-      secondaryText: AppColors.secondaryLight,
-      tertiary: AppColors.tertiaryLight,
-      onSurfaceVariant: AppColors.onSurfaceVariantLight,
-      onTertiaryVariant: AppColors.onTertiaryVariantLight,
-      onSecondaryVariant: AppColors.onSecondaryVariantLight,
+      borderStrong: AppColors.borderStrongLight,
+      primaryText: AppColors.textLight,
+      mutedText: AppColors.textMutedLight,
+      faintText: AppColors.textFaintLight,
+      accent: AppColors.accentLight,
+      accentInk: AppColors.accentInkLight,
+      success: AppColors.successLight,
+      warn: AppColors.warnLight,
+      danger: AppColors.dangerLight,
+      chipBg: AppColors.chipBgLight,
     );
   }
 
   static ThemeData _buildTheme({
     required Brightness brightness,
     required TextTheme textTheme,
+    required Color bg,
     required Color surface,
-    required Color surfaceAlt,
-    required Color surfaceContainer,
-    required Color card,
+    required Color surface2,
     required Color border,
+    required Color borderStrong,
     required Color primaryText,
-    required Color secondaryText,
-    required Color tertiary,
-    required Color onSurfaceVariant,
-    required Color onTertiaryVariant,
-    required Color onSecondaryVariant,
+    required Color mutedText,
+    required Color faintText,
+    required Color accent,
+    required Color accentInk,
+    required Color success,
+    required Color warn,
+    required Color danger,
+    required Color chipBg,
   }) {
     final isDark = brightness == Brightness.dark;
     final inputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(AppRadius.md),
-      borderSide: BorderSide(color: border),
+      borderSide: BorderSide(color: border, width: 0.5),
     );
 
     return ThemeData(
@@ -80,72 +87,53 @@ class AppTheme {
       brightness: brightness,
       extensions: [
         AppColorScheme(
-          brandPrimary: AppColors.brandPrimary,
-          brandSecondary: isDark
-              ? const Color(0xFFBB7EF9)
-              : AppColors.brandSecondary,
-          brandGradientStart: AppColors.brandGradientStart,
-          brandGradientEnd: AppColors.brandGradientEnd,
-          brandAccent: isDark ? const Color(0xFFA78BFA) : AppColors.brandAccent,
-          brandSubtle: isDark
-              ? const Color(0xFF1A1240)
-              : AppColors.tertiaryLight,
+          accent: accent,
+          accentInk: accentInk,
+          bg: bg,
+          surface2: surface2,
+          chipBg: chipBg,
           surfacePrimary: surface,
-          surfaceSecondary: surfaceAlt,
-          surfaceElevated: card,
-          surfaceOverlay: card.withValues(alpha: 0.95),
+          surfaceElevated: surface,
+          surfaceOverlay: surface.withValues(alpha: 0.95),
           borderDefault: border,
-          borderSubtle: isDark
-              ? const Color(0xFF1E2226)
-              : const Color(0xFFF0F2F5),
-          borderStrong: isDark
-              ? const Color(0xFF3A4049)
-              : const Color(0xFFCBD1D8),
+          borderSubtle: isDark ? AppColors.bgDark : AppColors.surface2Light,
+          borderStrong: borderStrong,
           textPrimary: primaryText,
-          textSecondary: secondaryText,
-          textTertiary: isDark
-              ? const Color(0xFF5A6370)
-              : const Color(0xFF8B95A3),
-          textInverse: isDark
-              ? const Color(0xFF0D1117)
-              : const Color(0xFFFFFFFF),
-          success: isDark ? const Color(0xFF4DCF82) : AppColors.success,
-          warning: isDark ? const Color(0xFFFFB84C) : AppColors.warning,
-          danger: isDark ? const Color(0xFFFF5858) : AppColors.danger,
-          info: isDark ? const Color(0xFF7B9FFF) : AppColors.info,
+          textMuted: mutedText,
+          textFaint: faintText,
+          success: success,
+          warning: warn,
+          danger: danger,
         ),
       ],
       textTheme: textTheme,
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surfaceAlt,
+        fillColor: surface2,
         floatingLabelStyle: textTheme.labelLarge?.copyWith(
           fontWeight: FontWeight.w700,
-          color: AppColors.brandPrimary,
+          color: accent,
         ),
         labelStyle: textTheme.labelLarge?.copyWith(
           fontWeight: FontWeight.w600,
-          color: onSurfaceVariant,
+          color: mutedText,
         ),
         hintStyle: textTheme.bodyMedium?.copyWith(
           fontWeight: FontWeight.w500,
-          color: secondaryText,
+          color: mutedText,
         ),
-        errorStyle: textTheme.bodySmall?.copyWith(color: AppColors.error),
-        helperStyle: textTheme.bodySmall?.copyWith(color: secondaryText),
+        errorStyle: textTheme.bodySmall?.copyWith(color: danger),
+        helperStyle: textTheme.bodySmall?.copyWith(color: mutedText),
         border: inputBorder,
         enabledBorder: inputBorder,
         focusedBorder: inputBorder.copyWith(
-          borderSide: const BorderSide(
-            color: AppColors.brandPrimary,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: accent, width: 1.5),
         ),
         errorBorder: inputBorder.copyWith(
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: BorderSide(color: danger, width: 0.5),
         ),
         focusedErrorBorder: inputBorder.copyWith(
-          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+          borderSide: BorderSide(color: danger, width: 1.5),
         ),
       ),
       splashFactory: NoSplash.splashFactory,
@@ -154,116 +142,115 @@ class AppTheme {
       hoverColor: Colors.transparent,
       colorScheme: ColorScheme(
         brightness: brightness,
-        primary: AppColors.brandPrimary,
-        onPrimary: Colors.white,
-        primaryContainer: AppColors.brandPrimary.withValues(alpha: 0.16),
-        onPrimaryContainer: AppColors.brandPrimary,
-        secondary: AppColors.brandSecondary,
-        onSecondary: Colors.white,
-        secondaryContainer: AppColors.brandSecondary.withValues(alpha: 0.16),
-        onSecondaryContainer: AppColors.brandSecondary,
-        tertiary: tertiary,
+        primary: accent,
+        onPrimary: accentInk,
+        primaryContainer: accent.withValues(alpha: 0.12),
+        onPrimaryContainer: accent,
+        secondary: accent,
+        onSecondary: accentInk,
+        secondaryContainer: accent.withValues(alpha: 0.10),
+        onSecondaryContainer: accent,
+        tertiary: surface2,
         onTertiary: primaryText,
-        tertiaryContainer: surfaceContainer,
+        tertiaryContainer: surface2,
         onTertiaryContainer: primaryText,
-        error: AppColors.error,
-        onError: Colors.white,
-        errorContainer: AppColors.error.withValues(alpha: 0.16),
-        onErrorContainer: AppColors.error,
+        error: danger,
+        onError: accentInk,
+        errorContainer: danger.withValues(alpha: 0.12),
+        onErrorContainer: danger,
         surface: surface,
         onSurface: primaryText,
-        surfaceContainerHighest: surfaceContainer,
-        onSurfaceVariant: onSurfaceVariant,
+        surfaceContainerHighest: surface2,
+        onSurfaceVariant: mutedText,
         outline: border,
         outlineVariant: border,
         shadow: Colors.black,
         scrim: Colors.black,
-        inverseSurface: isDark ? AppColors.surfaceLight : AppColors.surfaceDark,
-        onInverseSurface: isDark
-            ? AppColors.primaryLight
-            : AppColors.primaryDark,
-        inversePrimary: AppColors.brandAccent,
-        onTertiaryFixedVariant: onTertiaryVariant,
-        onSecondaryFixedVariant: onSecondaryVariant,
+        inverseSurface: isDark ? AppColors.surfaceLight : AppColors.bgDark,
+        onInverseSurface: isDark ? AppColors.textLight : AppColors.textDark,
+        inversePrimary: isDark ? AppColors.accentLight : AppColors.accentDark,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: card,
-        indicatorColor: AppColors.brandPrimary.withValues(alpha: 0.15),
+        backgroundColor: surface,
+        indicatorColor: Colors.transparent,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
-            color: states.contains(WidgetState.selected)
-                ? AppColors.brandPrimary
-                : secondaryText,
+            color: states.contains(WidgetState.selected) ? accent : mutedText,
+            size: 22,
           ),
         ),
         labelTextStyle: WidgetStateProperty.resolveWith(
-          (states) => textTheme.labelMedium?.copyWith(
-            fontWeight: states.contains(WidgetState.selected)
-                ? FontWeight.w700
-                : FontWeight.w600,
-            color: states.contains(WidgetState.selected)
-                ? AppColors.brandPrimary
-                : secondaryText,
+          (states) => GoogleFonts.inter(
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.1,
+            color: states.contains(WidgetState.selected) ? accent : mutedText,
           ),
         ),
       ),
       navigationRailTheme: NavigationRailThemeData(
-        backgroundColor: card,
-        selectedIconTheme: const IconThemeData(color: AppColors.brandPrimary),
-        unselectedIconTheme: IconThemeData(color: secondaryText),
-        selectedLabelTextStyle: textTheme.labelLarge?.copyWith(
-          color: AppColors.brandPrimary,
+        backgroundColor: surface,
+        selectedIconTheme: IconThemeData(color: accent),
+        unselectedIconTheme: IconThemeData(color: mutedText),
+        selectedLabelTextStyle: GoogleFonts.inter(
+          color: accent,
           fontWeight: FontWeight.w700,
         ),
-        unselectedLabelTextStyle: textTheme.labelLarge?.copyWith(
-          color: secondaryText,
+        unselectedLabelTextStyle: GoogleFonts.inter(
+          color: mutedText,
           fontWeight: FontWeight.w600,
         ),
-        indicatorColor: AppColors.brandPrimary.withValues(alpha: 0.15),
+        indicatorColor: accent.withValues(alpha: 0.10),
       ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.brandPrimary,
-        foregroundColor: Colors.white,
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: accent,
+        foregroundColor: accentInk,
+        shape: const CircleBorder(),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          backgroundColor: AppColors.brandPrimary,
-          foregroundColor: Colors.white,
+          backgroundColor: accent,
+          foregroundColor: accentInk,
+          minimumSize: const Size(0, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
-          textStyle: textTheme.labelLarge?.copyWith(
-            fontWeight: FontWeight.w700,
+          textStyle: GoogleFonts.inter(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.1,
           ),
         ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: card,
+        color: surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
-          side: BorderSide(color: border),
+          borderRadius: BorderRadius.circular(AppRadius.card),
+          side: BorderSide(color: border, width: 0.5),
         ),
       ),
-      cardColor: card,
+      cardColor: surface,
       dividerColor: border,
-      scaffoldBackgroundColor: surface,
+      dividerTheme: DividerThemeData(color: border, thickness: 0.5, space: 0),
+      scaffoldBackgroundColor: bg,
       appBarTheme: AppBarTheme(
-        backgroundColor: surface,
+        backgroundColor: bg,
         elevation: 0,
         toolbarHeight: AppDimensions.appBarHeight,
         iconTheme: IconThemeData(color: primaryText),
-        titleTextStyle: GoogleFonts.spaceGrotesk(
+        titleTextStyle: GoogleFonts.inter(
           color: primaryText,
           fontSize: 20,
           fontWeight: FontWeight.w700,
+          letterSpacing: -0.3,
         ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.transparent,
-        selectedItemColor: AppColors.brandPrimary,
-        unselectedItemColor: secondaryText,
+        selectedItemColor: accent,
+        unselectedItemColor: mutedText,
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,

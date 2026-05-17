@@ -1,5 +1,7 @@
+import 'package:cars_manager/core/services/notification_service.dart';
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/analytics/domain/export_service.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
@@ -43,8 +45,10 @@ class SettingsContent extends ConsumerWidget {
         await ExportService.shareCSV(csv, filename);
       } catch (error) {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(l10n.analytics_exportFailed('$error'))),
+        AppSnackBar.show(
+          context,
+          l10n.analytics_exportFailed('$error'),
+          isError: true,
         );
       }
     }
@@ -97,18 +101,6 @@ class SettingsContent extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
-              _SettingsSection(
-                icon: Icons.account_circle_rounded,
-                title: 'Profile',
-                children: [
-                  _ProfileSummary(
-                    vehicles: cars.length,
-                    currency: settings.currency,
-                    units: settings.units,
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.lg),
               _SettingsSection(
                 icon: Icons.tune_rounded,
                 title: l10n.settings_preferences,
@@ -213,6 +205,19 @@ class SettingsContent extends ConsumerWidget {
                       _ReminderChip(label: '1 day'),
                     ],
                   ),
+                  const _SettingsDivider(),
+                  _ActionRow(
+                    icon: Icons.notifications_outlined,
+                    title: l10n.settings_testNotification,
+                    subtitle:
+                        'Send a sample notification to preview how they appear.',
+                    onTap: () async {
+                      await NotificationService().showTestNotification();
+                      if (context.mounted) {
+                        AppSnackBar.show(context, 'Test notification sent!');
+                      }
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -240,14 +245,7 @@ class SettingsContent extends ConsumerWidget {
               const _SettingsSection(
                 icon: Icons.info_outline_rounded,
                 title: 'About',
-                children: [
-                  _InfoLine(label: 'Version', value: '2.0.0+1'),
-                  _SettingsDivider(),
-                  _InfoLine(
-                    label: 'Product',
-                    value: 'Every cost. Every service. Total clarity.',
-                  ),
-                ],
+                children: [_InfoLine(label: 'Version', value: '2.0.0+1')],
               ),
             ],
           );
@@ -272,7 +270,9 @@ class SettingsContent extends ConsumerWidget {
             child: Text(l10n.common_cancel),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: AppColors.danger),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.dangerLight,
+            ),
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(l10n.settings_resetData),
           ),
@@ -305,8 +305,8 @@ class _SettingsSection extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
         boxShadow: theme.brightness == Brightness.light ? AppShadows.sm : null,
       ),
       child: Column(
@@ -315,8 +315,10 @@ class _SettingsSection extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                backgroundColor: AppColors.brandPrimary.withValues(alpha: 0.1),
-                foregroundColor: AppColors.brandPrimary,
+                backgroundColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.1,
+                ),
+                foregroundColor: theme.colorScheme.primary,
                 child: Icon(icon),
               ),
               const SizedBox(width: AppSpacing.md),
@@ -397,62 +399,6 @@ class _SettingsControl extends StatelessWidget {
   }
 }
 
-class _ProfileSummary extends StatelessWidget {
-  const _ProfileSummary({
-    required this.vehicles,
-    required this.currency,
-    required this.units,
-  });
-
-  final int vehicles;
-  final String currency;
-  final String units;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Row(
-      children: [
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            gradient: AppColors.brandGradient,
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-          ),
-          child: const Icon(
-            Icons.directions_car_filled_rounded,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(width: AppSpacing.md),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'CarsManager',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xs),
-              Text(
-                '$vehicles ${vehicles == 1 ? 'vehicle' : 'vehicles'} • $currency • $units',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _LanguageSelector extends ConsumerWidget {
   const _LanguageSelector({required this.settings});
 
@@ -510,7 +456,7 @@ class _LanguageOption extends StatelessWidget {
     final theme = Theme.of(context);
     return Material(
       color: isSelected
-          ? AppColors.brandPrimary.withValues(alpha: 0.12)
+          ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
           : theme.colorScheme.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(AppRadius.pill),
       child: InkWell(
@@ -536,7 +482,9 @@ class _LanguageOption extends StatelessWidget {
               Text(
                 title,
                 style: theme.textTheme.labelLarge?.copyWith(
-                  color: isSelected ? AppColors.brandPrimary : null,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : null,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -565,7 +513,9 @@ class _ActionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isDanger ? AppColors.danger : AppColors.brandPrimary;
+    final color = isDanger
+        ? AppColors.dangerLight
+        : Theme.of(context).colorScheme.primary;
     final theme = Theme.of(context);
 
     return Material(
@@ -590,7 +540,7 @@ class _ActionRow extends StatelessWidget {
                     Text(
                       title,
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: isDanger ? AppColors.danger : null,
+                        color: isDanger ? AppColors.dangerLight : null,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -624,7 +574,10 @@ class _ReminderChip extends StatelessWidget {
     return Chip(
       avatar: const Icon(Icons.schedule_rounded, size: 18),
       label: Text(label),
-      side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+      side: BorderSide(
+        color: Theme.of(context).colorScheme.outline,
+        width: 0.5,
+      ),
     );
   }
 }

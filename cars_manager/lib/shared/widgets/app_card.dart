@@ -5,31 +5,32 @@ class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(AppSpacing.lg),
+    this.padding = const EdgeInsets.all(18),
     this.onTap,
+    this.borderRadius,
   });
 
   final Widget child;
   final EdgeInsetsGeometry padding;
   final VoidCallback? onTap;
+  final double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final radius = borderRadius ?? AppRadius.card;
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: colorScheme.outlineVariant),
-        boxShadow: Theme.of(context).brightness == Brightness.light
-            ? AppShadows.xs
-            : null,
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
+        boxShadow: theme.brightness == Brightness.light ? AppShadows.xs : null,
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(AppRadius.md),
+          borderRadius: BorderRadius.circular(radius),
           onTap: onTap,
           child: Padding(padding: padding, child: child),
         ),

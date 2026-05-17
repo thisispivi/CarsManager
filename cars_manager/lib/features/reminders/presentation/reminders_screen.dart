@@ -100,7 +100,7 @@ class _ReminderCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
         boxShadow: theme.brightness == Brightness.light ? AppShadows.sm : null,
       ),
       child: Row(
@@ -162,9 +162,9 @@ Color _statusColor(DateTime dueDate) {
   final normalizedDue = DateTime(dueDate.year, dueDate.month, dueDate.day);
   final daysRemaining = normalizedDue.difference(today).inDays;
 
-  if (daysRemaining < 0) return AppColors.danger;
-  if (daysRemaining <= 30) return AppColors.warning;
-  return AppColors.success;
+  if (daysRemaining < 0) return AppColors.dangerLight;
+  if (daysRemaining <= 30) return AppColors.warnLight;
+  return AppColors.successLight;
 }
 
 class _ReminderItem {

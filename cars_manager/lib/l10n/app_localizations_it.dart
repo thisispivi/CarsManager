@@ -558,4 +558,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get reminders_tax => 'Bollo';
+
+  @override
+  String get settings_testNotification => 'Notifica di test';
 }

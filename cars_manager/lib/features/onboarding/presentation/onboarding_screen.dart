@@ -112,7 +112,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                           ),
                           decoration: BoxDecoration(
                             color: i == _page
-                                ? AppColors.brandPrimary
+                                ? AppColors.accentLight
                                 : theme.colorScheme.outlineVariant,
                             borderRadius: BorderRadius.circular(AppRadius.pill),
                           ),
@@ -163,10 +163,14 @@ class _OnboardingPage extends StatelessWidget {
                 width: 156,
                 height: 156,
                 decoration: BoxDecoration(
-                  gradient: AppColors.brandGradient,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFFE5734F), Color(0xFF8E4A35)],
+                  ),
                   borderRadius: BorderRadius.circular(AppRadius.xxl),
                   boxShadow: Theme.of(context).brightness == Brightness.light
-                      ? AppShadows.brandGlow(AppColors.brandPrimary)
+                      ? AppShadows.brandGlow(AppColors.accentLight)
                       : null,
                 ),
                 child: Icon(data.icon, color: Colors.white, size: 72),

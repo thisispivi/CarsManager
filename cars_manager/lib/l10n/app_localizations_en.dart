@@ -552,4 +552,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminders_tax => 'Tax';
+
+  @override
+  String get settings_testNotification => 'Test Notification';
 }

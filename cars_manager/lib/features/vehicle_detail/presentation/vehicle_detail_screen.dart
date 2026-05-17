@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/models/car.dart';
@@ -13,6 +14,7 @@ import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
+import 'package:cars_manager/shared/widgets/vehicle_visual_card.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/add_fuel_entry_bottom_sheet.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
 import 'package:cars_manager/shared/widgets/empty_state.dart';
@@ -151,144 +153,149 @@ class _VehicleHeader extends ConsumerWidget {
       ref.read(carsControllerProvider.notifier).update(updated);
     }
 
-    return _SurfaceCard(
-      padding: EdgeInsets.zero,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  if (hasImage)
-                    ImageRect(
-                      aspectRatio: 16 / 9,
-                      imageUrl: car.imageUrl,
-                      imageBase64: car.imageBase64,
-                      imageAlignment: car.imageAlignment,
-                      backgroundColor:
-                          theme.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.zero,
-                      primaryColor: theme.colorScheme.primary,
-                    )
-                  else
-                    Container(
-                      decoration: const BoxDecoration(
-                        gradient: AppColors.brandGradient,
-                      ),
-                      child: Icon(
-                        Icons.directions_car_filled_rounded,
-                        color: Colors.white.withValues(alpha: 0.9),
-                        size: 84,
-                      ),
-                    ),
-                  const DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Color(0xB0000000)],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: AppSpacing.md,
-                    top: AppSpacing.md,
-                    child: _RoundIconButton(
-                      icon: Icons.arrow_back_rounded,
-                      tooltip: 'Back',
-                      onTap: () {
-                        if (context.canPop()) {
-                          context.pop();
-                        } else {
-                          context.go('/garage');
-                        }
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    right: AppSpacing.md,
-                    top: AppSpacing.md,
-                    child: _RoundIconButton(
-                      icon: Icons.edit_rounded,
-                      tooltip: 'Edit vehicle',
-                      onTap: editCar,
-                    ),
-                  ),
-                  Positioned(
-                    left: AppSpacing.lg,
-                    right: AppSpacing.lg,
-                    bottom: AppSpacing.lg,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          car.name,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+          child: Row(
+            children: [
+              _RoundIconButton(
+                icon: Icons.arrow_back_rounded,
+                tooltip: 'Back',
+                onTap: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go('/garage');
+                  }
+                },
+              ),
+              const Spacer(),
+              _RoundIconButton(
+                icon: Icons.edit_rounded,
+                tooltip: 'Edit vehicle',
+                onTap: editCar,
+              ),
+            ],
+          ),
+        ),
+        _SurfaceCard(
+          padding: EdgeInsets.zero,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(
+                  height: 170,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      if (hasImage)
+                        ImageRect(
+                          aspectRatio: 16 / 9,
+                          imageUrl: car.imageUrl,
+                          imageBase64: car.imageBase64,
+                          imageAlignment: car.imageAlignment,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.zero,
+                          primaryColor: theme.colorScheme.primary,
+                        )
+                      else
+                        VehicleVisualCard(
+                          car: car,
+                          height: 170,
+                          borderRadius: 0,
+                        ),
+                      if (hasImage) ...[
+                        const DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [Colors.transparent, Color(0xB0000000)],
+                            ),
                           ),
                         ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          '${car.manufacture} ${car.model} • ${car.yearOfManufacture}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.78),
-                            fontWeight: FontWeight.w700,
+                        Positioned(
+                          left: AppSpacing.lg,
+                          right: AppSpacing.lg,
+                          bottom: AppSpacing.lg,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                car.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.headlineSmall?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              Text(
+                                '${car.manufacture} ${car.model} • ${car.yearOfManufacture}',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: Colors.white.withValues(alpha: 0.78),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    spacing: AppSpacing.sm,
-                    runSpacing: AppSpacing.sm,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _InfoPill(
-                        icon: Icons.confirmation_number_outlined,
-                        label: car.licensePlate.isEmpty
-                            ? 'No plate'
-                            : car.licensePlate,
+                      Wrap(
+                        spacing: AppSpacing.sm,
+                        runSpacing: AppSpacing.sm,
+                        children: [
+                          _InfoPill(
+                            icon: Icons.confirmation_number_outlined,
+                            label: car.licensePlate.isEmpty
+                                ? 'No plate'
+                                : car.licensePlate,
+                          ),
+                          _InfoPill(
+                            icon: Icons.local_gas_station_rounded,
+                            label: car.fuelType?.name ?? 'Fuel not set',
+                          ),
+                        ],
                       ),
-                      _InfoPill(
-                        icon: Icons.local_gas_station_rounded,
-                        label: car.fuelType?.name ?? 'Fuel not set',
+                      const SizedBox(height: AppSpacing.lg),
+                      _DueStatusRow(
+                        label: 'Insurance',
+                        days: car.daysUntilNextInsuranceExpiration,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      _DueStatusRow(
+                        label: 'Inspection',
+                        days: car.daysUntilNextInspection,
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      _DueStatusRow(
+                        label: 'Tax',
+                        days: car.daysUntilNextTaxDue,
                       ),
                     ],
                   ),
-                  const SizedBox(height: AppSpacing.lg),
-                  _DueStatusRow(
-                    label: 'Insurance',
-                    days: car.daysUntilNextInsuranceExpiration,
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  _DueStatusRow(
-                    label: 'Inspection',
-                    days: car.daysUntilNextInspection,
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  _DueStatusRow(label: 'Tax', days: car.daysUntilNextTaxDue),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -309,13 +316,16 @@ class _VehicleTabs extends StatelessWidget {
     return Column(
       children: [
         _SurfaceCard(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.xs,
+          ),
           child: TabBar(
             controller: controller,
             isScrollable: true,
             tabAlignment: TabAlignment.start,
             dividerColor: Colors.transparent,
-            labelColor: AppColors.brandPrimary,
+            labelColor: Theme.of(context).colorScheme.primary,
             unselectedLabelColor: Theme.of(
               context,
             ).colorScheme.onSurfaceVariant,
@@ -387,26 +397,30 @@ class _OverviewTab extends StatelessWidget {
               const SizedBox(height: AppSpacing.lg),
               _BreakdownBar(
                 items: [
-                  _BreakdownItem('Fuel', car.totalFuelCost, AppColors.success),
+                  _BreakdownItem(
+                    'Fuel',
+                    car.totalFuelCost,
+                    AppColors.categoryFuel,
+                  ),
                   _BreakdownItem(
                     'Insurance',
                     car.totalPaidInsurances.toDouble(),
-                    AppColors.info,
+                    AppColors.categoryInsurance,
                   ),
                   _BreakdownItem(
                     'Tax',
                     car.totalPaidTaxes.toDouble(),
-                    const Color(0xFF06B6D4),
+                    AppColors.categoryTax,
                   ),
                   _BreakdownItem(
                     'Repairs',
                     car.totalPaidRepairs.toDouble(),
-                    const Color(0xFF8B5CF6),
+                    AppColors.categoryRepair,
                   ),
                   _BreakdownItem(
                     'Fines',
                     car.totalPaidFines.toDouble(),
-                    AppColors.danger,
+                    AppColors.categoryFine,
                   ),
                 ],
                 currency: currency,
@@ -465,9 +479,7 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
           .read(carsControllerProvider.notifier)
           .update(car.copyWith(fuel: [...car.fuel, entry]));
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Fuel entry added')));
+      AppSnackBar.show(context, 'Fuel entry added');
     }
 
     return ListView(
@@ -529,7 +541,7 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
                         ? '${DateFormat.yMMMd().format(entry.date)} · ${money.format(entry.totalCost / entry.liters)}/L'
                         : DateFormat.yMMMd().format(entry.date),
                     trailing: money.format(entry.totalCost),
-                    color: AppColors.success,
+                    color: AppColors.categoryFuel,
                   ),
                   if (entry !=
                       (_showAll ? entries : entries.take(8).toList()).last)
@@ -610,9 +622,7 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
 
       ref.read(carsControllerProvider.notifier).update(updatedCar);
       if (!context.mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Expense added')));
+      AppSnackBar.show(context, 'Expense added');
     }
 
     return ListView(
@@ -645,27 +655,27 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
                   _BreakdownItem(
                     'Insurance',
                     car.totalPaidInsurances.toDouble(),
-                    AppColors.info,
+                    AppColors.categoryInsurance,
                   ),
                   _BreakdownItem(
                     'Inspection',
                     car.totalPaidInspections.toDouble(),
-                    AppColors.warning,
+                    AppColors.categoryInspection,
                   ),
                   _BreakdownItem(
                     'Tax',
                     car.totalPaidTaxes.toDouble(),
-                    const Color(0xFF06B6D4),
+                    AppColors.categoryTax,
                   ),
                   _BreakdownItem(
                     'Repairs',
                     car.totalPaidRepairs.toDouble(),
-                    const Color(0xFF8B5CF6),
+                    AppColors.categoryRepair,
                   ),
                   _BreakdownItem(
                     'Fines',
                     car.totalPaidFines.toDouble(),
-                    AppColors.danger,
+                    AppColors.categoryFine,
                   ),
                 ]),
                 currency: currency,
@@ -775,11 +785,11 @@ class _SurfaceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: padding ?? const EdgeInsets.all(AppSpacing.lg),
+      padding: padding ?? const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: theme.colorScheme.outline, width: 0.5),
         boxShadow: theme.brightness == Brightness.light ? AppShadows.sm : null,
       ),
       child: child,
@@ -806,7 +816,7 @@ class _MetricCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: AppColors.brandPrimary, size: 28),
+            Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
             const SizedBox(height: AppSpacing.lg),
             Text(
               value,
@@ -916,9 +926,13 @@ class _DataRowLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 18,
-          backgroundColor: color.withValues(alpha: 0.12),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Icon(icon, color: color, size: 18),
         ),
         const SizedBox(width: AppSpacing.md),
@@ -1013,19 +1027,19 @@ class _InfoPill extends StatelessWidget {
         vertical: AppSpacing.sm,
       ),
       decoration: BoxDecoration(
-        color: AppColors.brandPrimary.withValues(alpha: 0.1),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppRadius.pill),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: AppColors.brandPrimary, size: 18),
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 18),
           const SizedBox(width: AppSpacing.xs),
           Text(
             label,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: AppColors.brandPrimary,
-              fontWeight: FontWeight.w800,
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
@@ -1047,19 +1061,21 @@ class _RoundIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Tooltip(
       message: tooltip,
-      child: Material(
-        color: Colors.black.withValues(alpha: 0.32),
-        shape: const CircleBorder(),
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: onTap,
-          child: SizedBox(
-            width: 42,
-            height: 42,
-            child: Icon(icon, color: Colors.white),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: theme.cardColor,
+            shape: BoxShape.circle,
+            border: Border.all(color: theme.colorScheme.outline, width: 0.5),
           ),
+          child: Icon(icon, color: theme.colorScheme.onSurface, size: 20),
         ),
       ),
     );
@@ -1120,17 +1136,20 @@ class _PeriodSelector<T> extends StatelessWidget {
             label: Text(labelFor(item)),
             selected: item == value,
             onSelected: (_) => onChanged(item),
-            selectedColor: AppColors.brandPrimary.withValues(alpha: 0.14),
+            selectedColor: Theme.of(
+              context,
+            ).colorScheme.primary.withValues(alpha: 0.10),
             labelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: item == value
-                  ? AppColors.brandPrimary
+                  ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
             ),
             side: BorderSide(
               color: item == value
-                  ? AppColors.brandPrimary.withValues(alpha: 0.4)
-                  : Theme.of(context).colorScheme.outlineVariant,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.outline,
+              width: 0.5,
             ),
           ),
       ],
@@ -1226,15 +1245,23 @@ class _ExpenseTypeChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ActionChip(
-      avatar: Icon(icon, size: 18, color: AppColors.brandPrimary),
+      avatar: Icon(
+        icon,
+        size: 18,
+        color: Theme.of(context).colorScheme.primary,
+      ),
       label: Text(label),
       onPressed: () => Navigator.of(context).pop(type),
       labelStyle: Theme.of(context).textTheme.labelLarge?.copyWith(
-        color: AppColors.brandPrimary,
-        fontWeight: FontWeight.w800,
+        color: Theme.of(context).colorScheme.primary,
+        fontWeight: FontWeight.w700,
       ),
-      backgroundColor: AppColors.brandPrimary.withValues(alpha: 0.1),
-      side: BorderSide(color: AppColors.brandPrimary.withValues(alpha: 0.2)),
+      backgroundColor: Theme.of(
+        context,
+      ).colorScheme.primary.withValues(alpha: 0.1),
+      side: BorderSide(
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
+      ),
     );
   }
 }
@@ -1336,7 +1363,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
     for (final entry in car.fuel)
       _TimelineEvent(
         icon: Icons.local_gas_station_rounded,
-        color: AppColors.success,
+        color: AppColors.categoryFuel,
         title: 'Fuel',
         date: entry.date,
         amount: money.format(entry.totalCost),
@@ -1344,7 +1371,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
     for (final entry in car.insuranceDatas)
       _TimelineEvent(
         icon: Icons.description_outlined,
-        color: AppColors.info,
+        color: AppColors.categoryInsurance,
         title: 'Insurance',
         date: entry.startDate,
         amount: money.format(entry.premiumAmount),
@@ -1353,7 +1380,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
     for (final entry in car.inspectionDatas)
       _TimelineEvent(
         icon: Icons.fact_check_outlined,
-        color: AppColors.warning,
+        color: AppColors.categoryInspection,
         title: 'Inspection',
         date: entry.date,
         amount: money.format(entry.amount ?? 0),
@@ -1362,7 +1389,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
     for (final entry in car.taxDatas)
       _TimelineEvent(
         icon: Icons.paid_outlined,
-        color: const Color(0xFF06B6D4),
+        color: AppColors.categoryTax,
         title: 'Vehicle tax',
         date: entry.date,
         amount: money.format(entry.amount),
@@ -1371,7 +1398,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
     for (final entry in car.repairDatas)
       _TimelineEvent(
         icon: Icons.build_rounded,
-        color: const Color(0xFF8B5CF6),
+        color: AppColors.categoryRepair,
         title: entry.description.isEmpty ? 'Repair' : entry.description,
         date: entry.date,
         amount: money.format(entry.amount),
@@ -1380,7 +1407,7 @@ List<_TimelineEvent> _timelineEvents(Car car, String currency) {
     for (final entry in car.fineDatas)
       _TimelineEvent(
         icon: Icons.report_gmailerrorred_rounded,
-        color: AppColors.danger,
+        color: AppColors.categoryFine,
         title: 'Fine',
         date: entry.date,
         amount: money.format(entry.amount),
@@ -1428,8 +1455,8 @@ enum _ExpenseFilter {
 }
 
 Color _statusColor(int? days) {
-  if (days == null) return AppColors.info;
-  if (days < 0) return AppColors.danger;
-  if (days <= 30) return AppColors.warning;
-  return AppColors.success;
+  if (days == null) return AppColors.categoryInspection;
+  if (days < 0) return AppColors.dangerLight;
+  if (days <= 30) return AppColors.warnLight;
+  return AppColors.successLight;
 }

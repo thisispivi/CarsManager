@@ -20,18 +20,18 @@ void main() {
   testWidgets('ok status uses success color', (tester) async {
     await tester.pumpWidget(buildPill(StatusLevel.ok, 'OK'));
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.color, AppColors.success);
+    expect(icon.color, AppColors.successLight);
   });
 
   testWidgets('upcoming status uses warning color', (tester) async {
     await tester.pumpWidget(buildPill(StatusLevel.upcoming, 'Soon'));
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.color, AppColors.warning);
+    expect(icon.color, AppColors.warnLight);
   });
 
   testWidgets('overdue status uses danger color', (tester) async {
     await tester.pumpWidget(buildPill(StatusLevel.overdue, 'Late'));
     final icon = tester.widget<Icon>(find.byType(Icon));
-    expect(icon.color, AppColors.danger);
+    expect(icon.color, AppColors.dangerLight);
   });
 }

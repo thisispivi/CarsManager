@@ -1069,6 +1069,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tax'**
   String get reminders_tax;
+
+  /// No description provided for @settings_testNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Notification'**
+  String get settings_testNotification;
 }
 
 class _AppLocalizationsDelegate
