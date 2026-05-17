@@ -42,7 +42,7 @@ jobs:
 
       - name: Build Web
         working-directory: cars_manager
-        run: flutter build web --release
+        run: flutter build web --release --base-href /CarsManager/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
