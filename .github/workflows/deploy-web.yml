@@ -1,6 +1,7 @@
 name: Deploy Web
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: [Release]
     types: [completed]
@@ -9,9 +10,8 @@ jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
-      actions: read
       contents: read
       pages: write
       id-token: write
@@ -21,18 +21,25 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Download web artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
         with:
-          name: web-release-${{ github.event.workflow_run.head_branch }}
-          run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: web-build/
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        working-directory: cars_manager
+        run: flutter pub get
+
+      - name: Build Web
+        working-directory: cars_manager
+        run: flutter build web --release
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: web-build/
+          path: cars_manager/build/web/
 
       - name: Deploy to GitHub Pages
         id: deployment
