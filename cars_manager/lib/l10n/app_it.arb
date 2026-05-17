@@ -4,10 +4,6 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-  "carData_title": "Dati Auto",
-  "@carData_title": {
-    "description": "Title for the car data section"
-  },
   "carData_name": "Nome Auto",
   "@carData_name": {
     "description": "Label for the car name field"
@@ -15,10 +11,6 @@
   "carData_model": "Modello",
   "@carData_model": {
     "description": "Label for the car model field"
-  },
-  "carData_setUp": "Configura",
-  "@carData_setUp": {
-    "description": "Label for the car setup action"
   },
   "carData_manufacture": "Costruttore",
   "@carData_manufacture": {
@@ -28,25 +20,9 @@
   "@carData_yearOfManufacture": {
     "description": "Label for the manufacturing year field"
   },
-  "carData_originalPrice": "Prezzo Originale",
-  "@carData_originalPrice": {
-    "description": "Label for the original price field"
-  },
-  "carData_productionRangeYears": "Periodo di Produzione",
-  "@carData_productionRangeYears": {
-    "description": "Label for the production years range field"
-  },
   "carData_licensePlate": "Targa",
   "@carData_licensePlate": {
     "description": "Label for the license plate field"
-  },
-  "carData_acquisitionDate": "Data di Acquisizione",
-  "@carData_acquisitionDate": {
-    "description": "Label for the date when the car was acquired"
-  },
-  "carData_photoUrl": "URL Foto",
-  "@carData_photoUrl": {
-    "description": "Label for the car photo URL field"
   },
   "carData_photo": "Foto",
   "@carData_photo": {
@@ -55,10 +31,6 @@
   "carData_fuelType": "Tipo carburante",
   "@carData_fuelType": {
     "description": "Label for the car fuel type field"
-  },
-  "carData_carInspectionDate": "Data Revisione",
-  "@carData_carInspectionDate": {
-    "description": "Label for the car inspection date field"
   },
   "cars_car_shortTitle": "Auto",
   "@cars_car_shortTitle": {
@@ -130,64 +102,6 @@
   "@fuelType_lpg": {
     "description": "Label for LPG fuel type"
   },
-  "driveType_fwd": "Trazione anteriore",
-  "@driveType_fwd": {
-    "description": "Label for front-wheel drive type"
-  },
-  "driveType_rwd": "Trazione posteriore",
-  "@driveType_rwd": {
-    "description": "Label for rear-wheel drive type"
-  },
-  "driveType_awd": "Trazione integrale",
-  "@driveType_awd": {
-    "description": "Label for all-wheel drive type"
-  },
-  "driveType_fourWheelDrive": "Trazione 4x4",
-  "@driveType_fourWheelDrive": {
-    "description": "Label for 4-wheel drive type"
-  },
-  "transmissionType_manual": "Manuale",
-  "@transmissionType_manual": {
-    "description": "Label for manual transmission type"
-  },
-  "transmissionType_automatic": "Automatica",
-  "@transmissionType_automatic": {
-    "description": "Label for automatic transmission type"
-  },
-  "transmissionType_semiAutomatic": "Semi-automatica",
-  "@transmissionType_semiAutomatic": {
-    "description": "Label for semi-automatic transmission type"
-  },
-  "unit_kg": "{weight} kg",
-  "@unit_kg": {
-    "description": "Weight in kilograms",
-    "placeholders": {
-      "weight": {
-        "type": "String",
-        "example": "1500"
-      }
-    }
-  },
-  "unit_l": "{volume} L",
-  "@unit_l": {
-    "description": "Volume in liters",
-    "placeholders": {
-      "volume": {
-        "type": "String",
-        "example": "50"
-      }
-    }
-  },
-  "unit_m": "{length} m",
-  "@unit_m": {
-    "description": "Length in meters",
-    "placeholders": {
-      "length": {
-        "type": "String",
-        "example": "4.5"
-      }
-    }
-  },
   "unit_km": "{length} km",
   "@unit_km": {
     "description": "Distance in kilometers",
@@ -195,106 +109,6 @@
       "length": {
         "type": "String",
         "example": "100"
-      }
-    }
-  },
-  "unit_l_per_100km": "{consumption} L/100km",
-  "@unit_l_per_100km": {
-    "description": "Fuel consumption in liters per 100 kilometers",
-    "placeholders": {
-      "consumption": {
-        "type": "String",
-        "example": "6.5"
-      }
-    }
-  },
-  "unit_g_per_km": "{emission} g/km",
-  "@unit_g_per_km": {
-    "description": "CO₂ emissions in grams per kilometer",
-    "placeholders": {
-      "emission": {
-        "type": "String",
-        "example": "120"
-      }
-    }
-  },
-  "unit_kmh": "{speed} km/h",
-  "@unit_kmh": {
-    "description": "Speed in kilometers per hour",
-    "placeholders": {
-      "speed": {
-        "type": "String",
-        "example": "220"
-      }
-    }
-  },
-  "unit_s": "{time} s",
-  "@unit_s": {
-    "description": "Time in seconds",
-    "placeholders": {
-      "time": {
-        "type": "String",
-        "example": "8.5"
-      }
-    }
-  },
-  "unit_nm": "{torque} Nm",
-  "@unit_nm": {
-    "description": "Torque in Newton-meters",
-    "placeholders": {
-      "torque": {
-        "type": "String",
-        "example": "300"
-      }
-    }
-  },
-  "unit_rpm": "{speed} giri/min",
-  "@unit_rpm": {
-    "description": "Engine speed in revolutions per minute",
-    "placeholders": {
-      "speed": {
-        "type": "String",
-        "example": "6000"
-      }
-    }
-  },
-  "unit_hp": "{power} CV",
-  "@unit_hp": {
-    "description": "Power in horsepower",
-    "placeholders": {
-      "power": {
-        "type": "String",
-        "example": "150"
-      }
-    }
-  },
-  "unit_kw": "{power} kW",
-  "@unit_kw": {
-    "description": "Power in kilowatts",
-    "placeholders": {
-      "power": {
-        "type": "String",
-        "example": "110"
-      }
-    }
-  },
-  "unit_cc": "{displacement} cc",
-  "@unit_cc": {
-    "description": "Engine displacement in cubic centimeters",
-    "placeholders": {
-      "displacement": {
-        "type": "String",
-        "example": "2000"
-      }
-    }
-  },
-  "unit_dm3": "{volume} dm³",
-  "@unit_dm3": {
-    "description": "Volume in cubic decimeters (liters)",
-    "placeholders": {
-      "volume": {
-        "type": "String",
-        "example": "50"
       }
     }
   },
@@ -443,10 +257,6 @@
   "themeSelector_title": "Tema",
   "@themeSelector_title": {
     "description": "Title for the theme selection dropdown"
-  },
-  "themeSelector_dark_mode": "Modalità Scura",
-  "@themeSelector_dark_mode": {
-    "description": "Label for the dark mode theme option"
   },
   "fineType_speeding": "Eccesso di Velocità",
   "@fineType_speeding": {
@@ -616,10 +426,6 @@
   "@fuel_total_cost_label": {
     "description": "Label for total cost"
   },
-  "fuel_expenseDistribution_title": "Distribuzione spese carburante",
-  "@fuel_expenseDistribution_title": {
-    "description": "Title for fuel expense distribution chart"
-  },
   "fuel_expensesByYear_title": "Spese carburante per anno",
   "@fuel_expensesByYear_title": {
     "description": "Title for fuel expenses by year chart"
@@ -692,14 +498,6 @@
   "@validation_licensePlateInvalid": {
     "description": "Validation message for an invalid license plate"
   },
-  "validation_urlInvalid": "Inserisci un URL http(s) valido",
-  "@validation_urlInvalid": {
-    "description": "Validation message for an invalid URL"
-  },
-  "validation_dateNotPast": "La data di scadenza dell'assicurazione non può essere nel passato.",
-  "@validation_dateNotPast": {
-    "description": "Validation message shown when the insurance expiration date is in the past"
-  },
   "validation_number_gt_zero": "{field} deve essere un numero > 0",
   "@validation_number_gt_zero": {
     "description": "Validation message for positive numbers",
@@ -721,16 +519,76 @@
     }
   },
   "nav_garage": "Garage",
-  "nav_fuel": "Carburante",
-  "nav_expenses": "Spese",
   "nav_analytics": "Analisi",
   "nav_reminders": "Promemoria",
   "nav_reminders_title": "Promemoria",
   "nav_switchCar": "Cambia auto",
   "analytics_title": "Analisi",
-  "analytics_totalExpenses": "Spese totali",
-  "analytics_fuelEntries": "Rifornimenti",
-  "analytics_trackedVehicle": "Veicolo monitorato",
+  "analytics_subtitle": "Le tue spese in sintesi",
+  "analytics_totalTracked": "TOTALE TRACCIATO",
+  "analytics_vehicleCount": "{count, plural, one{# veicolo} other{# veicoli}}",
+  "@analytics_vehicleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "analytics_last12Months": "ultimi 12 mesi",
+  "analytics_emptyTitle": "Nessuna analisi disponibile",
+  "analytics_emptySubtitle": "Aggiungi un'auto e registra carburante o spese per sbloccare gli insight.",
+  "analytics_costOverview": "Panoramica costi totali",
+  "analytics_categoryBreakdown": "Ripartizione per categoria",
+  "analytics_costPerCar": "Costo per auto",
+  "analytics_monthlyTrend": "Andamento mensile",
+  "analytics_tableMonth": "Mese",
+  "analytics_tableFuel": "Carburante",
+  "analytics_tableMaint": "Manut.",
+  "analytics_tableFixed": "Fissi",
+  "analytics_tableTotal": "Totale",
+  "analytics_insightAcrossVehicles": "Su ogni veicolo e categoria",
+  "analytics_insightVsLastMonth": "Rispetto al mese scorso",
+  "analytics_insightLargestCategory": "Categoria di spesa principale",
+  "analytics_insightDeadlines": "In scadenza nei prossimi 30 giorni",
+  "analytics_insightThisMonth": "Questo mese è attivo",
+  "analytics_noUrgentDeadlines": "Nessuna scadenza urgente",
+  "analytics_deadlinesSoon": "{count} {count, plural, one{scadenza} other{scadenze}} a breve",
+  "@analytics_deadlinesSoon": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "analytics_filterAll": "Tutte le auto",
+  "analytics_noCarSelected": "Seleziona almeno un'auto per vedere le analisi.",
+  "analytics_noCategoryData": "Nessuna categoria di costo ha ancora dati.",
+  "analytics_noSpendYet": "Nessuna spesa ancora",
+  "analytics_startLoggingPatterns": "Inizia a registrare dati per vedere gli andamenti",
+  "analytics_trackedAmount": "{amount} tracciati",
+  "@analytics_trackedAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1.234,00 €"
+      }
+    }
+  },
+  "analytics_deltaPercent": "{percent}% {direction}",
+  "@analytics_deltaPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String",
+        "example": "12"
+      },
+      "direction": {
+        "type": "String",
+        "example": "in più"
+      }
+    }
+  },
+  "analytics_deltaUp": "in più",
+  "analytics_deltaDown": "in meno",
   "analytics_exportCsv": "Esporta CSV",
   "analytics_exportFailed": "Esportazione non riuscita: {error}",
   "@analytics_exportFailed": {

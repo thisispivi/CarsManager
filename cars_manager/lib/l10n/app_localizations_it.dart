@@ -12,16 +12,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get appTitle => 'CarsManager';
 
   @override
-  String get carData_title => 'Dati Auto';
-
-  @override
   String get carData_name => 'Nome Auto';
 
   @override
   String get carData_model => 'Modello';
-
-  @override
-  String get carData_setUp => 'Configura';
 
   @override
   String get carData_manufacture => 'Costruttore';
@@ -30,28 +24,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get carData_yearOfManufacture => 'Anno di Produzione';
 
   @override
-  String get carData_originalPrice => 'Prezzo Originale';
-
-  @override
-  String get carData_productionRangeYears => 'Periodo di Produzione';
-
-  @override
   String get carData_licensePlate => 'Targa';
-
-  @override
-  String get carData_acquisitionDate => 'Data di Acquisizione';
-
-  @override
-  String get carData_photoUrl => 'URL Foto';
 
   @override
   String get carData_photo => 'Foto';
 
   @override
   String get carData_fuelType => 'Tipo carburante';
-
-  @override
-  String get carData_carInspectionDate => 'Data Revisione';
 
   @override
   String get cars_car_shortTitle => 'Auto';
@@ -109,94 +88,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get fuelType_lpg => 'GPL';
 
   @override
-  String get driveType_fwd => 'Trazione anteriore';
-
-  @override
-  String get driveType_rwd => 'Trazione posteriore';
-
-  @override
-  String get driveType_awd => 'Trazione integrale';
-
-  @override
-  String get driveType_fourWheelDrive => 'Trazione 4x4';
-
-  @override
-  String get transmissionType_manual => 'Manuale';
-
-  @override
-  String get transmissionType_automatic => 'Automatica';
-
-  @override
-  String get transmissionType_semiAutomatic => 'Semi-automatica';
-
-  @override
-  String unit_kg(String weight) {
-    return '$weight kg';
-  }
-
-  @override
-  String unit_l(String volume) {
-    return '$volume L';
-  }
-
-  @override
-  String unit_m(String length) {
-    return '$length m';
-  }
-
-  @override
   String unit_km(String length) {
     return '$length km';
-  }
-
-  @override
-  String unit_l_per_100km(String consumption) {
-    return '$consumption L/100km';
-  }
-
-  @override
-  String unit_g_per_km(String emission) {
-    return '$emission g/km';
-  }
-
-  @override
-  String unit_kmh(String speed) {
-    return '$speed km/h';
-  }
-
-  @override
-  String unit_s(String time) {
-    return '$time s';
-  }
-
-  @override
-  String unit_nm(String torque) {
-    return '$torque Nm';
-  }
-
-  @override
-  String unit_rpm(String speed) {
-    return '$speed giri/min';
-  }
-
-  @override
-  String unit_hp(String power) {
-    return '$power CV';
-  }
-
-  @override
-  String unit_kw(String power) {
-    return '$power kW';
-  }
-
-  @override
-  String unit_cc(String displacement) {
-    return '$displacement cc';
-  }
-
-  @override
-  String unit_dm3(String volume) {
-    return '$volume dm³';
   }
 
   @override
@@ -303,9 +196,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get themeSelector_title => 'Tema';
-
-  @override
-  String get themeSelector_dark_mode => 'Modalità Scura';
 
   @override
   String get fineType_speeding => 'Eccesso di Velocità';
@@ -433,9 +323,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get fuel_total_cost_label => 'Costo totale';
 
   @override
-  String get fuel_expenseDistribution_title => 'Distribuzione spese carburante';
-
-  @override
   String get fuel_expensesByYear_title => 'Spese carburante per anno';
 
   @override
@@ -471,13 +358,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get validation_licensePlateInvalid => 'La targa non sembra valida';
 
   @override
-  String get validation_urlInvalid => 'Inserisci un URL http(s) valido';
-
-  @override
-  String get validation_dateNotPast =>
-      'La data di scadenza dell\'assicurazione non può essere nel passato.';
-
-  @override
   String validation_number_gt_zero(String field) {
     return '$field deve essere un numero > 0';
   }
@@ -489,12 +369,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get nav_garage => 'Garage';
-
-  @override
-  String get nav_fuel => 'Carburante';
-
-  @override
-  String get nav_expenses => 'Spese';
 
   @override
   String get nav_analytics => 'Analisi';
@@ -512,13 +386,122 @@ class AppLocalizationsIt extends AppLocalizations {
   String get analytics_title => 'Analisi';
 
   @override
-  String get analytics_totalExpenses => 'Spese totali';
+  String get analytics_subtitle => 'Le tue spese in sintesi';
 
   @override
-  String get analytics_fuelEntries => 'Rifornimenti';
+  String get analytics_totalTracked => 'TOTALE TRACCIATO';
 
   @override
-  String get analytics_trackedVehicle => 'Veicolo monitorato';
+  String analytics_vehicleCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '# veicoli',
+      one: '# veicolo',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get analytics_last12Months => 'ultimi 12 mesi';
+
+  @override
+  String get analytics_emptyTitle => 'Nessuna analisi disponibile';
+
+  @override
+  String get analytics_emptySubtitle =>
+      'Aggiungi un\'auto e registra carburante o spese per sbloccare gli insight.';
+
+  @override
+  String get analytics_costOverview => 'Panoramica costi totali';
+
+  @override
+  String get analytics_categoryBreakdown => 'Ripartizione per categoria';
+
+  @override
+  String get analytics_costPerCar => 'Costo per auto';
+
+  @override
+  String get analytics_monthlyTrend => 'Andamento mensile';
+
+  @override
+  String get analytics_tableMonth => 'Mese';
+
+  @override
+  String get analytics_tableFuel => 'Carburante';
+
+  @override
+  String get analytics_tableMaint => 'Manut.';
+
+  @override
+  String get analytics_tableFixed => 'Fissi';
+
+  @override
+  String get analytics_tableTotal => 'Totale';
+
+  @override
+  String get analytics_insightAcrossVehicles => 'Su ogni veicolo e categoria';
+
+  @override
+  String get analytics_insightVsLastMonth => 'Rispetto al mese scorso';
+
+  @override
+  String get analytics_insightLargestCategory =>
+      'Categoria di spesa principale';
+
+  @override
+  String get analytics_insightDeadlines => 'In scadenza nei prossimi 30 giorni';
+
+  @override
+  String get analytics_insightThisMonth => 'Questo mese è attivo';
+
+  @override
+  String get analytics_noUrgentDeadlines => 'Nessuna scadenza urgente';
+
+  @override
+  String analytics_deadlinesSoon(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'scadenze',
+      one: 'scadenza',
+    );
+    return '$count $_temp0 a breve';
+  }
+
+  @override
+  String get analytics_filterAll => 'Tutte le auto';
+
+  @override
+  String get analytics_noCarSelected =>
+      'Seleziona almeno un\'auto per vedere le analisi.';
+
+  @override
+  String get analytics_noCategoryData =>
+      'Nessuna categoria di costo ha ancora dati.';
+
+  @override
+  String get analytics_noSpendYet => 'Nessuna spesa ancora';
+
+  @override
+  String get analytics_startLoggingPatterns =>
+      'Inizia a registrare dati per vedere gli andamenti';
+
+  @override
+  String analytics_trackedAmount(String amount) {
+    return '$amount tracciati';
+  }
+
+  @override
+  String analytics_deltaPercent(String percent, String direction) {
+    return '$percent% $direction';
+  }
+
+  @override
+  String get analytics_deltaUp => 'in più';
+
+  @override
+  String get analytics_deltaDown => 'in meno';
 
   @override
   String get analytics_exportCsv => 'Esporta CSV';

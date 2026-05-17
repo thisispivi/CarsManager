@@ -26,37 +26,39 @@ class InspectionItem extends ConsumerWidget {
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
 
+    Future<void> editInspection() async {
+      final updated = await showModalBottomSheet<InspectionData>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => AddPaymentBottomSheet(
+          type: PaymentEntryType.inspection,
+          initialData: inspection,
+        ),
+      );
+
+      if (updated != null && context.mounted) {
+        ref
+            .read(expensesControllerProvider.notifier)
+            .updateInspection(oldData: inspection, data: updated);
+      }
+    }
+
+    void showActions() {
+      showEntryActionsSheet(
+        context: context,
+        onEdit: editInspection,
+        onDelete: () {
+          ref
+              .read(expensesControllerProvider.notifier)
+              .removeInspection(inspection);
+        },
+      );
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onLongPress: () {
-        showEntryActionsSheet(
-          context: context,
-          onEdit: () {
-            () async {
-              final updated = await showModalBottomSheet<InspectionData>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => AddPaymentBottomSheet(
-                  type: PaymentEntryType.inspection,
-                  initialData: inspection,
-                ),
-              );
-
-              if (updated != null && context.mounted) {
-                ref
-                    .read(expensesControllerProvider.notifier)
-                    .updateInspection(oldData: inspection, data: updated);
-              }
-            }();
-          },
-          onDelete: () {
-            ref
-                .read(expensesControllerProvider.notifier)
-                .removeInspection(inspection);
-          },
-        );
-      },
+      onLongPress: showActions,
       child: Container(
         margin: EdgeInsets.only(bottom: isLast ? 0 : 8, left: 16, right: 16),
         decoration: BoxDecoration(
@@ -121,6 +123,11 @@ class InspectionItem extends ConsumerWidget {
                         ),
                       ],
                     ),
+                  ),
+                  IconButton(
+                    onPressed: showActions,
+                    icon: const Icon(Icons.more_vert_rounded),
+                    tooltip: localizations.common_actions,
                   ),
                 ],
               ),

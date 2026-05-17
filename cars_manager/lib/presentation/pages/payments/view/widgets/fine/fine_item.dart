@@ -27,35 +27,37 @@ class FineItem extends ConsumerWidget {
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
 
+    Future<void> editFine() async {
+      final updated = await showModalBottomSheet<FineData>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => AddPaymentBottomSheet(
+          type: PaymentEntryType.fine,
+          initialData: fine,
+        ),
+      );
+
+      if (updated != null && context.mounted) {
+        ref
+            .read(expensesControllerProvider.notifier)
+            .updateFine(oldData: fine, data: updated);
+      }
+    }
+
+    void showActions() {
+      showEntryActionsSheet(
+        context: context,
+        onEdit: editFine,
+        onDelete: () {
+          ref.read(expensesControllerProvider.notifier).removeFine(fine);
+        },
+      );
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onLongPress: () {
-        showEntryActionsSheet(
-          context: context,
-          onEdit: () {
-            () async {
-              final updated = await showModalBottomSheet<FineData>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => AddPaymentBottomSheet(
-                  type: PaymentEntryType.fine,
-                  initialData: fine,
-                ),
-              );
-
-              if (updated != null && context.mounted) {
-                ref
-                    .read(expensesControllerProvider.notifier)
-                    .updateFine(oldData: fine, data: updated);
-              }
-            }();
-          },
-          onDelete: () {
-            ref.read(expensesControllerProvider.notifier).removeFine(fine);
-          },
-        );
-      },
+      onLongPress: showActions,
       child: Container(
         margin: EdgeInsets.only(bottom: isLast ? 0 : 8, left: 16, right: 16),
         decoration: BoxDecoration(
@@ -110,6 +112,11 @@ class FineItem extends ConsumerWidget {
                         ),
                       ],
                     ),
+                  ),
+                  IconButton(
+                    onPressed: showActions,
+                    icon: const Icon(Icons.more_vert_rounded),
+                    tooltip: localizations.common_actions,
                   ),
                 ],
               ),

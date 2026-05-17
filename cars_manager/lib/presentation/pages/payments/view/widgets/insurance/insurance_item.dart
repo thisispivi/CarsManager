@@ -1,4 +1,5 @@
 import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
@@ -21,40 +22,43 @@ class InsuranceItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
 
+    Future<void> editInsurance() async {
+      final updated = await showModalBottomSheet<InsuranceData>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => AddPaymentBottomSheet(
+          type: PaymentEntryType.insurance,
+          initialData: insurance,
+        ),
+      );
+
+      if (updated != null && context.mounted) {
+        ref
+            .read(expensesControllerProvider.notifier)
+            .updateInsurance(oldData: insurance, data: updated);
+      }
+    }
+
+    void showActions() {
+      showEntryActionsSheet(
+        context: context,
+        onEdit: editInsurance,
+        onDelete: () {
+          ref
+              .read(expensesControllerProvider.notifier)
+              .removeInsurance(insurance);
+        },
+      );
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onLongPress: () {
-        showEntryActionsSheet(
-          context: context,
-          onEdit: () {
-            () async {
-              final updated = await showModalBottomSheet<InsuranceData>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => AddPaymentBottomSheet(
-                  type: PaymentEntryType.insurance,
-                  initialData: insurance,
-                ),
-              );
-
-              if (updated != null && context.mounted) {
-                ref
-                    .read(expensesControllerProvider.notifier)
-                    .updateInsurance(oldData: insurance, data: updated);
-              }
-            }();
-          },
-          onDelete: () {
-            ref
-                .read(expensesControllerProvider.notifier)
-                .removeInsurance(insurance);
-          },
-        );
-      },
+      onLongPress: showActions,
       child: Container(
         margin: EdgeInsets.only(bottom: isLast ? 0 : 8, left: 16, right: 16),
         decoration: BoxDecoration(
@@ -109,6 +113,11 @@ class InsuranceItem extends ConsumerWidget {
                         ),
                       ],
                     ),
+                  ),
+                  IconButton(
+                    onPressed: showActions,
+                    icon: const Icon(Icons.more_vert_rounded),
+                    tooltip: localizations.common_actions,
                   ),
                 ],
               ),

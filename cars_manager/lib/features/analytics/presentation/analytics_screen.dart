@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/theme/theme_extensions.dart';
 import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/analytics/domain/export_service.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
@@ -13,18 +14,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class AnalyticsScreen extends ConsumerWidget {
+/// Presents fleet-level spending analytics, export actions, and car filters.
+class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AnalyticsScreen> createState() => _AnalyticsScreenState();
+}
+
+class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
+  late Set<String> _selectedCarIds;
+  late Set<String> _knownCarIds;
+
+  @override
+  void initState() {
+    super.initState();
+    final cars = ref.read(carsControllerProvider);
+    _selectedCarIds = cars.map((car) => car.id).toSet();
+    _knownCarIds = Set<String>.from(_selectedCarIds);
+  }
+
+  void _syncCarSelection(List<Car> cars) {
+    final currentIds = cars.map((car) => car.id).toSet();
+    if (currentIds.length == _knownCarIds.length &&
+        currentIds.containsAll(_knownCarIds)) {
+      return;
+    }
+
+    final newIds = currentIds.difference(_knownCarIds);
+    _selectedCarIds = {
+      ..._selectedCarIds.where(currentIds.contains),
+      ...newIds,
+    };
+    _knownCarIds = currentIds;
+  }
+
+  void _toggleCar(String id) {
+    setState(() {
+      if (_selectedCarIds.contains(id)) {
+        _selectedCarIds.remove(id);
+      } else {
+        _selectedCarIds.add(id);
+      }
+    });
+  }
+
+  void _selectAllCars(List<Car> cars) {
+    setState(() {
+      _selectedCarIds = cars.map((car) => car.id).toSet();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final cars = ref.watch(carsControllerProvider);
     final currency = ref.watch(appSettingsProvider).currency;
     final l10n = AppLocalizations.of(context)!;
-    final data = _AnalyticsData.fromCars(cars, currency);
+    _syncCarSelection(cars);
+
+    final filteredCars = cars
+        .where((car) => _selectedCarIds.contains(car.id))
+        .toList(growable: false);
+    final data = _AnalyticsData.fromCars(filteredCars, currency, l10n);
 
     Future<void> exportData() async {
-      final csv = ExportService.carsToCSV(cars);
+      final csv = ExportService.carsToCSV(filteredCars);
       final filename =
           'cars_export_${DateTime.now().millisecondsSinceEpoch}.csv';
       try {
@@ -40,12 +94,11 @@ class AnalyticsScreen extends ConsumerWidget {
     }
 
     if (cars.isEmpty) {
-      return const SafeArea(
+      return SafeArea(
         child: EmptyState(
           icon: Icons.insights_rounded,
-          title: 'No analytics yet',
-          subtitle:
-              'Add a car and start logging fuel or expenses to unlock insights.',
+          title: l10n.analytics_emptyTitle,
+          subtitle: l10n.analytics_emptySubtitle,
         ),
       );
     }
@@ -76,8 +129,10 @@ class AnalyticsScreen extends ConsumerWidget {
                       child: Column(
                         children: [
                           _CategoryBreakdown(data: data),
-                          const SizedBox(height: AppSpacing.xl),
-                          _CarComparison(data: data),
+                          if (data.carTotals.length > 1) ...[
+                            const SizedBox(height: AppSpacing.xl),
+                            _CarComparison(data: data),
+                          ],
                         ],
                       ),
                     ),
@@ -91,8 +146,10 @@ class AnalyticsScreen extends ConsumerWidget {
                     const SizedBox(height: AppSpacing.xl),
                     _CategoryBreakdown(data: data),
                     const SizedBox(height: AppSpacing.xl),
-                    _CarComparison(data: data),
-                    const SizedBox(height: AppSpacing.xl),
+                    if (data.carTotals.length > 1) ...[
+                      _CarComparison(data: data),
+                      const SizedBox(height: AppSpacing.xl),
+                    ],
                     _MonthlyTrendTable(data: data),
                   ],
                 );
@@ -100,13 +157,32 @@ class AnalyticsScreen extends ConsumerWidget {
           return ListView(
             padding: EdgeInsets.all(isWide ? AppSpacing.xxl : AppSpacing.lg),
             children: [
-              _HeroTotalCard(
-                data: data,
-                onExport: exportData,
-                carsCount: cars.length,
-              ),
+              const _AnalyticsHeader(),
+              if (cars.length > 1) ...[
+                const SizedBox(height: AppSpacing.lg),
+                _CarFilterRow(
+                  cars: cars,
+                  selectedCarIds: _selectedCarIds,
+                  onToggle: _toggleCar,
+                  onSelectAll: () => _selectAllCars(cars),
+                ),
+              ],
               const SizedBox(height: AppSpacing.xl),
-              content,
+              if (_selectedCarIds.isEmpty)
+                EmptyState(
+                  icon: Icons.filter_alt_off_rounded,
+                  title: l10n.analytics_noCarSelected,
+                  subtitle: l10n.analytics_filterAll,
+                )
+              else ...[
+                _HeroTotalCard(
+                  data: data,
+                  onExport: exportData,
+                  carsCount: filteredCars.length,
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                content,
+              ],
             ],
           );
         },
@@ -115,6 +191,76 @@ class AnalyticsScreen extends ConsumerWidget {
   }
 }
 
+/// Displays the analytics page title and supporting summary text.
+class _AnalyticsHeader extends StatelessWidget {
+  const _AnalyticsHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.analytics_title,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          l10n.analytics_subtitle,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Lets users include or exclude cars from the analytics calculations.
+class _CarFilterRow extends StatelessWidget {
+  const _CarFilterRow({
+    required this.cars,
+    required this.selectedCarIds,
+    required this.onToggle,
+    required this.onSelectAll,
+  });
+
+  final List<Car> cars;
+  final Set<String> selectedCarIds;
+  final ValueChanged<String> onToggle;
+  final VoidCallback onSelectAll;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Wrap(
+      spacing: AppSpacing.sm,
+      runSpacing: AppSpacing.sm,
+      children: [
+        FilterChip(
+          label: Text(l10n.analytics_filterAll),
+          selected: selectedCarIds.length == cars.length,
+          onSelected: (_) => onSelectAll(),
+        ),
+        for (final car in cars)
+          FilterChip(
+            label: Text(car.name),
+            selected: selectedCarIds.contains(car.id),
+            onSelected: (_) => onToggle(car.id),
+          ),
+      ],
+    );
+  }
+}
+
+/// Highlights the total tracked spend and CSV export affordance.
 class _HeroTotalCard extends StatelessWidget {
   const _HeroTotalCard({
     required this.data,
@@ -129,14 +275,16 @@ class _HeroTotalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-    final fg = cs.onInverseSurface;
-    final fgMuted = cs.onInverseSurface.withValues(alpha: 0.60);
+    final l10n = AppLocalizations.of(context)!;
+    final appCS = theme.extension<AppColorScheme>()!;
+    final bgColor = appCS.accent;
+    final fgColor = appCS.accentInk;
+    final fgMuted = appCS.accentInk.withValues(alpha: 0.70);
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: cs.inverseSurface,
+        color: bgColor,
         borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       child: Row(
@@ -147,7 +295,7 @@ class _HeroTotalCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'TOTAL TRACKED',
+                  l10n.analytics_totalTracked,
                   style: TextStyle(
                     color: fgMuted,
                     fontSize: 11,
@@ -160,15 +308,14 @@ class _HeroTotalCard extends StatelessWidget {
                 Text(
                   data.money.format(data.totalSpend),
                   style: TextStyle(
-                    color: fg,
+                    color: fgColor,
                     fontSize: 38,
                     fontWeight: FontWeight.w700,
-                    letterSpacing: -1,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '$carsCount ${carsCount == 1 ? 'vehicle' : 'vehicles'} · last 12 months',
+                  '${l10n.analytics_vehicleCount(carsCount)} - ${l10n.analytics_last12Months}',
                   style: TextStyle(
                     color: fgMuted,
                     fontSize: 13,
@@ -181,8 +328,8 @@ class _HeroTotalCard extends StatelessWidget {
           IconButton(
             onPressed: onExport,
             icon: const Icon(Icons.download_rounded),
-            color: fg,
-            tooltip: 'Export CSV',
+            color: fgColor,
+            tooltip: l10n.analytics_exportCsv,
           ),
         ],
       ),
@@ -190,6 +337,7 @@ class _HeroTotalCard extends StatelessWidget {
   }
 }
 
+/// Shows horizontally scrollable insight cards for the selected cars.
 class _InsightStrip extends StatelessWidget {
   const _InsightStrip({required this.insights});
 
@@ -242,6 +390,7 @@ class _InsightStrip extends StatelessWidget {
   }
 }
 
+/// Renders the six-month total cost bar overview.
 class _CostOverview extends StatelessWidget {
   const _CostOverview({required this.data});
 
@@ -259,7 +408,7 @@ class _CostOverview extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionHeader(
-            title: 'Total cost overview',
+            title: AppLocalizations.of(context)!.analytics_costOverview,
             trailing: data.money.format(data.totalSpend),
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -288,6 +437,7 @@ class _CostOverview extends StatelessWidget {
   }
 }
 
+/// Shows spend by category using proportional bars.
 class _CategoryBreakdown extends StatelessWidget {
   const _CategoryBreakdown({required this.data});
 
@@ -304,10 +454,12 @@ class _CategoryBreakdown extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionHeader(title: 'Category breakdown'),
+          _SectionHeader(
+            title: AppLocalizations.of(context)!.analytics_categoryBreakdown,
+          ),
           const SizedBox(height: AppSpacing.lg),
           if (data.categories.every((item) => item.value == 0))
-            const _MutedText('No cost categories have data yet.')
+            _MutedText(AppLocalizations.of(context)!.analytics_noCategoryData)
           else
             for (final item in data.categories.where(
               (item) => item.value > 0,
@@ -328,6 +480,7 @@ class _CategoryBreakdown extends StatelessWidget {
   }
 }
 
+/// Compares selected cars by their total tracked spend.
 class _CarComparison extends StatelessWidget {
   const _CarComparison({required this.data});
 
@@ -347,7 +500,9 @@ class _CarComparison extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionHeader(title: 'Cost per car'),
+          _SectionHeader(
+            title: AppLocalizations.of(context)!.analytics_costPerCar,
+          ),
           const SizedBox(height: AppSpacing.lg),
           for (final item in data.carTotals) ...[
             _HorizontalBar(
@@ -365,6 +520,7 @@ class _CarComparison extends StatelessWidget {
   }
 }
 
+/// Displays month-by-month fuel, maintenance, fixed, and total costs.
 class _MonthlyTrendTable extends StatelessWidget {
   const _MonthlyTrendTable({required this.data});
 
@@ -383,6 +539,7 @@ class _MonthlyTrendTable extends StatelessWidget {
     final mutedStyle = cellStyle?.copyWith(
       color: theme.colorScheme.onSurfaceVariant,
     );
+    final l10n = AppLocalizations.of(context)!;
 
     Widget row({
       required String month,
@@ -422,14 +579,14 @@ class _MonthlyTrendTable extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _SectionHeader(title: 'Monthly trend'),
-          const SizedBox(height: AppSpacing.md),
+          _SectionHeader(title: l10n.analytics_monthlyTrend),
+          const SizedBox(height: AppSpacing.lg),
           row(
-            month: 'Month',
-            fuel: 'Fuel',
-            maint: 'Maint.',
-            fixed: 'Fixed',
-            total: 'Total',
+            month: l10n.analytics_tableMonth,
+            fuel: l10n.analytics_tableFuel,
+            maint: l10n.analytics_tableMaint,
+            fixed: l10n.analytics_tableFixed,
+            total: l10n.analytics_tableTotal,
             style: headerStyle,
           ),
           const Divider(height: AppSpacing.md),
@@ -448,6 +605,7 @@ class _MonthlyTrendTable extends StatelessWidget {
   }
 }
 
+/// Common analytics card shell.
 class _SurfaceCard extends StatelessWidget {
   const _SurfaceCard({required this.child});
 
@@ -469,6 +627,7 @@ class _SurfaceCard extends StatelessWidget {
   }
 }
 
+/// Displays a section heading with an optional trailing value.
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({required this.title, this.trailing});
 
@@ -500,6 +659,7 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
+/// Draws a single monthly bar in the cost overview chart.
 class _MonthColumn extends StatelessWidget {
   const _MonthColumn({
     required this.month,
@@ -548,6 +708,7 @@ class _MonthColumn extends StatelessWidget {
   }
 }
 
+/// Renders a labeled progress bar and its formatted value.
 class _HorizontalBar extends StatelessWidget {
   const _HorizontalBar({
     required this.label,
@@ -601,6 +762,7 @@ class _HorizontalBar extends StatelessWidget {
   }
 }
 
+/// Presents secondary explanatory text with subdued color.
 class _MutedText extends StatelessWidget {
   const _MutedText(this.text);
 
@@ -618,6 +780,7 @@ class _MutedText extends StatelessWidget {
   }
 }
 
+/// Aggregated analytics model for the currently selected cars.
 class _AnalyticsData {
   const _AnalyticsData({
     required this.money,
@@ -635,7 +798,11 @@ class _AnalyticsData {
   final List<_MonthlyTotal> monthlyTotals;
   final List<_Insight> insights;
 
-  factory _AnalyticsData.fromCars(List<Car> cars, String currency) {
+  factory _AnalyticsData.fromCars(
+    List<Car> cars,
+    String currency,
+    AppLocalizations l10n,
+  ) {
     final money = NumberFormat.simpleCurrency(name: currency);
     final totalFuel = cars.fold<double>(
       0,
@@ -663,16 +830,36 @@ class _AnalyticsData {
     );
 
     final categories = [
-      _LabeledValue('Fuel', totalFuel, AppColors.categoryFuel),
-      _LabeledValue('Insurance', totalInsurance, AppColors.categoryInsurance),
       _LabeledValue(
-        'Inspection',
+        l10n.analytics_tableFuel,
+        totalFuel,
+        AppColors.categoryFuel,
+      ),
+      _LabeledValue(
+        l10n.payments_insuranceData_shortTitle,
+        totalInsurance,
+        AppColors.categoryInsurance,
+      ),
+      _LabeledValue(
+        l10n.payments_inspectionData_shortTitle,
         totalInspection,
         AppColors.categoryInspection,
       ),
-      _LabeledValue('Tax', totalTax, AppColors.categoryTax),
-      _LabeledValue('Repairs', totalRepair, AppColors.categoryRepair),
-      _LabeledValue('Fines', totalFine, AppColors.categoryFine),
+      _LabeledValue(
+        l10n.payments_taxData_shortTitle,
+        totalTax,
+        AppColors.categoryTax,
+      ),
+      _LabeledValue(
+        l10n.payments_repairsData_shortTitle,
+        totalRepair,
+        AppColors.categoryRepair,
+      ),
+      _LabeledValue(
+        l10n.payments_fineData_shortTitle,
+        totalFine,
+        AppColors.categoryFine,
+      ),
     ]..sort((a, b) => b.value.compareTo(a.value));
 
     final carTotals = [
@@ -696,8 +883,11 @@ class _AnalyticsData {
     );
     final topCategory = categories.firstWhere(
       (item) => item.value > 0,
-      orElse: () =>
-          const _LabeledValue('No spend yet', 0, AppColors.categoryInspection),
+      orElse: () => _LabeledValue(
+        l10n.analytics_noSpendYet,
+        0,
+        AppColors.categoryInspection,
+      ),
     );
     final upcomingCount = cars
         .expand(
@@ -727,24 +917,29 @@ class _AnalyticsData {
         _Insight(
           icon: Icons.payments_rounded,
           color: AppColors.accentLight,
-          title: '${money.format(totalSpend)} tracked',
-          subtitle: 'Across every vehicle and category',
+          title: l10n.analytics_trackedAmount(money.format(totalSpend)),
+          subtitle: l10n.analytics_insightAcrossVehicles,
         ),
         _Insight(
           icon: Icons.trending_up_rounded,
           color: delta > 0 ? AppColors.warnLight : AppColors.successLight,
           title: previousMonth == 0
-              ? 'This month is active'
-              : '${delta.abs().toStringAsFixed(0)}% ${delta >= 0 ? 'up' : 'down'}',
-          subtitle: 'Compared with last month',
+              ? l10n.analytics_insightThisMonth
+              : l10n.analytics_deltaPercent(
+                  delta.abs().toStringAsFixed(0),
+                  delta >= 0
+                      ? l10n.analytics_deltaUp
+                      : l10n.analytics_deltaDown,
+                ),
+          subtitle: l10n.analytics_insightVsLastMonth,
         ),
         _Insight(
           icon: Icons.category_rounded,
           color: topCategory.color,
           title: topCategory.label,
           subtitle: topCategory.value == 0
-              ? 'Start logging to see patterns'
-              : 'Largest spend category',
+              ? l10n.analytics_startLoggingPatterns
+              : l10n.analytics_insightLargestCategory,
         ),
         _Insight(
           icon: Icons.notifications_active_rounded,
@@ -752,15 +947,16 @@ class _AnalyticsData {
               ? AppColors.warnLight
               : AppColors.successLight,
           title: upcomingCount == 0
-              ? 'No urgent deadlines'
-              : '$upcomingCount deadlines soon',
-          subtitle: 'Due in the next 30 days',
+              ? l10n.analytics_noUrgentDeadlines
+              : l10n.analytics_deadlinesSoon(upcomingCount),
+          subtitle: l10n.analytics_insightDeadlines,
         ),
       ],
     );
   }
 }
 
+/// Cost totals for a single calendar month.
 class _MonthlyTotal {
   const _MonthlyTotal({
     required this.month,
@@ -822,6 +1018,7 @@ class _MonthlyTotal {
   }
 }
 
+/// Label, value, and display color tuple used by analytics charts.
 class _LabeledValue {
   const _LabeledValue(this.label, this.value, this.color);
 
@@ -830,6 +1027,7 @@ class _LabeledValue {
   final Color color;
 }
 
+/// One compact insight shown in the analytics strip.
 class _Insight {
   const _Insight({
     required this.icon,

@@ -1,4 +1,5 @@
 import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/tax_data.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
@@ -21,38 +22,39 @@ class TaxItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
 
+    Future<void> editTax() async {
+      final updated = await showModalBottomSheet<TaxData>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) =>
+            AddPaymentBottomSheet(type: PaymentEntryType.tax, initialData: tax),
+      );
+
+      if (updated != null && context.mounted) {
+        ref
+            .read(expensesControllerProvider.notifier)
+            .updateTax(oldData: tax, data: updated);
+      }
+    }
+
+    void showActions() {
+      showEntryActionsSheet(
+        context: context,
+        onEdit: editTax,
+        onDelete: () {
+          ref.read(expensesControllerProvider.notifier).removeTax(tax);
+        },
+      );
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onLongPress: () {
-        showEntryActionsSheet(
-          context: context,
-          onEdit: () {
-            () async {
-              final updated = await showModalBottomSheet<TaxData>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => AddPaymentBottomSheet(
-                  type: PaymentEntryType.tax,
-                  initialData: tax,
-                ),
-              );
-
-              if (updated != null && context.mounted) {
-                ref
-                    .read(expensesControllerProvider.notifier)
-                    .updateTax(oldData: tax, data: updated);
-              }
-            }();
-          },
-          onDelete: () {
-            ref.read(expensesControllerProvider.notifier).removeTax(tax);
-          },
-        );
-      },
+      onLongPress: showActions,
       child: Container(
         margin: EdgeInsets.only(bottom: isLast ? 0 : 8, left: 16, right: 16),
         decoration: BoxDecoration(
@@ -103,6 +105,11 @@ class TaxItem extends ConsumerWidget {
                     ),
                   ],
                 ),
+              ),
+              IconButton(
+                onPressed: showActions,
+                icon: const Icon(Icons.more_vert_rounded),
+                tooltip: localizations.common_actions,
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:cars_manager/features/expenses/domain/expenses_notifier.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/presentation/common/widgets/entry_actions.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
@@ -21,40 +22,43 @@ class RepairItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
+    final localizations = AppLocalizations.of(context)!;
     final numberFormat = NumberFormat.decimalPattern(locale.toString());
     final dateFormat = DateFormat('dd MMM yyyy', locale.toString());
 
     final description = repair.description.trim();
 
+    Future<void> editRepair() async {
+      final updated = await showModalBottomSheet<RepairData>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => AddPaymentBottomSheet(
+          type: PaymentEntryType.repair,
+          initialData: repair,
+        ),
+      );
+
+      if (updated != null && context.mounted) {
+        ref
+            .read(expensesControllerProvider.notifier)
+            .updateRepair(oldData: repair, data: updated);
+      }
+    }
+
+    void showActions() {
+      showEntryActionsSheet(
+        context: context,
+        onEdit: editRepair,
+        onDelete: () {
+          ref.read(expensesControllerProvider.notifier).removeRepair(repair);
+        },
+      );
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onLongPress: () {
-        showEntryActionsSheet(
-          context: context,
-          onEdit: () {
-            () async {
-              final updated = await showModalBottomSheet<RepairData>(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) => AddPaymentBottomSheet(
-                  type: PaymentEntryType.repair,
-                  initialData: repair,
-                ),
-              );
-
-              if (updated != null && context.mounted) {
-                ref
-                    .read(expensesControllerProvider.notifier)
-                    .updateRepair(oldData: repair, data: updated);
-              }
-            }();
-          },
-          onDelete: () {
-            ref.read(expensesControllerProvider.notifier).removeRepair(repair);
-          },
-        );
-      },
+      onLongPress: showActions,
       child: Container(
         margin: EdgeInsets.only(bottom: isLast ? 0 : 8, left: 16, right: 16),
         decoration: BoxDecoration(
@@ -109,6 +113,11 @@ class RepairItem extends ConsumerWidget {
                         ),
                       ],
                     ),
+                  ),
+                  IconButton(
+                    onPressed: showActions,
+                    icon: const Icon(Icons.more_vert_rounded),
+                    tooltip: localizations.common_actions,
                   ),
                 ],
               ),

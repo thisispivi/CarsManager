@@ -35,33 +35,37 @@ class FuelEntryItem extends ConsumerWidget {
         ? Icons.bolt_outlined
         : Icons.water_drop_outlined;
 
+    Future<void> editEntry() async {
+      final updated = await showModalBottomSheet<FuelEntry>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) => AddFuelEntryBottomSheet(
+          lockedFuelType: lockedFuelType,
+          initialEntry: entry,
+        ),
+      );
+
+      if (updated != null && context.mounted) {
+        ref
+            .read(fuelControllerProvider.notifier)
+            .update(oldEntry: entry, entry: updated);
+      }
+    }
+
+    void showActions() {
+      showEntryActionsSheet(
+        context: context,
+        onEdit: editEntry,
+        onDelete: () {
+          ref.read(fuelControllerProvider.notifier).remove(entry);
+        },
+      );
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(12),
-      onLongPress: () {
-        showEntryActionsSheet(
-          context: context,
-          onEdit: () async {
-            final updated = await showModalBottomSheet<FuelEntry>(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) => AddFuelEntryBottomSheet(
-                lockedFuelType: lockedFuelType,
-                initialEntry: entry,
-              ),
-            );
-
-            if (updated != null && context.mounted) {
-              ref
-                  .read(fuelControllerProvider.notifier)
-                  .update(oldEntry: entry, entry: updated);
-            }
-          },
-          onDelete: () {
-            ref.read(fuelControllerProvider.notifier).remove(entry);
-          },
-        );
-      },
+      onLongPress: showActions,
       child: Container(
         margin: EdgeInsets.only(bottom: isLast ? 0 : 8, left: 16, right: 16),
         decoration: BoxDecoration(
@@ -116,6 +120,11 @@ class FuelEntryItem extends ConsumerWidget {
                         ),
                       ],
                     ),
+                  ),
+                  IconButton(
+                    onPressed: showActions,
+                    icon: const Icon(Icons.more_vert_rounded),
+                    tooltip: localizations.common_actions,
                   ),
                 ],
               ),

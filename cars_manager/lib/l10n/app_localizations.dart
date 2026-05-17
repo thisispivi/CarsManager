@@ -104,12 +104,6 @@ abstract class AppLocalizations {
   /// **'CarsManager'**
   String get appTitle;
 
-  /// Title for the car data section
-  ///
-  /// In en, this message translates to:
-  /// **'Car Data'**
-  String get carData_title;
-
   /// Label for the car name field
   ///
   /// In en, this message translates to:
@@ -121,12 +115,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Model'**
   String get carData_model;
-
-  /// Label for the car setup action
-  ///
-  /// In en, this message translates to:
-  /// **'Set Up'**
-  String get carData_setUp;
 
   /// Label for the car manufacturer field
   ///
@@ -140,35 +128,11 @@ abstract class AppLocalizations {
   /// **'Year of Manufacture'**
   String get carData_yearOfManufacture;
 
-  /// Label for the original price field
-  ///
-  /// In en, this message translates to:
-  /// **'Original Price'**
-  String get carData_originalPrice;
-
-  /// Label for the production years range field
-  ///
-  /// In en, this message translates to:
-  /// **'Production Years Range'**
-  String get carData_productionRangeYears;
-
   /// Label for the license plate field
   ///
   /// In en, this message translates to:
   /// **'License Plate'**
   String get carData_licensePlate;
-
-  /// Label for the date when the car was acquired
-  ///
-  /// In en, this message translates to:
-  /// **'Acquisition Date'**
-  String get carData_acquisitionDate;
-
-  /// Label for the car photo URL field
-  ///
-  /// In en, this message translates to:
-  /// **'Photo URL'**
-  String get carData_photoUrl;
 
   /// Label for the car photo field
   ///
@@ -181,12 +145,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Fuel type'**
   String get carData_fuelType;
-
-  /// Label for the car inspection date field
-  ///
-  /// In en, this message translates to:
-  /// **'Car Inspection Date'**
-  String get carData_carInspectionDate;
 
   /// Short entity name for a car
   ///
@@ -284,131 +242,11 @@ abstract class AppLocalizations {
   /// **'LPG'**
   String get fuelType_lpg;
 
-  /// Label for front-wheel drive type
-  ///
-  /// In en, this message translates to:
-  /// **'Front-wheel drive'**
-  String get driveType_fwd;
-
-  /// Label for rear-wheel drive type
-  ///
-  /// In en, this message translates to:
-  /// **'Rear-wheel drive'**
-  String get driveType_rwd;
-
-  /// Label for all-wheel drive type
-  ///
-  /// In en, this message translates to:
-  /// **'All-wheel drive'**
-  String get driveType_awd;
-
-  /// Label for 4-wheel drive type
-  ///
-  /// In en, this message translates to:
-  /// **'4-wheel drive'**
-  String get driveType_fourWheelDrive;
-
-  /// Label for manual transmission type
-  ///
-  /// In en, this message translates to:
-  /// **'Manual'**
-  String get transmissionType_manual;
-
-  /// Label for automatic transmission type
-  ///
-  /// In en, this message translates to:
-  /// **'Automatic'**
-  String get transmissionType_automatic;
-
-  /// Label for semi-automatic transmission type
-  ///
-  /// In en, this message translates to:
-  /// **'Semi-automatic'**
-  String get transmissionType_semiAutomatic;
-
-  /// Weight in kilograms
-  ///
-  /// In en, this message translates to:
-  /// **'{weight} kg'**
-  String unit_kg(String weight);
-
-  /// Volume in liters
-  ///
-  /// In en, this message translates to:
-  /// **'{volume} L'**
-  String unit_l(String volume);
-
-  /// Length in meters
-  ///
-  /// In en, this message translates to:
-  /// **'{length} m'**
-  String unit_m(String length);
-
   /// Length in kilometers
   ///
   /// In en, this message translates to:
   /// **'{length} km'**
   String unit_km(String length);
-
-  /// Fuel consumption in liters per 100 kilometers
-  ///
-  /// In en, this message translates to:
-  /// **'{consumption} L/100km'**
-  String unit_l_per_100km(String consumption);
-
-  /// CO₂ emissions in grams per kilometer
-  ///
-  /// In en, this message translates to:
-  /// **'{emission} g/km'**
-  String unit_g_per_km(String emission);
-
-  /// Speed in kilometers per hour
-  ///
-  /// In en, this message translates to:
-  /// **'{speed} km/h'**
-  String unit_kmh(String speed);
-
-  /// Time in seconds
-  ///
-  /// In en, this message translates to:
-  /// **'{time} s'**
-  String unit_s(String time);
-
-  /// Torque in Newton-meters
-  ///
-  /// In en, this message translates to:
-  /// **'{torque} Nm'**
-  String unit_nm(String torque);
-
-  /// Engine speed in revolutions per minute
-  ///
-  /// In en, this message translates to:
-  /// **'{speed} rpm'**
-  String unit_rpm(String speed);
-
-  /// Power in horsepower
-  ///
-  /// In en, this message translates to:
-  /// **'{power} hp'**
-  String unit_hp(String power);
-
-  /// Power in kilowatts
-  ///
-  /// In en, this message translates to:
-  /// **'{power} kW'**
-  String unit_kw(String power);
-
-  /// Engine displacement in cubic centimeters
-  ///
-  /// In en, this message translates to:
-  /// **'{displacement} cc'**
-  String unit_cc(String displacement);
-
-  /// Volume in cubic decimeters (liters)
-  ///
-  /// In en, this message translates to:
-  /// **'{volume} dm³'**
-  String unit_dm3(String volume);
 
   /// Amount in specified currency
   ///
@@ -607,12 +445,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Theme'**
   String get themeSelector_title;
-
-  /// Label for the dark mode theme option
-  ///
-  /// In en, this message translates to:
-  /// **'Dark Mode'**
-  String get themeSelector_dark_mode;
 
   /// Label for the speeding fine type
   ///
@@ -848,12 +680,6 @@ abstract class AppLocalizations {
   /// **'Total cost'**
   String get fuel_total_cost_label;
 
-  /// Title for fuel expense distribution chart
-  ///
-  /// In en, this message translates to:
-  /// **'Fuel Expense Distribution'**
-  String get fuel_expenseDistribution_title;
-
   /// Title for fuel expenses by year chart
   ///
   /// In en, this message translates to:
@@ -908,18 +734,6 @@ abstract class AppLocalizations {
   /// **'License plate looks invalid'**
   String get validation_licensePlateInvalid;
 
-  /// Validation message for an invalid URL
-  ///
-  /// In en, this message translates to:
-  /// **'Please enter a valid http(s) URL'**
-  String get validation_urlInvalid;
-
-  /// Validation message shown when the insurance expiration date is in the past
-  ///
-  /// In en, this message translates to:
-  /// **'Insurance expiration date cannot be in the past.'**
-  String get validation_dateNotPast;
-
   /// Validation message for positive numbers
   ///
   /// In en, this message translates to:
@@ -937,18 +751,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Garage'**
   String get nav_garage;
-
-  /// No description provided for @nav_fuel.
-  ///
-  /// In en, this message translates to:
-  /// **'Fuel'**
-  String get nav_fuel;
-
-  /// No description provided for @nav_expenses.
-  ///
-  /// In en, this message translates to:
-  /// **'Expenses'**
-  String get nav_expenses;
 
   /// No description provided for @nav_analytics.
   ///
@@ -980,23 +782,191 @@ abstract class AppLocalizations {
   /// **'Analytics'**
   String get analytics_title;
 
-  /// No description provided for @analytics_totalExpenses.
+  /// No description provided for @analytics_subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Total expenses'**
-  String get analytics_totalExpenses;
+  /// **'Your spending at a glance'**
+  String get analytics_subtitle;
 
-  /// No description provided for @analytics_fuelEntries.
+  /// No description provided for @analytics_totalTracked.
   ///
   /// In en, this message translates to:
-  /// **'Fuel entries'**
-  String get analytics_fuelEntries;
+  /// **'TOTAL TRACKED'**
+  String get analytics_totalTracked;
 
-  /// No description provided for @analytics_trackedVehicle.
+  /// No description provided for @analytics_vehicleCount.
   ///
   /// In en, this message translates to:
-  /// **'Tracked vehicle'**
-  String get analytics_trackedVehicle;
+  /// **'{count, plural, one{# vehicle} other{# vehicles}}'**
+  String analytics_vehicleCount(int count);
+
+  /// No description provided for @analytics_last12Months.
+  ///
+  /// In en, this message translates to:
+  /// **'last 12 months'**
+  String get analytics_last12Months;
+
+  /// No description provided for @analytics_emptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No analytics yet'**
+  String get analytics_emptyTitle;
+
+  /// No description provided for @analytics_emptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a car and start logging fuel or expenses to unlock insights.'**
+  String get analytics_emptySubtitle;
+
+  /// No description provided for @analytics_costOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Total cost overview'**
+  String get analytics_costOverview;
+
+  /// No description provided for @analytics_categoryBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Category breakdown'**
+  String get analytics_categoryBreakdown;
+
+  /// No description provided for @analytics_costPerCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost per car'**
+  String get analytics_costPerCar;
+
+  /// No description provided for @analytics_monthlyTrend.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly trend'**
+  String get analytics_monthlyTrend;
+
+  /// No description provided for @analytics_tableMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get analytics_tableMonth;
+
+  /// No description provided for @analytics_tableFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel'**
+  String get analytics_tableFuel;
+
+  /// No description provided for @analytics_tableMaint.
+  ///
+  /// In en, this message translates to:
+  /// **'Maint.'**
+  String get analytics_tableMaint;
+
+  /// No description provided for @analytics_tableFixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed'**
+  String get analytics_tableFixed;
+
+  /// No description provided for @analytics_tableTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get analytics_tableTotal;
+
+  /// No description provided for @analytics_insightAcrossVehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'Across every vehicle and category'**
+  String get analytics_insightAcrossVehicles;
+
+  /// No description provided for @analytics_insightVsLastMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Compared with last month'**
+  String get analytics_insightVsLastMonth;
+
+  /// No description provided for @analytics_insightLargestCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest spend category'**
+  String get analytics_insightLargestCategory;
+
+  /// No description provided for @analytics_insightDeadlines.
+  ///
+  /// In en, this message translates to:
+  /// **'Due in the next 30 days'**
+  String get analytics_insightDeadlines;
+
+  /// No description provided for @analytics_insightThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month is active'**
+  String get analytics_insightThisMonth;
+
+  /// No description provided for @analytics_noUrgentDeadlines.
+  ///
+  /// In en, this message translates to:
+  /// **'No urgent deadlines'**
+  String get analytics_noUrgentDeadlines;
+
+  /// No description provided for @analytics_deadlinesSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} {count, plural, one{deadline} other{deadlines}} soon'**
+  String analytics_deadlinesSoon(int count);
+
+  /// No description provided for @analytics_filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All cars'**
+  String get analytics_filterAll;
+
+  /// No description provided for @analytics_noCarSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Select at least one car to view analytics.'**
+  String get analytics_noCarSelected;
+
+  /// No description provided for @analytics_noCategoryData.
+  ///
+  /// In en, this message translates to:
+  /// **'No cost categories have data yet.'**
+  String get analytics_noCategoryData;
+
+  /// No description provided for @analytics_noSpendYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No spend yet'**
+  String get analytics_noSpendYet;
+
+  /// No description provided for @analytics_startLoggingPatterns.
+  ///
+  /// In en, this message translates to:
+  /// **'Start logging to see patterns'**
+  String get analytics_startLoggingPatterns;
+
+  /// No description provided for @analytics_trackedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} tracked'**
+  String analytics_trackedAmount(String amount);
+
+  /// No description provided for @analytics_deltaPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% {direction}'**
+  String analytics_deltaPercent(String percent, String direction);
+
+  /// No description provided for @analytics_deltaUp.
+  ///
+  /// In en, this message translates to:
+  /// **'up'**
+  String get analytics_deltaUp;
+
+  /// No description provided for @analytics_deltaDown.
+  ///
+  /// In en, this message translates to:
+  /// **'down'**
+  String get analytics_deltaDown;
 
   /// No description provided for @analytics_exportCsv.
   ///

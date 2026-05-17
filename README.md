@@ -30,9 +30,10 @@ The v2 experience reframes the app from a simple car utility into a personal veh
 | Vehicle Detail | Overview, Fuel, Expenses, and Timeline tabs per car |
 | Fuel | Period filters, spend/liter metrics, visible calculation flow, entry history |
 | Expenses | Insurance, inspection, tax, repair, and fine tracking with category filters |
-| Analytics | Cross-car insight cards, cost overview, category ranking, car comparison, monthly trend table |
+| Analytics | Localized insights, per-car filter chips, cost overview, category ranking, car comparison, monthly trend table, CSV export |
 | Search | Global search for cars, fuel entries, and expenses with keyboard access |
-| Settings | Full settings page for theme, language, units, currency, notifications, export, and reset |
+| Reminders | Local due-date notifications for insurance, inspection, and tax, with Android exact-alarm fallback |
+| Settings | Full settings page for theme, language, units, currency, notification preferences, export, and reset |
 | Onboarding | First-run product introduction stored with SharedPreferences |
 | Platform | Mobile bottom navigation, tablet rail, desktop sidebar, web URLs, light and dark themes |
 
@@ -40,12 +41,11 @@ The v2 experience reframes the app from a simple car utility into a personal veh
 
 ## Design
 
-CarsManager v2 uses the new logo-led blue-to-green identity:
+CarsManager v2 uses a warm, data-friendly identity:
 
-- Brand gradient: `#004B9F` to `#63C83E`
-- Primary action blue: `#0062CC`
-- Health/success green: `#1EA85A`
-- Neutral surfaces: white/soft gray in light mode and `#0F1114`/`#1C2026` in dark mode
+- Coral accent surfaces for primary emphasis and analytics hero moments
+- Warm cream backgrounds in light mode and warm charcoal surfaces in dark mode
+- Semantic category colors for fuel, insurance, inspection, tax, repairs, and fines
 - Typography: Space Grotesk across UI and data-heavy surfaces
 
 The interface favors soft cards, restrained shadows, compact insight blocks, accessible semantic colors, and platform-specific navigation rather than a mobile layout stretched onto desktop.

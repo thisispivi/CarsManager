@@ -1,17 +1,22 @@
 import 'package:cars_manager/core/services/preferences_service.dart';
 import 'package:cars_manager/models/car.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+/// Coordinates local notification setup and due-date reminder scheduling.
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
+
+  /// Returns the shared notification service instance.
   factory NotificationService() => _instance;
   NotificationService._internal();
 
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  /// Initializes timezone data and platform notification settings.
   Future<void> init() async {
     tz.initializeTimeZones();
     const androidSettings = AndroidInitializationSettings(
@@ -25,6 +30,11 @@ class NotificationService {
     await _notificationsPlugin.initialize(settings: initSettings);
   }
 
+  /// Schedules reminder notifications for a single due date.
+  ///
+  /// Android exact alarms are attempted first for timely reminders. If the
+  /// platform denies exact alarms, the notification is retried as inexact so
+  /// scheduling never crashes the app.
   Future<void> scheduleDueDateNotification({
     required int id,
     required String carName,
@@ -43,26 +53,42 @@ class NotificationService {
       final title = 'Upcoming Due Date';
       final body = 'Your $carName\'s $itemName expires $daysText';
 
-      await _notificationsPlugin.zonedSchedule(
-        id: notificationId,
-        title: title,
-        body: body,
-        scheduledDate: tz.TZDateTime.from(scheduleDate, tz.local),
-        notificationDetails: const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'due_dates',
-            'Due Dates',
-            channelDescription: 'Reminders for car maintenance and renewals',
-            importance: Importance.high,
-            priority: Priority.high,
-          ),
-          iOS: DarwinNotificationDetails(),
+      final scheduledDate = tz.TZDateTime.from(scheduleDate, tz.local);
+      const notificationDetails = NotificationDetails(
+        android: AndroidNotificationDetails(
+          'due_dates',
+          'Due Dates',
+          channelDescription: 'Reminders for car maintenance and renewals',
+          importance: Importance.high,
+          priority: Priority.high,
         ),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        iOS: DarwinNotificationDetails(),
       );
+
+      try {
+        await _notificationsPlugin.zonedSchedule(
+          id: notificationId,
+          title: title,
+          body: body,
+          scheduledDate: scheduledDate,
+          notificationDetails: notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        );
+      } on PlatformException catch (error) {
+        if (error.code != 'exact_alarms_not_permitted') rethrow;
+        await _notificationsPlugin.zonedSchedule(
+          id: notificationId,
+          title: title,
+          body: body,
+          scheduledDate: scheduledDate,
+          notificationDetails: notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.inexact,
+        );
+      }
     }
   }
 
+  /// Cancels all reminder notifications associated with an item id.
   Future<void> cancelItemNotifications(
     int baseId,
     PreferencesService prefs,
@@ -74,6 +100,7 @@ class NotificationService {
     }
   }
 
+  /// Schedules reminders for every due-date type currently tracked by [car].
   Future<void> scheduleCarReminders({
     required Car car,
     required PreferencesService prefs,

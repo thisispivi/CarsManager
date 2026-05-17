@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Semantic color tokens layered on top of Flutter's [ColorScheme].
 @immutable
 class AppColorScheme extends ThemeExtension<AppColorScheme> {
   const AppColorScheme({
@@ -22,22 +23,55 @@ class AppColorScheme extends ThemeExtension<AppColorScheme> {
     required this.danger,
   });
 
+  /// Brand accent used for primary highlights and hero surfaces.
   final Color accent;
+
+  /// Text and icon color intended to sit on top of [accent].
   final Color accentInk;
+
+  /// App background color.
   final Color bg;
+
+  /// Secondary surface color for subtle panels and nested controls.
   final Color surface2;
+
+  /// Background color for low-emphasis chips.
   final Color chipBg;
+
+  /// Default content surface color.
   final Color surfacePrimary;
+
+  /// Raised surface color for cards, sheets, and elevated controls.
   final Color surfaceElevated;
+
+  /// Overlay surface color used above other surfaces.
   final Color surfaceOverlay;
+
+  /// Standard border color.
   final Color borderDefault;
+
+  /// Low-contrast divider and border color.
   final Color borderSubtle;
+
+  /// Higher-contrast border color for selected or emphasized elements.
   final Color borderStrong;
+
+  /// Primary readable text color.
   final Color textPrimary;
+
+  /// Secondary text color for supporting information.
   final Color textMuted;
+
+  /// Lowest-emphasis text color for hints and disabled-like content.
   final Color textFaint;
+
+  /// Success state color.
   final Color success;
+
+  /// Warning state color.
   final Color warning;
+
+  /// Error or destructive state color.
   final Color danger;
 
   @override

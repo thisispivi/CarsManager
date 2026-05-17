@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart' show Share, XFile;
 
+/// Builds and shares CSV exports for tracked cars and their entries.
 class ExportService {
+  /// Converts all supported fuel and expense records for [cars] into CSV text.
   static String carsToCSV(List<Car> cars) {
     final buffer = StringBuffer();
     buffer.writeln('Car,Type,Date,Amount,Notes');
@@ -52,6 +54,7 @@ class ExportService {
     return buffer.toString();
   }
 
+  /// Shares [csv] using the platform share sheet under [filename].
   static Future<void> shareCSV(String csv, String filename) async {
     if (kIsWeb) {
       await Share.share(csv, subject: filename);

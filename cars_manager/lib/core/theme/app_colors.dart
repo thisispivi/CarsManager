@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Central color tokens for the CarsManager design system.
-/// Warm Cream palette — coral accent, warm off-white background.
 class AppColors {
-  // ─── Warm Cream Light ────────────────────────────────────────
+  /// Light theme palette: warm neutral surfaces with a coral accent.
   static const Color bgLight = Color(0xFFF6F2EC);
   static const Color surfaceLight = Color(0xFFFFFFFF);
   static const Color surface2Light = Color(0xFFFAF7F2);
@@ -19,7 +18,7 @@ class AppColors {
   static const Color dangerLight = Color(0xFFC04949);
   static const Color chipBgLight = Color.fromRGBO(229, 115, 79, 0.10);
 
-  // ─── Warm Cream Dark ─────────────────────────────────────────
+  /// Dark theme palette: warm dark surfaces with brighter semantic colors.
   static const Color bgDark = Color(0xFF1A1612);
   static const Color surfaceDark = Color(0xFF22201C);
   static const Color surface2Dark = Color(0xFF2A2722);
@@ -35,7 +34,7 @@ class AppColors {
   static const Color dangerDark = Color(0xFFE07373);
   static const Color chipBgDark = Color.fromRGBO(239, 139, 107, 0.16);
 
-  // ─── Category colors (theme-invariant) ───────────────────────
+  /// Theme-invariant colors assigned to spending categories.
   static const Color categoryFuel = Color(0xFFE5734F);
   static const Color categoryInsurance = Color(0xFF2C8C72);
   static const Color categoryInspection = Color(0xFF3D6FB5);
