@@ -24,6 +24,8 @@ class NextInsuranceInfo extends StatelessWidget {
       nextDueDate: nextInsuranceDate,
       daysRemaining: daysUntilNext,
       daysLabel: localizations.days,
+      calendarTitle:
+          '${localizations.payments_insuranceData_shortTitle} - ${car.name}',
     );
   }
 }

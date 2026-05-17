@@ -24,6 +24,8 @@ class NextInspectionInfo extends StatelessWidget {
       nextDueDate: nextInspectionDate,
       daysRemaining: daysUntilNext,
       daysLabel: localizations.days,
+      calendarTitle:
+          '${localizations.payments_inspectionData_shortTitle} - ${car.name}',
     );
   }
 }

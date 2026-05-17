@@ -1,3 +1,4 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/utils/due_date_color.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ class NextInfoDue extends StatelessWidget {
   final DateTime nextDueDate;
   final int daysRemaining;
   final String daysLabel;
+  final String? calendarTitle;
   static const double horizontalMargin = 16.0;
 
   const NextInfoDue({
@@ -16,6 +18,7 @@ class NextInfoDue extends StatelessWidget {
     required this.nextDueDate,
     required this.daysRemaining,
     required this.daysLabel,
+    this.calendarTitle,
   });
 
   @override
@@ -65,6 +68,29 @@ class NextInfoDue extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
+          Tooltip(
+            message: l10n.common_addToCalendar,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(18),
+              onTap: () => Add2Calendar.addEvent2Cal(
+                Event(
+                  title: calendarTitle ?? title,
+                  startDate: nextDueDate,
+                  endDate: nextDueDate,
+                  allDay: true,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Icon(
+                  Icons.calendar_today_outlined,
+                  size: 18,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: const EdgeInsets.symmetric(

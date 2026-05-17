@@ -24,6 +24,8 @@ class NextTaxInfo extends StatelessWidget {
       nextDueDate: nextTaxDate,
       daysRemaining: daysUntilNext,
       daysLabel: localizations.days,
+      calendarTitle:
+          '${localizations.payments_taxData_shortTitle} - ${car.name}',
     );
   }
 }
