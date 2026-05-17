@@ -1,6 +1,6 @@
 {
-  "name": "CarsManager",
-  "short_name": "CarsManager",
+  "name": "Cars Manager",
+  "short_name": "Cars Manager",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0F1114",

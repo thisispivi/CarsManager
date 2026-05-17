@@ -245,7 +245,7 @@ class _CarSwitcherHeaderState extends ConsumerState<CarSwitcherHeader>
           Image.asset('assets/icons/CarsManagerLogo.png', height: 28),
           const SizedBox(width: 8),
           Text(
-            AppLocalizations.of(context)?.appTitle ?? 'CarsManager',
+            AppLocalizations.of(context)?.appTitle ?? 'Cars Manager',
             style: textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
               color: Theme.of(context).colorScheme.primary,

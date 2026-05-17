@@ -1,8 +1,8 @@
 flutter_native_splash:
   # Light theme splash
   color: '#FFFFFF'
-  image: assets/icons/CarsManagerLogoTransparent.png
-  image_dark: assets/icons/CarsManagerLogoTransparent.png
+  image: assets/icons/CarsManagerSplashLogo.png
+  image_dark: assets/icons/CarsManagerSplashLogo.png
 
   # Dark theme splash
   color_dark: '#0F1114'
@@ -16,8 +16,8 @@ flutter_native_splash:
     color_dark: '#0F1114'
     icon_background_color: '#FFFFFF'
     icon_background_color_dark: '#1E2226'
-    image: assets/icons/CarsManagerLogoTransparent.png
-    image_dark: assets/icons/CarsManagerLogoTransparent.png
+    image: assets/icons/CarsManagerSplashLogo.png
+    image_dark: assets/icons/CarsManagerSplashLogo.png
 
   # iOS
   ios: true

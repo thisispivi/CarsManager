@@ -154,10 +154,19 @@ class _OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/icons/CarsManagerLogoFull.png',
-            height: 42,
-            fit: BoxFit.contain,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/icons/CarsManagerLogo.png', height: 42),
+              const SizedBox(width: AppSpacing.sm),
+              Text(
+                'Cars Manager',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: AppSpacing.xxxl),
           Container(

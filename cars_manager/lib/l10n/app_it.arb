@@ -1,6 +1,6 @@
 {
   "@@locale": "it",
-  "appTitle": "CarsManager",
+  "appTitle": "Cars Manager",
   "@appTitle": {
     "description": "The title of the application"
   },
@@ -828,7 +828,7 @@
 
   "settings_subtitle": "Preferenze, promemoria, dati e informazioni sull'app.",
   "@settings_subtitle": {"description": "Subtitle shown below Settings heading"},
-  "settings_theme_subtitle": "Scegli come appare CarsManager.",
+  "settings_theme_subtitle": "Scegli come appare Cars Manager.",
   "@settings_theme_subtitle": {"description": "Subtitle for the theme preference row"},
   "settings_theme_system": "Sistema",
   "@settings_theme_system": {"description": "System/auto theme option label"},

@@ -9,7 +9,7 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
-  String get appTitle => 'CarsManager';
+  String get appTitle => 'Cars Manager';
 
   @override
   String get carData_name => 'Nome Auto';
@@ -875,7 +875,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'Preferenze, promemoria, dati e informazioni sull\'app.';
 
   @override
-  String get settings_theme_subtitle => 'Scegli come appare CarsManager.';
+  String get settings_theme_subtitle => 'Scegli come appare Cars Manager.';
 
   @override
   String get settings_theme_system => 'Sistema';

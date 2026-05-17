@@ -144,7 +144,7 @@ class NotificationService {
   Future<void> showTestNotification() async {
     await _notificationsPlugin.show(
       id: 0,
-      title: 'CarsManager',
+      title: 'Cars Manager',
       body: 'Notifications are working! Your reminders will appear here.',
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(

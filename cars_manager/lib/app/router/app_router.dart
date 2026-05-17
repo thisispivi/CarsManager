@@ -23,7 +23,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: AppRoutes.home,
             pageBuilder: (context, state) => _FadeTransitionPage(
               child: Title(
-                title: 'Home - CarsManager',
+                title: 'Home - Cars Manager',
                 color: const Color(0xFF0062CC),
                 child: const OnboardingGate(),
               ),
@@ -34,7 +34,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: AppRoutes.garage,
             pageBuilder: (context, state) => _FadeTransitionPage(
               child: Title(
-                title: 'Garage - CarsManager',
+                title: 'Garage - Cars Manager',
                 color: const Color(0xFF0062CC),
                 child: const CarsHomePage(),
               ),
@@ -52,7 +52,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: AppRoutes.vehicleDetail,
             pageBuilder: (context, state) => _FadeTransitionPage(
               child: Title(
-                title: 'Vehicle - CarsManager',
+                title: 'Vehicle - Cars Manager',
                 color: const Color(0xFF0062CC),
                 child: VehicleDetailScreen(carId: state.pathParameters['id']!),
               ),
@@ -63,7 +63,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 name: AppRoutes.vehicleFuel,
                 pageBuilder: (context, state) => _FadeTransitionPage(
                   child: Title(
-                    title: 'Fuel - CarsManager',
+                    title: 'Fuel - Cars Manager',
                     color: const Color(0xFF0062CC),
                     child: VehicleDetailScreen(
                       carId: state.pathParameters['id']!,
@@ -77,7 +77,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 name: AppRoutes.vehicleExpenses,
                 pageBuilder: (context, state) => _FadeTransitionPage(
                   child: Title(
-                    title: 'Expenses - CarsManager',
+                    title: 'Expenses - Cars Manager',
                     color: const Color(0xFF0062CC),
                     child: VehicleDetailScreen(
                       carId: state.pathParameters['id']!,
@@ -91,7 +91,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 name: AppRoutes.vehicleTimeline,
                 pageBuilder: (context, state) => _FadeTransitionPage(
                   child: Title(
-                    title: 'Timeline - CarsManager',
+                    title: 'Timeline - Cars Manager',
                     color: const Color(0xFF0062CC),
                     child: VehicleDetailScreen(
                       carId: state.pathParameters['id']!,
@@ -123,7 +123,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: AppRoutes.analytics,
             pageBuilder: (context, state) => _FadeTransitionPage(
               child: Title(
-                title: 'Analytics - CarsManager',
+                title: 'Analytics - Cars Manager',
                 color: const Color(0xFF0062CC),
                 child: const AnalyticsScreen(),
               ),
@@ -139,7 +139,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             name: AppRoutes.settings,
             pageBuilder: (context, state) => _FadeTransitionPage(
               child: Title(
-                title: 'Settings - CarsManager',
+                title: 'Settings - Cars Manager',
                 color: const Color(0xFF0062CC),
                 child: const SettingsContent(showCloseButton: false),
               ),

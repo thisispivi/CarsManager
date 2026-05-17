@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "CarsManager" "\0"
-            VALUE "FileDescription", "CarsManager" "\0"
+            VALUE "CompanyName", "Cars Manager" "\0"
+            VALUE "FileDescription", "Cars Manager" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "CarsManager" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 Andrea Piras. All rights reserved." "\0"
             VALUE "OriginalFilename", "CarsManager.exe" "\0"
-            VALUE "ProductName", "CarsManager" "\0"
+            VALUE "ProductName", "Cars Manager" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

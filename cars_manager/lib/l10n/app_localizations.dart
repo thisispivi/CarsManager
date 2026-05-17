@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// The title of the application
   ///
   /// In en, this message translates to:
-  /// **'CarsManager'**
+  /// **'Cars Manager'**
   String get appTitle;
 
   /// Label for the car name field
@@ -1631,7 +1631,7 @@ abstract class AppLocalizations {
   /// Subtitle for the theme preference row
   ///
   /// In en, this message translates to:
-  /// **'Choose how CarsManager appears.'**
+  /// **'Choose how Cars Manager appears.'**
   String get settings_theme_subtitle;
 
   /// System/auto theme option label

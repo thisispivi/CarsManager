@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="logos/CarsManagerLogo.svg" alt="CarsManager" height="96" />
-  <h1>CarsManager</h1>
+  <img src="cars_manager/assets/icons/CarsManagerLogo.png" alt="Cars Manager" height="96" />
+  <h1>Cars Manager</h1>
   <p><strong>Your vehicle intelligence platform.</strong></p>
   <p>Every cost. Every service. Total clarity.</p>
 
@@ -15,7 +15,7 @@
 
 ## Overview
 
-CarsManager is a privacy-first vehicle management app built with Flutter. It keeps vehicle health, fuel history, expenses, reminders, and analytics in one local-first workspace.
+Cars Manager is a privacy-first vehicle management app built with Flutter. It keeps vehicle health, fuel history, expenses, reminders, and analytics in one local-first workspace.
 
 The v2 experience reframes the app from a simple car utility into a personal vehicle intelligence platform: a glanceable dashboard, image-led garage, per-vehicle detail pages, cross-car analytics, search, onboarding, and responsive layouts for mobile, tablet, web, and desktop.
 
@@ -41,7 +41,7 @@ The v2 experience reframes the app from a simple car utility into a personal veh
 
 ## Design
 
-CarsManager v2 uses a warm, data-friendly identity:
+Cars Manager v2 uses a warm, data-friendly identity:
 
 - Coral accent surfaces for primary emphasis and analytics hero moments
 - Warm cream backgrounds in light mode and warm charcoal surfaces in dark mode

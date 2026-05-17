@@ -234,10 +234,18 @@ class _DesktopSidebar extends ConsumerWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(4, 4, 4, AppSpacing.xl),
-                child: Image.asset(
-                  'assets/icons/CarsManagerLogoFull.png',
-                  height: 34,
-                  alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    Image.asset('assets/icons/CarsManagerLogo.png', height: 34),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      'Cars Manager',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               _SidebarCarSwitcher(cars: cars, activeCarId: activeCar?.id),

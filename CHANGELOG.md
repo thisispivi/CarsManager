@@ -37,10 +37,10 @@ Versioning: [Semantic Versioning](https://semver.org/).
 - Removed screen-level `GoogleFonts.spaceGrotesk()` calls so typography flows through the app theme.
 - Hardened image handling for mobile file picking and corrupt base64 data.
 - Package identifier updated from `com.example.cars_manager` to `io.carsmanager.app`
-- App label changed from "Cars Manager" to "CarsManager" across all platforms
+- App label standardized as "Cars Manager" across all platforms
 - Web manifest: brand colours (`#004B9F` primary, `#0F1114` background), correct product description
 - Web `index.html`: proper title, description, theme-color, and `lang="en"` attribute
-- iOS `Info.plist`: display name and bundle name updated to "CarsManager"
+- iOS `Info.plist`: display name and bundle name updated to "Cars Manager"
 - `pubspec.yaml`: professional product description
 
 ---

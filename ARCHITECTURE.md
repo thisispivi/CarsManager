@@ -42,7 +42,6 @@ CarsManager/
 │   ├── analysis_options.yaml
 │   ├── flutter_launcher_icons.yaml
 │   └── flutter_native_splash.yaml
-├── logos/                       # Source brand assets
 ├── README.md
 ├── DESIGN_SYSTEM.md
 ├── ENVIRONMENT_SETUP.md
@@ -178,7 +177,7 @@ flutter gen-l10n
 
 ## Branding
 
-Brand assets live in `logos/` and `cars_manager/assets/icons/`. Platform-facing metadata is configured in:
+Brand assets live in `cars_manager/assets/icons/`. Platform-facing metadata is configured in:
 
 - Android: `android/app/build.gradle.kts`, `AndroidManifest.xml`
 - Web: `web/index.html`, `web/manifest.json`
