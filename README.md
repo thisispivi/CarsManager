@@ -95,7 +95,7 @@ Cars Manager keeps the app local-first: vehicle data is stored on-device, while 
 ### Run Locally
 
 ```bash
-git clone https://github.com/apirasp/CarsManager.git
+git clone https://github.com/thisispivi/CarsManager.git
 cd CarsManager
 npm install
 

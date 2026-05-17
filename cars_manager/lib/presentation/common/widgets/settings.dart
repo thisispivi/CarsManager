@@ -232,7 +232,7 @@ class SettingsContent extends ConsumerWidget {
                 icon: Icons.info_outline_rounded,
                 title: l10n.settings_about,
                 children: [
-                  _InfoLine(label: l10n.settings_version, value: '2.0.0+1'),
+                  _InfoLine(label: l10n.settings_version, value: '2.0.2+2'),
                 ],
               ),
             ],

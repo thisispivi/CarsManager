@@ -29,7 +29,7 @@ Versioning: [Semantic Versioning](https://semver.org/).
 - Strict `analysis_options.yaml` with 15+ lint rules
 
 ### Changed
-- Version bumped to `2.0.0+1`.
+- Version bumped to `2.0.2+2`.
 - Graphical overhaul: updated the brand palette from purple-indigo to blue-green, added logo-aligned gradient tokens, refreshed navigation, themed forms/buttons/cards, and redesigned garage vehicle cards.
 - Home now launches into the v2 dashboard after onboarding instead of the garage management view.
 - Global Fuel, Expenses, and Reminders tabs now redirect into dashboard or per-vehicle detail contexts.
@@ -62,5 +62,5 @@ Versioning: [Semantic Versioning](https://semver.org/).
 - Pre-commit hooks: `dart format`, `dart analyze`, `flutter test`
 - GitHub Actions CI: dart analyze + dart test
 
-[Unreleased]: https://github.com/apirasp/CarsManager/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/apirasp/CarsManager/releases/tag/v1.0.0
+[Unreleased]: https://github.com/thisispivi/CarsManager/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/thisispivi/CarsManager/releases/tag/v1.0.0

@@ -58,7 +58,7 @@ fnm use --install-if-missing 22
 ## Clone and install
 
 ```bash
-git clone https://github.com/apirasp/CarsManager.git
+git clone https://github.com/thisispivi/CarsManager.git
 cd CarsManager
 
 # Install Node.js tooling (commit linting, husky hooks)
