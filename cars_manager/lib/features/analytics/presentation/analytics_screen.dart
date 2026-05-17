@@ -119,6 +119,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                           const SizedBox(height: AppSpacing.xl),
                           _CostOverview(data: data),
                           const SizedBox(height: AppSpacing.xl),
+                          _YearlyCostChart(yearlyTotals: data.yearlyTotals),
+                          const SizedBox(height: AppSpacing.xl),
                           _MonthlyTrendTable(data: data),
                         ],
                       ),
@@ -143,6 +145,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                     _InsightStrip(insights: data.insights),
                     const SizedBox(height: AppSpacing.xl),
                     _CostOverview(data: data),
+                    const SizedBox(height: AppSpacing.xl),
+                    _YearlyCostChart(yearlyTotals: data.yearlyTotals),
                     const SizedBox(height: AppSpacing.xl),
                     _CategoryBreakdown(data: data),
                     const SizedBox(height: AppSpacing.xl),
@@ -788,6 +792,7 @@ class _AnalyticsData {
     required this.categories,
     required this.carTotals,
     required this.monthlyTotals,
+    required this.yearlyTotals,
     required this.insights,
   });
 
@@ -796,6 +801,7 @@ class _AnalyticsData {
   final List<_LabeledValue> categories;
   final List<_LabeledValue> carTotals;
   final List<_MonthlyTotal> monthlyTotals;
+  final List<_YearlyTotal> yearlyTotals;
   final List<_Insight> insights;
 
   factory _AnalyticsData.fromCars(
@@ -877,6 +883,33 @@ class _AnalyticsData {
         _MonthlyTotal.fromCars(cars, DateTime(now.year, now.month - i)),
     ];
 
+    // Collect years that have any data
+    final yearsWithData = <int>{};
+    for (final car in cars) {
+      for (final e in car.fuel) {
+        yearsWithData.add(e.date.year);
+      }
+      for (final e in car.insuranceDatas) {
+        yearsWithData.add(e.startDate.year);
+      }
+      for (final e in car.inspectionDatas) {
+        yearsWithData.add(e.date.year);
+      }
+      for (final e in car.taxDatas) {
+        yearsWithData.add(e.date.year);
+      }
+      for (final e in car.repairDatas) {
+        yearsWithData.add(e.date.year);
+      }
+      for (final e in car.fineDatas) {
+        yearsWithData.add(e.date.year);
+      }
+    }
+    final sortedYears = (yearsWithData.toList()..sort()).take(6).toList();
+    final yearlyTotals = [
+      for (final year in sortedYears) _YearlyTotal.fromCars(cars, year),
+    ];
+
     final totalSpend = categories.fold<double>(
       0,
       (sum, item) => sum + item.value,
@@ -913,6 +946,7 @@ class _AnalyticsData {
       categories: categories,
       carTotals: carTotals,
       monthlyTotals: monthlyTotals,
+      yearlyTotals: yearlyTotals,
       insights: [
         _Insight(
           icon: Icons.payments_rounded,
@@ -952,6 +986,220 @@ class _AnalyticsData {
           subtitle: l10n.analytics_insightDeadlines,
         ),
       ],
+    );
+  }
+}
+
+/// Stacked bar chart showing yearly costs broken down by category.
+class _YearlyCostChart extends StatelessWidget {
+  const _YearlyCostChart({required this.yearlyTotals});
+
+  final List<_YearlyTotal> yearlyTotals;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    if (yearlyTotals.isEmpty || yearlyTotals.every((y) => y.total == 0)) {
+      return _SurfaceCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _SectionHeader(title: l10n.analytics_yearlyCost),
+            const SizedBox(height: AppSpacing.lg),
+            _MutedText(l10n.analytics_yearlyNoData),
+          ],
+        ),
+      );
+    }
+
+    final maxValue = yearlyTotals.map((y) => y.total).fold<double>(0, math.max);
+    const barHeight = 140.0;
+
+    final categoryColors = [
+      AppColors.categoryFuel,
+      AppColors.categoryInsurance,
+      AppColors.categoryInspection,
+      AppColors.categoryTax,
+      AppColors.categoryRepair,
+      AppColors.categoryFine,
+    ];
+    final categoryLabels = [
+      l10n.analytics_tableFuel,
+      l10n.payments_insuranceData_shortTitle,
+      l10n.payments_inspectionData_shortTitle,
+      l10n.payments_taxData_shortTitle,
+      l10n.payments_repairsData_shortTitle,
+      l10n.payments_fineData_shortTitle,
+    ];
+
+    return _SurfaceCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _SectionHeader(title: l10n.analytics_yearlyCost),
+          const SizedBox(height: AppSpacing.lg),
+          SizedBox(
+            height: barHeight + 24,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (final year in yearlyTotals) ...[
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // Stacked bar
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: FractionallySizedBox(
+                              heightFactor: maxValue == 0
+                                  ? 0.06
+                                  : math.max(0.06, year.total / maxValue),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Column(
+                                  children: [
+                                    for (
+                                      var i = 0;
+                                      i < year.segments.length;
+                                      i++
+                                    )
+                                      if (year.segments[i] > 0)
+                                        Flexible(
+                                          flex: (year.segments[i] * 1000)
+                                              .round(),
+                                          child: Container(
+                                            color: categoryColors[i],
+                                          ),
+                                        ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                        Text(
+                          '${year.year}',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (year != yearlyTotals.last)
+                    const SizedBox(width: AppSpacing.sm),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          // Legend
+          Wrap(
+            spacing: AppSpacing.md,
+            runSpacing: AppSpacing.sm,
+            children: [
+              for (var i = 0; i < categoryColors.length; i++)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: categoryColors[i],
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      categoryLabels[i],
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Cost totals for a single calendar year, broken down by category segment.
+class _YearlyTotal {
+  const _YearlyTotal({required this.year, required this.segments});
+
+  final int year;
+
+  /// Segments in order: fuel, insurance, inspection, tax, repair, fine.
+  final List<double> segments;
+
+  double get total => segments.fold(0, (s, v) => s + v);
+
+  factory _YearlyTotal.fromCars(List<Car> cars, int year) {
+    bool sameYear(DateTime date) => date.year == year;
+
+    final fuel = cars.fold<double>(
+      0,
+      (sum, car) =>
+          sum +
+          car.fuel
+              .where((e) => sameYear(e.date))
+              .fold<double>(0, (s, e) => s + e.totalCost),
+    );
+    final insurance = cars.fold<double>(
+      0,
+      (sum, car) =>
+          sum +
+          car.insuranceDatas
+              .where((e) => sameYear(e.startDate))
+              .fold<double>(0, (s, e) => s + e.premiumAmount),
+    );
+    final inspection = cars.fold<double>(
+      0,
+      (sum, car) =>
+          sum +
+          car.inspectionDatas
+              .where((e) => sameYear(e.date))
+              .fold<double>(0, (s, e) => s + (e.amount ?? 0)),
+    );
+    final tax = cars.fold<double>(
+      0,
+      (sum, car) =>
+          sum +
+          car.taxDatas
+              .where((e) => sameYear(e.date))
+              .fold<double>(0, (s, e) => s + e.amount),
+    );
+    final repair = cars.fold<double>(
+      0,
+      (sum, car) =>
+          sum +
+          car.repairDatas
+              .where((e) => sameYear(e.date))
+              .fold<double>(0, (s, e) => s + e.amount),
+    );
+    final fine = cars.fold<double>(
+      0,
+      (sum, car) =>
+          sum +
+          car.fineDatas
+              .where((e) => sameYear(e.date))
+              .fold<double>(0, (s, e) => s + e.amount),
+    );
+
+    return _YearlyTotal(
+      year: year,
+      segments: [fuel, insurance, inspection, tax, repair, fine],
     );
   }
 }

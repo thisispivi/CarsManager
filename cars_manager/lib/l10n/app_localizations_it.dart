@@ -295,6 +295,23 @@ class AppLocalizationsIt extends AppLocalizations {
       'Questa azione non può essere annullata.';
 
   @override
+  String get common_back => 'Indietro';
+
+  @override
+  String get common_overdue => 'Scaduto';
+
+  @override
+  String get common_noData => 'Nessun dato';
+
+  @override
+  String common_showAll(int count) {
+    return 'Mostra tutti i $count elementi';
+  }
+
+  @override
+  String get common_showLess => 'Mostra meno';
+
+  @override
   String get fuel_entries_title => 'Rifornimenti';
 
   @override
@@ -396,8 +413,8 @@ class AppLocalizationsIt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '# veicoli',
-      one: '# veicolo',
+      other: '$count veicoli',
+      one: '$count veicolo',
     );
     return '$_temp0';
   }
@@ -544,4 +561,387 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get settings_testNotification => 'Notifica di test';
+
+  @override
+  String get home_welcomeBack => 'Bentornato';
+
+  @override
+  String get home_addFirstCar => 'Aggiungi la tua prima auto';
+
+  @override
+  String get home_addFirstCarSubtitle =>
+      'Tieni traccia di carburante, spese, manutenzione e scadenze da un\'unica dashboard.';
+
+  @override
+  String get home_addCar => 'Aggiungi auto';
+
+  @override
+  String get home_activeCar => 'Attiva';
+
+  @override
+  String get home_switchCar => 'Cambia';
+
+  @override
+  String get home_quickActions => 'Azioni rapide';
+
+  @override
+  String get home_quickFuel => 'Carburante';
+
+  @override
+  String get home_quickExpense => 'Spesa';
+
+  @override
+  String get home_quickSearch => 'Cerca';
+
+  @override
+  String get home_upcoming => 'In scadenza';
+
+  @override
+  String get home_upcomingEmpty => 'Nessuna scadenza imminente.';
+
+  @override
+  String get home_recentActivity => 'Attività recente';
+
+  @override
+  String get home_recentActivityEmpty =>
+      'I nuovi rifornimenti e le spese appariranno qui.';
+
+  @override
+  String get home_recentActivitySeeAll => 'Vedi tutto';
+
+  @override
+  String get home_monthlySummary => 'Riepilogo mensile';
+
+  @override
+  String get home_monthlySummarySubtitle =>
+      'Speso questo mese tra carburante e spese';
+
+  @override
+  String get home_activityFuelEntry => 'Rifornimento';
+
+  @override
+  String get home_activityRepair => 'Riparazione';
+
+  @override
+  String get home_activityFine => 'Multa';
+
+  @override
+  String get home_activityVehicleTax => 'Bollo';
+
+  @override
+  String get home_activityInspection => 'Revisione';
+
+  @override
+  String get home_activityInsurance => 'Assicurazione';
+
+  @override
+  String get garage_title => 'Il mio garage';
+
+  @override
+  String garage_subtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count veicoli tracciati',
+      one: '$count veicolo tracciato',
+    );
+    return '$_temp0 con storico salute, carburante e costi.';
+  }
+
+  @override
+  String get garage_empty => 'Il tuo garage è vuoto';
+
+  @override
+  String get garage_activeVehicle => 'Veicolo attivo';
+
+  @override
+  String get garage_dueSoon => 'In scadenza';
+
+  @override
+  String get garage_fuelEntries => 'Rifornimenti';
+
+  @override
+  String get garage_expenseEvents => 'Spese';
+
+  @override
+  String get vehicleDetail_notFound => 'Veicolo non trovato';
+
+  @override
+  String get vehicleDetail_notFoundSubtitle =>
+      'Questa auto potrebbe essere stata rimossa dal garage.';
+
+  @override
+  String get vehicleDetail_backToGarage => 'Torna al garage';
+
+  @override
+  String get vehicleDetail_tabOverview => 'Panoramica';
+
+  @override
+  String get vehicleDetail_tabFuel => 'Carburante';
+
+  @override
+  String get vehicleDetail_tabExpenses => 'Spese';
+
+  @override
+  String get vehicleDetail_tabTimeline => 'Cronologia';
+
+  @override
+  String get vehicleDetail_totalTracked => 'Totale tracciato';
+
+  @override
+  String get vehicleDetail_fuelEntries => 'Rifornimenti';
+
+  @override
+  String get vehicleDetail_serviceEvents => 'Interventi';
+
+  @override
+  String get vehicleDetail_costBreakdown => 'Ripartizione costi';
+
+  @override
+  String vehicleDetail_fuelHistory(String period) {
+    return 'Storico carburante ($period)';
+  }
+
+  @override
+  String get vehicleDetail_addFuel => 'Aggiungi rifornimento';
+
+  @override
+  String get vehicleDetail_expenseCategories => 'Categorie spese';
+
+  @override
+  String get vehicleDetail_latestExpenses => 'Ultime spese';
+
+  @override
+  String vehicleDetail_latestExpensesFiltered(String category) {
+    return 'Ultime spese: $category';
+  }
+
+  @override
+  String get vehicleDetail_addExpense => 'Aggiungi spesa';
+
+  @override
+  String get vehicleDetail_vehicleTimeline => 'Cronologia veicolo';
+
+  @override
+  String get vehicleDetail_noFuelEntries => 'Nessun rifornimento.';
+
+  @override
+  String get vehicleDetail_noExpenses => 'Nessuna spesa.';
+
+  @override
+  String vehicleDetail_noExpensesFiltered(String category) {
+    return 'Nessuna spesa di tipo $category.';
+  }
+
+  @override
+  String get vehicleDetail_noData => 'Nessun dato sui costi.';
+
+  @override
+  String get vehicleDetail_timelineEmpty =>
+      'Carburante, manutenzione e pagamenti appariranno qui.';
+
+  @override
+  String vehicleDetail_showAllEntries(int count) {
+    return 'Mostra tutti i $count rifornimenti';
+  }
+
+  @override
+  String vehicleDetail_showAllExpenses(int count) {
+    return 'Mostra tutte le $count spese';
+  }
+
+  @override
+  String vehicleDetail_showAllEvents(int count) {
+    return 'Mostra tutti i $count eventi';
+  }
+
+  @override
+  String get vehicleDetail_addExpenseTitle => 'Aggiungi spesa';
+
+  @override
+  String get vehicleDetail_insurance => 'Assicurazione';
+
+  @override
+  String get vehicleDetail_inspection => 'Revisione';
+
+  @override
+  String get vehicleDetail_tax => 'Bollo';
+
+  @override
+  String get vehicleDetail_repair => 'Riparazione';
+
+  @override
+  String get vehicleDetail_fine => 'Multa';
+
+  @override
+  String get vehicleDetail_fuel => 'Carburante';
+
+  @override
+  String get vehicleDetail_noPlate => 'Nessuna targa';
+
+  @override
+  String get vehicleDetail_fuelNotSet => 'Carburante non impostato';
+
+  @override
+  String get onboarding_slide1Title => 'Le tue auto, organizzate';
+
+  @override
+  String get onboarding_slide1Subtitle =>
+      'Tieni ogni veicolo, scadenza e dettaglio chiave in un\'unica vista.';
+
+  @override
+  String get onboarding_slide2Title => 'Traccia ogni costo';
+
+  @override
+  String get onboarding_slide2Subtitle =>
+      'Registra carburante, assicurazione, bollo, riparazioni e multe senza cercare nei menu.';
+
+  @override
+  String get onboarding_slide3Title => 'Non perdere mai una scadenza';
+
+  @override
+  String get onboarding_slide3Subtitle =>
+      'Vedi rinnovi e date di manutenzione imminenti prima che diventino urgenti.';
+
+  @override
+  String get onboarding_skip => 'Salta';
+
+  @override
+  String get onboarding_getStarted => 'Inizia';
+
+  @override
+  String get onboarding_continue => 'Continua';
+
+  @override
+  String get analytics_yearlyCost => 'Costi annuali per categoria';
+
+  @override
+  String get analytics_yearlyNoData => 'Nessun dato per i veicoli selezionati.';
+
+  @override
+  String get common_next => 'Avanti';
+
+  @override
+  String get common_all => 'Tutti';
+
+  @override
+  String get carForm_step_basics => 'Base';
+
+  @override
+  String get carForm_step_details => 'Dettagli';
+
+  @override
+  String get carForm_step_photo => 'Foto';
+
+  @override
+  String get carForm_step_basicsDesc =>
+      'Assegna un nome all\'auto e aggiungi le informazioni sul modello per riconoscerla rapidamente.';
+
+  @override
+  String get carForm_step_detailsDesc =>
+      'Aggiungi la targa e il tipo di carburante per impostazioni predefinite più precise.';
+
+  @override
+  String get carForm_step_photoDesc =>
+      'Aggiungi una foto chiara per il garage e il cruscotto. Puoi saltare questo passaggio per ora.';
+
+  @override
+  String carForm_imagePickerError(String error) {
+    return 'Impossibile aprire il selettore immagini: $error';
+  }
+
+  @override
+  String get vehicleDetail_totalLiters => 'Litri totali';
+
+  @override
+  String get vehicleDetail_avgPricePerLiter => 'Prezzo medio/L';
+
+  @override
+  String vehicleDetail_categorySummary(String category) {
+    return 'Riepilogo $category';
+  }
+
+  @override
+  String get common_due => 'Scade:';
+
+  @override
+  String get common_left => 'rimasti';
+
+  @override
+  String get common_addToCalendar => 'Aggiungi al calendario';
+
+  @override
+  String get settings_subtitle =>
+      'Preferenze, promemoria, dati e informazioni sull\'app.';
+
+  @override
+  String get settings_theme_subtitle => 'Scegli come appare CarsManager.';
+
+  @override
+  String get settings_theme_system => 'Sistema';
+
+  @override
+  String get settings_theme_light => 'Chiaro';
+
+  @override
+  String get settings_theme_dark => 'Scuro';
+
+  @override
+  String get settings_units => 'Unità';
+
+  @override
+  String get settings_units_subtitle => 'Distanza e volume predefiniti.';
+
+  @override
+  String get settings_units_metric => 'Metrico';
+
+  @override
+  String get settings_units_imperial => 'Imperiale';
+
+  @override
+  String get settings_currency => 'Valuta';
+
+  @override
+  String get settings_currency_subtitle =>
+      'Usata per totali, grafici ed esportazioni.';
+
+  @override
+  String get settings_notifications => 'Notifiche';
+
+  @override
+  String get settings_notifications_enableReminders => 'Attiva promemoria';
+
+  @override
+  String get settings_notifications_subtitle =>
+      'Mostra assicurazione, revisione e bollo in scadenza.';
+
+  @override
+  String get settings_reminder_90days => '90 giorni';
+
+  @override
+  String get settings_reminder_30days => '30 giorni';
+
+  @override
+  String get settings_reminder_7days => '7 giorni';
+
+  @override
+  String get settings_reminder_1day => '1 giorno';
+
+  @override
+  String get settings_exportSubtitle =>
+      'Scarica uno snapshot CSV del tuo garage.';
+
+  @override
+  String get settings_resetDataSubtitle =>
+      'Elimina tutte le auto e le voci da questo dispositivo.';
+
+  @override
+  String get settings_about => 'Informazioni';
+
+  @override
+  String get settings_version => 'Versione';
+
+  @override
+  String get settings_language_subtitle =>
+      'Gestisce etichette, date e testi localizzati.';
 }

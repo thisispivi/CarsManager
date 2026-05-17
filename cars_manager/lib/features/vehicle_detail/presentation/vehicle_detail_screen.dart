@@ -1,10 +1,12 @@
 import 'dart:math' as math;
 
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
 import 'package:cars_manager/models/fine_data.dart';
 import 'package:cars_manager/models/fuel_entry.dart';
@@ -12,8 +14,10 @@ import 'package:cars_manager/models/inspection_data.dart';
 import 'package:cars_manager/models/insurance_data.dart';
 import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/tax_data.dart';
+import 'package:cars_manager/presentation/common/utils/due_date_color.dart';
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
+import 'package:cars_manager/shared/widgets/app_back_button.dart';
 import 'package:cars_manager/shared/widgets/vehicle_visual_card.dart';
 import 'package:cars_manager/presentation/pages/fuel/view/widgets/entries/add_fuel_entry_bottom_sheet.dart';
 import 'package:cars_manager/presentation/pages/payments/view/widgets/entries/add_payment_bottom_sheet.dart';
@@ -68,6 +72,7 @@ class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final cars = ref.watch(carsControllerProvider);
     final car = cars.where((item) => item.id == widget.carId).firstOrNull;
     final activeCarId = ref.watch(activeCarControllerProvider);
@@ -77,9 +82,9 @@ class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
       return SafeArea(
         child: EmptyState(
           icon: Icons.directions_car_outlined,
-          title: 'Vehicle not found',
-          subtitle: 'This car may have been removed from your garage.',
-          actionLabel: 'Back to Garage',
+          title: l10n.vehicleDetail_notFound,
+          subtitle: l10n.vehicleDetail_notFoundSubtitle,
+          actionLabel: l10n.vehicleDetail_backToGarage,
           onAction: () => context.go('/garage'),
         ),
       );
@@ -95,11 +100,12 @@ class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isWide = constraints.maxWidth >= 980;
-          final header = _VehicleHeader(car: car);
+          final header = _VehicleHeader(car: car, l10n: l10n);
           final tabs = _VehicleTabs(
             car: car,
             currency: currency,
             controller: _tabController,
+            l10n: l10n,
           );
 
           if (isWide) {
@@ -125,7 +131,10 @@ class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
                 ),
               ),
             ],
-            body: tabs,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: tabs,
+            ),
           );
         },
       ),
@@ -134,9 +143,10 @@ class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
 }
 
 class _VehicleHeader extends ConsumerWidget {
-  const _VehicleHeader({required this.car});
+  const _VehicleHeader({required this.car, required this.l10n});
 
   final Car car;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -156,14 +166,13 @@ class _VehicleHeader extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Navigation row: back button left, edit button right
         Padding(
           padding: const EdgeInsets.only(bottom: AppSpacing.sm),
           child: Row(
             children: [
-              _RoundIconButton(
-                icon: Icons.arrow_back_rounded,
-                tooltip: 'Back',
-                onTap: () {
+              AppBackButton(
+                onPressed: () {
                   if (context.canPop()) {
                     context.pop();
                   } else {
@@ -172,14 +181,15 @@ class _VehicleHeader extends ConsumerWidget {
                 },
               ),
               const Spacer(),
-              _RoundIconButton(
-                icon: Icons.edit_rounded,
-                tooltip: 'Edit vehicle',
-                onTap: editCar,
+              OutlinedButton.icon(
+                onPressed: editCar,
+                icon: const Icon(Icons.edit_rounded, size: 18),
+                label: Text(l10n.common_edit),
               ),
             ],
           ),
         ),
+        // Car card — full-width image with info below
         _SurfaceCard(
           padding: EdgeInsets.zero,
           child: ClipRRect(
@@ -187,8 +197,9 @@ class _VehicleHeader extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Image / visual card with gradient overlay
                 SizedBox(
-                  height: 170,
+                  height: 200,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
@@ -206,52 +217,53 @@ class _VehicleHeader extends ConsumerWidget {
                       else
                         VehicleVisualCard(
                           car: car,
-                          height: 170,
+                          height: 200,
                           borderRadius: 0,
                         ),
-                      if (hasImage) ...[
-                        const DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Colors.transparent, Color(0xB0000000)],
+                      // Gradient + name overlay (always shown)
+                      const DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.transparent, Color(0xC0000000)],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: AppSpacing.lg,
+                        right: AppSpacing.lg,
+                        bottom: AppSpacing.lg,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              car.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
-                          ),
-                        ),
-                        Positioned(
-                          left: AppSpacing.lg,
-                          right: AppSpacing.lg,
-                          bottom: AppSpacing.lg,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                car.name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.headlineSmall?.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                            const SizedBox(height: AppSpacing.xs),
+                            Text(
+                              '${car.manufacture} ${car.model} · ${car.yearOfManufacture}',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.80),
+                                fontWeight: FontWeight.w600,
                               ),
-                              const SizedBox(height: AppSpacing.xs),
-                              Text(
-                                '${car.manufacture} ${car.model} • ${car.yearOfManufacture}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: Colors.white.withValues(alpha: 0.78),
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ],
                   ),
                 ),
+                // Info section below image
                 Padding(
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   child: Column(
@@ -264,29 +276,49 @@ class _VehicleHeader extends ConsumerWidget {
                           _InfoPill(
                             icon: Icons.confirmation_number_outlined,
                             label: car.licensePlate.isEmpty
-                                ? 'No plate'
+                                ? l10n.vehicleDetail_noPlate
                                 : car.licensePlate,
                           ),
                           _InfoPill(
                             icon: Icons.local_gas_station_rounded,
-                            label: car.fuelType?.name ?? 'Fuel not set',
+                            label:
+                                car.fuelType?.name ??
+                                l10n.vehicleDetail_fuelNotSet,
                           ),
                         ],
                       ),
                       const SizedBox(height: AppSpacing.lg),
                       _DueStatusRow(
-                        label: 'Insurance',
+                        icon: Icons.description_outlined,
+                        color: AppColors.categoryInsurance,
+                        label: l10n.vehicleDetail_insurance,
                         days: car.daysUntilNextInsuranceExpiration,
+                        dueDate: car.nextInsuranceExpirationDate,
+                        l10n: l10n,
+                        calendarTitle:
+                            '${l10n.vehicleDetail_insurance} — ${car.name}',
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       _DueStatusRow(
-                        label: 'Inspection',
+                        icon: Icons.fact_check_outlined,
+                        color: AppColors.categoryInspection,
+                        label: l10n.vehicleDetail_inspection,
                         days: car.daysUntilNextInspection,
+                        dueDate: car.nextInspectionDate,
+                        l10n: l10n,
+                        calendarTitle:
+                            '${l10n.vehicleDetail_inspection} — ${car.name}',
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       _DueStatusRow(
-                        label: 'Tax',
+                        icon: Icons.paid_outlined,
+                        color: AppColors.categoryTax,
+                        label: l10n.vehicleDetail_tax,
                         days: car.daysUntilNextTaxDue,
+                        dueDate: car.nextTaxDueDate,
+                        l10n: l10n,
+                        calendarTitle:
+                            '${l10n.vehicleDetail_tax} — ${car.name}',
                       ),
                     ],
                   ),
@@ -305,11 +337,13 @@ class _VehicleTabs extends StatelessWidget {
     required this.car,
     required this.currency,
     required this.controller,
+    required this.l10n,
   });
 
   final Car car;
   final String currency;
   final TabController controller;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -329,11 +363,11 @@ class _VehicleTabs extends StatelessWidget {
             unselectedLabelColor: Theme.of(
               context,
             ).colorScheme.onSurfaceVariant,
-            tabs: const [
-              Tab(text: 'Overview'),
-              Tab(text: 'Fuel'),
-              Tab(text: 'Expenses'),
-              Tab(text: 'Timeline'),
+            tabs: [
+              Tab(text: l10n.vehicleDetail_tabOverview),
+              Tab(text: l10n.vehicleDetail_tabFuel),
+              Tab(text: l10n.vehicleDetail_tabExpenses),
+              Tab(text: l10n.vehicleDetail_tabTimeline),
             ],
           ),
         ),
@@ -342,10 +376,10 @@ class _VehicleTabs extends StatelessWidget {
           child: TabBarView(
             controller: controller,
             children: [
-              _OverviewTab(car: car, currency: currency),
-              _FuelTab(car: car, currency: currency),
-              _ExpensesTab(car: car, currency: currency),
-              _TimelineTab(car: car, currency: currency),
+              _OverviewTab(car: car, currency: currency, l10n: l10n),
+              _FuelTab(car: car, currency: currency, l10n: l10n),
+              _ExpensesTab(car: car, currency: currency, l10n: l10n),
+              _TimelineTab(car: car, currency: currency, l10n: l10n),
             ],
           ),
         ),
@@ -355,35 +389,40 @@ class _VehicleTabs extends StatelessWidget {
 }
 
 class _OverviewTab extends StatelessWidget {
-  const _OverviewTab({required this.car, required this.currency});
+  const _OverviewTab({
+    required this.car,
+    required this.currency,
+    required this.l10n,
+  });
 
   final Car car;
   final String currency;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
     final money = NumberFormat.simpleCurrency(name: currency);
     final total = car.totalFuelCost + car.totalPaidExpenses;
     return ListView(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.only(bottom: AppSpacing.xxxl),
       children: [
         Wrap(
-          spacing: AppSpacing.lg,
-          runSpacing: AppSpacing.lg,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
           children: [
             _MetricCard(
               icon: Icons.payments_rounded,
-              label: 'Total tracked',
+              label: l10n.vehicleDetail_totalTracked,
               value: money.format(total),
             ),
             _MetricCard(
               icon: Icons.local_gas_station_rounded,
-              label: 'Fuel entries',
+              label: l10n.vehicleDetail_fuelEntries,
               value: '${car.fuel.length}',
             ),
             _MetricCard(
               icon: Icons.build_rounded,
-              label: 'Service events',
+              label: l10n.vehicleDetail_serviceEvents,
               value: '${car.repairDatas.length + car.inspectionDatas.length}',
             ),
           ],
@@ -393,37 +432,38 @@ class _OverviewTab extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _SectionHeading('Cost breakdown'),
+              _SectionHeading(l10n.vehicleDetail_costBreakdown),
               const SizedBox(height: AppSpacing.lg),
               _BreakdownBar(
                 items: [
                   _BreakdownItem(
-                    'Fuel',
+                    l10n.vehicleDetail_fuel,
                     car.totalFuelCost,
                     AppColors.categoryFuel,
                   ),
                   _BreakdownItem(
-                    'Insurance',
+                    l10n.vehicleDetail_insurance,
                     car.totalPaidInsurances.toDouble(),
                     AppColors.categoryInsurance,
                   ),
                   _BreakdownItem(
-                    'Tax',
+                    l10n.vehicleDetail_tax,
                     car.totalPaidTaxes.toDouble(),
                     AppColors.categoryTax,
                   ),
                   _BreakdownItem(
-                    'Repairs',
+                    l10n.vehicleDetail_repair,
                     car.totalPaidRepairs.toDouble(),
                     AppColors.categoryRepair,
                   ),
                   _BreakdownItem(
-                    'Fines',
+                    l10n.vehicleDetail_fine,
                     car.totalPaidFines.toDouble(),
                     AppColors.categoryFine,
                   ),
                 ],
                 currency: currency,
+                l10n: l10n,
               ),
             ],
           ),
@@ -434,10 +474,15 @@ class _OverviewTab extends StatelessWidget {
 }
 
 class _FuelTab extends ConsumerStatefulWidget {
-  const _FuelTab({required this.car, required this.currency});
+  const _FuelTab({
+    required this.car,
+    required this.currency,
+    required this.l10n,
+  });
 
   final Car car;
   final String currency;
+  final AppLocalizations l10n;
 
   @override
   ConsumerState<_FuelTab> createState() => _FuelTabState();
@@ -449,6 +494,7 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = widget.l10n;
     final car = widget.car;
     final money = NumberFormat.simpleCurrency(name: widget.currency);
     final cutoff = _period.cutoffDate(DateTime.now());
@@ -479,17 +525,46 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
           .read(carsControllerProvider.notifier)
           .update(car.copyWith(fuel: [...car.fuel, entry]));
       if (!context.mounted) return;
-      AppSnackBar.show(context, 'Fuel entry added');
+      AppSnackBar.show(context, l10n.vehicleDetail_addFuel);
+    }
+
+    Future<void> editFuelEntry(FuelEntry entry) async {
+      final updated = await showModalBottomSheet<FuelEntry>(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => AddFuelEntryBottomSheet(
+          lockedFuelType: car.fuelType,
+          initialEntry: entry,
+        ),
+      );
+      if (updated == null) return;
+      final newList = car.fuel.map((e) => e == entry ? updated : e).toList();
+      ref
+          .read(carsControllerProvider.notifier)
+          .update(car.copyWith(fuel: newList));
+    }
+
+    void deleteFuelEntry(FuelEntry entry) {
+      ref
+          .read(carsControllerProvider.notifier)
+          .update(
+            car.copyWith(fuel: car.fuel.where((e) => e != entry).toList()),
+          );
     }
 
     return ListView(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        0,
+        AppSpacing.sm,
+        AppSpacing.xxxl,
+      ),
       children: [
         _SurfaceCard(
           child: _PeriodSelector<_FuelPeriod>(
             value: _period,
             values: _FuelPeriod.values,
-            labelFor: (period) => period.label,
+            labelFor: (period) => period.labelFor(l10n),
             onChanged: (period) => setState(() {
               _period = period;
               _showAll = false;
@@ -498,22 +573,22 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
         ),
         const SizedBox(height: AppSpacing.lg),
         Wrap(
-          spacing: AppSpacing.lg,
-          runSpacing: AppSpacing.lg,
+          spacing: AppSpacing.sm,
+          runSpacing: AppSpacing.sm,
           children: [
             _MetricCard(
               icon: Icons.payments_rounded,
-              label: 'Fuel spent',
+              label: l10n.vehicleDetail_totalTracked,
               value: money.format(fuelCost),
             ),
             _MetricCard(
               icon: Icons.water_drop_rounded,
-              label: 'Total liters',
+              label: l10n.vehicleDetail_totalLiters,
               value: NumberFormat.decimalPattern().format(liters),
             ),
             _MetricCard(
               icon: Icons.speed_rounded,
-              label: 'Avg price/L',
+              label: l10n.vehicleDetail_avgPricePerLiter,
               value: money.format(avgPrice),
             ),
           ],
@@ -524,17 +599,17 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _SectionHeading(
-                'Fuel history (${_period.label})',
-                actionLabel: 'Add fuel',
+                l10n.vehicleDetail_fuelHistory(_period.labelFor(l10n)),
+                actionLabel: l10n.vehicleDetail_addFuel,
                 onAction: addFuelEntry,
               ),
               const SizedBox(height: AppSpacing.md),
               if (entries.isEmpty)
-                const _EmptyTabLine('No fuel entries yet.')
+                _EmptyTabLine(l10n.vehicleDetail_noFuelEntries)
               else ...[
                 for (final entry
                     in (_showAll ? entries : entries.take(8).toList())) ...[
-                  _DataRowLine(
+                  _ActionableDataRow(
                     icon: Icons.local_gas_station_rounded,
                     title: '${entry.liters.toStringAsFixed(2)} L',
                     subtitle: entry.liters > 0
@@ -542,6 +617,9 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
                         : DateFormat.yMMMd().format(entry.date),
                     trailing: money.format(entry.totalCost),
                     color: AppColors.categoryFuel,
+                    onEdit: () => editFuelEntry(entry),
+                    onDelete: () => deleteFuelEntry(entry),
+                    l10n: l10n,
                   ),
                   if (entry !=
                       (_showAll ? entries : entries.take(8).toList()).last)
@@ -554,8 +632,8 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
                       onPressed: () => setState(() => _showAll = !_showAll),
                       child: Text(
                         _showAll
-                            ? 'Show less'
-                            : 'Show all ${entries.length} entries',
+                            ? l10n.common_showLess
+                            : l10n.vehicleDetail_showAllEntries(entries.length),
                       ),
                     ),
                   ),
@@ -570,10 +648,15 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
 }
 
 class _ExpensesTab extends ConsumerStatefulWidget {
-  const _ExpensesTab({required this.car, required this.currency});
+  const _ExpensesTab({
+    required this.car,
+    required this.currency,
+    required this.l10n,
+  });
 
   final Car car;
   final String currency;
+  final AppLocalizations l10n;
 
   @override
   ConsumerState<_ExpensesTab> createState() => _ExpensesTabState();
@@ -585,13 +668,14 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = widget.l10n;
     final car = widget.car;
     final currency = widget.currency;
 
     Future<void> addExpense() async {
       final type = await showModalBottomSheet<PaymentEntryType>(
         context: context,
-        builder: (context) => const _ExpenseTypePicker(),
+        builder: (context) => _ExpenseTypePicker(l10n: l10n),
       );
       if (type == null || !context.mounted) return;
 
@@ -622,17 +706,122 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
 
       ref.read(carsControllerProvider.notifier).update(updatedCar);
       if (!context.mounted) return;
-      AppSnackBar.show(context, 'Expense added');
+      AppSnackBar.show(context, l10n.vehicleDetail_addExpense);
+    }
+
+    Future<void> editExpense(_TimelineEvent event) async {
+      if (event.expenseFilter == null) return;
+      final type = switch (event.expenseFilter!) {
+        _ExpenseFilter.insurance => PaymentEntryType.insurance,
+        _ExpenseFilter.inspection => PaymentEntryType.inspection,
+        _ExpenseFilter.tax => PaymentEntryType.tax,
+        _ExpenseFilter.repair => PaymentEntryType.repair,
+        _ExpenseFilter.fine => PaymentEntryType.fine,
+        _ExpenseFilter.all => null,
+      };
+      if (type == null) return;
+
+      final data = await showModalBottomSheet<Object>(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) =>
+            AddPaymentBottomSheet(type: type, initialData: event.rawData),
+      );
+      if (data == null) return;
+
+      Car updatedCar;
+      switch (type) {
+        case PaymentEntryType.insurance:
+          updatedCar = car.copyWith(
+            insuranceDatas: car.insuranceDatas
+                .map((e) => e == event.rawData ? data as InsuranceData : e)
+                .toList(),
+          );
+        case PaymentEntryType.inspection:
+          updatedCar = car.copyWith(
+            inspectionDatas: car.inspectionDatas
+                .map((e) => e == event.rawData ? data as InspectionData : e)
+                .toList(),
+          );
+        case PaymentEntryType.tax:
+          updatedCar = car.copyWith(
+            taxDatas: car.taxDatas
+                .map((e) => e == event.rawData ? data as TaxData : e)
+                .toList(),
+          );
+        case PaymentEntryType.repair:
+          updatedCar = car.copyWith(
+            repairDatas: car.repairDatas
+                .map((e) => e == event.rawData ? data as RepairData : e)
+                .toList(),
+          );
+        case PaymentEntryType.fine:
+          updatedCar = car.copyWith(
+            fineDatas: car.fineDatas
+                .map((e) => e == event.rawData ? data as FineData : e)
+                .toList(),
+          );
+      }
+      ref.read(carsControllerProvider.notifier).update(updatedCar);
+    }
+
+    void deleteExpense(_TimelineEvent event) {
+      if (event.expenseFilter == null) return;
+      final type = switch (event.expenseFilter!) {
+        _ExpenseFilter.insurance => PaymentEntryType.insurance,
+        _ExpenseFilter.inspection => PaymentEntryType.inspection,
+        _ExpenseFilter.tax => PaymentEntryType.tax,
+        _ExpenseFilter.repair => PaymentEntryType.repair,
+        _ExpenseFilter.fine => PaymentEntryType.fine,
+        _ExpenseFilter.all => null,
+      };
+      if (type == null) return;
+
+      Car updatedCar;
+      switch (type) {
+        case PaymentEntryType.insurance:
+          updatedCar = car.copyWith(
+            insuranceDatas: car.insuranceDatas
+                .where((e) => e != event.rawData)
+                .toList(),
+          );
+        case PaymentEntryType.inspection:
+          updatedCar = car.copyWith(
+            inspectionDatas: car.inspectionDatas
+                .where((e) => e != event.rawData)
+                .toList(),
+          );
+        case PaymentEntryType.tax:
+          updatedCar = car.copyWith(
+            taxDatas: car.taxDatas.where((e) => e != event.rawData).toList(),
+          );
+        case PaymentEntryType.repair:
+          updatedCar = car.copyWith(
+            repairDatas: car.repairDatas
+                .where((e) => e != event.rawData)
+                .toList(),
+          );
+        case PaymentEntryType.fine:
+          updatedCar = car.copyWith(
+            fineDatas: car.fineDatas.where((e) => e != event.rawData).toList(),
+          );
+      }
+      ref.read(carsControllerProvider.notifier).update(updatedCar);
     }
 
     return ListView(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        0,
+        AppSpacing.sm,
+        AppSpacing.xxxl,
+      ),
       children: [
         _SurfaceCard(
           child: _PeriodSelector<_ExpenseFilter>(
             value: _filter,
             values: _ExpenseFilter.values,
-            labelFor: (filter) => filter.label,
+            labelFor: (filter) => filter.label(l10n),
             onChanged: (filter) => setState(() {
               _filter = filter;
               _showAll = false;
@@ -646,39 +835,40 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
             children: [
               _SectionHeading(
                 _filter == _ExpenseFilter.all
-                    ? 'Expense categories'
-                    : '${_filter.label} summary',
+                    ? l10n.vehicleDetail_expenseCategories
+                    : l10n.vehicleDetail_categorySummary(_filter.label(l10n)),
               ),
               const SizedBox(height: AppSpacing.lg),
               _BreakdownBar(
                 items: _filter.applyBreakdown([
                   _BreakdownItem(
-                    'Insurance',
+                    l10n.vehicleDetail_insurance,
                     car.totalPaidInsurances.toDouble(),
                     AppColors.categoryInsurance,
                   ),
                   _BreakdownItem(
-                    'Inspection',
+                    l10n.vehicleDetail_inspection,
                     car.totalPaidInspections.toDouble(),
                     AppColors.categoryInspection,
                   ),
                   _BreakdownItem(
-                    'Tax',
+                    l10n.vehicleDetail_tax,
                     car.totalPaidTaxes.toDouble(),
                     AppColors.categoryTax,
                   ),
                   _BreakdownItem(
-                    'Repairs',
+                    l10n.vehicleDetail_repair,
                     car.totalPaidRepairs.toDouble(),
                     AppColors.categoryRepair,
                   ),
                   _BreakdownItem(
-                    'Fines',
+                    l10n.vehicleDetail_fine,
                     car.totalPaidFines.toDouble(),
                     AppColors.categoryFine,
                   ),
                 ]),
                 currency: currency,
+                l10n: l10n,
               ),
             ],
           ),
@@ -690,9 +880,11 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
             children: [
               _SectionHeading(
                 _filter == _ExpenseFilter.all
-                    ? 'Latest expenses'
-                    : 'Latest ${_filter.label.toLowerCase()}',
-                actionLabel: 'Add expense',
+                    ? l10n.vehicleDetail_latestExpenses
+                    : l10n.vehicleDetail_latestExpensesFiltered(
+                        _filter.label(l10n).toLowerCase(),
+                      ),
+                actionLabel: l10n.vehicleDetail_addExpense,
                 onAction: addExpense,
               ),
               const SizedBox(height: AppSpacing.md),
@@ -700,8 +892,11 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
                 car,
                 currency,
                 _filter,
+                l10n: l10n,
                 showAll: _showAll,
                 onToggleShowAll: () => setState(() => _showAll = !_showAll),
+                onEdit: editExpense,
+                onDelete: deleteExpense,
               ),
             ],
           ),
@@ -712,10 +907,15 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
 }
 
 class _TimelineTab extends StatefulWidget {
-  const _TimelineTab({required this.car, required this.currency});
+  const _TimelineTab({
+    required this.car,
+    required this.currency,
+    required this.l10n,
+  });
 
   final Car car;
   final String currency;
+  final AppLocalizations l10n;
 
   @override
   State<_TimelineTab> createState() => _TimelineTabState();
@@ -726,22 +926,26 @@ class _TimelineTabState extends State<_TimelineTab> {
 
   @override
   Widget build(BuildContext context) {
-    final events = _timelineEvents(widget.car, widget.currency);
+    final l10n = widget.l10n;
+    final events = _timelineEvents(widget.car, widget.currency, l10n);
     final visible = _showAll ? events : events.take(20).toList();
 
     return ListView(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        0,
+        AppSpacing.sm,
+        AppSpacing.xxxl,
+      ),
       children: [
         _SurfaceCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _SectionHeading('Vehicle timeline'),
+              _SectionHeading(l10n.vehicleDetail_vehicleTimeline),
               const SizedBox(height: AppSpacing.md),
               if (events.isEmpty)
-                const _EmptyTabLine(
-                  'Fuel, service, and payment events will appear here.',
-                )
+                _EmptyTabLine(l10n.vehicleDetail_timelineEmpty)
               else ...[
                 for (final event in visible) ...[
                   _DataRowLine(
@@ -760,8 +964,8 @@ class _TimelineTabState extends State<_TimelineTab> {
                       onPressed: () => setState(() => _showAll = !_showAll),
                       child: Text(
                         _showAll
-                            ? 'Show less'
-                            : 'Show all ${events.length} events',
+                            ? l10n.common_showLess
+                            : l10n.vehicleDetail_showAllEvents(events.length),
                       ),
                     ),
                   ),
@@ -774,6 +978,8 @@ class _TimelineTabState extends State<_TimelineTab> {
     );
   }
 }
+
+// ── Shared surface card ──────────────────────────────────────────────────────
 
 class _SurfaceCard extends StatelessWidget {
   const _SurfaceCard({required this.child, this.padding});
@@ -797,6 +1003,8 @@ class _SurfaceCard extends StatelessWidget {
   }
 }
 
+// ── Metric card (auto-expands in a Row) ─────────────────────────────────────
+
 class _MetricCard extends StatelessWidget {
   const _MetricCard({
     required this.icon,
@@ -810,42 +1018,46 @@ class _MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 220,
-      child: _SurfaceCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, color: Theme.of(context).colorScheme.primary, size: 28),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+    return _SurfaceCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
+          const SizedBox(height: AppSpacing.md),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              label,
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
+// ── Breakdown bar ────────────────────────────────────────────────────────────
+
 class _BreakdownBar extends StatelessWidget {
-  const _BreakdownBar({required this.items, required this.currency});
+  const _BreakdownBar({
+    required this.items,
+    required this.currency,
+    required this.l10n,
+  });
 
   final List<_BreakdownItem> items;
   final String currency;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -854,7 +1066,7 @@ class _BreakdownBar extends StatelessWidget {
     final money = NumberFormat.simpleCurrency(name: currency);
 
     if (visibleItems.isEmpty || total == 0) {
-      return const _EmptyTabLine('No cost data yet.');
+      return _EmptyTabLine(l10n.vehicleDetail_noData);
     }
 
     return Column(
@@ -906,6 +1118,8 @@ class _BreakdownBar extends StatelessWidget {
     );
   }
 }
+
+// ── Plain data row ───────────────────────────────────────────────────────────
 
 class _DataRowLine extends StatelessWidget {
   const _DataRowLine({
@@ -967,22 +1181,145 @@ class _DataRowLine extends StatelessWidget {
   }
 }
 
-class _DueStatusRow extends StatelessWidget {
-  const _DueStatusRow({required this.label, required this.days});
+// ── Actionable data row (with edit/delete three-dot menu) ───────────────────
 
-  final String label;
-  final int? days;
+class _ActionableDataRow extends StatelessWidget {
+  const _ActionableDataRow({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.trailing,
+    required this.color,
+    required this.onEdit,
+    required this.onDelete,
+    required this.l10n,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final String trailing;
+  final Color color;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
-    final color = _statusColor(days);
-    final value = days == null
-        ? 'No data'
-        : days! < 0
-        ? 'Overdue'
-        : '$days days';
+    final cs = Theme.of(context).colorScheme;
     return Row(
       children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: color, size: 18),
+        ),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: cs.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          trailing,
+          style: Theme.of(
+            context,
+          ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+        ),
+        PopupMenuButton<String>(
+          tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
+          icon: Icon(Icons.more_vert, size: 20, color: cs.onSurfaceVariant),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          onSelected: (value) {
+            if (value == 'edit') onEdit();
+            if (value == 'delete') onDelete();
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem<String>(
+              value: 'edit',
+              child: Row(
+                children: [
+                  Icon(Icons.edit_outlined, size: 18, color: cs.onSurface),
+                  const SizedBox(width: 10),
+                  Text(l10n.common_edit),
+                ],
+              ),
+            ),
+            PopupMenuItem<String>(
+              value: 'delete',
+              child: Row(
+                children: [
+                  Icon(Icons.delete_outline, size: 18, color: cs.error),
+                  const SizedBox(width: 10),
+                  Text(l10n.common_delete, style: TextStyle(color: cs.error)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// ── Due status row with icon ─────────────────────────────────────────────────
+
+class _DueStatusRow extends StatelessWidget {
+  const _DueStatusRow({
+    required this.icon,
+    required this.color,
+    required this.label,
+    required this.days,
+    required this.l10n,
+    this.dueDate,
+    this.calendarTitle,
+  });
+
+  final IconData icon;
+  final Color color;
+  final String label;
+  final int? days;
+  final AppLocalizations l10n;
+  final DateTime? dueDate;
+  final String? calendarTitle;
+
+  @override
+  Widget build(BuildContext context) {
+    final statusColor = statusColorForDaysOf(context, days);
+    final value = days == null ? l10n.common_noData : '${days!}d';
+    return Row(
+      children: [
+        Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.12),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(icon, size: 16, color: color),
+        ),
+        const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Text(
             label,
@@ -991,21 +1328,68 @@ class _DueStatusRow extends StatelessWidget {
             ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
+        if (dueDate != null) ...[
+          Tooltip(
+            message: l10n.common_addToCalendar,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: () => Add2Calendar.addEvent2Cal(
+                Event(
+                  title: calendarTitle ?? label,
+                  startDate: dueDate!,
+                  endDate: dueDate!,
+                  allDay: true,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(
+                  Icons.calendar_today_outlined,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+        ],
+        // Pill with glow bullet inside at the right
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
             vertical: AppSpacing.xs,
           ),
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.12),
+            color: statusColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(AppRadius.pill),
           ),
-          child: Text(
-            value,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w800,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                value,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: statusColor,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(width: 5),
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: statusColor,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: statusColor.withValues(alpha: 0.7),
+                      blurRadius: 5,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -1043,40 +1427,6 @@ class _InfoPill extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _RoundIconButton extends StatelessWidget {
-  const _RoundIconButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String tooltip;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Tooltip(
-      message: tooltip,
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: theme.cardColor,
-            shape: BoxShape.circle,
-            border: Border.all(color: theme.colorScheme.outline, width: 0.5),
-          ),
-          child: Icon(icon, color: theme.colorScheme.onSurface, size: 20),
-        ),
       ),
     );
   }
@@ -1158,7 +1508,9 @@ class _PeriodSelector<T> extends StatelessWidget {
 }
 
 class _ExpenseTypePicker extends StatelessWidget {
-  const _ExpenseTypePicker();
+  const _ExpenseTypePicker({required this.l10n});
+
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -1179,7 +1531,7 @@ class _ExpenseTypePicker extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'Add expense',
+                    l10n.vehicleDetail_addExpenseTitle,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
@@ -1193,34 +1545,34 @@ class _ExpenseTypePicker extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppSpacing.md),
-            const Wrap(
+            Wrap(
               spacing: AppSpacing.sm,
               runSpacing: AppSpacing.sm,
               children: [
                 _ExpenseTypeChoice(
                   type: PaymentEntryType.insurance,
                   icon: Icons.description_outlined,
-                  label: 'Insurance',
+                  label: l10n.vehicleDetail_insurance,
                 ),
                 _ExpenseTypeChoice(
                   type: PaymentEntryType.inspection,
                   icon: Icons.fact_check_outlined,
-                  label: 'Inspection',
+                  label: l10n.vehicleDetail_inspection,
                 ),
                 _ExpenseTypeChoice(
                   type: PaymentEntryType.tax,
                   icon: Icons.paid_outlined,
-                  label: 'Tax',
+                  label: l10n.vehicleDetail_tax,
                 ),
                 _ExpenseTypeChoice(
                   type: PaymentEntryType.repair,
                   icon: Icons.build_rounded,
-                  label: 'Repair',
+                  label: l10n.vehicleDetail_repair,
                 ),
                 _ExpenseTypeChoice(
                   type: PaymentEntryType.fine,
                   icon: Icons.report_gmailerrorred_rounded,
-                  label: 'Fine',
+                  label: l10n.vehicleDetail_fine,
                 ),
               ],
             ),
@@ -1283,6 +1635,8 @@ class _EmptyTabLine extends StatelessWidget {
   }
 }
 
+// ── Data models ──────────────────────────────────────────────────────────────
+
 class _BreakdownItem {
   const _BreakdownItem(this.label, this.value, this.color);
 
@@ -1299,6 +1653,7 @@ class _TimelineEvent {
     required this.date,
     required this.amount,
     this.expenseFilter,
+    this.rawData,
   });
 
   final IconData icon;
@@ -1307,16 +1662,24 @@ class _TimelineEvent {
   final DateTime date;
   final String amount;
   final _ExpenseFilter? expenseFilter;
+
+  /// The original data object, used for edit/delete operations.
+  final Object? rawData;
 }
+
+// ── Helper functions ─────────────────────────────────────────────────────────
 
 List<Widget> _expenseRows(
   Car car,
   String currency,
   _ExpenseFilter filter, {
+  required AppLocalizations l10n,
   bool showAll = false,
   VoidCallback? onToggleShowAll,
+  void Function(_TimelineEvent)? onEdit,
+  void Function(_TimelineEvent)? onDelete,
 }) {
-  final all = _timelineEvents(car, currency).where((event) {
+  final all = _timelineEvents(car, currency, l10n).where((event) {
     if (event.expenseFilter == null) return false;
     return filter == _ExpenseFilter.all || event.expenseFilter == filter;
   }).toList();
@@ -1325,8 +1688,10 @@ List<Widget> _expenseRows(
     return [
       _EmptyTabLine(
         filter == _ExpenseFilter.all
-            ? 'No expenses yet.'
-            : 'No ${filter.label.toLowerCase()} expenses yet.',
+            ? l10n.vehicleDetail_noExpenses
+            : l10n.vehicleDetail_noExpensesFiltered(
+                filter.label(l10n).toLowerCase(),
+              ),
       ),
     ];
   }
@@ -1334,13 +1699,25 @@ List<Widget> _expenseRows(
   final visible = showAll ? all : all.take(10).toList();
   return [
     for (final event in visible) ...[
-      _DataRowLine(
-        icon: event.icon,
-        title: event.title,
-        subtitle: DateFormat.yMMMd().format(event.date),
-        trailing: event.amount,
-        color: event.color,
-      ),
+      if (onEdit != null && onDelete != null)
+        _ActionableDataRow(
+          icon: event.icon,
+          title: event.title,
+          subtitle: DateFormat.yMMMd().format(event.date),
+          trailing: event.amount,
+          color: event.color,
+          onEdit: () => onEdit(event),
+          onDelete: () => onDelete(event),
+          l10n: l10n,
+        )
+      else
+        _DataRowLine(
+          icon: event.icon,
+          title: event.title,
+          subtitle: DateFormat.yMMMd().format(event.date),
+          trailing: event.amount,
+          color: event.color,
+        ),
       if (event != visible.last) const Divider(height: 20),
     ],
     if (all.length > 10 && onToggleShowAll != null) ...[
@@ -1349,7 +1726,9 @@ List<Widget> _expenseRows(
         child: TextButton(
           onPressed: onToggleShowAll,
           child: Text(
-            showAll ? 'Show less' : 'Show all ${all.length} expenses',
+            showAll
+                ? l10n.common_showLess
+                : l10n.vehicleDetail_showAllExpenses(all.length),
           ),
         ),
       ),
@@ -1357,77 +1736,94 @@ List<Widget> _expenseRows(
   ];
 }
 
-List<_TimelineEvent> _timelineEvents(Car car, String currency) {
+List<_TimelineEvent> _timelineEvents(
+  Car car,
+  String currency,
+  AppLocalizations l10n,
+) {
   final money = NumberFormat.simpleCurrency(name: currency);
   final events = <_TimelineEvent>[
     for (final entry in car.fuel)
       _TimelineEvent(
         icon: Icons.local_gas_station_rounded,
         color: AppColors.categoryFuel,
-        title: 'Fuel',
+        title: l10n.vehicleDetail_fuel,
         date: entry.date,
         amount: money.format(entry.totalCost),
+        rawData: entry,
       ),
     for (final entry in car.insuranceDatas)
       _TimelineEvent(
         icon: Icons.description_outlined,
         color: AppColors.categoryInsurance,
-        title: 'Insurance',
+        title: l10n.vehicleDetail_insurance,
         date: entry.startDate,
         amount: money.format(entry.premiumAmount),
         expenseFilter: _ExpenseFilter.insurance,
+        rawData: entry,
       ),
     for (final entry in car.inspectionDatas)
       _TimelineEvent(
         icon: Icons.fact_check_outlined,
         color: AppColors.categoryInspection,
-        title: 'Inspection',
+        title: l10n.vehicleDetail_inspection,
         date: entry.date,
         amount: money.format(entry.amount ?? 0),
         expenseFilter: _ExpenseFilter.inspection,
+        rawData: entry,
       ),
     for (final entry in car.taxDatas)
       _TimelineEvent(
         icon: Icons.paid_outlined,
         color: AppColors.categoryTax,
-        title: 'Vehicle tax',
+        title: l10n.vehicleDetail_tax,
         date: entry.date,
         amount: money.format(entry.amount),
         expenseFilter: _ExpenseFilter.tax,
+        rawData: entry,
       ),
     for (final entry in car.repairDatas)
       _TimelineEvent(
         icon: Icons.build_rounded,
         color: AppColors.categoryRepair,
-        title: entry.description.isEmpty ? 'Repair' : entry.description,
+        title: entry.description.isEmpty
+            ? l10n.vehicleDetail_repair
+            : entry.description,
         date: entry.date,
         amount: money.format(entry.amount),
         expenseFilter: _ExpenseFilter.repair,
+        rawData: entry,
       ),
     for (final entry in car.fineDatas)
       _TimelineEvent(
         icon: Icons.report_gmailerrorred_rounded,
         color: AppColors.categoryFine,
-        title: 'Fine',
+        title: l10n.vehicleDetail_fine,
         date: entry.date,
         amount: money.format(entry.amount),
         expenseFilter: _ExpenseFilter.fine,
+        rawData: entry,
       ),
   ]..sort((a, b) => b.date.compareTo(a.date));
 
   return events;
 }
 
+// ── Enums ────────────────────────────────────────────────────────────────────
+
 enum _FuelPeriod {
   threeMonths('3M', 3),
   sixMonths('6M', 6),
   oneYear('1Y', 12),
-  all('All', null);
+  all(null, null);
 
-  const _FuelPeriod(this.label, this.months);
+  const _FuelPeriod(this.abbreviation, this.months);
 
-  final String label;
+  /// Short abbreviation (e.g. '3M'); null only for the 'all' case.
+  final String? abbreviation;
   final int? months;
+
+  String labelFor(AppLocalizations l10n) => abbreviation ?? l10n.common_all;
 
   DateTime? cutoffDate(DateTime now) {
     final value = months;
@@ -1437,26 +1833,27 @@ enum _FuelPeriod {
 }
 
 enum _ExpenseFilter {
-  all('All'),
-  insurance('Insurance'),
-  inspection('Inspection'),
-  tax('Tax'),
-  repair('Repair'),
-  fine('Fine');
+  all,
+  insurance,
+  inspection,
+  tax,
+  repair,
+  fine;
 
-  const _ExpenseFilter(this.label);
-
-  final String label;
+  String label(AppLocalizations l10n) => switch (this) {
+    _ExpenseFilter.all => l10n.common_all,
+    _ExpenseFilter.insurance => l10n.vehicleDetail_insurance,
+    _ExpenseFilter.inspection => l10n.vehicleDetail_inspection,
+    _ExpenseFilter.tax => l10n.vehicleDetail_tax,
+    _ExpenseFilter.repair => l10n.vehicleDetail_repair,
+    _ExpenseFilter.fine => l10n.vehicleDetail_fine,
+  };
 
   List<_BreakdownItem> applyBreakdown(List<_BreakdownItem> items) {
     if (this == _ExpenseFilter.all) return items;
-    return items.where((item) => item.label == label).toList();
+    // Match by position: insurance=0, inspection=1, tax=2, repair=3, fine=4
+    final index = _ExpenseFilter.values.indexOf(this) - 1;
+    if (index < 0 || index >= items.length) return items;
+    return [items[index]];
   }
-}
-
-Color _statusColor(int? days) {
-  if (days == null) return AppColors.categoryInspection;
-  if (days < 0) return AppColors.dangerLight;
-  if (days <= 30) return AppColors.warnLight;
-  return AppColors.successLight;
 }

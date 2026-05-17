@@ -289,6 +289,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get common_deleteConfirmBody => 'This action cannot be undone.';
 
   @override
+  String get common_back => 'Back';
+
+  @override
+  String get common_overdue => 'Overdue';
+
+  @override
+  String get common_noData => 'No data';
+
+  @override
+  String common_showAll(int count) {
+    return 'Show all $count entries';
+  }
+
+  @override
+  String get common_showLess => 'Show less';
+
+  @override
   String get fuel_entries_title => 'Fuel Entries';
 
   @override
@@ -390,8 +407,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '# vehicles',
-      one: '# vehicle',
+      other: '$count vehicles',
+      one: '$count vehicle',
     );
     return '$_temp0';
   }
@@ -536,4 +553,387 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_testNotification => 'Test Notification';
+
+  @override
+  String get home_welcomeBack => 'Welcome back';
+
+  @override
+  String get home_addFirstCar => 'Add your first car';
+
+  @override
+  String get home_addFirstCarSubtitle =>
+      'Track fuel, expenses, maintenance, and deadlines from one calm dashboard.';
+
+  @override
+  String get home_addCar => 'Add Car';
+
+  @override
+  String get home_activeCar => 'Active';
+
+  @override
+  String get home_switchCar => 'Switch';
+
+  @override
+  String get home_quickActions => 'Quick actions';
+
+  @override
+  String get home_quickFuel => 'Fuel';
+
+  @override
+  String get home_quickExpense => 'Expense';
+
+  @override
+  String get home_quickSearch => 'Search';
+
+  @override
+  String get home_upcoming => 'Upcoming';
+
+  @override
+  String get home_upcomingEmpty => 'No upcoming deadlines yet.';
+
+  @override
+  String get home_recentActivity => 'Recent activity';
+
+  @override
+  String get home_recentActivityEmpty =>
+      'New fuel and expense entries will appear here.';
+
+  @override
+  String get home_recentActivitySeeAll => 'See all';
+
+  @override
+  String get home_monthlySummary => 'Monthly summary';
+
+  @override
+  String get home_monthlySummarySubtitle =>
+      'Spent this month across fuel and expenses';
+
+  @override
+  String get home_activityFuelEntry => 'Fuel entry';
+
+  @override
+  String get home_activityRepair => 'Repair';
+
+  @override
+  String get home_activityFine => 'Fine';
+
+  @override
+  String get home_activityVehicleTax => 'Vehicle tax';
+
+  @override
+  String get home_activityInspection => 'Inspection';
+
+  @override
+  String get home_activityInsurance => 'Insurance';
+
+  @override
+  String get garage_title => 'My Garage';
+
+  @override
+  String garage_subtitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count vehicles tracked',
+      one: '$count vehicle tracked',
+    );
+    return '$_temp0 with health, fuel, and cost history.';
+  }
+
+  @override
+  String get garage_empty => 'Your garage is empty';
+
+  @override
+  String get garage_activeVehicle => 'Active vehicle';
+
+  @override
+  String get garage_dueSoon => 'Due soon';
+
+  @override
+  String get garage_fuelEntries => 'Fuel entries';
+
+  @override
+  String get garage_expenseEvents => 'Expense events';
+
+  @override
+  String get vehicleDetail_notFound => 'Vehicle not found';
+
+  @override
+  String get vehicleDetail_notFoundSubtitle =>
+      'This car may have been removed from your garage.';
+
+  @override
+  String get vehicleDetail_backToGarage => 'Back to Garage';
+
+  @override
+  String get vehicleDetail_tabOverview => 'Overview';
+
+  @override
+  String get vehicleDetail_tabFuel => 'Fuel';
+
+  @override
+  String get vehicleDetail_tabExpenses => 'Expenses';
+
+  @override
+  String get vehicleDetail_tabTimeline => 'Timeline';
+
+  @override
+  String get vehicleDetail_totalTracked => 'Total tracked';
+
+  @override
+  String get vehicleDetail_fuelEntries => 'Fuel entries';
+
+  @override
+  String get vehicleDetail_serviceEvents => 'Service events';
+
+  @override
+  String get vehicleDetail_costBreakdown => 'Cost breakdown';
+
+  @override
+  String vehicleDetail_fuelHistory(String period) {
+    return 'Fuel history ($period)';
+  }
+
+  @override
+  String get vehicleDetail_addFuel => 'Add fuel';
+
+  @override
+  String get vehicleDetail_expenseCategories => 'Expense categories';
+
+  @override
+  String get vehicleDetail_latestExpenses => 'Latest expenses';
+
+  @override
+  String vehicleDetail_latestExpensesFiltered(String category) {
+    return 'Latest $category';
+  }
+
+  @override
+  String get vehicleDetail_addExpense => 'Add expense';
+
+  @override
+  String get vehicleDetail_vehicleTimeline => 'Vehicle timeline';
+
+  @override
+  String get vehicleDetail_noFuelEntries => 'No fuel entries yet.';
+
+  @override
+  String get vehicleDetail_noExpenses => 'No expenses yet.';
+
+  @override
+  String vehicleDetail_noExpensesFiltered(String category) {
+    return 'No $category expenses yet.';
+  }
+
+  @override
+  String get vehicleDetail_noData => 'No cost data yet.';
+
+  @override
+  String get vehicleDetail_timelineEmpty =>
+      'Fuel, service, and payment events will appear here.';
+
+  @override
+  String vehicleDetail_showAllEntries(int count) {
+    return 'Show all $count entries';
+  }
+
+  @override
+  String vehicleDetail_showAllExpenses(int count) {
+    return 'Show all $count expenses';
+  }
+
+  @override
+  String vehicleDetail_showAllEvents(int count) {
+    return 'Show all $count events';
+  }
+
+  @override
+  String get vehicleDetail_addExpenseTitle => 'Add expense';
+
+  @override
+  String get vehicleDetail_insurance => 'Insurance';
+
+  @override
+  String get vehicleDetail_inspection => 'Inspection';
+
+  @override
+  String get vehicleDetail_tax => 'Tax';
+
+  @override
+  String get vehicleDetail_repair => 'Repair';
+
+  @override
+  String get vehicleDetail_fine => 'Fine';
+
+  @override
+  String get vehicleDetail_fuel => 'Fuel';
+
+  @override
+  String get vehicleDetail_noPlate => 'No plate';
+
+  @override
+  String get vehicleDetail_fuelNotSet => 'Fuel not set';
+
+  @override
+  String get onboarding_slide1Title => 'Your cars, organized';
+
+  @override
+  String get onboarding_slide1Subtitle =>
+      'Keep every vehicle, deadline, and key detail in one confident view.';
+
+  @override
+  String get onboarding_slide2Title => 'Track every cost';
+
+  @override
+  String get onboarding_slide2Subtitle =>
+      'Log fuel, insurance, tax, repairs, and fines without digging through menus.';
+
+  @override
+  String get onboarding_slide3Title => 'Never miss a deadline';
+
+  @override
+  String get onboarding_slide3Subtitle =>
+      'See upcoming renewals and service dates before they become urgent.';
+
+  @override
+  String get onboarding_skip => 'Skip';
+
+  @override
+  String get onboarding_getStarted => 'Get Started';
+
+  @override
+  String get onboarding_continue => 'Continue';
+
+  @override
+  String get analytics_yearlyCost => 'Yearly cost breakdown';
+
+  @override
+  String get analytics_yearlyNoData => 'No data for selected cars.';
+
+  @override
+  String get common_next => 'Next';
+
+  @override
+  String get common_all => 'All';
+
+  @override
+  String get carForm_step_basics => 'Basics';
+
+  @override
+  String get carForm_step_details => 'Details';
+
+  @override
+  String get carForm_step_photo => 'Photo';
+
+  @override
+  String get carForm_step_basicsDesc =>
+      'Name the car and add the model information you use to recognize it quickly.';
+
+  @override
+  String get carForm_step_detailsDesc =>
+      'Add the plate and fuel type so entries can use smarter defaults.';
+
+  @override
+  String get carForm_step_photoDesc =>
+      'Add a clear photo for the garage and dashboard. You can skip this for now.';
+
+  @override
+  String carForm_imagePickerError(String error) {
+    return 'Could not open image picker: $error';
+  }
+
+  @override
+  String get vehicleDetail_totalLiters => 'Total liters';
+
+  @override
+  String get vehicleDetail_avgPricePerLiter => 'Avg price/L';
+
+  @override
+  String vehicleDetail_categorySummary(String category) {
+    return '$category summary';
+  }
+
+  @override
+  String get common_due => 'Due:';
+
+  @override
+  String get common_left => 'left';
+
+  @override
+  String get common_addToCalendar => 'Add to calendar';
+
+  @override
+  String get settings_subtitle =>
+      'Preferences, reminders, data, and app details.';
+
+  @override
+  String get settings_theme_subtitle => 'Choose how CarsManager appears.';
+
+  @override
+  String get settings_theme_system => 'System';
+
+  @override
+  String get settings_theme_light => 'Light';
+
+  @override
+  String get settings_theme_dark => 'Dark';
+
+  @override
+  String get settings_units => 'Units';
+
+  @override
+  String get settings_units_subtitle => 'Distance and volume defaults.';
+
+  @override
+  String get settings_units_metric => 'Metric';
+
+  @override
+  String get settings_units_imperial => 'Imperial';
+
+  @override
+  String get settings_currency => 'Currency';
+
+  @override
+  String get settings_currency_subtitle =>
+      'Used for totals, charts, and exports.';
+
+  @override
+  String get settings_notifications => 'Notifications';
+
+  @override
+  String get settings_notifications_enableReminders => 'Enable reminders';
+
+  @override
+  String get settings_notifications_subtitle =>
+      'Surface insurance, inspection, and tax dates.';
+
+  @override
+  String get settings_reminder_90days => '90 days';
+
+  @override
+  String get settings_reminder_30days => '30 days';
+
+  @override
+  String get settings_reminder_7days => '7 days';
+
+  @override
+  String get settings_reminder_1day => '1 day';
+
+  @override
+  String get settings_exportSubtitle =>
+      'Download a CSV snapshot of your garage.';
+
+  @override
+  String get settings_resetDataSubtitle =>
+      'Delete all cars and entries from this device.';
+
+  @override
+  String get settings_about => 'About';
+
+  @override
+  String get settings_version => 'Version';
+
+  @override
+  String get settings_language_subtitle =>
+      'Controls labels, dates, and localized copy.';
 }

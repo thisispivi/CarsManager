@@ -390,6 +390,29 @@
   "@common_deleteConfirmBody": {
     "description": "Body for delete confirmation"
   },
+  "common_back": "Back",
+  "@common_back": {
+    "description": "Label for back navigation button"
+  },
+  "common_overdue": "Overdue",
+  "@common_overdue": {
+    "description": "Label shown when a deadline has passed"
+  },
+  "common_noData": "No data",
+  "@common_noData": {
+    "description": "Shown when no data is available for a field"
+  },
+  "common_showAll": "Show all {count} entries",
+  "@common_showAll": {
+    "description": "Button to show all entries",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "common_showLess": "Show less",
+  "@common_showLess": {
+    "description": "Button to collapse list"
+  },
   "fuel_entries_title": "Fuel Entries",
   "@fuel_entries_title": {
     "description": "Title for fuel entries section"
@@ -526,7 +549,7 @@
   "analytics_title": "Analytics",
   "analytics_subtitle": "Your spending at a glance",
   "analytics_totalTracked": "TOTAL TRACKED",
-  "analytics_vehicleCount": "{count, plural, one{# vehicle} other{# vehicles}}",
+  "analytics_vehicleCount": "{count, plural, one{{count} vehicle} other{{count} vehicles}}",
   "@analytics_vehicleCount": {
     "placeholders": {
       "count": {
@@ -609,5 +632,244 @@
   "reminders_insurance": "Insurance",
   "reminders_inspection": "Inspection",
   "reminders_tax": "Tax",
-  "settings_testNotification": "Test Notification"
+  "settings_testNotification": "Test Notification",
+
+  "home_welcomeBack": "Welcome back",
+  "home_addFirstCar": "Add your first car",
+  "home_addFirstCarSubtitle": "Track fuel, expenses, maintenance, and deadlines from one calm dashboard.",
+  "home_addCar": "Add Car",
+  "home_activeCar": "Active",
+  "home_switchCar": "Switch",
+  "home_quickActions": "Quick actions",
+  "home_quickFuel": "Fuel",
+  "home_quickExpense": "Expense",
+  "home_quickSearch": "Search",
+  "home_upcoming": "Upcoming",
+  "home_upcomingEmpty": "No upcoming deadlines yet.",
+  "home_recentActivity": "Recent activity",
+  "home_recentActivityEmpty": "New fuel and expense entries will appear here.",
+  "home_recentActivitySeeAll": "See all",
+  "home_monthlySummary": "Monthly summary",
+  "home_monthlySummarySubtitle": "Spent this month across fuel and expenses",
+  "home_activityFuelEntry": "Fuel entry",
+  "home_activityRepair": "Repair",
+  "home_activityFine": "Fine",
+  "home_activityVehicleTax": "Vehicle tax",
+  "home_activityInspection": "Inspection",
+  "home_activityInsurance": "Insurance",
+
+  "garage_title": "My Garage",
+  "garage_subtitle": "{count, plural, one{{count} vehicle tracked} other{{count} vehicles tracked}} with health, fuel, and cost history.",
+  "@garage_subtitle": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "garage_empty": "Your garage is empty",
+  "garage_activeVehicle": "Active vehicle",
+  "garage_dueSoon": "Due soon",
+  "garage_fuelEntries": "Fuel entries",
+  "garage_expenseEvents": "Expense events",
+
+  "vehicleDetail_notFound": "Vehicle not found",
+  "vehicleDetail_notFoundSubtitle": "This car may have been removed from your garage.",
+  "vehicleDetail_backToGarage": "Back to Garage",
+  "vehicleDetail_tabOverview": "Overview",
+  "vehicleDetail_tabFuel": "Fuel",
+  "vehicleDetail_tabExpenses": "Expenses",
+  "vehicleDetail_tabTimeline": "Timeline",
+  "vehicleDetail_totalTracked": "Total tracked",
+  "vehicleDetail_fuelEntries": "Fuel entries",
+  "vehicleDetail_serviceEvents": "Service events",
+  "vehicleDetail_costBreakdown": "Cost breakdown",
+  "vehicleDetail_fuelHistory": "Fuel history ({period})",
+  "@vehicleDetail_fuelHistory": {
+    "placeholders": {
+      "period": {"type": "String"}
+    }
+  },
+  "vehicleDetail_addFuel": "Add fuel",
+  "vehicleDetail_expenseCategories": "Expense categories",
+  "vehicleDetail_latestExpenses": "Latest expenses",
+  "vehicleDetail_latestExpensesFiltered": "Latest {category}",
+  "@vehicleDetail_latestExpensesFiltered": {
+    "placeholders": {
+      "category": {"type": "String"}
+    }
+  },
+  "vehicleDetail_addExpense": "Add expense",
+  "vehicleDetail_vehicleTimeline": "Vehicle timeline",
+  "vehicleDetail_noFuelEntries": "No fuel entries yet.",
+  "vehicleDetail_noExpenses": "No expenses yet.",
+  "vehicleDetail_noExpensesFiltered": "No {category} expenses yet.",
+  "@vehicleDetail_noExpensesFiltered": {
+    "placeholders": {
+      "category": {"type": "String"}
+    }
+  },
+  "vehicleDetail_noData": "No cost data yet.",
+  "vehicleDetail_timelineEmpty": "Fuel, service, and payment events will appear here.",
+  "vehicleDetail_showAllEntries": "Show all {count} entries",
+  "@vehicleDetail_showAllEntries": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "vehicleDetail_showAllExpenses": "Show all {count} expenses",
+  "@vehicleDetail_showAllExpenses": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "vehicleDetail_showAllEvents": "Show all {count} events",
+  "@vehicleDetail_showAllEvents": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "vehicleDetail_addExpenseTitle": "Add expense",
+  "vehicleDetail_insurance": "Insurance",
+  "vehicleDetail_inspection": "Inspection",
+  "vehicleDetail_tax": "Tax",
+  "vehicleDetail_repair": "Repair",
+  "vehicleDetail_fine": "Fine",
+  "vehicleDetail_fuel": "Fuel",
+  "vehicleDetail_noPlate": "No plate",
+  "vehicleDetail_fuelNotSet": "Fuel not set",
+
+  "onboarding_slide1Title": "Your cars, organized",
+  "onboarding_slide1Subtitle": "Keep every vehicle, deadline, and key detail in one confident view.",
+  "onboarding_slide2Title": "Track every cost",
+  "onboarding_slide2Subtitle": "Log fuel, insurance, tax, repairs, and fines without digging through menus.",
+  "onboarding_slide3Title": "Never miss a deadline",
+  "onboarding_slide3Subtitle": "See upcoming renewals and service dates before they become urgent.",
+  "onboarding_skip": "Skip",
+  "onboarding_getStarted": "Get Started",
+  "onboarding_continue": "Continue",
+
+  "analytics_yearlyCost": "Yearly cost breakdown",
+  "analytics_yearlyNoData": "No data for selected cars.",
+
+  "common_next": "Next",
+  "@common_next": {
+    "description": "Generic next/continue action label"
+  },
+  "common_all": "All",
+  "@common_all": {
+    "description": "Generic all/show-all filter label"
+  },
+
+  "carForm_step_basics": "Basics",
+  "@carForm_step_basics": {
+    "description": "Car form step 1 label"
+  },
+  "carForm_step_details": "Details",
+  "@carForm_step_details": {
+    "description": "Car form step 2 label"
+  },
+  "carForm_step_photo": "Photo",
+  "@carForm_step_photo": {
+    "description": "Car form step 3 label"
+  },
+  "carForm_step_basicsDesc": "Name the car and add the model information you use to recognize it quickly.",
+  "@carForm_step_basicsDesc": {
+    "description": "Car form step 1 description"
+  },
+  "carForm_step_detailsDesc": "Add the plate and fuel type so entries can use smarter defaults.",
+  "@carForm_step_detailsDesc": {
+    "description": "Car form step 2 description"
+  },
+  "carForm_step_photoDesc": "Add a clear photo for the garage and dashboard. You can skip this for now.",
+  "@carForm_step_photoDesc": {
+    "description": "Car form step 3 description"
+  },
+  "carForm_imagePickerError": "Could not open image picker: {error}",
+  "@carForm_imagePickerError": {
+    "description": "Error shown when the image picker fails to open",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "permission denied"
+      }
+    }
+  },
+
+  "vehicleDetail_totalLiters": "Total liters",
+  "@vehicleDetail_totalLiters": {
+    "description": "Metric card label for total fuel liters"
+  },
+  "vehicleDetail_avgPricePerLiter": "Avg price/L",
+  "@vehicleDetail_avgPricePerLiter": {
+    "description": "Metric card label for average price per liter"
+  },
+  "vehicleDetail_categorySummary": "{category} summary",
+  "@vehicleDetail_categorySummary": {
+    "description": "Section heading when a single expense category is selected",
+    "placeholders": {
+      "category": {
+        "type": "String",
+        "example": "Insurance"
+      }
+    }
+  },
+
+  "common_due": "Due:",
+  "@common_due": {
+    "description": "Prefix label shown before a due date (e.g. 'Due: 15 Jan')"
+  },
+  "common_left": "left",
+  "@common_left": {
+    "description": "Suffix shown after a days-remaining count (e.g. '3 days left')"
+  },
+  "common_addToCalendar": "Add to calendar",
+  "@common_addToCalendar": {
+    "description": "Tooltip for the button that adds a due date event to the device calendar"
+  },
+
+  "settings_subtitle": "Preferences, reminders, data, and app details.",
+  "@settings_subtitle": {"description": "Subtitle shown below Settings heading"},
+  "settings_theme_subtitle": "Choose how CarsManager appears.",
+  "@settings_theme_subtitle": {"description": "Subtitle for the theme preference row"},
+  "settings_theme_system": "System",
+  "@settings_theme_system": {"description": "System/auto theme option label"},
+  "settings_theme_light": "Light",
+  "@settings_theme_light": {"description": "Light theme option label"},
+  "settings_theme_dark": "Dark",
+  "@settings_theme_dark": {"description": "Dark theme option label"},
+  "settings_units": "Units",
+  "@settings_units": {"description": "Label for the units preference section"},
+  "settings_units_subtitle": "Distance and volume defaults.",
+  "@settings_units_subtitle": {"description": "Subtitle for the units preference row"},
+  "settings_units_metric": "Metric",
+  "@settings_units_metric": {"description": "Metric units option label"},
+  "settings_units_imperial": "Imperial",
+  "@settings_units_imperial": {"description": "Imperial units option label"},
+  "settings_currency": "Currency",
+  "@settings_currency": {"description": "Label for the currency preference row"},
+  "settings_currency_subtitle": "Used for totals, charts, and exports.",
+  "@settings_currency_subtitle": {"description": "Subtitle for the currency preference row"},
+  "settings_notifications": "Notifications",
+  "@settings_notifications": {"description": "Section heading for notification settings"},
+  "settings_notifications_enableReminders": "Enable reminders",
+  "@settings_notifications_enableReminders": {"description": "Label for the enable-reminders toggle"},
+  "settings_notifications_subtitle": "Surface insurance, inspection, and tax dates.",
+  "@settings_notifications_subtitle": {"description": "Subtitle for the notifications toggle row"},
+  "settings_reminder_90days": "90 days",
+  "@settings_reminder_90days": {"description": "Reminder chip label for 90-day advance notice"},
+  "settings_reminder_30days": "30 days",
+  "@settings_reminder_30days": {"description": "Reminder chip label for 30-day advance notice"},
+  "settings_reminder_7days": "7 days",
+  "@settings_reminder_7days": {"description": "Reminder chip label for 7-day advance notice"},
+  "settings_reminder_1day": "1 day",
+  "@settings_reminder_1day": {"description": "Reminder chip label for 1-day advance notice"},
+  "settings_exportSubtitle": "Download a CSV snapshot of your garage.",
+  "@settings_exportSubtitle": {"description": "Subtitle for the export/backup action row"},
+  "settings_resetDataSubtitle": "Delete all cars and entries from this device.",
+  "@settings_resetDataSubtitle": {"description": "Subtitle for the reset-all-data action row"},
+  "settings_about": "About",
+  "@settings_about": {"description": "Section heading for the about/version section"},
+  "settings_version": "Version",
+  "@settings_version": {"description": "Label for the app version info line"},
+  "settings_language_subtitle": "Controls labels, dates, and localized copy.",
+  "@settings_language_subtitle": {"description": "Subtitle for the language selector row"}
 }

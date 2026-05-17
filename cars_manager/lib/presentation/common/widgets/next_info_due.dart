@@ -1,3 +1,4 @@
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/utils/due_date_color.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,11 +21,12 @@ class NextInfoDue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     final locale = Localizations.localeOf(context);
     final dateFormat = DateFormat('d MMM y', locale.toString());
 
-    final pillColor = dueDateColorForDays(daysRemaining);
+    final pillColor = statusColorForDaysOf(context, daysRemaining);
 
     return Container(
       width: double.infinity,
@@ -51,7 +53,7 @@ class NextInfoDue extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Due: ${dateFormat.format(nextDueDate)}',
+                  '${l10n.common_due} ${dateFormat.format(nextDueDate)}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -74,7 +76,7 @@ class NextInfoDue extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              '$daysRemaining $daysLabel left',
+              '$daysRemaining $daysLabel ${l10n.common_left}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,

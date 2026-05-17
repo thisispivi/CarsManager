@@ -1,9 +1,10 @@
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/features/onboarding/domain/onboarding_controller.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -16,27 +17,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _controller = PageController();
   int _page = 0;
 
-  static const _pages = [
-    _OnboardingPageData(
-      icon: Icons.directions_car_filled_rounded,
-      title: 'Your cars, organized',
-      subtitle:
-          'Keep every vehicle, deadline, and key detail in one confident view.',
-    ),
-    _OnboardingPageData(
-      icon: Icons.receipt_long_rounded,
-      title: 'Track every cost',
-      subtitle:
-          'Log fuel, insurance, tax, repairs, and fines without digging through menus.',
-    ),
-    _OnboardingPageData(
-      icon: Icons.notifications_active_rounded,
-      title: 'Never miss a deadline',
-      subtitle:
-          'See upcoming renewals and service dates before they become urgent.',
-    ),
-  ];
-
   @override
   void dispose() {
     _controller.dispose();
@@ -47,8 +27,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return ref.read(onboardingControllerProvider.notifier).complete();
   }
 
-  void _next() {
-    if (_page == _pages.length - 1) {
+  void _next(int pageCount) {
+    if (_page == pageCount - 1) {
       _finish();
       return;
     }
@@ -60,7 +40,26 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+
+    final pages = [
+      _OnboardingPageData(
+        icon: Icons.directions_car_filled_rounded,
+        title: l10n.onboarding_slide1Title,
+        subtitle: l10n.onboarding_slide1Subtitle,
+      ),
+      _OnboardingPageData(
+        icon: Icons.receipt_long_rounded,
+        title: l10n.onboarding_slide2Title,
+        subtitle: l10n.onboarding_slide2Subtitle,
+      ),
+      _OnboardingPageData(
+        icon: Icons.notifications_active_rounded,
+        title: l10n.onboarding_slide3Title,
+        subtitle: l10n.onboarding_slide3Subtitle,
+      ),
+    ];
 
     return Scaffold(
       body: SafeArea(
@@ -75,17 +74,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 ),
                 child: TextButton(
                   onPressed: _finish,
-                  child: const Text('Skip'),
+                  child: Text(l10n.onboarding_skip),
                 ),
               ),
             ),
             Expanded(
               child: PageView.builder(
                 controller: _controller,
-                itemCount: _pages.length,
+                itemCount: pages.length,
                 onPageChanged: (index) => setState(() => _page = index),
                 itemBuilder: (context, index) {
-                  return _OnboardingPage(data: _pages[index]);
+                  return _OnboardingPage(data: pages[index]);
                 },
               ),
             ),
@@ -101,7 +100,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      for (var i = 0; i < _pages.length; i++)
+                      for (var i = 0; i < pages.length; i++)
                         AnimatedContainer(
                           duration: AppAnimations.durationFast,
                           curve: AppAnimations.curveDefault,
@@ -123,9 +122,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: _next,
+                      onPressed: () => _next(pages.length),
                       child: Text(
-                        _page == _pages.length - 1 ? 'Get Started' : 'Continue',
+                        _page == pages.length - 1
+                            ? l10n.onboarding_getStarted
+                            : l10n.onboarding_continue,
                       ),
                     ),
                   ),

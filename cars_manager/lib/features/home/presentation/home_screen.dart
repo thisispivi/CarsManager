@@ -5,7 +5,9 @@ import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/search/presentation/search_overlay.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
+import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
+import 'package:cars_manager/presentation/common/utils/due_date_color.dart';
 import 'package:cars_manager/presentation/common/widgets/car_switcher_header.dart';
 import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
@@ -23,6 +25,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final cars = ref.watch(carsControllerProvider);
     final activeCar = ref.watch(activeCarProvider) ?? cars.firstOrNull;
     final currency = ref.watch(appSettingsProvider).currency;
@@ -43,10 +46,9 @@ class HomeScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(AppSpacing.xl),
             child: EmptyState(
               icon: Icons.directions_car_filled_outlined,
-              title: 'Add your first car',
-              subtitle:
-                  'Track fuel, expenses, maintenance, and deadlines from one calm dashboard.',
-              actionLabel: 'Add Car',
+              title: l10n.home_addFirstCar,
+              subtitle: l10n.home_addFirstCarSubtitle,
+              actionLabel: l10n.home_addCar,
               onAction: openAddForm,
             ),
           ),
@@ -54,7 +56,7 @@ class HomeScreen extends ConsumerWidget {
       );
     }
 
-    final dashboard = _DashboardData.fromCar(activeCar, currency);
+    final dashboard = _DashboardData.fromCar(activeCar, currency, l10n);
 
     return SafeArea(
       child: RefreshIndicator(
@@ -101,7 +103,7 @@ class HomeScreen extends ConsumerWidget {
                   )
                 : Column(
                     children: [
-                      const _GreetingRow(),
+                      _GreetingRow(l10n: l10n),
                       const SizedBox(height: AppSpacing.lg),
                       _ActiveCarHero(
                         car: activeCar,
@@ -134,7 +136,9 @@ class HomeScreen extends ConsumerWidget {
 }
 
 class _GreetingRow extends StatelessWidget {
-  const _GreetingRow();
+  const _GreetingRow({required this.l10n});
+
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +160,7 @@ class _GreetingRow extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Welcome back',
+                l10n.home_welcomeBack,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.6,
@@ -184,6 +188,7 @@ class _ActiveCarHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final hasImage =
@@ -232,7 +237,7 @@ class _ActiveCarHero extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Active · ${car.name}',
+                        '${l10n.home_activeCar} · ${car.name}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodyMedium?.copyWith(
@@ -250,7 +255,7 @@ class _ActiveCarHero extends StatelessWidget {
                           vertical: AppSpacing.xs,
                         ),
                         child: Text(
-                          'Switch ›',
+                          '${l10n.home_switchCar} ›',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: colors.primary,
                             fontWeight: FontWeight.w600,
@@ -276,17 +281,18 @@ class _QuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return _DashboardCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeaderRow(title: 'Quick actions'),
+          SectionHeaderRow(title: l10n.home_quickActions),
           Row(
             children: [
               Expanded(
                 child: _QuickActionCard(
                   icon: Icons.local_gas_station_rounded,
-                  label: 'Fuel',
+                  label: l10n.home_quickFuel,
                   color: AppColors.accentLight,
                   onTap: () => context.push('/car/${activeCar.id}/fuel'),
                 ),
@@ -295,7 +301,7 @@ class _QuickActions extends StatelessWidget {
               Expanded(
                 child: _QuickActionCard(
                   icon: Icons.receipt_long_rounded,
-                  label: 'Expense',
+                  label: l10n.home_quickExpense,
                   color: AppColors.categoryTax,
                   onTap: () => context.push('/car/${activeCar.id}/expenses'),
                 ),
@@ -304,7 +310,7 @@ class _QuickActions extends StatelessWidget {
               Expanded(
                 child: _QuickActionCard(
                   icon: Icons.search_rounded,
-                  label: 'Search',
+                  label: l10n.home_quickSearch,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   onTap: () => showSearchOverlay(context),
                 ),
@@ -324,15 +330,16 @@ class _UpcomingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return _DashboardCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeaderRow(title: 'Upcoming'),
+          SectionHeaderRow(title: l10n.home_upcoming),
           if (items.isEmpty)
-            const _MutedLine(
+            _MutedLine(
               icon: Icons.check_circle_outline_rounded,
-              text: 'No upcoming deadlines yet.',
+              text: l10n.home_upcomingEmpty,
             )
           else
             for (final item in items) ...[
@@ -353,21 +360,24 @@ class _RecentActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return _DashboardCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionHeaderRow(
-            title: 'Recent activity',
-            actionLabel: items.isNotEmpty ? 'See all' : null,
+            title: l10n.home_recentActivity,
+            actionLabel: items.isNotEmpty
+                ? l10n.home_recentActivitySeeAll
+                : null,
             onAction: items.isNotEmpty
                 ? () => context.push('/car/$carId/timeline')
                 : null,
           ),
           if (items.isEmpty)
-            const _MutedLine(
+            _MutedLine(
               icon: Icons.history_rounded,
-              text: 'New fuel and expense entries will appear here.',
+              text: l10n.home_recentActivityEmpty,
             )
           else
             for (final item in items) ...[
@@ -387,6 +397,7 @@ class _MonthlySummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final maxValue = math.max(1.0, data.monthlySeries.reduce(math.max));
     final now = DateTime.now();
@@ -400,7 +411,7 @@ class _MonthlySummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeaderRow(title: 'Monthly summary'),
+          SectionHeaderRow(title: l10n.home_monthlySummary),
           Text(
             data.formatMoney(data.currentMonthTotal),
             style: theme.textTheme.headlineMedium?.copyWith(
@@ -411,7 +422,7 @@ class _MonthlySummary extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Spent this month across fuel and expenses',
+            l10n.home_monthlySummarySubtitle,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w500,
@@ -525,8 +536,9 @@ class _DueRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = _statusColor(item.days);
-    final daysText = item.days < 0 ? 'Overdue' : '${item.days}d';
+    final color = statusColorForDaysOf(context, item.days);
+    // Show actual number including negatives (e.g. "-5d" for overdue)
+    final daysText = '${item.days}d';
     return Row(
       children: [
         Container(
@@ -559,6 +571,7 @@ class _DueRow extends StatelessWidget {
             ],
           ),
         ),
+        // Pill with glow bullet inside at the right
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
@@ -568,12 +581,33 @@ class _DueRow extends StatelessWidget {
             color: color.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(AppRadius.pill),
           ),
-          child: Text(
-            daysText,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w700,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                daysText,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(width: 5),
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.7),
+                      blurRadius: 5,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -732,7 +766,11 @@ class _DashboardData {
       (inspectionDays != null && inspectionDays! < 0) ||
       (taxDays != null && taxDays! < 0);
 
-  factory _DashboardData.fromCar(Car car, String currency) {
+  factory _DashboardData.fromCar(
+    Car car,
+    String currency,
+    AppLocalizations l10n,
+  ) {
     final now = DateTime.now();
     final money = NumberFormat.simpleCurrency(name: currency);
 
@@ -740,21 +778,21 @@ class _DashboardData {
       if (car.nextInsuranceExpirationDate != null)
         _DueItem(
           icon: Icons.description_outlined,
-          title: 'Insurance renewal',
+          title: l10n.home_activityInsurance,
           subtitle: DateFormat.yMMMd().format(car.nextInsuranceExpirationDate!),
           days: car.daysUntilNextInsuranceExpiration!,
         ),
       if (car.nextInspectionDate != null)
         _DueItem(
           icon: Icons.fact_check_outlined,
-          title: 'Inspection',
+          title: l10n.home_activityInspection,
           subtitle: DateFormat.yMMMd().format(car.nextInspectionDate!),
           days: car.daysUntilNextInspection!,
         ),
       if (car.nextTaxDueDate != null)
         _DueItem(
           icon: Icons.paid_outlined,
-          title: 'Vehicle tax',
+          title: l10n.home_activityVehicleTax,
           subtitle: DateFormat.yMMMd().format(car.nextTaxDueDate!),
           days: car.daysUntilNextTaxDue!,
         ),
@@ -765,7 +803,7 @@ class _DashboardData {
         _ActivityItem(
           icon: Icons.local_gas_station_rounded,
           color: AppColors.categoryFuel,
-          title: 'Fuel entry',
+          title: l10n.home_activityFuelEntry,
           date: entry.date,
           amount: money.format(entry.totalCost),
         ),
@@ -773,7 +811,7 @@ class _DashboardData {
         _ActivityItem(
           icon: Icons.build_rounded,
           color: AppColors.categoryRepair,
-          title: 'Repair',
+          title: l10n.home_activityRepair,
           date: repair.date,
           amount: money.format(repair.amount),
         ),
@@ -781,7 +819,7 @@ class _DashboardData {
         _ActivityItem(
           icon: Icons.report_gmailerrorred_rounded,
           color: AppColors.categoryFine,
-          title: 'Fine',
+          title: l10n.home_activityFine,
           date: fine.date,
           amount: money.format(fine.amount),
         ),
@@ -789,7 +827,7 @@ class _DashboardData {
         _ActivityItem(
           icon: Icons.paid_outlined,
           color: AppColors.categoryTax,
-          title: 'Vehicle tax',
+          title: l10n.home_activityVehicleTax,
           date: tax.date,
           amount: money.format(tax.amount),
         ),
@@ -797,7 +835,7 @@ class _DashboardData {
         _ActivityItem(
           icon: Icons.fact_check_outlined,
           color: AppColors.categoryInspection,
-          title: 'Inspection',
+          title: l10n.home_activityInspection,
           date: inspection.date,
           amount: money.format(inspection.amount ?? 0),
         ),
@@ -805,7 +843,7 @@ class _DashboardData {
         _ActivityItem(
           icon: Icons.description_outlined,
           color: AppColors.categoryInsurance,
-          title: 'Insurance',
+          title: l10n.home_activityInsurance,
           date: insurance.startDate,
           amount: money.format(insurance.premiumAmount),
         ),
@@ -884,11 +922,4 @@ class _ActivityItem {
   final String title;
   final DateTime date;
   final String amount;
-}
-
-Color _statusColor(int? days) {
-  if (days == null) return AppColors.categoryInspection;
-  if (days < 0) return AppColors.dangerLight;
-  if (days <= 30) return AppColors.warnLight;
-  return AppColors.successLight;
 }

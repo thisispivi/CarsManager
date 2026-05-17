@@ -390,6 +390,29 @@
   "@common_deleteConfirmBody": {
     "description": "Body for delete confirmation"
   },
+  "common_back": "Indietro",
+  "@common_back": {
+    "description": "Label for back navigation button"
+  },
+  "common_overdue": "Scaduto",
+  "@common_overdue": {
+    "description": "Label shown when a deadline has passed"
+  },
+  "common_noData": "Nessun dato",
+  "@common_noData": {
+    "description": "Shown when no data is available for a field"
+  },
+  "common_showAll": "Mostra tutti i {count} elementi",
+  "@common_showAll": {
+    "description": "Button to show all entries",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "common_showLess": "Mostra meno",
+  "@common_showLess": {
+    "description": "Button to collapse list"
+  },
   "fuel_entries_title": "Rifornimenti",
   "@fuel_entries_title": {
     "description": "Title for fuel entries section"
@@ -526,7 +549,7 @@
   "analytics_title": "Analisi",
   "analytics_subtitle": "Le tue spese in sintesi",
   "analytics_totalTracked": "TOTALE TRACCIATO",
-  "analytics_vehicleCount": "{count, plural, one{# veicolo} other{# veicoli}}",
+  "analytics_vehicleCount": "{count, plural, one{{count} veicolo} other{{count} veicoli}}",
   "@analytics_vehicleCount": {
     "placeholders": {
       "count": {
@@ -609,5 +632,244 @@
   "reminders_insurance": "Assicurazione",
   "reminders_inspection": "Revisione",
   "reminders_tax": "Bollo",
-  "settings_testNotification": "Notifica di test"
+  "settings_testNotification": "Notifica di test",
+
+  "home_welcomeBack": "Bentornato",
+  "home_addFirstCar": "Aggiungi la tua prima auto",
+  "home_addFirstCarSubtitle": "Tieni traccia di carburante, spese, manutenzione e scadenze da un'unica dashboard.",
+  "home_addCar": "Aggiungi auto",
+  "home_activeCar": "Attiva",
+  "home_switchCar": "Cambia",
+  "home_quickActions": "Azioni rapide",
+  "home_quickFuel": "Carburante",
+  "home_quickExpense": "Spesa",
+  "home_quickSearch": "Cerca",
+  "home_upcoming": "In scadenza",
+  "home_upcomingEmpty": "Nessuna scadenza imminente.",
+  "home_recentActivity": "Attività recente",
+  "home_recentActivityEmpty": "I nuovi rifornimenti e le spese appariranno qui.",
+  "home_recentActivitySeeAll": "Vedi tutto",
+  "home_monthlySummary": "Riepilogo mensile",
+  "home_monthlySummarySubtitle": "Speso questo mese tra carburante e spese",
+  "home_activityFuelEntry": "Rifornimento",
+  "home_activityRepair": "Riparazione",
+  "home_activityFine": "Multa",
+  "home_activityVehicleTax": "Bollo",
+  "home_activityInspection": "Revisione",
+  "home_activityInsurance": "Assicurazione",
+
+  "garage_title": "Il mio garage",
+  "garage_subtitle": "{count, plural, one{{count} veicolo tracciato} other{{count} veicoli tracciati}} con storico salute, carburante e costi.",
+  "@garage_subtitle": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "garage_empty": "Il tuo garage è vuoto",
+  "garage_activeVehicle": "Veicolo attivo",
+  "garage_dueSoon": "In scadenza",
+  "garage_fuelEntries": "Rifornimenti",
+  "garage_expenseEvents": "Spese",
+
+  "vehicleDetail_notFound": "Veicolo non trovato",
+  "vehicleDetail_notFoundSubtitle": "Questa auto potrebbe essere stata rimossa dal garage.",
+  "vehicleDetail_backToGarage": "Torna al garage",
+  "vehicleDetail_tabOverview": "Panoramica",
+  "vehicleDetail_tabFuel": "Carburante",
+  "vehicleDetail_tabExpenses": "Spese",
+  "vehicleDetail_tabTimeline": "Cronologia",
+  "vehicleDetail_totalTracked": "Totale tracciato",
+  "vehicleDetail_fuelEntries": "Rifornimenti",
+  "vehicleDetail_serviceEvents": "Interventi",
+  "vehicleDetail_costBreakdown": "Ripartizione costi",
+  "vehicleDetail_fuelHistory": "Storico carburante ({period})",
+  "@vehicleDetail_fuelHistory": {
+    "placeholders": {
+      "period": {"type": "String"}
+    }
+  },
+  "vehicleDetail_addFuel": "Aggiungi rifornimento",
+  "vehicleDetail_expenseCategories": "Categorie spese",
+  "vehicleDetail_latestExpenses": "Ultime spese",
+  "vehicleDetail_latestExpensesFiltered": "Ultime spese: {category}",
+  "@vehicleDetail_latestExpensesFiltered": {
+    "placeholders": {
+      "category": {"type": "String"}
+    }
+  },
+  "vehicleDetail_addExpense": "Aggiungi spesa",
+  "vehicleDetail_vehicleTimeline": "Cronologia veicolo",
+  "vehicleDetail_noFuelEntries": "Nessun rifornimento.",
+  "vehicleDetail_noExpenses": "Nessuna spesa.",
+  "vehicleDetail_noExpensesFiltered": "Nessuna spesa di tipo {category}.",
+  "@vehicleDetail_noExpensesFiltered": {
+    "placeholders": {
+      "category": {"type": "String"}
+    }
+  },
+  "vehicleDetail_noData": "Nessun dato sui costi.",
+  "vehicleDetail_timelineEmpty": "Carburante, manutenzione e pagamenti appariranno qui.",
+  "vehicleDetail_showAllEntries": "Mostra tutti i {count} rifornimenti",
+  "@vehicleDetail_showAllEntries": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "vehicleDetail_showAllExpenses": "Mostra tutte le {count} spese",
+  "@vehicleDetail_showAllExpenses": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "vehicleDetail_showAllEvents": "Mostra tutti i {count} eventi",
+  "@vehicleDetail_showAllEvents": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "vehicleDetail_addExpenseTitle": "Aggiungi spesa",
+  "vehicleDetail_insurance": "Assicurazione",
+  "vehicleDetail_inspection": "Revisione",
+  "vehicleDetail_tax": "Bollo",
+  "vehicleDetail_repair": "Riparazione",
+  "vehicleDetail_fine": "Multa",
+  "vehicleDetail_fuel": "Carburante",
+  "vehicleDetail_noPlate": "Nessuna targa",
+  "vehicleDetail_fuelNotSet": "Carburante non impostato",
+
+  "onboarding_slide1Title": "Le tue auto, organizzate",
+  "onboarding_slide1Subtitle": "Tieni ogni veicolo, scadenza e dettaglio chiave in un'unica vista.",
+  "onboarding_slide2Title": "Traccia ogni costo",
+  "onboarding_slide2Subtitle": "Registra carburante, assicurazione, bollo, riparazioni e multe senza cercare nei menu.",
+  "onboarding_slide3Title": "Non perdere mai una scadenza",
+  "onboarding_slide3Subtitle": "Vedi rinnovi e date di manutenzione imminenti prima che diventino urgenti.",
+  "onboarding_skip": "Salta",
+  "onboarding_getStarted": "Inizia",
+  "onboarding_continue": "Continua",
+
+  "analytics_yearlyCost": "Costi annuali per categoria",
+  "analytics_yearlyNoData": "Nessun dato per i veicoli selezionati.",
+
+  "common_next": "Avanti",
+  "@common_next": {
+    "description": "Generic next/continue action label"
+  },
+  "common_all": "Tutti",
+  "@common_all": {
+    "description": "Generic all/show-all filter label"
+  },
+
+  "carForm_step_basics": "Base",
+  "@carForm_step_basics": {
+    "description": "Car form step 1 label"
+  },
+  "carForm_step_details": "Dettagli",
+  "@carForm_step_details": {
+    "description": "Car form step 2 label"
+  },
+  "carForm_step_photo": "Foto",
+  "@carForm_step_photo": {
+    "description": "Car form step 3 label"
+  },
+  "carForm_step_basicsDesc": "Assegna un nome all'auto e aggiungi le informazioni sul modello per riconoscerla rapidamente.",
+  "@carForm_step_basicsDesc": {
+    "description": "Car form step 1 description"
+  },
+  "carForm_step_detailsDesc": "Aggiungi la targa e il tipo di carburante per impostazioni predefinite più precise.",
+  "@carForm_step_detailsDesc": {
+    "description": "Car form step 2 description"
+  },
+  "carForm_step_photoDesc": "Aggiungi una foto chiara per il garage e il cruscotto. Puoi saltare questo passaggio per ora.",
+  "@carForm_step_photoDesc": {
+    "description": "Car form step 3 description"
+  },
+  "carForm_imagePickerError": "Impossibile aprire il selettore immagini: {error}",
+  "@carForm_imagePickerError": {
+    "description": "Error shown when the image picker fails to open",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "permesso negato"
+      }
+    }
+  },
+
+  "vehicleDetail_totalLiters": "Litri totali",
+  "@vehicleDetail_totalLiters": {
+    "description": "Metric card label for total fuel liters"
+  },
+  "vehicleDetail_avgPricePerLiter": "Prezzo medio/L",
+  "@vehicleDetail_avgPricePerLiter": {
+    "description": "Metric card label for average price per liter"
+  },
+  "vehicleDetail_categorySummary": "Riepilogo {category}",
+  "@vehicleDetail_categorySummary": {
+    "description": "Section heading when a single expense category is selected",
+    "placeholders": {
+      "category": {
+        "type": "String",
+        "example": "Assicurazione"
+      }
+    }
+  },
+
+  "common_due": "Scade:",
+  "@common_due": {
+    "description": "Prefix label shown before a due date (e.g. 'Scade: 15 gen')"
+  },
+  "common_left": "rimasti",
+  "@common_left": {
+    "description": "Suffix shown after a days-remaining count (e.g. '3 giorni rimasti')"
+  },
+  "common_addToCalendar": "Aggiungi al calendario",
+  "@common_addToCalendar": {
+    "description": "Tooltip for the button that adds a due date event to the device calendar"
+  },
+
+  "settings_subtitle": "Preferenze, promemoria, dati e informazioni sull'app.",
+  "@settings_subtitle": {"description": "Subtitle shown below Settings heading"},
+  "settings_theme_subtitle": "Scegli come appare CarsManager.",
+  "@settings_theme_subtitle": {"description": "Subtitle for the theme preference row"},
+  "settings_theme_system": "Sistema",
+  "@settings_theme_system": {"description": "System/auto theme option label"},
+  "settings_theme_light": "Chiaro",
+  "@settings_theme_light": {"description": "Light theme option label"},
+  "settings_theme_dark": "Scuro",
+  "@settings_theme_dark": {"description": "Dark theme option label"},
+  "settings_units": "Unità",
+  "@settings_units": {"description": "Label for the units preference section"},
+  "settings_units_subtitle": "Distanza e volume predefiniti.",
+  "@settings_units_subtitle": {"description": "Subtitle for the units preference row"},
+  "settings_units_metric": "Metrico",
+  "@settings_units_metric": {"description": "Metric units option label"},
+  "settings_units_imperial": "Imperiale",
+  "@settings_units_imperial": {"description": "Imperial units option label"},
+  "settings_currency": "Valuta",
+  "@settings_currency": {"description": "Label for the currency preference row"},
+  "settings_currency_subtitle": "Usata per totali, grafici ed esportazioni.",
+  "@settings_currency_subtitle": {"description": "Subtitle for the currency preference row"},
+  "settings_notifications": "Notifiche",
+  "@settings_notifications": {"description": "Section heading for notification settings"},
+  "settings_notifications_enableReminders": "Attiva promemoria",
+  "@settings_notifications_enableReminders": {"description": "Label for the enable-reminders toggle"},
+  "settings_notifications_subtitle": "Mostra assicurazione, revisione e bollo in scadenza.",
+  "@settings_notifications_subtitle": {"description": "Subtitle for the notifications toggle row"},
+  "settings_reminder_90days": "90 giorni",
+  "@settings_reminder_90days": {"description": "Reminder chip label for 90-day advance notice"},
+  "settings_reminder_30days": "30 giorni",
+  "@settings_reminder_30days": {"description": "Reminder chip label for 30-day advance notice"},
+  "settings_reminder_7days": "7 giorni",
+  "@settings_reminder_7days": {"description": "Reminder chip label for 7-day advance notice"},
+  "settings_reminder_1day": "1 giorno",
+  "@settings_reminder_1day": {"description": "Reminder chip label for 1-day advance notice"},
+  "settings_exportSubtitle": "Scarica uno snapshot CSV del tuo garage.",
+  "@settings_exportSubtitle": {"description": "Subtitle for the export/backup action row"},
+  "settings_resetDataSubtitle": "Elimina tutte le auto e le voci da questo dispositivo.",
+  "@settings_resetDataSubtitle": {"description": "Subtitle for the reset-all-data action row"},
+  "settings_about": "Informazioni",
+  "@settings_about": {"description": "Section heading for the about/version section"},
+  "settings_version": "Versione",
+  "@settings_version": {"description": "Label for the app version info line"},
+  "settings_language_subtitle": "Gestisce etichette, date e testi localizzati.",
+  "@settings_language_subtitle": {"description": "Subtitle for the language selector row"}
 }

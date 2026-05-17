@@ -281,7 +281,7 @@ class _CarFormPageState extends State<CarFormPage> {
                           horizontalPadding,
                           AppSpacing.md,
                         ),
-                        child: _CarFormProgress(step: _step),
+                        child: _CarFormProgress(step: _step, l10n: l10n),
                       ),
                       Expanded(
                         child: AnimatedSwitcher(
@@ -299,17 +299,14 @@ class _CarFormPageState extends State<CarFormPage> {
                             children: [
                               _StepIntro(
                                 title: switch (_step) {
-                                  0 => 'Basics',
-                                  1 => 'Details',
-                                  _ => 'Photo',
+                                  0 => l10n.carForm_step_basics,
+                                  1 => l10n.carForm_step_details,
+                                  _ => l10n.carForm_step_photo,
                                 },
                                 subtitle: switch (_step) {
-                                  0 =>
-                                    'Name the car and add the model information you use to recognize it quickly.',
-                                  1 =>
-                                    'Add the plate and fuel type so entries can use smarter defaults.',
-                                  _ =>
-                                    'Add a clear photo for the garage and dashboard. You can skip this for now.',
+                                  0 => l10n.carForm_step_basicsDesc,
+                                  1 => l10n.carForm_step_detailsDesc,
+                                  _ => l10n.carForm_step_photoDesc,
                                 },
                               ),
                               const SizedBox(height: AppSpacing.xl),
@@ -391,7 +388,9 @@ class _CarFormPageState extends State<CarFormPage> {
                               child: OutlinedButton(
                                 onPressed: _back,
                                 child: Text(
-                                  _step == 0 ? l10n.common_cancel : 'Back',
+                                  _step == 0
+                                      ? l10n.common_cancel
+                                      : l10n.common_back,
                                 ),
                               ),
                             ),
@@ -402,7 +401,7 @@ class _CarFormPageState extends State<CarFormPage> {
                                 child: Text(
                                   _step == _lastStep
                                       ? l10n.common_save
-                                      : 'Next',
+                                      : l10n.common_next,
                                 ),
                               ),
                             ),
@@ -445,8 +444,11 @@ class _CarFormPageState extends State<CarFormPage> {
       });
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not open image picker: $e')),
+      final l10n = AppLocalizations.of(context)!;
+      AppSnackBar.show(
+        context,
+        l10n.carForm_imagePickerError(e.toString()),
+        isError: true,
       );
     }
   }
@@ -462,26 +464,26 @@ class _CarFormPageState extends State<CarFormPage> {
 }
 
 class _CarFormProgress extends StatelessWidget {
-  const _CarFormProgress({required this.step});
+  const _CarFormProgress({required this.step, required this.l10n});
 
   final int step;
-
-  static const _labels = ['Basics', 'Details', 'Photo'];
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final labels = [
+      l10n.carForm_step_basics,
+      l10n.carForm_step_details,
+      l10n.carForm_step_photo,
+    ];
     return Column(
       children: [
         Row(
           children: [
-            for (var i = 0; i < _labels.length; i++) ...[
-              _StepDot(
-                label: _labels[i],
-                isActive: i == step,
-                isDone: i < step,
-              ),
-              if (i != _labels.length - 1)
+            for (var i = 0; i < labels.length; i++) ...[
+              _StepDot(label: labels[i], isActive: i == step, isDone: i < step),
+              if (i != labels.length - 1)
                 Expanded(
                   child: AnimatedContainer(
                     duration: AppAnimations.durationFast,
@@ -752,83 +754,190 @@ class _CarImagePickerCard extends StatelessWidget {
         (imageUrl != null && imageUrl!.trim().isNotEmpty);
 
     return Container(
-      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: cs.outline, width: 0.5),
       ),
+      clipBehavior: Clip.antiAlias,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            l10n.carData_photo,
-            style: theme.textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: cs.primary,
-            ),
-          ),
-          const SizedBox(height: 10),
+          // Header label
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-            child: SizedBox(
-              height: 180,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: ImageRect(
-                  aspectRatio: 16 / 9,
-                  imageUrl: imageUrl,
-                  imageBase64: imageBase64,
-                  imageAlignment: Alignment.center,
-                  backgroundColor: cs.surfaceContainerHighest,
-                  borderRadius: BorderRadius.zero,
-                  primaryColor: cs.primary,
-                ),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.sm,
+            ),
+            child: Text(
+              l10n.carData_photo,
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: cs.primary,
               ),
             ),
           ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              FilledButton.tonalIcon(
-                onPressed: onPick,
-                icon: const Icon(Icons.photo_library_outlined),
-                label: Text(
-                  l10n.common_pick,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: cs.onSecondaryContainer,
-                  ),
-                ),
+          // Image / placeholder area
+          GestureDetector(
+            onTap: onPick,
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // Background: image or placeholder
+                  hasImage
+                      ? ImageRect(
+                          aspectRatio: 16 / 9,
+                          imageUrl: imageUrl,
+                          imageBase64: imageBase64,
+                          imageAlignment: Alignment.center,
+                          backgroundColor: cs.surfaceContainerHighest,
+                          borderRadius: BorderRadius.zero,
+                          primaryColor: cs.primary,
+                        )
+                      : ColoredBox(
+                          color: cs.surfaceContainerHighest,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add_photo_alternate_outlined,
+                                size: 48,
+                                color: cs.onSurfaceVariant.withValues(
+                                  alpha: 0.6,
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.sm),
+                              Text(
+                                l10n.carData_photo,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: cs.onSurfaceVariant.withValues(
+                                    alpha: 0.7,
+                                  ),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                  // Overlay action strip when image is present
+                  if (hasImage)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                          vertical: AppSpacing.sm,
+                        ),
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.transparent, Color(0xCC000000)],
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            _ImageActionButton(
+                              icon: Icons.photo_library_outlined,
+                              label: l10n.common_pick,
+                              onTap: onPick,
+                            ),
+                            if (onReCrop != null) ...[
+                              const SizedBox(width: AppSpacing.sm),
+                              _ImageActionButton(
+                                icon: Icons.crop,
+                                label: l10n.common_edit,
+                                onTap: onReCrop!,
+                              ),
+                            ],
+                            const SizedBox(width: AppSpacing.sm),
+                            _ImageActionButton(
+                              icon: Icons.delete_outline,
+                              label: l10n.common_delete,
+                              onTap: onRemove,
+                              isDestructive: true,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
               ),
-              if (hasImage)
-                FilledButton.tonalIcon(
-                  onPressed: onRemove,
-                  icon: const Icon(Icons.delete_outline),
-                  label: Text(
-                    l10n.common_delete,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: cs.onSecondaryContainer,
-                    ),
-                  ),
-                ),
-              if (onReCrop != null)
-                FilledButton.tonalIcon(
-                  onPressed: onReCrop,
-                  icon: const Icon(Icons.crop),
-                  label: Text(
-                    l10n.common_edit,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: cs.onSecondaryContainer,
-                    ),
-                  ),
-                ),
-            ],
+            ),
           ),
+          // Bottom pick button when no image
+          if (!hasImage)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.md,
+              ),
+              child: OutlinedButton.icon(
+                onPressed: onPick,
+                icon: const Icon(Icons.photo_library_outlined, size: 18),
+                label: Text(l10n.common_pick),
+              ),
+            )
+          else
+            const SizedBox(height: AppSpacing.xs),
         ],
+      ),
+    );
+  }
+}
+
+class _ImageActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool isDestructive;
+
+  const _ImageActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.isDestructive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isDestructive ? const Color(0xFFFF6B6B) : Colors.white;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.xs,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+          border: Border.all(color: color.withValues(alpha: 0.3), width: 0.5),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: color),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: color,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

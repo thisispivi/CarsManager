@@ -626,6 +626,36 @@ abstract class AppLocalizations {
   /// **'This action cannot be undone.'**
   String get common_deleteConfirmBody;
 
+  /// Label for back navigation button
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get common_back;
+
+  /// Label shown when a deadline has passed
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get common_overdue;
+
+  /// Shown when no data is available for a field
+  ///
+  /// In en, this message translates to:
+  /// **'No data'**
+  String get common_noData;
+
+  /// Button to show all entries
+  ///
+  /// In en, this message translates to:
+  /// **'Show all {count} entries'**
+  String common_showAll(int count);
+
+  /// Button to collapse list
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get common_showLess;
+
   /// Title for fuel entries section
   ///
   /// In en, this message translates to:
@@ -797,7 +827,7 @@ abstract class AppLocalizations {
   /// No description provided for @analytics_vehicleCount.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, one{# vehicle} other{# vehicles}}'**
+  /// **'{count, plural, one{{count} vehicle} other{{count} vehicles}}'**
   String analytics_vehicleCount(int count);
 
   /// No description provided for @analytics_last12Months.
@@ -1045,6 +1075,690 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Test Notification'**
   String get settings_testNotification;
+
+  /// No description provided for @home_welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get home_welcomeBack;
+
+  /// No description provided for @home_addFirstCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first car'**
+  String get home_addFirstCar;
+
+  /// No description provided for @home_addFirstCarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track fuel, expenses, maintenance, and deadlines from one calm dashboard.'**
+  String get home_addFirstCarSubtitle;
+
+  /// No description provided for @home_addCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Car'**
+  String get home_addCar;
+
+  /// No description provided for @home_activeCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get home_activeCar;
+
+  /// No description provided for @home_switchCar.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch'**
+  String get home_switchCar;
+
+  /// No description provided for @home_quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick actions'**
+  String get home_quickActions;
+
+  /// No description provided for @home_quickFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel'**
+  String get home_quickFuel;
+
+  /// No description provided for @home_quickExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get home_quickExpense;
+
+  /// No description provided for @home_quickSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get home_quickSearch;
+
+  /// No description provided for @home_upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get home_upcoming;
+
+  /// No description provided for @home_upcomingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming deadlines yet.'**
+  String get home_upcomingEmpty;
+
+  /// No description provided for @home_recentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent activity'**
+  String get home_recentActivity;
+
+  /// No description provided for @home_recentActivityEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'New fuel and expense entries will appear here.'**
+  String get home_recentActivityEmpty;
+
+  /// No description provided for @home_recentActivitySeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get home_recentActivitySeeAll;
+
+  /// No description provided for @home_monthlySummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly summary'**
+  String get home_monthlySummary;
+
+  /// No description provided for @home_monthlySummarySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent this month across fuel and expenses'**
+  String get home_monthlySummarySubtitle;
+
+  /// No description provided for @home_activityFuelEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel entry'**
+  String get home_activityFuelEntry;
+
+  /// No description provided for @home_activityRepair.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair'**
+  String get home_activityRepair;
+
+  /// No description provided for @home_activityFine.
+  ///
+  /// In en, this message translates to:
+  /// **'Fine'**
+  String get home_activityFine;
+
+  /// No description provided for @home_activityVehicleTax.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle tax'**
+  String get home_activityVehicleTax;
+
+  /// No description provided for @home_activityInspection.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspection'**
+  String get home_activityInspection;
+
+  /// No description provided for @home_activityInsurance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance'**
+  String get home_activityInsurance;
+
+  /// No description provided for @garage_title.
+  ///
+  /// In en, this message translates to:
+  /// **'My Garage'**
+  String get garage_title;
+
+  /// No description provided for @garage_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} vehicle tracked} other{{count} vehicles tracked}} with health, fuel, and cost history.'**
+  String garage_subtitle(int count);
+
+  /// No description provided for @garage_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your garage is empty'**
+  String get garage_empty;
+
+  /// No description provided for @garage_activeVehicle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active vehicle'**
+  String get garage_activeVehicle;
+
+  /// No description provided for @garage_dueSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Due soon'**
+  String get garage_dueSoon;
+
+  /// No description provided for @garage_fuelEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel entries'**
+  String get garage_fuelEntries;
+
+  /// No description provided for @garage_expenseEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense events'**
+  String get garage_expenseEvents;
+
+  /// No description provided for @vehicleDetail_notFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle not found'**
+  String get vehicleDetail_notFound;
+
+  /// No description provided for @vehicleDetail_notFoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This car may have been removed from your garage.'**
+  String get vehicleDetail_notFoundSubtitle;
+
+  /// No description provided for @vehicleDetail_backToGarage.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Garage'**
+  String get vehicleDetail_backToGarage;
+
+  /// No description provided for @vehicleDetail_tabOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get vehicleDetail_tabOverview;
+
+  /// No description provided for @vehicleDetail_tabFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel'**
+  String get vehicleDetail_tabFuel;
+
+  /// No description provided for @vehicleDetail_tabExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Expenses'**
+  String get vehicleDetail_tabExpenses;
+
+  /// No description provided for @vehicleDetail_tabTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get vehicleDetail_tabTimeline;
+
+  /// No description provided for @vehicleDetail_totalTracked.
+  ///
+  /// In en, this message translates to:
+  /// **'Total tracked'**
+  String get vehicleDetail_totalTracked;
+
+  /// No description provided for @vehicleDetail_fuelEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel entries'**
+  String get vehicleDetail_fuelEntries;
+
+  /// No description provided for @vehicleDetail_serviceEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Service events'**
+  String get vehicleDetail_serviceEvents;
+
+  /// No description provided for @vehicleDetail_costBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Cost breakdown'**
+  String get vehicleDetail_costBreakdown;
+
+  /// No description provided for @vehicleDetail_fuelHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel history ({period})'**
+  String vehicleDetail_fuelHistory(String period);
+
+  /// No description provided for @vehicleDetail_addFuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add fuel'**
+  String get vehicleDetail_addFuel;
+
+  /// No description provided for @vehicleDetail_expenseCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense categories'**
+  String get vehicleDetail_expenseCategories;
+
+  /// No description provided for @vehicleDetail_latestExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest expenses'**
+  String get vehicleDetail_latestExpenses;
+
+  /// No description provided for @vehicleDetail_latestExpensesFiltered.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest {category}'**
+  String vehicleDetail_latestExpensesFiltered(String category);
+
+  /// No description provided for @vehicleDetail_addExpense.
+  ///
+  /// In en, this message translates to:
+  /// **'Add expense'**
+  String get vehicleDetail_addExpense;
+
+  /// No description provided for @vehicleDetail_vehicleTimeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Vehicle timeline'**
+  String get vehicleDetail_vehicleTimeline;
+
+  /// No description provided for @vehicleDetail_noFuelEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'No fuel entries yet.'**
+  String get vehicleDetail_noFuelEntries;
+
+  /// No description provided for @vehicleDetail_noExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'No expenses yet.'**
+  String get vehicleDetail_noExpenses;
+
+  /// No description provided for @vehicleDetail_noExpensesFiltered.
+  ///
+  /// In en, this message translates to:
+  /// **'No {category} expenses yet.'**
+  String vehicleDetail_noExpensesFiltered(String category);
+
+  /// No description provided for @vehicleDetail_noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No cost data yet.'**
+  String get vehicleDetail_noData;
+
+  /// No description provided for @vehicleDetail_timelineEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel, service, and payment events will appear here.'**
+  String get vehicleDetail_timelineEmpty;
+
+  /// No description provided for @vehicleDetail_showAllEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all {count} entries'**
+  String vehicleDetail_showAllEntries(int count);
+
+  /// No description provided for @vehicleDetail_showAllExpenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all {count} expenses'**
+  String vehicleDetail_showAllExpenses(int count);
+
+  /// No description provided for @vehicleDetail_showAllEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all {count} events'**
+  String vehicleDetail_showAllEvents(int count);
+
+  /// No description provided for @vehicleDetail_addExpenseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add expense'**
+  String get vehicleDetail_addExpenseTitle;
+
+  /// No description provided for @vehicleDetail_insurance.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance'**
+  String get vehicleDetail_insurance;
+
+  /// No description provided for @vehicleDetail_inspection.
+  ///
+  /// In en, this message translates to:
+  /// **'Inspection'**
+  String get vehicleDetail_inspection;
+
+  /// No description provided for @vehicleDetail_tax.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get vehicleDetail_tax;
+
+  /// No description provided for @vehicleDetail_repair.
+  ///
+  /// In en, this message translates to:
+  /// **'Repair'**
+  String get vehicleDetail_repair;
+
+  /// No description provided for @vehicleDetail_fine.
+  ///
+  /// In en, this message translates to:
+  /// **'Fine'**
+  String get vehicleDetail_fine;
+
+  /// No description provided for @vehicleDetail_fuel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel'**
+  String get vehicleDetail_fuel;
+
+  /// No description provided for @vehicleDetail_noPlate.
+  ///
+  /// In en, this message translates to:
+  /// **'No plate'**
+  String get vehicleDetail_noPlate;
+
+  /// No description provided for @vehicleDetail_fuelNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Fuel not set'**
+  String get vehicleDetail_fuelNotSet;
+
+  /// No description provided for @onboarding_slide1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cars, organized'**
+  String get onboarding_slide1Title;
+
+  /// No description provided for @onboarding_slide1Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep every vehicle, deadline, and key detail in one confident view.'**
+  String get onboarding_slide1Subtitle;
+
+  /// No description provided for @onboarding_slide2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Track every cost'**
+  String get onboarding_slide2Title;
+
+  /// No description provided for @onboarding_slide2Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log fuel, insurance, tax, repairs, and fines without digging through menus.'**
+  String get onboarding_slide2Subtitle;
+
+  /// No description provided for @onboarding_slide3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Never miss a deadline'**
+  String get onboarding_slide3Title;
+
+  /// No description provided for @onboarding_slide3Subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See upcoming renewals and service dates before they become urgent.'**
+  String get onboarding_slide3Subtitle;
+
+  /// No description provided for @onboarding_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboarding_skip;
+
+  /// No description provided for @onboarding_getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboarding_getStarted;
+
+  /// No description provided for @onboarding_continue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboarding_continue;
+
+  /// No description provided for @analytics_yearlyCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly cost breakdown'**
+  String get analytics_yearlyCost;
+
+  /// No description provided for @analytics_yearlyNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data for selected cars.'**
+  String get analytics_yearlyNoData;
+
+  /// Generic next/continue action label
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get common_next;
+
+  /// Generic all/show-all filter label
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get common_all;
+
+  /// Car form step 1 label
+  ///
+  /// In en, this message translates to:
+  /// **'Basics'**
+  String get carForm_step_basics;
+
+  /// Car form step 2 label
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get carForm_step_details;
+
+  /// Car form step 3 label
+  ///
+  /// In en, this message translates to:
+  /// **'Photo'**
+  String get carForm_step_photo;
+
+  /// Car form step 1 description
+  ///
+  /// In en, this message translates to:
+  /// **'Name the car and add the model information you use to recognize it quickly.'**
+  String get carForm_step_basicsDesc;
+
+  /// Car form step 2 description
+  ///
+  /// In en, this message translates to:
+  /// **'Add the plate and fuel type so entries can use smarter defaults.'**
+  String get carForm_step_detailsDesc;
+
+  /// Car form step 3 description
+  ///
+  /// In en, this message translates to:
+  /// **'Add a clear photo for the garage and dashboard. You can skip this for now.'**
+  String get carForm_step_photoDesc;
+
+  /// Error shown when the image picker fails to open
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open image picker: {error}'**
+  String carForm_imagePickerError(String error);
+
+  /// Metric card label for total fuel liters
+  ///
+  /// In en, this message translates to:
+  /// **'Total liters'**
+  String get vehicleDetail_totalLiters;
+
+  /// Metric card label for average price per liter
+  ///
+  /// In en, this message translates to:
+  /// **'Avg price/L'**
+  String get vehicleDetail_avgPricePerLiter;
+
+  /// Section heading when a single expense category is selected
+  ///
+  /// In en, this message translates to:
+  /// **'{category} summary'**
+  String vehicleDetail_categorySummary(String category);
+
+  /// Prefix label shown before a due date (e.g. 'Due: 15 Jan')
+  ///
+  /// In en, this message translates to:
+  /// **'Due:'**
+  String get common_due;
+
+  /// Suffix shown after a days-remaining count (e.g. '3 days left')
+  ///
+  /// In en, this message translates to:
+  /// **'left'**
+  String get common_left;
+
+  /// Tooltip for the button that adds a due date event to the device calendar
+  ///
+  /// In en, this message translates to:
+  /// **'Add to calendar'**
+  String get common_addToCalendar;
+
+  /// Subtitle shown below Settings heading
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences, reminders, data, and app details.'**
+  String get settings_subtitle;
+
+  /// Subtitle for the theme preference row
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how CarsManager appears.'**
+  String get settings_theme_subtitle;
+
+  /// System/auto theme option label
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get settings_theme_system;
+
+  /// Light theme option label
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get settings_theme_light;
+
+  /// Dark theme option label
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get settings_theme_dark;
+
+  /// Label for the units preference section
+  ///
+  /// In en, this message translates to:
+  /// **'Units'**
+  String get settings_units;
+
+  /// Subtitle for the units preference row
+  ///
+  /// In en, this message translates to:
+  /// **'Distance and volume defaults.'**
+  String get settings_units_subtitle;
+
+  /// Metric units option label
+  ///
+  /// In en, this message translates to:
+  /// **'Metric'**
+  String get settings_units_metric;
+
+  /// Imperial units option label
+  ///
+  /// In en, this message translates to:
+  /// **'Imperial'**
+  String get settings_units_imperial;
+
+  /// Label for the currency preference row
+  ///
+  /// In en, this message translates to:
+  /// **'Currency'**
+  String get settings_currency;
+
+  /// Subtitle for the currency preference row
+  ///
+  /// In en, this message translates to:
+  /// **'Used for totals, charts, and exports.'**
+  String get settings_currency_subtitle;
+
+  /// Section heading for notification settings
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get settings_notifications;
+
+  /// Label for the enable-reminders toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Enable reminders'**
+  String get settings_notifications_enableReminders;
+
+  /// Subtitle for the notifications toggle row
+  ///
+  /// In en, this message translates to:
+  /// **'Surface insurance, inspection, and tax dates.'**
+  String get settings_notifications_subtitle;
+
+  /// Reminder chip label for 90-day advance notice
+  ///
+  /// In en, this message translates to:
+  /// **'90 days'**
+  String get settings_reminder_90days;
+
+  /// Reminder chip label for 30-day advance notice
+  ///
+  /// In en, this message translates to:
+  /// **'30 days'**
+  String get settings_reminder_30days;
+
+  /// Reminder chip label for 7-day advance notice
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get settings_reminder_7days;
+
+  /// Reminder chip label for 1-day advance notice
+  ///
+  /// In en, this message translates to:
+  /// **'1 day'**
+  String get settings_reminder_1day;
+
+  /// Subtitle for the export/backup action row
+  ///
+  /// In en, this message translates to:
+  /// **'Download a CSV snapshot of your garage.'**
+  String get settings_exportSubtitle;
+
+  /// Subtitle for the reset-all-data action row
+  ///
+  /// In en, this message translates to:
+  /// **'Delete all cars and entries from this device.'**
+  String get settings_resetDataSubtitle;
+
+  /// Section heading for the about/version section
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settings_about;
+
+  /// Label for the app version info line
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get settings_version;
+
+  /// Subtitle for the language selector row
+  ///
+  /// In en, this message translates to:
+  /// **'Controls labels, dates, and localized copy.'**
+  String get settings_language_subtitle;
 }
 
 class _AppLocalizationsDelegate

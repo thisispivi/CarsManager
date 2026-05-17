@@ -4,11 +4,9 @@ import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/models/car.dart';
-import 'package:cars_manager/presentation/common/widgets/image_rect.dart';
 import 'package:cars_manager/presentation/pages/car_form/view/car_form_page.dart';
 import 'package:cars_manager/presentation/pages/home/view/widgets/car_tile.dart';
 import 'package:cars_manager/shared/widgets/empty_state.dart';
-import 'package:cars_manager/shared/widgets/vehicle_visual_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -110,8 +108,14 @@ class CarsHomePage extends ConsumerWidget {
           final horizontalPadding = isWide ? AppSpacing.xxl : AppSpacing.lg;
           final contentMaxWidth = width >= 1600 ? 1400.0 : double.infinity;
 
-          // Active car is shown in the header — exclude it from the list below.
-          final otherCars = cars.where((car) => car.id != activeCarId).toList();
+          // Active car always first; rest sorted by name
+          final effectiveActive = activeCar ?? cars.firstOrNull;
+          final sortedCars = effectiveActive == null
+              ? cars
+              : [
+                  effectiveActive,
+                  ...cars.where((c) => c.id != effectiveActive.id),
+                ];
 
           if (cars.isEmpty) {
             return Center(
@@ -121,7 +125,7 @@ class CarsHomePage extends ConsumerWidget {
                   padding: EdgeInsets.all(horizontalPadding),
                   child: EmptyState(
                     icon: Icons.directions_car_filled_outlined,
-                    title: 'Your garage is empty',
+                    title: l10n.garage_empty,
                     subtitle: l10n.cars_emptyState,
                     actionLabel: l10n.common_add,
                     onAction: openAddForm,
@@ -139,70 +143,70 @@ class CarsHomePage extends ConsumerWidget {
                   constraints: BoxConstraints(maxWidth: contentMaxWidth),
                   child: CustomScrollView(
                     slivers: [
+                      // ── Stats (top of page) ────────────────────────────
                       SliverPadding(
                         padding: EdgeInsets.fromLTRB(
                           horizontalPadding,
                           AppSpacing.xl,
+                          horizontalPadding,
+                          AppSpacing.md,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: _GarageStats(cars: cars, l10n: l10n),
+                        ),
+                      ),
+                      // ── Title row ──────────────────────────────────────
+                      SliverPadding(
+                        padding: EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          AppSpacing.md,
                           horizontalPadding,
                           AppSpacing.lg,
                         ),
                         sliver: SliverToBoxAdapter(
-                          child: _GarageHeader(
+                          child: _GarageTitleRow(
                             carsCount: cars.length,
-                            activeCar: activeCar ?? cars.first,
-                            onAddCar: openAddForm,
+                            onAddCar: isWide ? openAddForm : null,
+                            l10n: l10n,
                           ),
                         ),
                       ),
-                      SliverPadding(
-                        padding: EdgeInsets.fromLTRB(
-                          horizontalPadding,
-                          0,
-                          horizontalPadding,
-                          AppSpacing.xl,
-                        ),
-                        sliver: SliverToBoxAdapter(
-                          child: _GarageStats(cars: cars),
-                        ),
-                      ),
-                      if (otherCars.isNotEmpty)
-                        if (crossAxisCount == 1)
-                          SliverPadding(
-                            padding: EdgeInsets.fromLTRB(
-                              horizontalPadding,
-                              0,
-                              horizontalPadding,
-                              AppSpacing.xxxl,
-                            ),
-                            sliver: SliverList.separated(
-                              itemCount: otherCars.length,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(height: AppSpacing.lg),
-                              itemBuilder: (context, index) =>
-                                  buildTile(otherCars[index]),
-                            ),
-                          )
-                        else
-                          SliverPadding(
-                            padding: EdgeInsets.fromLTRB(
-                              horizontalPadding,
-                              0,
-                              horizontalPadding,
-                              AppSpacing.xxxl,
-                            ),
-                            sliver: SliverGrid.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: crossAxisCount,
-                                    crossAxisSpacing: AppSpacing.lg,
-                                    mainAxisSpacing: AppSpacing.lg,
-                                    childAspectRatio: 0.9,
-                                  ),
-                              itemCount: otherCars.length,
-                              itemBuilder: (context, index) =>
-                                  buildTile(otherCars[index]),
-                            ),
+                      // ── Cars (uniform grid / list) ─────────────────────
+                      if (crossAxisCount == 1)
+                        SliverPadding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalPadding,
+                            0,
+                            horizontalPadding,
+                            AppSpacing.xxxl,
                           ),
+                          sliver: SliverList.separated(
+                            itemCount: sortedCars.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: AppSpacing.lg),
+                            itemBuilder: (_, i) => buildTile(sortedCars[i]),
+                          ),
+                        )
+                      else
+                        SliverPadding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalPadding,
+                            0,
+                            horizontalPadding,
+                            AppSpacing.xxxl,
+                          ),
+                          sliver: SliverGrid.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: AppSpacing.lg,
+                                  mainAxisSpacing: AppSpacing.lg,
+                                  childAspectRatio: 0.92,
+                                ),
+                            itemCount: sortedCars.length,
+                            itemBuilder: (_, i) => buildTile(sortedCars[i]),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -225,222 +229,83 @@ class CarsHomePage extends ConsumerWidget {
   }
 }
 
-class _GarageHeader extends StatelessWidget {
-  const _GarageHeader({
+/// Title row showing "My Garage" heading with car count and optional add button.
+class _GarageTitleRow extends StatelessWidget {
+  const _GarageTitleRow({
     required this.carsCount,
-    required this.activeCar,
-    required this.onAddCar,
+    required this.l10n,
+    this.onAddCar,
   });
 
   final int carsCount;
-  final Car activeCar;
-  final VoidCallback onAddCar;
+  final AppLocalizations l10n;
+  final VoidCallback? onAddCar;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final hasImage =
-        (activeCar.imageBase64 != null && activeCar.imageBase64!.isNotEmpty) ||
-        (activeCar.imageUrl != null && activeCar.imageUrl!.isNotEmpty);
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWide = constraints.maxWidth >= 820;
-
-        final title = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'My Garage',
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.6,
-                height: 1.1,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.garage_title,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.6,
+                  height: 1.1,
+                ),
               ),
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              '$carsCount ${carsCount == 1 ? 'vehicle' : 'vehicles'} tracked with health, fuel, and cost history.',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                l10n.garage_subtitle(carsCount),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-          ],
-        );
-
-        final action = InkWell(
-          borderRadius: BorderRadius.circular(21),
-          onTap: onAddCar,
-          child: Container(
-            width: 42,
-            height: 42,
-            decoration: const BoxDecoration(
-              color: AppColors.accentLight,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
-          ),
-        );
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (isWide)
-              Row(
-                children: [
-                  Expanded(child: title),
-                  const SizedBox(width: AppSpacing.lg),
-                  action,
-                ],
-              )
-            else ...[
-              title,
-              const SizedBox(height: AppSpacing.lg),
             ],
-            const SizedBox(height: AppSpacing.xl),
-            InkWell(
-              borderRadius: BorderRadius.circular(AppRadius.xl),
-              onTap: () => context.push('/car/${activeCar.id}'),
+          ),
+        ),
+        if (onAddCar != null) ...[
+          const SizedBox(width: AppSpacing.lg),
+          Tooltip(
+            message: l10n.common_add,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(21),
+              onTap: onAddCar,
               child: Container(
-                decoration: BoxDecoration(
-                  color: theme.cardColor,
-                  borderRadius: BorderRadius.circular(AppRadius.xl),
-                  border: Border.all(
-                    color: theme.colorScheme.outline,
-                    width: 0.5,
-                  ),
-                  boxShadow: theme.brightness == Brightness.light
-                      ? AppShadows.brandGlow(theme.colorScheme.primary)
-                      : null,
+                width: 42,
+                height: 42,
+                decoration: const BoxDecoration(
+                  color: AppColors.accentLight,
+                  shape: BoxShape.circle,
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppRadius.xl),
-                  child: isWide
-                      ? Row(
-                          children: [
-                            SizedBox(
-                              width: 260,
-                              child: _ActiveCarImage(
-                                car: activeCar,
-                                hasImage: hasImage,
-                              ),
-                            ),
-                            Expanded(child: _ActiveCarCopy(car: activeCar)),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _ActiveCarImage(car: activeCar, hasImage: hasImage),
-                            _ActiveCarCopy(car: activeCar),
-                          ],
-                        ),
+                child: const Icon(
+                  Icons.add_rounded,
+                  color: Colors.white,
+                  size: 20,
                 ),
               ),
             ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _ActiveCarImage extends StatelessWidget {
-  const _ActiveCarImage({required this.car, required this.hasImage});
-
-  final Car car;
-  final bool hasImage;
-
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 16 / 9,
-      child: hasImage
-          ? ImageRect(
-              aspectRatio: 16 / 9,
-              imageUrl: car.imageUrl,
-              imageBase64: car.imageBase64,
-              imageAlignment: car.imageAlignment,
-              backgroundColor: Theme.of(
-                context,
-              ).colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.zero,
-              primaryColor: AppColors.accentLight,
-            )
-          : VehicleVisualCard(car: car, borderRadius: 0),
-    );
-  }
-}
-
-class _ActiveCarCopy extends StatelessWidget {
-  const _ActiveCarCopy({required this.car});
-
-  final Car car;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Active vehicle',
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: theme.colorScheme.primary,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            car.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Text(
-            '${car.manufacture} ${car.model} • ${car.yearOfManufacture}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Builder(
-            builder: (context) {
-              int urgency(int? d) => d == null ? 9999 : (d < 0 ? -9999 : d);
-              final chips = [
-                ('Insurance', car.daysUntilNextInsuranceExpiration),
-                ('Inspection', car.daysUntilNextInspection),
-                ('Tax', car.daysUntilNextTaxDue),
-              ]..sort((a, b) => urgency(a.$2).compareTo(urgency(b.$2)));
-              return Wrap(
-                spacing: AppSpacing.sm,
-                runSpacing: AppSpacing.sm,
-                children: [
-                  for (final c in chips) _StatusChip(label: c.$1, days: c.$2),
-                ],
-              );
-            },
           ),
         ],
-      ),
+      ],
     );
   }
 }
 
+/// Summary stats row — due-soon count, fuel entries, expense events.
+/// Displayed at the very top of the garage for an immediate fleet overview.
 class _GarageStats extends StatelessWidget {
-  const _GarageStats({required this.cars});
+  const _GarageStats({required this.cars, required this.l10n});
 
   final List<Car> cars;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -472,19 +337,19 @@ class _GarageStats extends StatelessWidget {
       children: [
         _StatPill(
           icon: Icons.notifications_active_rounded,
-          label: 'Due soon',
+          label: l10n.garage_dueSoon,
           value: '$upcoming',
           color: upcoming == 0 ? AppColors.successLight : AppColors.warnLight,
         ),
         _StatPill(
           icon: Icons.local_gas_station_rounded,
-          label: 'Fuel entries',
+          label: l10n.garage_fuelEntries,
           value: '$fuelEntries',
           color: AppColors.successLight,
         ),
         _StatPill(
           icon: Icons.receipt_long_rounded,
-          label: 'Expense events',
+          label: l10n.garage_expenseEvents,
           value: '$totalEvents',
           color: AppColors.accentLight,
         ),
@@ -542,46 +407,4 @@ class _StatPill extends StatelessWidget {
       ),
     );
   }
-}
-
-class _StatusChip extends StatelessWidget {
-  const _StatusChip({required this.label, required this.days});
-
-  final String label;
-  final int? days;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _statusColor(days);
-    final text = days == null
-        ? 'No data'
-        : days! < 0
-        ? 'Overdue'
-        : '$days d';
-
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.sm,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(AppRadius.pill),
-      ),
-      child: Text(
-        '$label • $text',
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: color,
-          fontWeight: FontWeight.w800,
-        ),
-      ),
-    );
-  }
-}
-
-Color _statusColor(int? days) {
-  if (days == null) return AppColors.categoryInspection;
-  if (days < 0) return AppColors.dangerLight;
-  if (days <= 30) return AppColors.warnLight;
-  return AppColors.successLight;
 }

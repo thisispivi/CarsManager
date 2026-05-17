@@ -1,4 +1,3 @@
-import 'package:cars_manager/core/services/notification_service.dart';
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/core/utils/app_snack_bar.dart';
@@ -77,7 +76,7 @@ class SettingsContent extends ConsumerWidget {
                         ),
                         const SizedBox(height: AppSpacing.xs),
                         Text(
-                          'Preferences, reminders, data, and app details.',
+                          l10n.settings_subtitle,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w600,
@@ -107,23 +106,23 @@ class SettingsContent extends ConsumerWidget {
                 children: [
                   _SettingsControl(
                     title: l10n.themeSelector_title,
-                    subtitle: 'Choose how CarsManager appears.',
+                    subtitle: l10n.settings_theme_subtitle,
                     control: SegmentedButton<ThemeMode>(
-                      segments: const [
+                      segments: [
                         ButtonSegment(
                           value: ThemeMode.system,
-                          icon: Icon(Icons.brightness_auto_rounded),
-                          label: Text('System'),
+                          icon: const Icon(Icons.brightness_auto_rounded),
+                          label: Text(l10n.settings_theme_system),
                         ),
                         ButtonSegment(
                           value: ThemeMode.light,
-                          icon: Icon(Icons.light_mode_rounded),
-                          label: Text('Light'),
+                          icon: const Icon(Icons.light_mode_rounded),
+                          label: Text(l10n.settings_theme_light),
                         ),
                         ButtonSegment(
                           value: ThemeMode.dark,
-                          icon: Icon(Icons.dark_mode_rounded),
-                          label: Text('Dark'),
+                          icon: const Icon(Icons.dark_mode_rounded),
+                          label: Text(l10n.settings_theme_dark),
                         ),
                       ],
                       selected: {settings.themeMode},
@@ -136,19 +135,19 @@ class SettingsContent extends ConsumerWidget {
                   _LanguageSelector(settings: settings),
                   const _SettingsDivider(),
                   _SettingsControl(
-                    title: 'Units',
-                    subtitle: 'Distance and volume defaults.',
+                    title: l10n.settings_units,
+                    subtitle: l10n.settings_units_subtitle,
                     control: SegmentedButton<String>(
-                      segments: const [
+                      segments: [
                         ButtonSegment(
                           value: 'metric',
-                          label: Text('Metric'),
-                          icon: Icon(Icons.speed_rounded),
+                          label: Text(l10n.settings_units_metric),
+                          icon: const Icon(Icons.speed_rounded),
                         ),
                         ButtonSegment(
                           value: 'imperial',
-                          label: Text('Imperial'),
-                          icon: Icon(Icons.straighten_rounded),
+                          label: Text(l10n.settings_units_imperial),
+                          icon: const Icon(Icons.straighten_rounded),
                         ),
                       ],
                       selected: {settings.units},
@@ -159,8 +158,8 @@ class SettingsContent extends ConsumerWidget {
                   ),
                   const _SettingsDivider(),
                   _SettingsControl(
-                    title: 'Currency',
-                    subtitle: 'Used for totals, charts, and exports.',
+                    title: l10n.settings_currency,
+                    subtitle: l10n.settings_currency_subtitle,
                     control: DropdownButton<String>(
                       value: settings.currency,
                       borderRadius: BorderRadius.circular(AppRadius.md),
@@ -182,11 +181,11 @@ class SettingsContent extends ConsumerWidget {
               const SizedBox(height: AppSpacing.lg),
               _SettingsSection(
                 icon: Icons.notifications_active_rounded,
-                title: 'Notifications',
+                title: l10n.settings_notifications,
                 children: [
                   _SettingsControl(
-                    title: 'Enable reminders',
-                    subtitle: 'Surface insurance, inspection, and tax dates.',
+                    title: l10n.settings_notifications_enableReminders,
+                    subtitle: l10n.settings_notifications_subtitle,
                     control: Switch(
                       value: settings.notificationsEnabled,
                       onChanged: (value) => ref
@@ -195,28 +194,15 @@ class SettingsContent extends ConsumerWidget {
                     ),
                   ),
                   const _SettingsDivider(),
-                  const Wrap(
+                  Wrap(
                     spacing: AppSpacing.sm,
                     runSpacing: AppSpacing.sm,
                     children: [
-                      _ReminderChip(label: '90 days'),
-                      _ReminderChip(label: '30 days'),
-                      _ReminderChip(label: '7 days'),
-                      _ReminderChip(label: '1 day'),
+                      _ReminderChip(label: l10n.settings_reminder_90days),
+                      _ReminderChip(label: l10n.settings_reminder_30days),
+                      _ReminderChip(label: l10n.settings_reminder_7days),
+                      _ReminderChip(label: l10n.settings_reminder_1day),
                     ],
-                  ),
-                  const _SettingsDivider(),
-                  _ActionRow(
-                    icon: Icons.notifications_outlined,
-                    title: l10n.settings_testNotification,
-                    subtitle:
-                        'Send a sample notification to preview how they appear.',
-                    onTap: () async {
-                      await NotificationService().showTestNotification();
-                      if (context.mounted) {
-                        AppSnackBar.show(context, 'Test notification sent!');
-                      }
-                    },
                   ),
                 ],
               ),
@@ -228,24 +214,26 @@ class SettingsContent extends ConsumerWidget {
                   _ActionRow(
                     icon: Icons.download_rounded,
                     title: l10n.settings_exportBackup,
-                    subtitle: 'Download a CSV snapshot of your garage.',
+                    subtitle: l10n.settings_exportSubtitle,
                     onTap: exportData,
                   ),
                   const _SettingsDivider(),
                   _ActionRow(
                     icon: Icons.delete_forever_rounded,
                     title: l10n.settings_resetData,
-                    subtitle: 'Delete all cars and entries from this device.',
+                    subtitle: l10n.settings_resetDataSubtitle,
                     isDanger: true,
                     onTap: () => _confirmReset(context, ref, l10n),
                   ),
                 ],
               ),
               const SizedBox(height: AppSpacing.lg),
-              const _SettingsSection(
+              _SettingsSection(
                 icon: Icons.info_outline_rounded,
-                title: 'About',
-                children: [_InfoLine(label: 'Version', value: '2.0.0+1')],
+                title: l10n.settings_about,
+                children: [
+                  _InfoLine(label: l10n.settings_version, value: '2.0.0+1'),
+                ],
               ),
             ],
           );
@@ -411,7 +399,7 @@ class _LanguageSelector extends ConsumerWidget {
 
     return _SettingsControl(
       title: l10n.language_selector_title,
-      subtitle: 'Controls labels, dates, and localized copy.',
+      subtitle: l10n.settings_language_subtitle,
       control: Wrap(
         spacing: AppSpacing.sm,
         runSpacing: AppSpacing.sm,
