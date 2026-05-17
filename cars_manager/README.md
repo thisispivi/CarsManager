@@ -1,6 +1,6 @@
-# CarsManager Flutter App
+# Cars Manager Flutter App
 
-This directory contains the Flutter application source for CarsManager.
+This directory contains the Flutter application source for Cars Manager.
 
 ## Quick Start
 
@@ -23,4 +23,3 @@ For full repository documentation, see:
 - [Architecture](../ARCHITECTURE.md)
 - [Design System](../DESIGN_SYSTEM.md)
 - [Environment Setup](../ENVIRONMENT_SETUP.md)
-- [Contributing](../CONTRIBUTING.md)

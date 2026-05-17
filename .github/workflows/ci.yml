@@ -89,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: android-apk-${{ github.sha }}
-          path: cars_manager/build/app/outputs/apk/release/*.apk
+          path: cars_manager/build/app/outputs/flutter-apk/*.apk
           retention-days: 7
 
   build-web:
@@ -110,7 +110,7 @@ jobs:
 
       - name: Build Web
         working-directory: cars_manager
-        run: flutter build web --release --web-renderer canvaskit
+        run: flutter build web --release
 
       - name: Upload web artifact
         uses: actions/upload-artifact@v4

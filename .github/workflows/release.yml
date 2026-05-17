@@ -42,18 +42,18 @@ jobs:
 
       - name: Build Web
         working-directory: cars_manager
-        run: flutter build web --release --web-renderer canvaskit
+        run: flutter build web --release
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            cars_manager/build/app/outputs/apk/release/*.apk
+            cars_manager/build/app/outputs/flutter-apk/*.apk
           generate_release_notes: true
           draft: false
           prerelease: ${{ contains(github.ref_name, '-beta') }}
           body: |
-            ## CarsManager ${{ github.ref_name }}
+            ## Cars Manager ${{ github.ref_name }}
 
             ### Download
             | Platform | File |

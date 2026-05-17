@@ -25,9 +25,7 @@ This document describes the current CarsManager architecture.
 ```text
 CarsManager/
 ├── .github/
-│   ├── workflows/               # CI, release, and web deployment
-│   ├── ISSUE_TEMPLATE/
-│   └── PULL_REQUEST_TEMPLATE.md
+│   └── workflows/               # CI, release, and web deployment
 ├── .husky/                      # Git hooks
 ├── cars_manager/                # Flutter application
 │   ├── android/
@@ -45,9 +43,6 @@ CarsManager/
 ├── README.md
 ├── DESIGN_SYSTEM.md
 ├── ENVIRONMENT_SETUP.md
-├── RELEASE.md
-├── ROADMAP.md
-├── SECURITY.md
 ├── package.json                 # Commit and verification tooling
 ├── commitlint.config.js
 └── .lintstagedrc.js

@@ -1,79 +1,98 @@
 <div align="center">
-  <img src="cars_manager/assets/icons/CarsManagerLogo.png" alt="Cars Manager" height="96" />
-  <h1>Cars Manager</h1>
-  <p><strong>Your vehicle intelligence platform.</strong></p>
-  <p>Every cost. Every service. Total clarity.</p>
+  <div style="display:flex;padding-block:40px;margin-bottom:20px;justify-content:center">
+    <picture>
+      <img alt="Cars Manager Banner" src="logos/CarsManagerBanner.png" style="width:100%;max-width:100%">
+    </picture>
+  </div>
 
-  [![CI](https://github.com/apirasp/CarsManager/actions/workflows/ci.yml/badge.svg)](https://github.com/apirasp/CarsManager/actions/workflows/ci.yml)
-  [![Release](https://img.shields.io/github/v/release/apirasp/CarsManager?include_prereleases&label=release)](https://github.com/apirasp/CarsManager/releases)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-  [![Flutter](https://img.shields.io/badge/Flutter-stable-02569B?logo=flutter)](https://flutter.dev)
-  [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Web%20%7C%20Desktop-brightgreen)](https://github.com/apirasp/CarsManager)
+# Cars Manager
+
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white)
+![Riverpod](https://img.shields.io/badge/Riverpod-40C4FF?style=for-the-badge&logo=flutter&logoColor=white)
+![GoRouter](https://img.shields.io/badge/GoRouter-111827?style=for-the-badge&logo=flutter&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white)
+![Web](https://img.shields.io/badge/Web-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)
+
 </div>
+
+Cars Manager is a local-first vehicle companion for tracking fuel, maintenance, insurance, taxes, fines, repairs, deadlines, and ownership costs from one calm dashboard.
 
 ---
 
-## Overview
+## Table of Contents
 
-Cars Manager is a privacy-first vehicle management app built with Flutter. It keeps vehicle health, fuel history, expenses, reminders, and analytics in one local-first workspace.
-
-The v2 experience reframes the app from a simple car utility into a personal vehicle intelligence platform: a glanceable dashboard, image-led garage, per-vehicle detail pages, cross-car analytics, search, onboarding, and responsive layouts for mobile, tablet, web, and desktop.
+- [Features](#features)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Run Locally](#run-locally)
+  - [Useful Commands](#useful-commands)
+- [Builds and Release](#builds-and-release)
+  - [Android APK](#android-apk)
+  - [Web](#web)
+  - [GitHub Release](#github-release)
+- [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [License](#license)
 
 ---
 
 ## Features
 
-| Category | Details |
-|----------|---------|
-| Dashboard | Active vehicle hero, upcoming deadlines, recent activity, quick actions, monthly summary |
-| Garage | Responsive car list/grid with active vehicle state, imagery, status pills, edit/delete actions |
-| Vehicle Detail | Overview, Fuel, Expenses, and Timeline tabs per car |
-| Fuel | Period filters, spend/liter metrics, visible calculation flow, entry history |
-| Expenses | Insurance, inspection, tax, repair, and fine tracking with category filters |
-| Analytics | Localized insights, per-car filter chips, cost overview, category ranking, car comparison, monthly trend table, CSV export |
-| Search | Global search for cars, fuel entries, and expenses with keyboard access |
-| Reminders | Local due-date notifications for insurance, inspection, and tax, with Android exact-alarm fallback |
-| Settings | Full settings page for theme, language, units, currency, notification preferences, export, and reset |
-| Onboarding | First-run product introduction stored with SharedPreferences |
-| Platform | Mobile bottom navigation, tablet rail, desktop sidebar, web URLs, light and dark themes |
+- **Vehicle dashboard** — active car hero, monthly summary, recent activity, quick actions, and upcoming deadlines.
+- **Garage management** — add, edit, delete, and switch vehicles with image-led cards and status indicators.
+- **Vehicle detail pages** — overview, fuel, expenses, and timeline tabs for each car.
+- **Fuel tracking** — fuel entries, total spend, liters/kWh, average prices, and year-based charts.
+- **Expense tracking** — insurance, inspection, tax, repair, and fine records with category-specific views.
+- **Reminders** — local notifications for insurance, inspection, and tax due dates.
+- **Analytics** — total cost overview, category breakdown, cost per car, monthly trend table, and CSV export.
+- **Search** — global search across vehicles and tracked records.
+- **Settings** — theme, language, units, currency, notification preferences, export, reset, and app info.
+- **Internationalisation** — English and Italian UI through Flutter gen-l10n.
+- **Responsive layout** — bottom navigation on mobile, navigation rail on tablet, sidebar on desktop.
+- **Cross-platform** — Android, iOS, web, Windows, macOS, and Linux project targets.
 
 ---
 
-## Design
+## Architecture
 
-Cars Manager v2 uses a warm, data-friendly identity:
+```text
+┌─────────────────────┐
+│  Flutter App        │
+│  Material + Router  │
+└────────┬────────────┘
+         │ GoRouter routes
+┌────────▼─────────┐       ┌────────────────────┐
+│  Feature Screens │ ◄───► │ Riverpod Providers │
+│  Home/Garage/etc.│       │ App state + logic  │
+└────────┬─────────┘       └─────────┬──────────┘
+         │                           │
+┌────────▼─────────┐       ┌─────────▼──────────┐
+│ Shared UI System │       │ Local Persistence  │
+│ Widgets + tokens │       │ JSON / localStorage│
+└──────────────────┘       └────────────────────┘
+```
 
-- Coral accent surfaces for primary emphasis and analytics hero moments
-- Warm cream backgrounds in light mode and warm charcoal surfaces in dark mode
-- Semantic category colors for fuel, insurance, inspection, tax, repairs, and fines
-- Typography: Space Grotesk across UI and data-heavy surfaces
-
-The interface favors soft cards, restrained shadows, compact insight blocks, accessible semantic colors, and platform-specific navigation rather than a mobile layout stretched onto desktop.
-
-See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) for tokens and component rules.
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| Framework | Flutter stable |
-| Language | Dart 3.x |
-| State management | Flutter Riverpod 2.x with generated `@riverpod` providers |
-| Navigation | GoRouter with URL-backed routes |
-| Models | Freezed and json_serializable |
-| Storage | Local JSON file on native platforms, `localStorage` on web |
-| Charts | fl_chart plus custom lightweight chart components |
-| Motion | flutter_animate and Material motion primitives |
-| Typography | Google Fonts / Space Grotesk |
-| Notifications | flutter_local_notifications |
-| Sharing | share_plus CSV export |
-| Tooling | GitHub Actions, Husky, lint-staged, commitlint |
+Cars Manager keeps the app local-first: vehicle data is stored on-device, while the UI is built around Riverpod state, GoRouter navigation, Freezed models, and shared design tokens.
 
 ---
 
-## Quick Start
+## Getting Started
+
+### Prerequisites
+
+| Tool    | Version                            |
+| ------- | ---------------------------------- |
+| Flutter | stable channel                     |
+| Dart    | bundled with Flutter               |
+| Node.js | >= 20, only for repository tooling |
+| npm     | >= 10, only for repository tooling |
+
+---
+
+### Run Locally
 
 ```bash
 git clone https://github.com/apirasp/CarsManager.git
@@ -92,46 +111,164 @@ cd cars_manager
 flutter run -d chrome
 ```
 
-Useful checks:
+---
+
+### Useful Commands
 
 ```bash
-cd cars_manager
+# From repository root
+npm run verify
+npm run analyze
+npm run test
+npm run build:android
+npm run build:web
+```
+
+```bash
+# From cars_manager/
+flutter pub get
+flutter gen-l10n
+dart run build_runner build --delete-conflicting-outputs
 flutter analyze
 flutter test
 ```
 
-See [ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md) for full setup and troubleshooting.
-
 ---
 
-## Architecture
+## Builds and Release
 
-```text
-cars_manager/lib/
-├── app/                  # App root and GoRouter configuration
-├── core/                 # Theme tokens, responsive helpers, services, storage
-├── design_system/        # Atoms, molecules, organisms, and chart wrappers
-├── features/             # Home, garage, vehicle detail, analytics, search, settings, onboarding
-├── l10n/                 # ARB files and generated localizations
-├── models/               # Vehicle, fuel, payment, and domain models
-├── presentation/         # Legacy pages/widgets still used during migration
-└── main.dart             # Bootstrap and ProviderScope
+### Android APK
+
+Build release APKs split by device architecture:
+
+```bash
+cd cars_manager
+flutter build apk --release --split-per-abi
 ```
 
-The current migration keeps stable legacy form widgets where they are still useful, while routing and primary navigation now favor the v2 feature screens.
+Output files:
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for deeper implementation notes.
+| ABI        | APK                                                         |
+| ---------- | ----------------------------------------------------------- |
+| ARM 64-bit | `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`   |
+| ARM 32-bit | `build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk` |
+| x86 64-bit | `build/app/outputs/flutter-apk/app-x86_64-release.apk`      |
+
+Build one universal APK instead:
+
+```bash
+cd cars_manager
+flutter build apk --release
+```
+
+Universal APK output:
+
+```text
+build/app/outputs/flutter-apk/app-release.apk
+```
 
 ---
 
-## Project Docs
+### Web
 
-- [Architecture](ARCHITECTURE.md)
-- [Design System](DESIGN_SYSTEM.md)
-- [Environment Setup](ENVIRONMENT_SETUP.md)
-- [Release Process](RELEASE.md)
-- [Roadmap](ROADMAP.md)
-- [Security](SECURITY.md)
+```bash
+cd cars_manager
+flutter build web --release
+```
+
+Output:
+
+```text
+build/web/
+```
+
+---
+
+### GitHub Release
+
+The repository has a release workflow that runs tests, builds APKs, builds web, and publishes APK files to a GitHub Release when a version tag is pushed.
+
+```bash
+# 1. Update version in cars_manager/pubspec.yaml
+# Example:
+# version: 2.0.1+2
+
+git add cars_manager/pubspec.yaml CHANGELOG.md
+git commit -m "chore(release): v2.0.1"
+git tag v2.0.1
+git push origin main --tags
+```
+
+Beta tags are supported:
+
+```bash
+git tag v2.0.1-beta.1
+git push origin main --tags
+```
+
+After the workflow finishes, download APKs from the GitHub Release page or from the workflow artifacts.
+
+---
+
+## Configuration
+
+| File                                       | Purpose                                                 |
+| ------------------------------------------ | ------------------------------------------------------- |
+| `cars_manager/pubspec.yaml`                | Flutter dependencies, assets, version, package metadata |
+| `cars_manager/flutter_launcher_icons.yaml` | Launcher icon generation settings                       |
+| `cars_manager/flutter_native_splash.yaml`  | Native splash screen generation settings                |
+| `cars_manager/l10n.yaml`                   | Localization generation settings                        |
+| `cars_manager/assets/data/cars.json`       | Seed/sample vehicle data                                |
+| `cars_manager/lib/l10n/app_en.arb`         | English strings                                         |
+| `cars_manager/lib/l10n/app_it.arb`         | Italian strings                                         |
+
+Regenerate launcher icons:
+
+```bash
+cd cars_manager
+dart run flutter_launcher_icons
+```
+
+Regenerate splash screens:
+
+```bash
+cd cars_manager
+dart run flutter_native_splash:create --path=flutter_native_splash.yaml
+```
+
+---
+
+## Project Structure
+
+```text
+CarsManager/
+├── .github/
+│   └── workflows/                 # CI, release, and web deploy workflows
+├── cars_manager/
+│   ├── android/                   # Android runner project
+│   ├── ios/                       # iOS runner project
+│   ├── linux/                     # Linux runner project
+│   ├── macos/                     # macOS runner project
+│   ├── web/                       # Web runner assets and manifest
+│   ├── windows/                   # Windows runner project
+│   ├── assets/
+│   │   ├── data/                  # Seed data
+│   │   └── icons/                 # App logo and SVG category icons
+│   ├── lib/
+│   │   ├── app/                   # App root, router, app-level state
+│   │   ├── core/                  # Theme, services, storage, utilities
+│   │   ├── design_system/         # Shared atoms, molecules, charts, organisms
+│   │   ├── features/              # Home, garage, analytics, settings, onboarding
+│   │   ├── l10n/                  # ARB files and generated localizations
+│   │   ├── models/                # Domain models
+│   │   ├── presentation/          # Shared presentation widgets and migrated pages
+│   │   └── main.dart              # Application bootstrap
+│   ├── test/                      # Unit and widget tests
+│   └── integration_test/          # Integration smoke tests
+├── scripts/                       # Repository helper scripts
+├── package.json                   # Root automation scripts
+└── README.md
+```
 
 ---
 
