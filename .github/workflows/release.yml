@@ -42,7 +42,7 @@ jobs:
 
       - name: Build Web
         working-directory: cars_manager
-        run: flutter build web --release --base-href /CarsManager/
+        run: flutter build web --release --base-href /
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -61,7 +61,7 @@ jobs:
             | Android (arm64-v8a) | `app-arm64-v8a-release.apk` |
             | Android (armeabi-v7a) | `app-armeabi-v7a-release.apk` |
             | Android (x86_64) | `app-x86_64-release.apk` |
-            | Web | Deployed to [GitHub Pages](https://thisispivi.github.io/CarsManager/) |
+            | Web | Deployed to [carsmanager.pivi.dev](https://carsmanager.pivi.dev/) |
 
       - name: Upload web artifact for deploy
         uses: actions/upload-artifact@v4

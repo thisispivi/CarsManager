@@ -34,7 +34,7 @@ jobs:
 
       - name: Build Web
         working-directory: cars_manager
-        run: flutter build web --release --base-href /CarsManager/
+        run: flutter build web --release --base-href /
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
