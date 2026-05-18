@@ -449,11 +449,11 @@
   "@fuel_total_cost_label": {
     "description": "Label for total cost"
   },
-  "fuel_expensesByYear_title": "Spese carburante per anno",
+  "fuel_expensesByYear_title": "Carburante speso per anno",
   "@fuel_expensesByYear_title": {
     "description": "Title for fuel expenses by year chart"
   },
-  "fuel_avgPriceByYear_title": "Prezzo medio per unità per anno",
+  "fuel_avgPriceByYear_title": "Costo per unità per anno",
   "@fuel_avgPriceByYear_title": {
     "description": "Title for fuel average price per unit by year chart"
   },

@@ -162,21 +162,20 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          controller: _litersController,
+                          controller: _totalCostController,
                           decoration: InputDecoration(
-                            labelText: amountLabel,
-                            prefixIcon: Icon(
-                              isElectric
-                                  ? Icons.bolt_outlined
-                                  : Icons.water_drop_outlined,
-                            ),
+                            labelText: localizations.fuel_total_cost_label,
+                            prefixIcon: const Icon(Icons.euro_rounded),
                           ),
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                           ),
-                          onChanged: (_) => _recalculateTotalFromAmount(),
-                          validator: (v) =>
-                              _validateDouble(localizations, v, amountLabel),
+                          onChanged: (_) => _recalculateAmountFromCost(),
+                          validator: (v) => _validateDouble(
+                            localizations,
+                            v,
+                            localizations.fuel_total_cost_label,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -190,7 +189,7 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                           keyboardType: const TextInputType.numberWithOptions(
                             decimal: true,
                           ),
-                          onChanged: (_) => _recalculateTotalFromAmount(),
+                          onChanged: (_) => _recalculateAmountFromCost(),
                           validator: (v) =>
                               _validateDouble(localizations, v, priceLabel),
                         ),
@@ -199,20 +198,18 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
-                    controller: _totalCostController,
+                    controller: _litersController,
                     decoration: InputDecoration(
-                      labelText: localizations.fuel_total_cost_label,
-                      prefixIcon: const Icon(Icons.euro_rounded),
+                      labelText: amountLabel,
+                      prefixIcon: Icon(
+                        isElectric
+                            ? Icons.bolt_outlined
+                            : Icons.water_drop_outlined,
+                      ),
                     ),
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    onChanged: (_) => _recalculatePriceFromTotal(),
-                    validator: (v) => _validateDouble(
-                      localizations,
-                      v,
-                      localizations.fuel_total_cost_label,
-                    ),
+                    readOnly: true,
+                    validator: (v) =>
+                        _validateDouble(localizations, v, amountLabel),
                   ),
                   if (_calculationText != null) ...[
                     const SizedBox(height: 6),
@@ -303,41 +300,20 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
     return parsed;
   }
 
-  void _recalculateTotalFromAmount() {
+  void _recalculateAmountFromCost() {
     if (_isAutoUpdating) return;
 
-    final amount = _tryParsePositive(_litersController.text);
-    final priceRaw = _pricePerLiterController.text;
-    final price = _tryParsePositive(priceRaw);
-
-    if (amount == null || price == null) {
-      _updateCalculationText();
-      return;
-    }
-
-    _isAutoUpdating = true;
-    try {
-      _totalCostController.text = (amount * price).toStringAsFixed(2);
-    } finally {
-      _isAutoUpdating = false;
-    }
-    _updateCalculationText();
-  }
-
-  void _recalculatePriceFromTotal() {
-    if (_isAutoUpdating) return;
-
-    final amount = _tryParsePositive(_litersController.text);
     final total = _tryParsePositive(_totalCostController.text);
+    final price = _tryParsePositive(_pricePerLiterController.text);
 
-    if (amount == null || total == null) {
+    if (total == null || price == null) {
       _updateCalculationText();
       return;
     }
 
     _isAutoUpdating = true;
     try {
-      _pricePerLiterController.text = (total / amount).toStringAsFixed(3);
+      _litersController.text = (total / price).toStringAsFixed(2);
     } finally {
       _isAutoUpdating = false;
     }
@@ -379,12 +355,12 @@ class _AddFuelEntryBottomSheetState extends State<AddFuelEntryBottomSheet> {
       return;
     }
 
-    final liters = _tryParsePositive(_litersController.text);
     final pricePerLiter = _tryParsePositive(_pricePerLiterController.text);
     final totalCost = _tryParsePositive(_totalCostController.text);
-    if (liters == null || pricePerLiter == null || totalCost == null) {
+    if (pricePerLiter == null || totalCost == null) {
       return;
     }
+    final liters = totalCost / pricePerLiter;
 
     final entry = FuelEntry(
       fuelType: _fuelType,

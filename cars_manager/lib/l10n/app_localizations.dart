@@ -713,13 +713,13 @@ abstract class AppLocalizations {
   /// Title for fuel expenses by year chart
   ///
   /// In en, this message translates to:
-  /// **'Fuel Expenses by Year'**
+  /// **'Fuel spent by Year'**
   String get fuel_expensesByYear_title;
 
   /// Title for fuel average price per unit by year chart
   ///
   /// In en, this message translates to:
-  /// **'Avg price per unit by Year'**
+  /// **'Cost per unit by Year'**
   String get fuel_avgPriceByYear_title;
 
   /// Title for fuel total amount by year chart

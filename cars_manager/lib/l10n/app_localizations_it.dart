@@ -340,10 +340,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get fuel_total_cost_label => 'Costo totale';
 
   @override
-  String get fuel_expensesByYear_title => 'Spese carburante per anno';
+  String get fuel_expensesByYear_title => 'Carburante speso per anno';
 
   @override
-  String get fuel_avgPriceByYear_title => 'Prezzo medio per unità per anno';
+  String get fuel_avgPriceByYear_title => 'Costo per unità per anno';
 
   @override
   String get fuel_amountByYear_title => 'Quantità totale per anno';
