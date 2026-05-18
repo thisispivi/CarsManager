@@ -9,6 +9,19 @@ Versioning: [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+---
+
+## [2.0.3] — 2026-05-18
+
+### Added
+- Android-style README screenshots in light and dark mode using English demo vehicle data.
+
+### Changed
+- Version bumped to `2.0.3+3`.
+- README now includes a screenshots gallery for dashboard, garage, and analytics previews.
+
+## [2.0.2] — 2026-05-17
+
 ### Added
 - CarsManager v2 dashboard with active-car hero, quick actions, upcoming deadlines, recent activity, and monthly summary.
 - Vehicle detail route with Overview, Fuel, Expenses, and Timeline tabs.
@@ -62,5 +75,7 @@ Versioning: [Semantic Versioning](https://semver.org/).
 - Pre-commit hooks: `dart format`, `dart analyze`, `flutter test`
 - GitHub Actions CI: dart analyze + dart test
 
-[Unreleased]: https://github.com/thisispivi/CarsManager/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/thisispivi/CarsManager/compare/v2.0.3...HEAD
+[2.0.3]: https://github.com/thisispivi/CarsManager/compare/v2.0.2...v2.0.3
+[2.0.2]: https://github.com/thisispivi/CarsManager/compare/v1.0.0...v2.0.2
 [1.0.0]: https://github.com/thisispivi/CarsManager/releases/tag/v1.0.0
