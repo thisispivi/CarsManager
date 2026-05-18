@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Car {
 
- String get id; String get name; String get model; String get manufacture; int get yearOfManufacture; String? get imageUrl; String? get imageBase64; String? get imageOriginalBase64; Alignment get imageAlignment; String get licensePlate; DateTime get insuranceExpirationDate; FuelType? get fuelType; List<FuelEntry> get fuel; List<InsuranceData> get insuranceDatas; List<InspectionData> get inspectionDatas; List<TaxData> get taxDatas; List<RepairData> get repairDatas; List<FineData> get fineDatas;
+ String get id; String get name; String get model; String get manufacture; int get yearOfManufacture; String? get imageUrl; String? get imageBase64; String? get imageOriginalBase64; Alignment get imageAlignment; String get licensePlate; FuelType? get fuelType; List<FuelEntry> get fuel; List<InsuranceData> get insuranceDatas; List<InspectionData> get inspectionDatas; List<TaxData> get taxDatas; List<RepairData> get repairDatas; List<FineData> get fineDatas;
 /// Create a copy of Car
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $CarCopyWith<Car> get copyWith => _$CarCopyWithImpl<Car>(this as Car, _$identity
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Car&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.model, model) || other.model == model)&&(identical(other.manufacture, manufacture) || other.manufacture == manufacture)&&(identical(other.yearOfManufacture, yearOfManufacture) || other.yearOfManufacture == yearOfManufacture)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.imageBase64, imageBase64) || other.imageBase64 == imageBase64)&&(identical(other.imageOriginalBase64, imageOriginalBase64) || other.imageOriginalBase64 == imageOriginalBase64)&&(identical(other.imageAlignment, imageAlignment) || other.imageAlignment == imageAlignment)&&(identical(other.licensePlate, licensePlate) || other.licensePlate == licensePlate)&&(identical(other.insuranceExpirationDate, insuranceExpirationDate) || other.insuranceExpirationDate == insuranceExpirationDate)&&(identical(other.fuelType, fuelType) || other.fuelType == fuelType)&&const DeepCollectionEquality().equals(other.fuel, fuel)&&const DeepCollectionEquality().equals(other.insuranceDatas, insuranceDatas)&&const DeepCollectionEquality().equals(other.inspectionDatas, inspectionDatas)&&const DeepCollectionEquality().equals(other.taxDatas, taxDatas)&&const DeepCollectionEquality().equals(other.repairDatas, repairDatas)&&const DeepCollectionEquality().equals(other.fineDatas, fineDatas));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Car&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.model, model) || other.model == model)&&(identical(other.manufacture, manufacture) || other.manufacture == manufacture)&&(identical(other.yearOfManufacture, yearOfManufacture) || other.yearOfManufacture == yearOfManufacture)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.imageBase64, imageBase64) || other.imageBase64 == imageBase64)&&(identical(other.imageOriginalBase64, imageOriginalBase64) || other.imageOriginalBase64 == imageOriginalBase64)&&(identical(other.imageAlignment, imageAlignment) || other.imageAlignment == imageAlignment)&&(identical(other.licensePlate, licensePlate) || other.licensePlate == licensePlate)&&(identical(other.fuelType, fuelType) || other.fuelType == fuelType)&&const DeepCollectionEquality().equals(other.fuel, fuel)&&const DeepCollectionEquality().equals(other.insuranceDatas, insuranceDatas)&&const DeepCollectionEquality().equals(other.inspectionDatas, inspectionDatas)&&const DeepCollectionEquality().equals(other.taxDatas, taxDatas)&&const DeepCollectionEquality().equals(other.repairDatas, repairDatas)&&const DeepCollectionEquality().equals(other.fineDatas, fineDatas));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,model,manufacture,yearOfManufacture,imageUrl,imageBase64,imageOriginalBase64,imageAlignment,licensePlate,insuranceExpirationDate,fuelType,const DeepCollectionEquality().hash(fuel),const DeepCollectionEquality().hash(insuranceDatas),const DeepCollectionEquality().hash(inspectionDatas),const DeepCollectionEquality().hash(taxDatas),const DeepCollectionEquality().hash(repairDatas),const DeepCollectionEquality().hash(fineDatas));
+int get hashCode => Object.hash(runtimeType,id,name,model,manufacture,yearOfManufacture,imageUrl,imageBase64,imageOriginalBase64,imageAlignment,licensePlate,fuelType,const DeepCollectionEquality().hash(fuel),const DeepCollectionEquality().hash(insuranceDatas),const DeepCollectionEquality().hash(inspectionDatas),const DeepCollectionEquality().hash(taxDatas),const DeepCollectionEquality().hash(repairDatas),const DeepCollectionEquality().hash(fineDatas));
 
 @override
 String toString() {
-  return 'Car(id: $id, name: $name, model: $model, manufacture: $manufacture, yearOfManufacture: $yearOfManufacture, imageUrl: $imageUrl, imageBase64: $imageBase64, imageOriginalBase64: $imageOriginalBase64, imageAlignment: $imageAlignment, licensePlate: $licensePlate, insuranceExpirationDate: $insuranceExpirationDate, fuelType: $fuelType, fuel: $fuel, insuranceDatas: $insuranceDatas, inspectionDatas: $inspectionDatas, taxDatas: $taxDatas, repairDatas: $repairDatas, fineDatas: $fineDatas)';
+  return 'Car(id: $id, name: $name, model: $model, manufacture: $manufacture, yearOfManufacture: $yearOfManufacture, imageUrl: $imageUrl, imageBase64: $imageBase64, imageOriginalBase64: $imageOriginalBase64, imageAlignment: $imageAlignment, licensePlate: $licensePlate, fuelType: $fuelType, fuel: $fuel, insuranceDatas: $insuranceDatas, inspectionDatas: $inspectionDatas, taxDatas: $taxDatas, repairDatas: $repairDatas, fineDatas: $fineDatas)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $CarCopyWith<$Res>  {
   factory $CarCopyWith(Car value, $Res Function(Car) _then) = _$CarCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String model, String manufacture, int yearOfManufacture, String? imageUrl, String? imageBase64, String? imageOriginalBase64, Alignment imageAlignment, String licensePlate, DateTime insuranceExpirationDate, FuelType? fuelType, List<FuelEntry> fuel, List<InsuranceData> insuranceDatas, List<InspectionData> inspectionDatas, List<TaxData> taxDatas, List<RepairData> repairDatas, List<FineData> fineDatas
+ String id, String name, String model, String manufacture, int yearOfManufacture, String? imageUrl, String? imageBase64, String? imageOriginalBase64, Alignment imageAlignment, String licensePlate, FuelType? fuelType, List<FuelEntry> fuel, List<InsuranceData> insuranceDatas, List<InspectionData> inspectionDatas, List<TaxData> taxDatas, List<RepairData> repairDatas, List<FineData> fineDatas
 });
 
 
@@ -62,7 +62,7 @@ class _$CarCopyWithImpl<$Res>
 
 /// Create a copy of Car
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? model = null,Object? manufacture = null,Object? yearOfManufacture = null,Object? imageUrl = freezed,Object? imageBase64 = freezed,Object? imageOriginalBase64 = freezed,Object? imageAlignment = null,Object? licensePlate = null,Object? insuranceExpirationDate = null,Object? fuelType = freezed,Object? fuel = null,Object? insuranceDatas = null,Object? inspectionDatas = null,Object? taxDatas = null,Object? repairDatas = null,Object? fineDatas = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? model = null,Object? manufacture = null,Object? yearOfManufacture = null,Object? imageUrl = freezed,Object? imageBase64 = freezed,Object? imageOriginalBase64 = freezed,Object? imageAlignment = null,Object? licensePlate = null,Object? fuelType = freezed,Object? fuel = null,Object? insuranceDatas = null,Object? inspectionDatas = null,Object? taxDatas = null,Object? repairDatas = null,Object? fineDatas = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -74,8 +74,7 @@ as String?,imageBase64: freezed == imageBase64 ? _self.imageBase64 : imageBase64
 as String?,imageOriginalBase64: freezed == imageOriginalBase64 ? _self.imageOriginalBase64 : imageOriginalBase64 // ignore: cast_nullable_to_non_nullable
 as String?,imageAlignment: null == imageAlignment ? _self.imageAlignment : imageAlignment // ignore: cast_nullable_to_non_nullable
 as Alignment,licensePlate: null == licensePlate ? _self.licensePlate : licensePlate // ignore: cast_nullable_to_non_nullable
-as String,insuranceExpirationDate: null == insuranceExpirationDate ? _self.insuranceExpirationDate : insuranceExpirationDate // ignore: cast_nullable_to_non_nullable
-as DateTime,fuelType: freezed == fuelType ? _self.fuelType : fuelType // ignore: cast_nullable_to_non_nullable
+as String,fuelType: freezed == fuelType ? _self.fuelType : fuelType // ignore: cast_nullable_to_non_nullable
 as FuelType?,fuel: null == fuel ? _self.fuel : fuel // ignore: cast_nullable_to_non_nullable
 as List<FuelEntry>,insuranceDatas: null == insuranceDatas ? _self.insuranceDatas : insuranceDatas // ignore: cast_nullable_to_non_nullable
 as List<InsuranceData>,inspectionDatas: null == inspectionDatas ? _self.inspectionDatas : inspectionDatas // ignore: cast_nullable_to_non_nullable
@@ -167,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String model,  String manufacture,  int yearOfManufacture,  String? imageUrl,  String? imageBase64,  String? imageOriginalBase64,  Alignment imageAlignment,  String licensePlate,  DateTime insuranceExpirationDate,  FuelType? fuelType,  List<FuelEntry> fuel,  List<InsuranceData> insuranceDatas,  List<InspectionData> inspectionDatas,  List<TaxData> taxDatas,  List<RepairData> repairDatas,  List<FineData> fineDatas)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String model,  String manufacture,  int yearOfManufacture,  String? imageUrl,  String? imageBase64,  String? imageOriginalBase64,  Alignment imageAlignment,  String licensePlate,  FuelType? fuelType,  List<FuelEntry> fuel,  List<InsuranceData> insuranceDatas,  List<InspectionData> inspectionDatas,  List<TaxData> taxDatas,  List<RepairData> repairDatas,  List<FineData> fineDatas)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Car() when $default != null:
-return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfManufacture,_that.imageUrl,_that.imageBase64,_that.imageOriginalBase64,_that.imageAlignment,_that.licensePlate,_that.insuranceExpirationDate,_that.fuelType,_that.fuel,_that.insuranceDatas,_that.inspectionDatas,_that.taxDatas,_that.repairDatas,_that.fineDatas);case _:
+return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfManufacture,_that.imageUrl,_that.imageBase64,_that.imageOriginalBase64,_that.imageAlignment,_that.licensePlate,_that.fuelType,_that.fuel,_that.insuranceDatas,_that.inspectionDatas,_that.taxDatas,_that.repairDatas,_that.fineDatas);case _:
   return orElse();
 
 }
@@ -188,10 +187,10 @@ return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfMa
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String model,  String manufacture,  int yearOfManufacture,  String? imageUrl,  String? imageBase64,  String? imageOriginalBase64,  Alignment imageAlignment,  String licensePlate,  DateTime insuranceExpirationDate,  FuelType? fuelType,  List<FuelEntry> fuel,  List<InsuranceData> insuranceDatas,  List<InspectionData> inspectionDatas,  List<TaxData> taxDatas,  List<RepairData> repairDatas,  List<FineData> fineDatas)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String model,  String manufacture,  int yearOfManufacture,  String? imageUrl,  String? imageBase64,  String? imageOriginalBase64,  Alignment imageAlignment,  String licensePlate,  FuelType? fuelType,  List<FuelEntry> fuel,  List<InsuranceData> insuranceDatas,  List<InspectionData> inspectionDatas,  List<TaxData> taxDatas,  List<RepairData> repairDatas,  List<FineData> fineDatas)  $default,) {final _that = this;
 switch (_that) {
 case _Car():
-return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfManufacture,_that.imageUrl,_that.imageBase64,_that.imageOriginalBase64,_that.imageAlignment,_that.licensePlate,_that.insuranceExpirationDate,_that.fuelType,_that.fuel,_that.insuranceDatas,_that.inspectionDatas,_that.taxDatas,_that.repairDatas,_that.fineDatas);case _:
+return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfManufacture,_that.imageUrl,_that.imageBase64,_that.imageOriginalBase64,_that.imageAlignment,_that.licensePlate,_that.fuelType,_that.fuel,_that.insuranceDatas,_that.inspectionDatas,_that.taxDatas,_that.repairDatas,_that.fineDatas);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +207,10 @@ return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfMa
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String model,  String manufacture,  int yearOfManufacture,  String? imageUrl,  String? imageBase64,  String? imageOriginalBase64,  Alignment imageAlignment,  String licensePlate,  DateTime insuranceExpirationDate,  FuelType? fuelType,  List<FuelEntry> fuel,  List<InsuranceData> insuranceDatas,  List<InspectionData> inspectionDatas,  List<TaxData> taxDatas,  List<RepairData> repairDatas,  List<FineData> fineDatas)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String model,  String manufacture,  int yearOfManufacture,  String? imageUrl,  String? imageBase64,  String? imageOriginalBase64,  Alignment imageAlignment,  String licensePlate,  FuelType? fuelType,  List<FuelEntry> fuel,  List<InsuranceData> insuranceDatas,  List<InspectionData> inspectionDatas,  List<TaxData> taxDatas,  List<RepairData> repairDatas,  List<FineData> fineDatas)?  $default,) {final _that = this;
 switch (_that) {
 case _Car() when $default != null:
-return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfManufacture,_that.imageUrl,_that.imageBase64,_that.imageOriginalBase64,_that.imageAlignment,_that.licensePlate,_that.insuranceExpirationDate,_that.fuelType,_that.fuel,_that.insuranceDatas,_that.inspectionDatas,_that.taxDatas,_that.repairDatas,_that.fineDatas);case _:
+return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfManufacture,_that.imageUrl,_that.imageBase64,_that.imageOriginalBase64,_that.imageAlignment,_that.licensePlate,_that.fuelType,_that.fuel,_that.insuranceDatas,_that.inspectionDatas,_that.taxDatas,_that.repairDatas,_that.fineDatas);case _:
   return null;
 
 }
@@ -223,7 +222,7 @@ return $default(_that.id,_that.name,_that.model,_that.manufacture,_that.yearOfMa
 
 
 class _Car extends Car {
-  const _Car({required this.id, required this.name, required this.model, required this.manufacture, required this.yearOfManufacture, this.imageUrl, this.imageBase64, this.imageOriginalBase64, this.imageAlignment = Alignment.center, this.licensePlate = '', required this.insuranceExpirationDate, this.fuelType, final  List<FuelEntry> fuel = const [], final  List<InsuranceData> insuranceDatas = const [], final  List<InspectionData> inspectionDatas = const [], final  List<TaxData> taxDatas = const [], final  List<RepairData> repairDatas = const [], final  List<FineData> fineDatas = const []}): _fuel = fuel,_insuranceDatas = insuranceDatas,_inspectionDatas = inspectionDatas,_taxDatas = taxDatas,_repairDatas = repairDatas,_fineDatas = fineDatas,super._();
+  const _Car({required this.id, required this.name, required this.model, required this.manufacture, required this.yearOfManufacture, this.imageUrl, this.imageBase64, this.imageOriginalBase64, this.imageAlignment = Alignment.center, this.licensePlate = '', this.fuelType, final  List<FuelEntry> fuel = const [], final  List<InsuranceData> insuranceDatas = const [], final  List<InspectionData> inspectionDatas = const [], final  List<TaxData> taxDatas = const [], final  List<RepairData> repairDatas = const [], final  List<FineData> fineDatas = const []}): _fuel = fuel,_insuranceDatas = insuranceDatas,_inspectionDatas = inspectionDatas,_taxDatas = taxDatas,_repairDatas = repairDatas,_fineDatas = fineDatas,super._();
   
 
 @override final  String id;
@@ -236,7 +235,6 @@ class _Car extends Car {
 @override final  String? imageOriginalBase64;
 @override@JsonKey() final  Alignment imageAlignment;
 @override@JsonKey() final  String licensePlate;
-@override final  DateTime insuranceExpirationDate;
 @override final  FuelType? fuelType;
  final  List<FuelEntry> _fuel;
 @override@JsonKey() List<FuelEntry> get fuel {
@@ -291,16 +289,16 @@ _$CarCopyWith<_Car> get copyWith => __$CarCopyWithImpl<_Car>(this, _$identity);
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Car&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.model, model) || other.model == model)&&(identical(other.manufacture, manufacture) || other.manufacture == manufacture)&&(identical(other.yearOfManufacture, yearOfManufacture) || other.yearOfManufacture == yearOfManufacture)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.imageBase64, imageBase64) || other.imageBase64 == imageBase64)&&(identical(other.imageOriginalBase64, imageOriginalBase64) || other.imageOriginalBase64 == imageOriginalBase64)&&(identical(other.imageAlignment, imageAlignment) || other.imageAlignment == imageAlignment)&&(identical(other.licensePlate, licensePlate) || other.licensePlate == licensePlate)&&(identical(other.insuranceExpirationDate, insuranceExpirationDate) || other.insuranceExpirationDate == insuranceExpirationDate)&&(identical(other.fuelType, fuelType) || other.fuelType == fuelType)&&const DeepCollectionEquality().equals(other._fuel, _fuel)&&const DeepCollectionEquality().equals(other._insuranceDatas, _insuranceDatas)&&const DeepCollectionEquality().equals(other._inspectionDatas, _inspectionDatas)&&const DeepCollectionEquality().equals(other._taxDatas, _taxDatas)&&const DeepCollectionEquality().equals(other._repairDatas, _repairDatas)&&const DeepCollectionEquality().equals(other._fineDatas, _fineDatas));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Car&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.model, model) || other.model == model)&&(identical(other.manufacture, manufacture) || other.manufacture == manufacture)&&(identical(other.yearOfManufacture, yearOfManufacture) || other.yearOfManufacture == yearOfManufacture)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.imageBase64, imageBase64) || other.imageBase64 == imageBase64)&&(identical(other.imageOriginalBase64, imageOriginalBase64) || other.imageOriginalBase64 == imageOriginalBase64)&&(identical(other.imageAlignment, imageAlignment) || other.imageAlignment == imageAlignment)&&(identical(other.licensePlate, licensePlate) || other.licensePlate == licensePlate)&&(identical(other.fuelType, fuelType) || other.fuelType == fuelType)&&const DeepCollectionEquality().equals(other._fuel, _fuel)&&const DeepCollectionEquality().equals(other._insuranceDatas, _insuranceDatas)&&const DeepCollectionEquality().equals(other._inspectionDatas, _inspectionDatas)&&const DeepCollectionEquality().equals(other._taxDatas, _taxDatas)&&const DeepCollectionEquality().equals(other._repairDatas, _repairDatas)&&const DeepCollectionEquality().equals(other._fineDatas, _fineDatas));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,model,manufacture,yearOfManufacture,imageUrl,imageBase64,imageOriginalBase64,imageAlignment,licensePlate,insuranceExpirationDate,fuelType,const DeepCollectionEquality().hash(_fuel),const DeepCollectionEquality().hash(_insuranceDatas),const DeepCollectionEquality().hash(_inspectionDatas),const DeepCollectionEquality().hash(_taxDatas),const DeepCollectionEquality().hash(_repairDatas),const DeepCollectionEquality().hash(_fineDatas));
+int get hashCode => Object.hash(runtimeType,id,name,model,manufacture,yearOfManufacture,imageUrl,imageBase64,imageOriginalBase64,imageAlignment,licensePlate,fuelType,const DeepCollectionEquality().hash(_fuel),const DeepCollectionEquality().hash(_insuranceDatas),const DeepCollectionEquality().hash(_inspectionDatas),const DeepCollectionEquality().hash(_taxDatas),const DeepCollectionEquality().hash(_repairDatas),const DeepCollectionEquality().hash(_fineDatas));
 
 @override
 String toString() {
-  return 'Car(id: $id, name: $name, model: $model, manufacture: $manufacture, yearOfManufacture: $yearOfManufacture, imageUrl: $imageUrl, imageBase64: $imageBase64, imageOriginalBase64: $imageOriginalBase64, imageAlignment: $imageAlignment, licensePlate: $licensePlate, insuranceExpirationDate: $insuranceExpirationDate, fuelType: $fuelType, fuel: $fuel, insuranceDatas: $insuranceDatas, inspectionDatas: $inspectionDatas, taxDatas: $taxDatas, repairDatas: $repairDatas, fineDatas: $fineDatas)';
+  return 'Car(id: $id, name: $name, model: $model, manufacture: $manufacture, yearOfManufacture: $yearOfManufacture, imageUrl: $imageUrl, imageBase64: $imageBase64, imageOriginalBase64: $imageOriginalBase64, imageAlignment: $imageAlignment, licensePlate: $licensePlate, fuelType: $fuelType, fuel: $fuel, insuranceDatas: $insuranceDatas, inspectionDatas: $inspectionDatas, taxDatas: $taxDatas, repairDatas: $repairDatas, fineDatas: $fineDatas)';
 }
 
 
@@ -311,7 +309,7 @@ abstract mixin class _$CarCopyWith<$Res> implements $CarCopyWith<$Res> {
   factory _$CarCopyWith(_Car value, $Res Function(_Car) _then) = __$CarCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String model, String manufacture, int yearOfManufacture, String? imageUrl, String? imageBase64, String? imageOriginalBase64, Alignment imageAlignment, String licensePlate, DateTime insuranceExpirationDate, FuelType? fuelType, List<FuelEntry> fuel, List<InsuranceData> insuranceDatas, List<InspectionData> inspectionDatas, List<TaxData> taxDatas, List<RepairData> repairDatas, List<FineData> fineDatas
+ String id, String name, String model, String manufacture, int yearOfManufacture, String? imageUrl, String? imageBase64, String? imageOriginalBase64, Alignment imageAlignment, String licensePlate, FuelType? fuelType, List<FuelEntry> fuel, List<InsuranceData> insuranceDatas, List<InspectionData> inspectionDatas, List<TaxData> taxDatas, List<RepairData> repairDatas, List<FineData> fineDatas
 });
 
 
@@ -328,7 +326,7 @@ class __$CarCopyWithImpl<$Res>
 
 /// Create a copy of Car
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? model = null,Object? manufacture = null,Object? yearOfManufacture = null,Object? imageUrl = freezed,Object? imageBase64 = freezed,Object? imageOriginalBase64 = freezed,Object? imageAlignment = null,Object? licensePlate = null,Object? insuranceExpirationDate = null,Object? fuelType = freezed,Object? fuel = null,Object? insuranceDatas = null,Object? inspectionDatas = null,Object? taxDatas = null,Object? repairDatas = null,Object? fineDatas = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? model = null,Object? manufacture = null,Object? yearOfManufacture = null,Object? imageUrl = freezed,Object? imageBase64 = freezed,Object? imageOriginalBase64 = freezed,Object? imageAlignment = null,Object? licensePlate = null,Object? fuelType = freezed,Object? fuel = null,Object? insuranceDatas = null,Object? inspectionDatas = null,Object? taxDatas = null,Object? repairDatas = null,Object? fineDatas = null,}) {
   return _then(_Car(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -340,8 +338,7 @@ as String?,imageBase64: freezed == imageBase64 ? _self.imageBase64 : imageBase64
 as String?,imageOriginalBase64: freezed == imageOriginalBase64 ? _self.imageOriginalBase64 : imageOriginalBase64 // ignore: cast_nullable_to_non_nullable
 as String?,imageAlignment: null == imageAlignment ? _self.imageAlignment : imageAlignment // ignore: cast_nullable_to_non_nullable
 as Alignment,licensePlate: null == licensePlate ? _self.licensePlate : licensePlate // ignore: cast_nullable_to_non_nullable
-as String,insuranceExpirationDate: null == insuranceExpirationDate ? _self.insuranceExpirationDate : insuranceExpirationDate // ignore: cast_nullable_to_non_nullable
-as DateTime,fuelType: freezed == fuelType ? _self.fuelType : fuelType // ignore: cast_nullable_to_non_nullable
+as String,fuelType: freezed == fuelType ? _self.fuelType : fuelType // ignore: cast_nullable_to_non_nullable
 as FuelType?,fuel: null == fuel ? _self._fuel : fuel // ignore: cast_nullable_to_non_nullable
 as List<FuelEntry>,insuranceDatas: null == insuranceDatas ? _self._insuranceDatas : insuranceDatas // ignore: cast_nullable_to_non_nullable
 as List<InsuranceData>,inspectionDatas: null == inspectionDatas ? _self._inspectionDatas : inspectionDatas // ignore: cast_nullable_to_non_nullable

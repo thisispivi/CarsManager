@@ -7,13 +7,12 @@ import 'package:cars_manager/models/repair_data.dart';
 import 'package:cars_manager/models/fine_data.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Car _emptyCar() => Car(
+Car _emptyCar() => const Car(
   id: '1',
   name: 'TestCar',
   model: 'Model3',
   manufacture: 'Tesla',
   yearOfManufacture: 2022,
-  insuranceExpirationDate: DateTime(2026),
 );
 
 void main() {

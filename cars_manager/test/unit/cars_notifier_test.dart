@@ -13,7 +13,6 @@ Car _makeCar(String id, String name) => Car(
   model: 'X',
   manufacture: 'Brand',
   yearOfManufacture: 2020,
-  insuranceExpirationDate: DateTime(2026),
 );
 
 void main() {

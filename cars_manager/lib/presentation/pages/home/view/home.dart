@@ -108,14 +108,11 @@ class CarsHomePage extends ConsumerWidget {
           final horizontalPadding = isWide ? AppSpacing.xxl : AppSpacing.lg;
           final contentMaxWidth = width >= 1600 ? 1400.0 : double.infinity;
 
-          // Active car always first; rest sorted by name
           final effectiveActive = activeCar ?? cars.firstOrNull;
-          final sortedCars = effectiveActive == null
-              ? cars
-              : [
-                  effectiveActive,
-                  ...cars.where((c) => c.id != effectiveActive.id),
-                ];
+          final otherCars = effectiveActive == null
+              ? <Car>[]
+              : (cars.where((c) => c.id != effectiveActive.id).toList()
+                  ..sort((a, b) => a.name.compareTo(b.name)));
 
           if (cars.isEmpty) {
             return Center(
@@ -143,23 +140,11 @@ class CarsHomePage extends ConsumerWidget {
                   constraints: BoxConstraints(maxWidth: contentMaxWidth),
                   child: CustomScrollView(
                     slivers: [
-                      // ── Stats (top of page) ────────────────────────────
-                      SliverPadding(
-                        padding: EdgeInsets.fromLTRB(
-                          horizontalPadding,
-                          AppSpacing.xl,
-                          horizontalPadding,
-                          AppSpacing.md,
-                        ),
-                        sliver: SliverToBoxAdapter(
-                          child: _GarageStats(cars: cars, l10n: l10n),
-                        ),
-                      ),
                       // ── Title row ──────────────────────────────────────
                       SliverPadding(
                         padding: EdgeInsets.fromLTRB(
                           horizontalPadding,
-                          AppSpacing.md,
+                          AppSpacing.xl,
                           horizontalPadding,
                           AppSpacing.lg,
                         ),
@@ -171,41 +156,96 @@ class CarsHomePage extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      // ── Cars (uniform grid / list) ─────────────────────
-                      if (crossAxisCount == 1)
+                      // ── Stats pills ────────────────────────────────────
+                      SliverPadding(
+                        padding: EdgeInsets.fromLTRB(
+                          horizontalPadding,
+                          0,
+                          horizontalPadding,
+                          AppSpacing.xl,
+                        ),
+                        sliver: SliverToBoxAdapter(
+                          child: _GarageStats(cars: cars, l10n: l10n),
+                        ),
+                      ),
+                      if (effectiveActive != null) ...[
                         SliverPadding(
                           padding: EdgeInsets.fromLTRB(
                             horizontalPadding,
                             0,
                             horizontalPadding,
-                            AppSpacing.xxxl,
+                            AppSpacing.md,
                           ),
-                          sliver: SliverList.separated(
-                            itemCount: sortedCars.length,
-                            separatorBuilder: (_, _) =>
-                                const SizedBox(height: AppSpacing.lg),
-                            itemBuilder: (_, i) => buildTile(sortedCars[i]),
+                          sliver: SliverToBoxAdapter(
+                            child: _GarageSectionLabel(
+                              title: l10n.garage_activeVehicle,
+                            ),
                           ),
-                        )
-                      else
+                        ),
                         SliverPadding(
                           padding: EdgeInsets.fromLTRB(
                             horizontalPadding,
                             0,
                             horizontalPadding,
-                            AppSpacing.xxxl,
+                            AppSpacing.xl,
                           ),
-                          sliver: SliverGrid.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: crossAxisCount,
-                                  crossAxisSpacing: AppSpacing.lg,
-                                  mainAxisSpacing: AppSpacing.lg,
-                                  childAspectRatio: 0.92,
-                                ),
-                            itemCount: sortedCars.length,
-                            itemBuilder: (_, i) => buildTile(sortedCars[i]),
+                          sliver: SliverToBoxAdapter(
+                            child: buildTile(effectiveActive),
                           ),
+                        ),
+                      ],
+                      if (otherCars.isNotEmpty) ...[
+                        SliverPadding(
+                          padding: EdgeInsets.fromLTRB(
+                            horizontalPadding,
+                            0,
+                            horizontalPadding,
+                            AppSpacing.md,
+                          ),
+                          sliver: SliverToBoxAdapter(
+                            child: _GarageSectionLabel(
+                              title: l10n.garage_otherVehicles,
+                            ),
+                          ),
+                        ),
+                        if (crossAxisCount == 1)
+                          SliverPadding(
+                            padding: EdgeInsets.fromLTRB(
+                              horizontalPadding,
+                              0,
+                              horizontalPadding,
+                              AppSpacing.xxxl,
+                            ),
+                            sliver: SliverList.separated(
+                              itemCount: otherCars.length,
+                              separatorBuilder: (_, _) =>
+                                  const SizedBox(height: AppSpacing.lg),
+                              itemBuilder: (_, i) => buildTile(otherCars[i]),
+                            ),
+                          )
+                        else
+                          SliverPadding(
+                            padding: EdgeInsets.fromLTRB(
+                              horizontalPadding,
+                              0,
+                              horizontalPadding,
+                              AppSpacing.xxxl,
+                            ),
+                            sliver: SliverGrid.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: crossAxisCount,
+                                    crossAxisSpacing: AppSpacing.lg,
+                                    mainAxisSpacing: AppSpacing.lg,
+                                    childAspectRatio: 0.92,
+                                  ),
+                              itemCount: otherCars.length,
+                              itemBuilder: (_, i) => buildTile(otherCars[i]),
+                            ),
+                          ),
+                      ] else
+                        const SliverToBoxAdapter(
+                          child: SizedBox(height: AppSpacing.xxxl),
                         ),
                     ],
                   ),
@@ -224,6 +264,23 @@ class CarsHomePage extends ConsumerWidget {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _GarageSectionLabel extends StatelessWidget {
+  const _GarageSectionLabel({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+        fontWeight: FontWeight.w900,
       ),
     );
   }

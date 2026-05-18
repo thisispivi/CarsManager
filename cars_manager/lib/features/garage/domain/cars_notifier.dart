@@ -51,6 +51,11 @@ class CarsController extends _$CarsController {
     ref.read(carsManagerStateProvider).removeCar(id);
   }
 
+  /// Replaces the whole garage with imported backup data.
+  void replaceAll(List<Car> cars) {
+    ref.read(carsManagerStateProvider).replaceCars(cars);
+  }
+
   /// Clears every saved car, entry, setting, and related app state.
   Future<void> resetAllData() async {
     await ref.read(carsManagerStateProvider).resetAllData();

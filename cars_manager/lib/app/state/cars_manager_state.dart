@@ -17,7 +17,10 @@ class CarsManagerState extends ChangeNotifier {
   CarsManagerState()
     : _cars = List<Car>.from(loadedCars),
       _activeCarId = loadedActiveCarId {
-    _notificationPreferences.init();
+    _notificationPreferences.init().then((_) {
+      _reminderIntervals = _notificationPreferences.reminderIntervals;
+      notifyListeners();
+    });
     _locale = _resolveInitialLocale();
     _themeMode = _resolveInitialThemeMode();
     _notificationsEnabled = loadedNotificationsEnabled ?? true;
@@ -40,6 +43,7 @@ class CarsManagerState extends ChangeNotifier {
   Locale? _locale;
   ThemeMode _themeMode = ThemeMode.dark;
   bool _notificationsEnabled = true;
+  List<int> _reminderIntervals = [90, 30, 7, 1];
   String _units = 'metric';
   String _currency = 'EUR';
 
@@ -97,6 +101,7 @@ class CarsManagerState extends ChangeNotifier {
   Locale? get locale => _locale;
   ThemeMode get themeMode => _themeMode;
   bool get notificationsEnabled => _notificationsEnabled;
+  List<int> get reminderIntervals => List.unmodifiable(_reminderIntervals);
   String get units => _units;
   String get currency => _currency;
 
@@ -132,6 +137,18 @@ class CarsManagerState extends ChangeNotifier {
     }
     notifyListeners();
     saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void replaceCars(List<Car> cars) {
+    _cars
+      ..clear()
+      ..addAll(cars);
+    _activeCarId = _cars.isNotEmpty ? _cars.first.id : null;
+    notifyListeners();
+    saveCarData(cars: _cars, activeCarId: _activeCarId);
+    for (final car in _cars) {
+      _syncNotificationsFor(car);
+    }
   }
 
   void setLocale(Locale locale) {
@@ -175,6 +192,7 @@ class CarsManagerState extends ChangeNotifier {
 
   void setNotificationsEnabled(bool enabled) {
     _notificationsEnabled = enabled;
+    _notificationPreferences.toggleNotifications(enabled);
     notifyListeners();
     setLoadedPreferences(
       localeCode: _locale?.languageCode,
@@ -184,6 +202,15 @@ class CarsManagerState extends ChangeNotifier {
       currency: _currency,
     );
     saveCarData(cars: _cars, activeCarId: _activeCarId);
+  }
+
+  void setReminderIntervals(List<int> intervals) {
+    _reminderIntervals = [...intervals]..sort((a, b) => b.compareTo(a));
+    _notificationPreferences.updateIntervals(_reminderIntervals);
+    notifyListeners();
+    for (final car in _cars) {
+      _syncNotificationsFor(car);
+    }
   }
 
   void setUnits(String units) {

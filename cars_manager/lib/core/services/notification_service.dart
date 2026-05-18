@@ -43,6 +43,8 @@ class NotificationService {
     required PreferencesService prefs,
   }) async {
     if (!prefs.notificationsEnabled) return;
+    final hasPermission = await requestNotificationPermission();
+    if (!hasPermission) return;
 
     for (int days in prefs.reminderIntervals) {
       final scheduleDate = dueDate.subtract(Duration(days: days));
@@ -93,8 +95,7 @@ class NotificationService {
     int baseId,
     PreferencesService prefs,
   ) async {
-    for (int days in [30, 7, 3, 0]) {
-      // Or stored max intervals
+    for (int days in [90, 30, 7, 3, 1, 0]) {
       final notificationId = '${baseId}_$days'.hashCode;
       await _notificationsPlugin.cancel(id: notificationId);
     }
@@ -107,6 +108,7 @@ class NotificationService {
   }) async {
     final insuranceDate = car.nextInsuranceExpirationDate;
     if (insuranceDate != null) {
+      await cancelItemNotifications(Object.hash(car.id, 'insurance'), prefs);
       await scheduleDueDateNotification(
         id: Object.hash(car.id, 'insurance'),
         carName: car.name,
@@ -118,6 +120,7 @@ class NotificationService {
 
     final inspectionDate = car.nextInspectionDate;
     if (inspectionDate != null) {
+      await cancelItemNotifications(Object.hash(car.id, 'inspection'), prefs);
       await scheduleDueDateNotification(
         id: Object.hash(car.id, 'inspection'),
         carName: car.name,
@@ -129,6 +132,7 @@ class NotificationService {
 
     final taxDate = car.nextTaxDueDate;
     if (taxDate != null) {
+      await cancelItemNotifications(Object.hash(car.id, 'tax'), prefs);
       await scheduleDueDateNotification(
         id: Object.hash(car.id, 'tax'),
         carName: car.name,
@@ -141,7 +145,10 @@ class NotificationService {
 
   /// Fires an immediate notification so the user can preview how reminders
   /// look on their device without waiting for a real due date.
-  Future<void> showTestNotification() async {
+  Future<bool> showTestNotification() async {
+    final hasPermission = await requestNotificationPermission();
+    if (!hasPermission) return false;
+
     await _notificationsPlugin.show(
       id: 0,
       title: 'Cars Manager',
@@ -157,5 +164,81 @@ class NotificationService {
         iOS: DarwinNotificationDetails(),
       ),
     );
+    return true;
+  }
+
+  /// Schedules a near-future reminder through the same Android scheduling
+  /// mechanism used by real due-date reminders.
+  Future<bool> scheduleTestReminder({
+    Duration delay = const Duration(minutes: 2),
+  }) async {
+    final hasPermission = await requestNotificationPermission();
+    if (!hasPermission) return false;
+
+    final scheduledDate = tz.TZDateTime.from(
+      DateTime.now().add(delay),
+      tz.local,
+    );
+    const notificationDetails = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'due_dates',
+        'Due Dates',
+        channelDescription: 'Reminders for car maintenance and renewals',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
+
+    try {
+      await _notificationsPlugin.zonedSchedule(
+        id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+        title: 'Cars Manager reminder',
+        body: 'Scheduled reminders are working.',
+        scheduledDate: scheduledDate,
+        notificationDetails: notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
+    } on PlatformException catch (error) {
+      if (error.code != 'exact_alarms_not_permitted') rethrow;
+      await _notificationsPlugin.zonedSchedule(
+        id: DateTime.now().millisecondsSinceEpoch.remainder(100000),
+        title: 'Cars Manager reminder',
+        body: 'Scheduled reminders are working.',
+        scheduledDate: scheduledDate,
+        notificationDetails: notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.inexact,
+      );
+    }
+
+    return true;
+  }
+
+  /// Requests the platform notification permission when required.
+  Future<bool> requestNotificationPermission() async {
+    final android = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    if (android != null) {
+      final enabled = await android.areNotificationsEnabled();
+      if (enabled == true) return true;
+      return await android.requestNotificationsPermission() ?? false;
+    }
+
+    final ios = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin
+        >();
+    if (ios != null) {
+      return await ios.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          ) ??
+          false;
+    }
+
+    return true;
   }
 }

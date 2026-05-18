@@ -31,8 +31,6 @@ class _CarFormPageState extends State<CarFormPage> {
   late final TextEditingController _yearController;
   late final TextEditingController _licensePlateController;
 
-  late DateTime _insuranceExpirationDate;
-
   FuelType? _fuelType;
   Uint8List? _imageOriginalBytes;
   Uint8List? _imageCroppedBytes;
@@ -94,8 +92,6 @@ class _CarFormPageState extends State<CarFormPage> {
     _licensePlateController = TextEditingController(
       text: car?.licensePlate ?? '',
     );
-
-    _insuranceExpirationDate = car?.insuranceExpirationDate ?? DateTime.now();
 
     _fuelType = car?.fuelType;
 
@@ -165,7 +161,6 @@ class _CarFormPageState extends State<CarFormPage> {
       imageOriginalBase64: imageOriginalBase64,
       imageAlignment: existing?.imageAlignment ?? Alignment.center,
       licensePlate: _licensePlateController.text.trim().toUpperCase(),
-      insuranceExpirationDate: _insuranceExpirationDate,
       fuelType: _fuelType,
       fuel: existing?.fuel ?? [],
       inspectionDatas: existing?.inspectionDatas ?? [],

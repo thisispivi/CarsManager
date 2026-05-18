@@ -667,6 +667,7 @@
   },
   "garage_empty": "Your garage is empty",
   "garage_activeVehicle": "Active vehicle",
+  "garage_otherVehicles": "Other vehicles",
   "garage_dueSoon": "Due soon",
   "garage_fuelEntries": "Fuel entries",
   "garage_expenseEvents": "Expense events",
@@ -825,6 +826,24 @@
   "@common_addToCalendar": {
     "description": "Tooltip for the button that adds a due date event to the device calendar"
   },
+  "calendar_addSuccess": "Calendar opened with the event details.",
+  "@calendar_addSuccess": {
+    "description": "Snackbar shown when the add-to-calendar action is launched"
+  },
+  "calendar_addBrowserFallback": "Opened Google Calendar with the event details.",
+  "@calendar_addBrowserFallback": {
+    "description": "Snackbar shown when the app opens a browser calendar fallback"
+  },
+  "calendar_addFailed": "Calendar failed: {error}",
+  "@calendar_addFailed": {
+    "description": "Snackbar shown when the add-to-calendar action fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "No calendar app available"
+      }
+    }
+  },
 
   "settings_subtitle": "Preferences, reminders, data, and app details.",
   "@settings_subtitle": {"description": "Subtitle shown below Settings heading"},
@@ -854,6 +873,18 @@
   "@settings_notifications_enableReminders": {"description": "Label for the enable-reminders toggle"},
   "settings_notifications_subtitle": "Surface insurance, inspection, and tax dates.",
   "@settings_notifications_subtitle": {"description": "Subtitle for the notifications toggle row"},
+  "settings_notifications_test": "Send test notification",
+  "@settings_notifications_test": {"description": "Action row title for sending a test notification"},
+  "settings_notifications_testSubtitle": "Preview how Android reminders appear.",
+  "@settings_notifications_testSubtitle": {"description": "Action row subtitle for sending a test notification"},
+  "settings_notifications_scheduleTest": "Schedule test reminder",
+  "@settings_notifications_scheduleTest": {"description": "Action row title for scheduling a near-future test reminder"},
+  "settings_notifications_scheduleTestSubtitle": "Fire a real reminder in 2 minutes.",
+  "@settings_notifications_scheduleTestSubtitle": {"description": "Action row subtitle for scheduling a near-future test reminder"},
+  "settings_notifications_testScheduled": "Test reminder scheduled for 2 minutes from now.",
+  "@settings_notifications_testScheduled": {"description": "Snackbar shown after scheduling a near-future test reminder"},
+  "settings_notifications_permissionDenied": "Notification permission is disabled.",
+  "@settings_notifications_permissionDenied": {"description": "Message shown when notification permission is denied"},
   "settings_reminder_90days": "90 days",
   "@settings_reminder_90days": {"description": "Reminder chip label for 90-day advance notice"},
   "settings_reminder_30days": "30 days",
@@ -864,6 +895,36 @@
   "@settings_reminder_1day": {"description": "Reminder chip label for 1-day advance notice"},
   "settings_exportSubtitle": "Download a CSV snapshot of your garage.",
   "@settings_exportSubtitle": {"description": "Subtitle for the export/backup action row"},
+  "settings_importBackup": "Import Data / Backup",
+  "@settings_importBackup": {"description": "Title for the import/backup action row"},
+  "settings_importSubtitle": "Restore a CSV backup created by Cars Manager.",
+  "@settings_importSubtitle": {"description": "Subtitle for the import/backup action row"},
+  "settings_importConfirmTitle": "Import backup?",
+  "@settings_importConfirmTitle": {"description": "Title for CSV backup import confirmation dialog"},
+  "settings_importConfirmBody": "This will replace your current garage with {count, plural, one{{count} vehicle} other{{count} vehicles}} from the backup.",
+  "@settings_importConfirmBody": {
+    "description": "Body for CSV backup import confirmation dialog",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "settings_importSuccess": "Imported {count, plural, one{{count} vehicle} other{{count} vehicles}}.",
+  "@settings_importSuccess": {
+    "description": "Snackbar shown after importing a CSV backup",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "settings_importFailed": "Import failed: {error}",
+  "@settings_importFailed": {
+    "description": "Snackbar shown when importing a CSV backup fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Unsupported file"
+      }
+    }
+  },
   "settings_resetDataSubtitle": "Delete all cars and entries from this device.",
   "@settings_resetDataSubtitle": {"description": "Subtitle for the reset-all-data action row"},
   "settings_about": "About",

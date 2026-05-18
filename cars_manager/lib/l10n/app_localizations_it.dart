@@ -655,6 +655,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get garage_activeVehicle => 'Veicolo attivo';
 
   @override
+  String get garage_otherVehicles => 'Altri veicoli';
+
+  @override
   String get garage_dueSoon => 'In scadenza';
 
   @override
@@ -871,6 +874,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get common_addToCalendar => 'Aggiungi al calendario';
 
   @override
+  String get calendar_addSuccess =>
+      'Calendario aperto con i dettagli dell\'evento.';
+
+  @override
+  String get calendar_addBrowserFallback =>
+      'Google Calendar aperto con i dettagli dell\'evento.';
+
+  @override
+  String calendar_addFailed(String error) {
+    return 'Calendario non riuscito: $error';
+  }
+
+  @override
   String get settings_subtitle =>
       'Preferenze, promemoria, dati e informazioni sull\'app.';
 
@@ -916,6 +932,29 @@ class AppLocalizationsIt extends AppLocalizations {
       'Mostra assicurazione, revisione e bollo in scadenza.';
 
   @override
+  String get settings_notifications_test => 'Invia notifica di test';
+
+  @override
+  String get settings_notifications_testSubtitle =>
+      'Anteprima dei promemoria Android.';
+
+  @override
+  String get settings_notifications_scheduleTest =>
+      'Programma promemoria di test';
+
+  @override
+  String get settings_notifications_scheduleTestSubtitle =>
+      'Invia un vero promemoria tra 2 minuti.';
+
+  @override
+  String get settings_notifications_testScheduled =>
+      'Promemoria di test programmato tra 2 minuti.';
+
+  @override
+  String get settings_notifications_permissionDenied =>
+      'Il permesso per le notifiche e disattivato.';
+
+  @override
   String get settings_reminder_90days => '90 giorni';
 
   @override
@@ -930,6 +969,43 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get settings_exportSubtitle =>
       'Scarica uno snapshot CSV del tuo garage.';
+
+  @override
+  String get settings_importBackup => 'Importa dati / Backup';
+
+  @override
+  String get settings_importSubtitle =>
+      'Ripristina un backup CSV creato da Cars Manager.';
+
+  @override
+  String get settings_importConfirmTitle => 'Importare il backup?';
+
+  @override
+  String settings_importConfirmBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count veicoli',
+      one: '$count veicolo',
+    );
+    return 'Questo sostituirà il garage attuale con $_temp0 dal backup.';
+  }
+
+  @override
+  String settings_importSuccess(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count veicoli',
+      one: '$count veicolo',
+    );
+    return 'Importati $_temp0.';
+  }
+
+  @override
+  String settings_importFailed(String error) {
+    return 'Importazione non riuscita: $error';
+  }
 
   @override
   String get settings_resetDataSubtitle =>

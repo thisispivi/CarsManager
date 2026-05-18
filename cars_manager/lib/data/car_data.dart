@@ -155,9 +155,6 @@ Car _carFromJson(Map<String, dynamic> json) {
         ? (json['yearOfManufacture'] as int)
         : int.tryParse(json['yearOfManufacture']?.toString() ?? '') ?? 0,
     licensePlate: (json['licensePlate'] ?? '').toString(),
-    insuranceExpirationDate: json['insuranceExpirationDate'] != null
-        ? DateTime.parse(json['insuranceExpirationDate'])
-        : DateTime.now(),
     imageUrl: json['imageUrl'],
     imageBase64: (json['imageBase64'] ?? json['image_base64'])?.toString(),
     imageOriginalBase64:
@@ -199,7 +196,6 @@ Map<String, dynamic> _carToJson(Car car) {
     'imageOriginalBase64': car.imageOriginalBase64,
     'imageAlignment': _alignmentToString(car.imageAlignment),
     'licensePlate': car.licensePlate,
-    'insuranceExpirationDate': car.insuranceExpirationDate.toIso8601String(),
     'fuelType': car.fuelType?.name,
     'fuel': car.fuel.map(_fuelEntryToJson).toList(),
     'inspectionDatas': car.inspectionDatas

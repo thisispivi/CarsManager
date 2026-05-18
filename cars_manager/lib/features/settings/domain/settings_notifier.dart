@@ -10,6 +10,7 @@ class AppSettingsState {
     required this.locale,
     required this.themeMode,
     required this.notificationsEnabled,
+    required this.reminderIntervals,
     required this.units,
     required this.currency,
   });
@@ -17,6 +18,7 @@ class AppSettingsState {
   final Locale? locale;
   final ThemeMode themeMode;
   final bool notificationsEnabled;
+  final List<int> reminderIntervals;
   final String units;
   final String currency;
 }
@@ -28,6 +30,7 @@ AppSettingsState appSettings(Ref ref) {
     locale: state.locale,
     themeMode: state.themeMode,
     notificationsEnabled: state.notificationsEnabled,
+    reminderIntervals: state.reminderIntervals,
     units: state.units,
     currency: state.currency,
   );
@@ -54,6 +57,10 @@ class SettingsController extends _$SettingsController {
 
   void setNotificationsEnabled(bool enabled) {
     ref.read(carsManagerStateProvider).setNotificationsEnabled(enabled);
+  }
+
+  void setReminderIntervals(List<int> intervals) {
+    ref.read(carsManagerStateProvider).setReminderIntervals(intervals);
   }
 
   void setUnits(String units) {

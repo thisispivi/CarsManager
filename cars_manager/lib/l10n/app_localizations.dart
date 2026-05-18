@@ -1238,6 +1238,12 @@ abstract class AppLocalizations {
   /// **'Active vehicle'**
   String get garage_activeVehicle;
 
+  /// No description provided for @garage_otherVehicles.
+  ///
+  /// In en, this message translates to:
+  /// **'Other vehicles'**
+  String get garage_otherVehicles;
+
   /// No description provided for @garage_dueSoon.
   ///
   /// In en, this message translates to:
@@ -1622,6 +1628,24 @@ abstract class AppLocalizations {
   /// **'Add to calendar'**
   String get common_addToCalendar;
 
+  /// Snackbar shown when the add-to-calendar action is launched
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar opened with the event details.'**
+  String get calendar_addSuccess;
+
+  /// Snackbar shown when the app opens a browser calendar fallback
+  ///
+  /// In en, this message translates to:
+  /// **'Opened Google Calendar with the event details.'**
+  String get calendar_addBrowserFallback;
+
+  /// Snackbar shown when the add-to-calendar action fails
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar failed: {error}'**
+  String calendar_addFailed(String error);
+
   /// Subtitle shown below Settings heading
   ///
   /// In en, this message translates to:
@@ -1706,6 +1730,42 @@ abstract class AppLocalizations {
   /// **'Surface insurance, inspection, and tax dates.'**
   String get settings_notifications_subtitle;
 
+  /// Action row title for sending a test notification
+  ///
+  /// In en, this message translates to:
+  /// **'Send test notification'**
+  String get settings_notifications_test;
+
+  /// Action row subtitle for sending a test notification
+  ///
+  /// In en, this message translates to:
+  /// **'Preview how Android reminders appear.'**
+  String get settings_notifications_testSubtitle;
+
+  /// Action row title for scheduling a near-future test reminder
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule test reminder'**
+  String get settings_notifications_scheduleTest;
+
+  /// Action row subtitle for scheduling a near-future test reminder
+  ///
+  /// In en, this message translates to:
+  /// **'Fire a real reminder in 2 minutes.'**
+  String get settings_notifications_scheduleTestSubtitle;
+
+  /// Snackbar shown after scheduling a near-future test reminder
+  ///
+  /// In en, this message translates to:
+  /// **'Test reminder scheduled for 2 minutes from now.'**
+  String get settings_notifications_testScheduled;
+
+  /// Message shown when notification permission is denied
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission is disabled.'**
+  String get settings_notifications_permissionDenied;
+
   /// Reminder chip label for 90-day advance notice
   ///
   /// In en, this message translates to:
@@ -1735,6 +1795,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download a CSV snapshot of your garage.'**
   String get settings_exportSubtitle;
+
+  /// Title for the import/backup action row
+  ///
+  /// In en, this message translates to:
+  /// **'Import Data / Backup'**
+  String get settings_importBackup;
+
+  /// Subtitle for the import/backup action row
+  ///
+  /// In en, this message translates to:
+  /// **'Restore a CSV backup created by Cars Manager.'**
+  String get settings_importSubtitle;
+
+  /// Title for CSV backup import confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Import backup?'**
+  String get settings_importConfirmTitle;
+
+  /// Body for CSV backup import confirmation dialog
+  ///
+  /// In en, this message translates to:
+  /// **'This will replace your current garage with {count, plural, one{{count} vehicle} other{{count} vehicles}} from the backup.'**
+  String settings_importConfirmBody(int count);
+
+  /// Snackbar shown after importing a CSV backup
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {count, plural, one{{count} vehicle} other{{count} vehicles}}.'**
+  String settings_importSuccess(int count);
+
+  /// Snackbar shown when importing a CSV backup fails
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed: {error}'**
+  String settings_importFailed(String error);
 
   /// Subtitle for the reset-all-data action row
   ///

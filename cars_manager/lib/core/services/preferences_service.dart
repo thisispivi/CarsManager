@@ -2,11 +2,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
 
 class PreferencesService extends ChangeNotifier {
+  static final PreferencesService _instance = PreferencesService._internal();
+
+  factory PreferencesService() => _instance;
+  PreferencesService._internal();
+
   static const String _notificationsEnabledKey = 'notificationsEnabled';
   static const String _intervalsKey = 'notificationIntervals';
 
   bool _notificationsEnabled = true;
-  List<int> _reminderIntervals = [30, 7, 3, 0];
+  List<int> _reminderIntervals = [90, 30, 7, 1];
 
   bool get notificationsEnabled => _notificationsEnabled;
   List<int> get reminderIntervals => _reminderIntervals;

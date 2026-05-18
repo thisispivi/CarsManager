@@ -1,4 +1,5 @@
-import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:cars_manager/core/services/calendar_service.dart';
+import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:cars_manager/presentation/common/utils/due_date_color.dart';
 import 'package:flutter/material.dart';
@@ -72,14 +73,29 @@ class NextInfoDue extends StatelessWidget {
             message: l10n.common_addToCalendar,
             child: InkWell(
               borderRadius: BorderRadius.circular(18),
-              onTap: () => Add2Calendar.addEvent2Cal(
-                Event(
-                  title: calendarTitle ?? title,
-                  startDate: nextDueDate,
-                  endDate: nextDueDate,
-                  allDay: true,
-                ),
-              ),
+              onTap: () async {
+                try {
+                  final result = await CalendarService.addEvent(
+                    title: calendarTitle ?? title,
+                    startDate: nextDueDate,
+                    endDate: nextDueDate.add(const Duration(days: 1)),
+                  );
+                  if (!context.mounted) return;
+                  AppSnackBar.show(
+                    context,
+                    result == CalendarAddResult.nativeCalendar
+                        ? l10n.calendar_addSuccess
+                        : l10n.calendar_addBrowserFallback,
+                  );
+                } catch (error) {
+                  if (!context.mounted) return;
+                  AppSnackBar.show(
+                    context,
+                    l10n.calendar_addFailed('$error'),
+                    isError: true,
+                  );
+                }
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Icon(

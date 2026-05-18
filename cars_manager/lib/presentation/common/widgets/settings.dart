@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
+import 'package:cars_manager/core/services/notification_service.dart';
 import 'package:cars_manager/core/utils/app_snack_bar.dart';
 import 'package:cars_manager/features/analytics/domain/export_service.dart';
 import 'package:cars_manager/features/garage/domain/cars_notifier.dart';
 import 'package:cars_manager/features/settings/domain/settings_notifier.dart';
 import 'package:cars_manager/l10n/app_localizations.dart';
 import 'package:country_flags/country_flags.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -50,6 +54,94 @@ class SettingsContent extends ConsumerWidget {
           isError: true,
         );
       }
+    }
+
+    Future<void> importData() async {
+      try {
+        final result = await FilePicker.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['csv'],
+          withData: true,
+        );
+        final file = result?.files.single;
+        if (file == null) return;
+
+        final bytes = file.bytes;
+        if (bytes == null) {
+          throw const FormatException('Could not read selected CSV file.');
+        }
+        final csv = utf8.decode(bytes);
+        final importedCars = ExportService.carsFromCSV(csv);
+        if (!context.mounted) return;
+
+        final replace = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(l10n.settings_importConfirmTitle),
+            content: Text(l10n.settings_importConfirmBody(importedCars.length)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(l10n.common_cancel),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(l10n.settings_importBackup),
+              ),
+            ],
+          ),
+        );
+        if (replace != true) return;
+
+        ref.read(carsControllerProvider.notifier).replaceAll(importedCars);
+        if (!context.mounted) return;
+        AppSnackBar.show(
+          context,
+          l10n.settings_importSuccess(importedCars.length),
+        );
+        context.go('/garage');
+      } catch (error) {
+        if (!context.mounted) return;
+        AppSnackBar.show(
+          context,
+          l10n.settings_importFailed('$error'),
+          isError: true,
+        );
+      }
+    }
+
+    Future<void> sendTestNotification() async {
+      final shown = await NotificationService().showTestNotification();
+      if (shown || !context.mounted) return;
+      AppSnackBar.show(
+        context,
+        l10n.settings_notifications_permissionDenied,
+        isError: true,
+      );
+    }
+
+    Future<void> scheduleTestReminder() async {
+      final scheduled = await NotificationService().scheduleTestReminder();
+      if (!context.mounted) return;
+      AppSnackBar.show(
+        context,
+        scheduled
+            ? l10n.settings_notifications_testScheduled
+            : l10n.settings_notifications_permissionDenied,
+        isError: !scheduled,
+      );
+    }
+
+    void toggleReminderInterval(int days) {
+      final intervals = settings.reminderIntervals.toSet();
+      if (intervals.contains(days)) {
+        intervals.remove(days);
+      } else {
+        intervals.add(days);
+      }
+      ref
+          .read(settingsControllerProvider.notifier)
+          .setReminderIntervals(intervals.toList());
     }
 
     return SafeArea(
@@ -198,11 +290,41 @@ class SettingsContent extends ConsumerWidget {
                     spacing: AppSpacing.sm,
                     runSpacing: AppSpacing.sm,
                     children: [
-                      _ReminderChip(label: l10n.settings_reminder_90days),
-                      _ReminderChip(label: l10n.settings_reminder_30days),
-                      _ReminderChip(label: l10n.settings_reminder_7days),
-                      _ReminderChip(label: l10n.settings_reminder_1day),
+                      _ReminderChip(
+                        label: l10n.settings_reminder_90days,
+                        selected: settings.reminderIntervals.contains(90),
+                        onSelected: (_) => toggleReminderInterval(90),
+                      ),
+                      _ReminderChip(
+                        label: l10n.settings_reminder_30days,
+                        selected: settings.reminderIntervals.contains(30),
+                        onSelected: (_) => toggleReminderInterval(30),
+                      ),
+                      _ReminderChip(
+                        label: l10n.settings_reminder_7days,
+                        selected: settings.reminderIntervals.contains(7),
+                        onSelected: (_) => toggleReminderInterval(7),
+                      ),
+                      _ReminderChip(
+                        label: l10n.settings_reminder_1day,
+                        selected: settings.reminderIntervals.contains(1),
+                        onSelected: (_) => toggleReminderInterval(1),
+                      ),
                     ],
+                  ),
+                  const _SettingsDivider(),
+                  _ActionRow(
+                    icon: Icons.notification_add_rounded,
+                    title: l10n.settings_notifications_test,
+                    subtitle: l10n.settings_notifications_testSubtitle,
+                    onTap: sendTestNotification,
+                  ),
+                  const _SettingsDivider(),
+                  _ActionRow(
+                    icon: Icons.schedule_send_rounded,
+                    title: l10n.settings_notifications_scheduleTest,
+                    subtitle: l10n.settings_notifications_scheduleTestSubtitle,
+                    onTap: scheduleTestReminder,
                   ),
                 ],
               ),
@@ -216,6 +338,13 @@ class SettingsContent extends ConsumerWidget {
                     title: l10n.settings_exportBackup,
                     subtitle: l10n.settings_exportSubtitle,
                     onTap: exportData,
+                  ),
+                  const _SettingsDivider(),
+                  _ActionRow(
+                    icon: Icons.upload_file_rounded,
+                    title: l10n.settings_importBackup,
+                    subtitle: l10n.settings_importSubtitle,
+                    onTap: importData,
                   ),
                   const _SettingsDivider(),
                   _ActionRow(
@@ -553,17 +682,34 @@ class _ActionRow extends StatelessWidget {
 }
 
 class _ReminderChip extends StatelessWidget {
-  const _ReminderChip({required this.label});
+  const _ReminderChip({
+    required this.label,
+    required this.selected,
+    required this.onSelected,
+  });
 
   final String label;
+  final bool selected;
+  final ValueChanged<bool> onSelected;
 
   @override
   Widget build(BuildContext context) {
-    return Chip(
-      avatar: const Icon(Icons.schedule_rounded, size: 18),
+    final theme = Theme.of(context);
+    return FilterChip(
       label: Text(label),
+      selected: selected,
+      onSelected: onSelected,
+      showCheckmark: false,
+      selectedColor: theme.colorScheme.primary.withValues(alpha: 0.12),
+      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+      labelStyle: theme.textTheme.labelLarge?.copyWith(
+        color: selected
+            ? theme.colorScheme.primary
+            : theme.colorScheme.onSurface,
+        fontWeight: FontWeight.w800,
+      ),
       side: BorderSide(
-        color: Theme.of(context).colorScheme.outline,
+        color: selected ? theme.colorScheme.primary : theme.colorScheme.outline,
         width: 0.5,
       ),
     );

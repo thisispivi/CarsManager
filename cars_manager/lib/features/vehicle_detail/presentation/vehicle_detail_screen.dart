@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:cars_manager/core/services/calendar_service.dart';
 import 'package:cars_manager/core/theme/app_colors.dart';
 import 'package:cars_manager/core/theme/app_dimensions.dart';
 import 'package:cars_manager/core/utils/app_snack_bar.dart';
@@ -109,7 +109,7 @@ class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
           );
 
           if (isWide) {
-            return Padding(
+            return SingleChildScrollView(
               padding: const EdgeInsets.all(AppSpacing.xxl),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,22 +122,129 @@ class _VehicleDetailScreenState extends ConsumerState<VehicleDetailScreen>
             );
           }
 
-          return NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(AppSpacing.lg),
-                  child: header,
-                ),
-              ),
-            ],
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-              child: tabs,
+          return SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.xxxl,
+            ),
+            child: Column(
+              children: [
+                header,
+                const SizedBox(height: AppSpacing.lg),
+                tabs,
+              ],
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class _VehicleTabs extends StatefulWidget {
+  const _VehicleTabs({
+    required this.car,
+    required this.currency,
+    required this.controller,
+    required this.l10n,
+  });
+
+  final Car car;
+  final String currency;
+  final TabController controller;
+  final AppLocalizations l10n;
+
+  @override
+  State<_VehicleTabs> createState() => _VehicleTabsState();
+}
+
+class _VehicleTabsState extends State<_VehicleTabs> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_handleTabChanged);
+  }
+
+  @override
+  void didUpdateWidget(_VehicleTabs oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_handleTabChanged);
+      widget.controller.addListener(_handleTabChanged);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_handleTabChanged);
+    super.dispose();
+  }
+
+  void _handleTabChanged() {
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tab = switch (widget.controller.index) {
+      0 => _OverviewTab(
+        car: widget.car,
+        currency: widget.currency,
+        l10n: widget.l10n,
+      ),
+      1 => _FuelTab(
+        car: widget.car,
+        currency: widget.currency,
+        l10n: widget.l10n,
+      ),
+      2 => _ExpensesTab(
+        car: widget.car,
+        currency: widget.currency,
+        l10n: widget.l10n,
+      ),
+      _ => _TimelineTab(
+        car: widget.car,
+        currency: widget.currency,
+        l10n: widget.l10n,
+      ),
+    };
+
+    return Column(
+      children: [
+        _SurfaceCard(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.xs,
+          ),
+          child: TabBar(
+            controller: widget.controller,
+            isScrollable: true,
+            tabAlignment: TabAlignment.start,
+            dividerColor: Colors.transparent,
+            labelColor: Theme.of(context).colorScheme.primary,
+            unselectedLabelColor: Theme.of(
+              context,
+            ).colorScheme.onSurfaceVariant,
+            tabs: [
+              Tab(text: widget.l10n.vehicleDetail_tabOverview),
+              Tab(text: widget.l10n.vehicleDetail_tabFuel),
+              Tab(text: widget.l10n.vehicleDetail_tabExpenses),
+              Tab(text: widget.l10n.vehicleDetail_tabTimeline),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 180),
+          child: KeyedSubtree(
+            key: ValueKey(widget.controller.index),
+            child: tab,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -332,62 +439,6 @@ class _VehicleHeader extends ConsumerWidget {
   }
 }
 
-class _VehicleTabs extends StatelessWidget {
-  const _VehicleTabs({
-    required this.car,
-    required this.currency,
-    required this.controller,
-    required this.l10n,
-  });
-
-  final Car car;
-  final String currency;
-  final TabController controller;
-  final AppLocalizations l10n;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _SurfaceCard(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.xs,
-          ),
-          child: TabBar(
-            controller: controller,
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            dividerColor: Colors.transparent,
-            labelColor: Theme.of(context).colorScheme.primary,
-            unselectedLabelColor: Theme.of(
-              context,
-            ).colorScheme.onSurfaceVariant,
-            tabs: [
-              Tab(text: l10n.vehicleDetail_tabOverview),
-              Tab(text: l10n.vehicleDetail_tabFuel),
-              Tab(text: l10n.vehicleDetail_tabExpenses),
-              Tab(text: l10n.vehicleDetail_tabTimeline),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        Expanded(
-          child: TabBarView(
-            controller: controller,
-            children: [
-              _OverviewTab(car: car, currency: currency, l10n: l10n),
-              _FuelTab(car: car, currency: currency, l10n: l10n),
-              _ExpensesTab(car: car, currency: currency, l10n: l10n),
-              _TimelineTab(car: car, currency: currency, l10n: l10n),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _OverviewTab extends StatelessWidget {
   const _OverviewTab({
     required this.car,
@@ -403,12 +454,9 @@ class _OverviewTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final money = NumberFormat.simpleCurrency(name: currency);
     final total = car.totalFuelCost + car.totalPaidExpenses;
-    return ListView(
-      padding: const EdgeInsets.only(bottom: AppSpacing.xxxl),
+    return _TabContent(
       children: [
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
+        _MetricCardGrid(
           children: [
             _MetricCard(
               icon: Icons.payments_rounded,
@@ -552,13 +600,7 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
           );
     }
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        0,
-        AppSpacing.sm,
-        AppSpacing.xxxl,
-      ),
+    return _TabContent(
       children: [
         _SurfaceCard(
           child: _PeriodSelector<_FuelPeriod>(
@@ -572,9 +614,7 @@ class _FuelTabState extends ConsumerState<_FuelTab> {
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
+        _MetricCardGrid(
           children: [
             _MetricCard(
               icon: Icons.payments_rounded,
@@ -809,13 +849,7 @@ class _ExpensesTabState extends ConsumerState<_ExpensesTab> {
       ref.read(carsControllerProvider.notifier).update(updatedCar);
     }
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        0,
-        AppSpacing.sm,
-        AppSpacing.xxxl,
-      ),
+    return _TabContent(
       children: [
         _SurfaceCard(
           child: _PeriodSelector<_ExpenseFilter>(
@@ -930,13 +964,7 @@ class _TimelineTabState extends State<_TimelineTab> {
     final events = _timelineEvents(widget.car, widget.currency, l10n);
     final visible = _showAll ? events : events.take(20).toList();
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.sm,
-        0,
-        AppSpacing.sm,
-        AppSpacing.xxxl,
-      ),
+    return _TabContent(
       children: [
         _SurfaceCard(
           child: Column(
@@ -981,6 +1009,28 @@ class _TimelineTabState extends State<_TimelineTab> {
 
 // ── Shared surface card ──────────────────────────────────────────────────────
 
+class _TabContent extends StatelessWidget {
+  const _TabContent({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.sm,
+        0,
+        AppSpacing.sm,
+        AppSpacing.xxxl,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
+    );
+  }
+}
+
 class _SurfaceCard extends StatelessWidget {
   const _SurfaceCard({required this.child, this.padding});
 
@@ -1003,7 +1053,39 @@ class _SurfaceCard extends StatelessWidget {
   }
 }
 
-// ── Metric card (auto-expands in a Row) ─────────────────────────────────────
+class _MetricCardGrid extends StatelessWidget {
+  const _MetricCardGrid({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        const spacing = AppSpacing.sm;
+        const minCardWidth = 96.0;
+        final columnCount =
+            ((constraints.maxWidth + spacing) / (minCardWidth + spacing))
+                .floor()
+                .clamp(1, children.length);
+        final cardWidth =
+            (constraints.maxWidth - (spacing * (columnCount - 1))) /
+            columnCount;
+
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: [
+            for (final child in children)
+              SizedBox(width: cardWidth, child: child),
+          ],
+        );
+      },
+    );
+  }
+}
+
+// ── Metric card ─────────────────────────────────────────────────────────────
 
 class _MetricCard extends StatelessWidget {
   const _MetricCard({
@@ -1333,14 +1415,29 @@ class _DueStatusRow extends StatelessWidget {
             message: l10n.common_addToCalendar,
             child: InkWell(
               borderRadius: BorderRadius.circular(16),
-              onTap: () => Add2Calendar.addEvent2Cal(
-                Event(
-                  title: calendarTitle ?? label,
-                  startDate: dueDate!,
-                  endDate: dueDate!,
-                  allDay: true,
-                ),
-              ),
+              onTap: () async {
+                try {
+                  final result = await CalendarService.addEvent(
+                    title: calendarTitle ?? label,
+                    startDate: dueDate!,
+                    endDate: dueDate!.add(const Duration(days: 1)),
+                  );
+                  if (!context.mounted) return;
+                  AppSnackBar.show(
+                    context,
+                    result == CalendarAddResult.nativeCalendar
+                        ? l10n.calendar_addSuccess
+                        : l10n.calendar_addBrowserFallback,
+                  );
+                } catch (error) {
+                  if (!context.mounted) return;
+                  AppSnackBar.show(
+                    context,
+                    l10n.calendar_addFailed('$error'),
+                    isError: true,
+                  );
+                }
+              },
               child: Padding(
                 padding: const EdgeInsets.all(6),
                 child: Icon(

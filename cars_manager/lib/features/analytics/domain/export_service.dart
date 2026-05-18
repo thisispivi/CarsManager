@@ -1,6 +1,13 @@
 import 'dart:io';
 
+import 'package:cars_manager/models/fine_data.dart';
+import 'package:cars_manager/models/fuel_entry.dart';
+import 'package:cars_manager/models/inspection_data.dart';
+import 'package:cars_manager/models/insurance_data.dart';
+import 'package:cars_manager/models/repair_data.dart';
+import 'package:cars_manager/models/tax_data.dart';
 import 'package:cars_manager/models/car.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,50 +15,227 @@ import 'package:share_plus/share_plus.dart' show Share, XFile;
 
 /// Builds and shares CSV exports for tracked cars and their entries.
 class ExportService {
+  static const _signature = 'CarsManagerBackup';
+  static const _version = '2';
+  static const _headers = [
+    'App',
+    'Version',
+    'Record',
+    'CarId',
+    'Name',
+    'Manufacturer',
+    'Model',
+    'Year',
+    'LicensePlate',
+    'FuelType',
+    'ImageUrl',
+    'ImageBase64',
+    'ImageOriginalBase64',
+    'ImageAlignmentX',
+    'ImageAlignmentY',
+    'EntryType',
+    'Date',
+    'EndDate',
+    'ExtensionDate',
+    'Amount',
+    'Liters',
+    'PricePerLiter',
+    'PolicyNumber',
+    'Provider',
+    'Passed',
+    'Mileage',
+    'Description',
+    'FineType',
+  ];
+  static const _legacyHeaders = [
+    'App',
+    'Version',
+    'Record',
+    'CarId',
+    'Name',
+    'Manufacturer',
+    'Model',
+    'Year',
+    'LicensePlate',
+    'FuelType',
+    'InsuranceExpirationDate',
+    'ImageUrl',
+    'ImageBase64',
+    'ImageOriginalBase64',
+    'ImageAlignmentX',
+    'ImageAlignmentY',
+    'EntryType',
+    'Date',
+    'EndDate',
+    'ExtensionDate',
+    'Amount',
+    'Liters',
+    'PricePerLiter',
+    'PolicyNumber',
+    'Provider',
+    'Passed',
+    'Mileage',
+    'Description',
+    'FineType',
+  ];
+
   /// Converts all supported fuel and expense records for [cars] into CSV text.
   static String carsToCSV(List<Car> cars) {
-    final buffer = StringBuffer();
-    buffer.writeln('Car,Type,Date,Amount,Notes');
+    final rows = <List<String>>[_headers];
 
     for (final car in cars) {
+      rows.add([
+        _signature,
+        _version,
+        'car',
+        car.id,
+        car.name,
+        car.manufacture,
+        car.model,
+        '${car.yearOfManufacture}',
+        car.licensePlate,
+        car.fuelType?.name ?? '',
+        car.imageUrl ?? '',
+        car.imageBase64 ?? '',
+        car.imageOriginalBase64 ?? '',
+        '${car.imageAlignment.x}',
+        '${car.imageAlignment.y}',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+      ]);
       for (final e in car.fuel) {
-        final date = DateFormat('yyyy-MM-dd').format(e.date);
-        buffer.writeln(
-          '${_escape(car.name)},Fuel,$date,${e.totalCost.toStringAsFixed(2)},${e.fuelType.name}',
+        rows.add(
+          _entryRow(
+            car.id,
+            'fuel',
+            date: e.date,
+            amount: e.totalCost,
+            fuelType: e.fuelType.name,
+            liters: e.liters,
+            pricePerLiter: e.pricePerLiter,
+          ),
         );
       }
       for (final e in car.insuranceDatas) {
-        final date = DateFormat('yyyy-MM-dd').format(e.startDate);
-        buffer.writeln(
-          '${_escape(car.name)},Insurance,$date,${e.premiumAmount.toStringAsFixed(2)},${_escape(e.policyNumber)}',
+        rows.add(
+          _entryRow(
+            car.id,
+            'insurance',
+            date: e.startDate,
+            endDate: e.endDate,
+            extensionDate: e.extensionDate,
+            amount: e.premiumAmount,
+            policyNumber: e.policyNumber,
+            provider: e.insuranceCompany,
+          ),
         );
       }
       for (final e in car.inspectionDatas) {
-        final date = DateFormat('yyyy-MM-dd').format(e.date);
-        final amount = e.amount?.toStringAsFixed(2) ?? '0.00';
-        buffer.writeln('${_escape(car.name)},Inspection,$date,$amount,');
-      }
-      for (final e in car.taxDatas) {
-        final date = DateFormat('yyyy-MM-dd').format(e.date);
-        buffer.writeln(
-          '${_escape(car.name)},Tax,$date,${e.amount.toStringAsFixed(2)},',
+        rows.add(
+          _entryRow(
+            car.id,
+            'inspection',
+            date: e.date,
+            amount: e.amount,
+            passed: e.isPassed,
+            mileage: e.mileage,
+          ),
         );
       }
+      for (final e in car.taxDatas) {
+        rows.add(_entryRow(car.id, 'tax', date: e.date, amount: e.amount));
+      }
       for (final e in car.repairDatas) {
-        final date = DateFormat('yyyy-MM-dd').format(e.date);
-        buffer.writeln(
-          '${_escape(car.name)},Repair,$date,${e.amount.toStringAsFixed(2)},${_escape(e.description)}',
+        rows.add(
+          _entryRow(
+            car.id,
+            'repair',
+            date: e.date,
+            amount: e.amount,
+            description: e.description,
+          ),
         );
       }
       for (final e in car.fineDatas) {
-        final date = DateFormat('yyyy-MM-dd').format(e.date);
-        buffer.writeln(
-          '${_escape(car.name)},Fine,$date,${e.amount.toStringAsFixed(2)},${e.type.name}',
+        rows.add(
+          _entryRow(
+            car.id,
+            'fine',
+            date: e.date,
+            amount: e.amount,
+            fineType: e.type.name,
+          ),
         );
       }
     }
 
-    return buffer.toString();
+    return rows.map((row) => row.map(_escape).join(',')).join('\n');
+  }
+
+  /// Parses a CSV generated by [carsToCSV].
+  static List<Car> carsFromCSV(String csv) {
+    final rows = _parse(csv);
+    final headers = rows.isEmpty ? <String>[] : rows.first;
+    final isCurrent = _listEquals(headers, _headers);
+    final isLegacy = _listEquals(headers, _legacyHeaders);
+    if (rows.length < 2 || (!isCurrent && !isLegacy)) {
+      throw const FormatException('Unsupported Cars Manager CSV backup.');
+    }
+
+    final byId = <String, _CarImport>{};
+    for (final row in rows.skip(1)) {
+      if (row.every((value) => value.trim().isEmpty)) continue;
+      final data = _rowMap(row, headers);
+      if (data['App'] != _signature ||
+          (data['Version'] != _version && data['Version'] != '1')) {
+        throw const FormatException(
+          'CSV was not generated by this app version.',
+        );
+      }
+
+      final carId = _required(data, 'CarId');
+      final record = data['Record'];
+      if (record == 'car') {
+        byId[carId] = _CarImport(
+          Car(
+            id: carId,
+            name: _required(data, 'Name'),
+            manufacture: _required(data, 'Manufacturer'),
+            model: _required(data, 'Model'),
+            yearOfManufacture: int.parse(_required(data, 'Year')),
+            licensePlate: data['LicensePlate'] ?? '',
+            fuelType: _enumByName(FuelType.values, data['FuelType']),
+            imageUrl: _emptyToNull(data['ImageUrl']),
+            imageBase64: _emptyToNull(data['ImageBase64']),
+            imageOriginalBase64: _emptyToNull(data['ImageOriginalBase64']),
+            imageAlignment: Alignment(
+              double.tryParse(data['ImageAlignmentX'] ?? '') ?? 0,
+              double.tryParse(data['ImageAlignmentY'] ?? '') ?? 0,
+            ),
+          ),
+        );
+        continue;
+      }
+
+      final bucket = byId[carId];
+      if (bucket == null) {
+        throw FormatException('Entry references unknown car "$carId".');
+      }
+      bucket.add(data);
+    }
+
+    return byId.values.map((bucket) => bucket.build()).toList();
   }
 
   /// Shares [csv] using the platform share sheet under [filename].
@@ -75,4 +259,234 @@ class ExportService {
     }
     return value;
   }
+
+  static List<String> _entryRow(
+    String carId,
+    String type, {
+    required DateTime date,
+    DateTime? endDate,
+    DateTime? extensionDate,
+    double? amount,
+    String? fuelType,
+    double? liters,
+    double? pricePerLiter,
+    String? policyNumber,
+    String? provider,
+    bool? passed,
+    double? mileage,
+    String? description,
+    String? fineType,
+  }) {
+    return [
+      _signature,
+      _version,
+      'entry',
+      carId,
+      '',
+      '',
+      '',
+      '',
+      '',
+      fuelType ?? '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      type,
+      _date(date),
+      endDate == null ? '' : _date(endDate),
+      extensionDate == null ? '' : _date(extensionDate),
+      amount?.toString() ?? '',
+      liters?.toString() ?? '',
+      pricePerLiter?.toString() ?? '',
+      policyNumber ?? '',
+      provider ?? '',
+      passed?.toString() ?? '',
+      mileage?.toString() ?? '',
+      description ?? '',
+      fineType ?? '',
+    ];
+  }
+
+  static String _date(DateTime date) => DateFormat('yyyy-MM-dd').format(date);
+
+  static List<List<String>> _parse(String csv) {
+    final rows = <List<String>>[];
+    final row = <String>[];
+    final field = StringBuffer();
+    var inQuotes = false;
+
+    for (var i = 0; i < csv.length; i++) {
+      final char = csv[i];
+      if (char == '"') {
+        if (inQuotes && i + 1 < csv.length && csv[i + 1] == '"') {
+          field.write('"');
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char == ',' && !inQuotes) {
+        row.add(field.toString());
+        field.clear();
+      } else if ((char == '\n' || char == '\r') && !inQuotes) {
+        if (char == '\r' && i + 1 < csv.length && csv[i + 1] == '\n') i++;
+        row.add(field.toString());
+        field.clear();
+        rows.add(List<String>.from(row));
+        row.clear();
+      } else {
+        field.write(char);
+      }
+    }
+    if (field.isNotEmpty || row.isNotEmpty) {
+      row.add(field.toString());
+      rows.add(row);
+    }
+    return rows;
+  }
+
+  static Map<String, String> _rowMap(List<String> row, List<String> headers) {
+    if (row.length != headers.length) {
+      throw const FormatException('CSV row has an unexpected column count.');
+    }
+    return {for (var i = 0; i < headers.length; i++) headers[i]: row[i]};
+  }
+
+  static bool _listEquals(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  static String _required(Map<String, String> data, String key) {
+    final value = data[key];
+    if (value == null || value.isEmpty) {
+      throw FormatException('Missing required CSV field "$key".');
+    }
+    return value;
+  }
+
+  static String? _emptyToNull(String? value) =>
+      value == null || value.isEmpty ? null : value;
+
+  static DateTime _parseDate(String value) => DateTime.parse(value);
+
+  static double _double(Map<String, String> data, String key) =>
+      double.parse(_required(data, key));
+
+  static double? _nullableDouble(Map<String, String> data, String key) {
+    final value = data[key];
+    return value == null || value.isEmpty ? null : double.parse(value);
+  }
+
+  static T? _enumByName<T extends Enum>(List<T> values, String? name) {
+    if (name == null || name.isEmpty) return null;
+    for (final value in values) {
+      if (value.name == name) return value;
+    }
+    throw FormatException('Unknown enum value "$name".');
+  }
+}
+
+class _CarImport {
+  _CarImport(this.car);
+
+  Car car;
+  final fuel = <FuelEntry>[];
+  final insurance = <InsuranceData>[];
+  final inspections = <InspectionData>[];
+  final taxes = <TaxData>[];
+  final repairs = <RepairData>[];
+  final fines = <FineData>[];
+
+  void add(Map<String, String> data) {
+    switch (data['EntryType']) {
+      case 'fuel':
+        fuel.add(
+          FuelEntry(
+            fuelType: ExportService._enumByName(
+              FuelType.values,
+              data['FuelType'],
+            )!,
+            liters: ExportService._double(data, 'Liters'),
+            totalCost: ExportService._double(data, 'Amount'),
+            pricePerLiter: ExportService._double(data, 'PricePerLiter'),
+            date: ExportService._parseDate(
+              ExportService._required(data, 'Date'),
+            ),
+          ),
+        );
+      case 'insurance':
+        insurance.add(
+          InsuranceData(
+            insuranceCompany: data['Provider'] ?? '',
+            policyNumber: data['PolicyNumber'] ?? '',
+            startDate: ExportService._parseDate(
+              ExportService._required(data, 'Date'),
+            ),
+            endDate: ExportService._parseDate(
+              ExportService._required(data, 'EndDate'),
+            ),
+            extensionDate: (data['ExtensionDate'] ?? '').isEmpty
+                ? null
+                : ExportService._parseDate(data['ExtensionDate']!),
+            premiumAmount: ExportService._double(data, 'Amount'),
+          ),
+        );
+      case 'inspection':
+        inspections.add(
+          InspectionData(
+            date: ExportService._parseDate(
+              ExportService._required(data, 'Date'),
+            ),
+            isPassed: (data['Passed'] ?? '').toLowerCase() == 'true',
+            amount: ExportService._nullableDouble(data, 'Amount'),
+            mileage: ExportService._nullableDouble(data, 'Mileage'),
+          ),
+        );
+      case 'tax':
+        taxes.add(
+          TaxData(
+            date: ExportService._parseDate(
+              ExportService._required(data, 'Date'),
+            ),
+            amount: ExportService._double(data, 'Amount'),
+          ),
+        );
+      case 'repair':
+        repairs.add(
+          RepairData(
+            date: ExportService._parseDate(
+              ExportService._required(data, 'Date'),
+            ),
+            amount: ExportService._double(data, 'Amount'),
+            description: data['Description'] ?? '',
+          ),
+        );
+      case 'fine':
+        fines.add(
+          FineData(
+            date: ExportService._parseDate(
+              ExportService._required(data, 'Date'),
+            ),
+            amount: ExportService._double(data, 'Amount'),
+            type: ExportService._enumByName(FineType.values, data['FineType'])!,
+          ),
+        );
+      default:
+        throw FormatException('Unknown entry type "${data['EntryType']}".');
+    }
+  }
+
+  Car build() => car.copyWith(
+    fuel: fuel,
+    insuranceDatas: insurance,
+    inspectionDatas: inspections,
+    taxDatas: taxes,
+    repairDatas: repairs,
+    fineDatas: fines,
+  );
 }

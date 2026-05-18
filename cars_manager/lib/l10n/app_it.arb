@@ -667,6 +667,7 @@
   },
   "garage_empty": "Il tuo garage è vuoto",
   "garage_activeVehicle": "Veicolo attivo",
+  "garage_otherVehicles": "Altri veicoli",
   "garage_dueSoon": "In scadenza",
   "garage_fuelEntries": "Rifornimenti",
   "garage_expenseEvents": "Spese",
@@ -825,6 +826,24 @@
   "@common_addToCalendar": {
     "description": "Tooltip for the button that adds a due date event to the device calendar"
   },
+  "calendar_addSuccess": "Calendario aperto con i dettagli dell'evento.",
+  "@calendar_addSuccess": {
+    "description": "Snackbar shown when the add-to-calendar action is launched"
+  },
+  "calendar_addBrowserFallback": "Google Calendar aperto con i dettagli dell'evento.",
+  "@calendar_addBrowserFallback": {
+    "description": "Snackbar shown when the app opens a browser calendar fallback"
+  },
+  "calendar_addFailed": "Calendario non riuscito: {error}",
+  "@calendar_addFailed": {
+    "description": "Snackbar shown when the add-to-calendar action fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Nessuna app calendario disponibile"
+      }
+    }
+  },
 
   "settings_subtitle": "Preferenze, promemoria, dati e informazioni sull'app.",
   "@settings_subtitle": {"description": "Subtitle shown below Settings heading"},
@@ -854,6 +873,18 @@
   "@settings_notifications_enableReminders": {"description": "Label for the enable-reminders toggle"},
   "settings_notifications_subtitle": "Mostra assicurazione, revisione e bollo in scadenza.",
   "@settings_notifications_subtitle": {"description": "Subtitle for the notifications toggle row"},
+  "settings_notifications_test": "Invia notifica di test",
+  "@settings_notifications_test": {"description": "Action row title for sending a test notification"},
+  "settings_notifications_testSubtitle": "Anteprima dei promemoria Android.",
+  "@settings_notifications_testSubtitle": {"description": "Action row subtitle for sending a test notification"},
+  "settings_notifications_scheduleTest": "Programma promemoria di test",
+  "@settings_notifications_scheduleTest": {"description": "Action row title for scheduling a near-future test reminder"},
+  "settings_notifications_scheduleTestSubtitle": "Invia un vero promemoria tra 2 minuti.",
+  "@settings_notifications_scheduleTestSubtitle": {"description": "Action row subtitle for scheduling a near-future test reminder"},
+  "settings_notifications_testScheduled": "Promemoria di test programmato tra 2 minuti.",
+  "@settings_notifications_testScheduled": {"description": "Snackbar shown after scheduling a near-future test reminder"},
+  "settings_notifications_permissionDenied": "Il permesso per le notifiche e disattivato.",
+  "@settings_notifications_permissionDenied": {"description": "Message shown when notification permission is denied"},
   "settings_reminder_90days": "90 giorni",
   "@settings_reminder_90days": {"description": "Reminder chip label for 90-day advance notice"},
   "settings_reminder_30days": "30 giorni",
@@ -864,6 +895,36 @@
   "@settings_reminder_1day": {"description": "Reminder chip label for 1-day advance notice"},
   "settings_exportSubtitle": "Scarica uno snapshot CSV del tuo garage.",
   "@settings_exportSubtitle": {"description": "Subtitle for the export/backup action row"},
+  "settings_importBackup": "Importa dati / Backup",
+  "@settings_importBackup": {"description": "Title for the import/backup action row"},
+  "settings_importSubtitle": "Ripristina un backup CSV creato da Cars Manager.",
+  "@settings_importSubtitle": {"description": "Subtitle for the import/backup action row"},
+  "settings_importConfirmTitle": "Importare il backup?",
+  "@settings_importConfirmTitle": {"description": "Title for CSV backup import confirmation dialog"},
+  "settings_importConfirmBody": "Questo sostituirà il garage attuale con {count, plural, one{{count} veicolo} other{{count} veicoli}} dal backup.",
+  "@settings_importConfirmBody": {
+    "description": "Body for CSV backup import confirmation dialog",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "settings_importSuccess": "Importati {count, plural, one{{count} veicolo} other{{count} veicoli}}.",
+  "@settings_importSuccess": {
+    "description": "Snackbar shown after importing a CSV backup",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "settings_importFailed": "Importazione non riuscita: {error}",
+  "@settings_importFailed": {
+    "description": "Snackbar shown when importing a CSV backup fails",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "File non supportato"
+      }
+    }
+  },
   "settings_resetDataSubtitle": "Elimina tutte le auto e le voci da questo dispositivo.",
   "@settings_resetDataSubtitle": {"description": "Subtitle for the reset-all-data action row"},
   "settings_about": "Informazioni",

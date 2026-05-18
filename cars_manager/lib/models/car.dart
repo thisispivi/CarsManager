@@ -24,7 +24,6 @@ abstract class Car with _$Car {
     String? imageOriginalBase64,
     @Default(Alignment.center) Alignment imageAlignment,
     @Default('') String licensePlate,
-    required DateTime insuranceExpirationDate,
     FuelType? fuelType,
     @Default([]) List<FuelEntry> fuel,
     @Default([]) List<InsuranceData> insuranceDatas,
