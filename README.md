@@ -14,6 +14,7 @@
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 ![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=apple&logoColor=white)
 ![Web](https://img.shields.io/badge/Web-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)
+![AI Generated](https://img.shields.io/badge/AI_Generated-FF69B4?style=for-the-badge&logo=probot&logoColor=white)
 
 </div>
 
