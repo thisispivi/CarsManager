@@ -6,17 +6,17 @@ This document describes the current CarsManager architecture.
 
 ## Technology Choices
 
-| Concern | Choice | Rationale |
-|---------|--------|-----------|
-| Framework | Flutter stable | One codebase for Android, web, and desktop targets |
-| State management | Flutter Riverpod 2.x | App state is provided through `ProviderScope` and generated `@riverpod` feature providers |
-| Navigation | GoRouter | Deep-linkable tab routes and web URL support |
-| Local storage | JSON file / web localStorage | Privacy-first persistence without a backend |
-| Code generation | Freezed + json_serializable | Immutable generated DTOs for new models |
-| Charts | fl_chart + custom wrappers | Native Flutter charting with consistent app styling |
-| Motion | flutter_animate | Declarative entrance and onboarding animations |
-| Localization | Flutter gen-l10n | Built-in ARB workflow for English and Italian |
-| Notifications | flutter_local_notifications | Local reminders and due-date notifications |
+| Concern          | Choice                       | Rationale                                                                                 |
+| ---------------- | ---------------------------- | ----------------------------------------------------------------------------------------- |
+| Framework        | Flutter stable               | One codebase for Android, web, and desktop targets                                        |
+| State management | Flutter Riverpod 2.x         | App state is provided through `ProviderScope` and generated `@riverpod` feature providers |
+| Navigation       | GoRouter                     | Deep-linkable tab routes and web URL support                                              |
+| Local storage    | JSON file / web localStorage | Privacy-first persistence without a backend                                               |
+| Code generation  | Freezed + json_serializable  | Immutable generated DTOs for new models                                                   |
+| Charts           | fl_chart + custom wrappers   | Native Flutter charting with consistent app styling                                       |
+| Motion           | flutter_animate              | Declarative entrance and onboarding animations                                            |
+| Localization     | Flutter gen-l10n             | Built-in ARB workflow for English and Italian                                             |
+| Notifications    | flutter_local_notifications  | Local reminders and due-date notifications                                                |
 
 ---
 
@@ -41,7 +41,6 @@ CarsManager/
 │   ├── flutter_launcher_icons.yaml
 │   └── flutter_native_splash.yaml
 ├── README.md
-├── DESIGN_SYSTEM.md
 ├── ENVIRONMENT_SETUP.md
 ├── package.json                 # Commit and verification tooling
 ├── commitlint.config.js
@@ -143,10 +142,10 @@ The shell is responsive: mobile uses a three-item bottom navigation bar, tablet 
 
 The app persists a single snapshot containing all vehicles, nested entries, active vehicle ID, and preferences.
 
-| Platform | Implementation | Notes |
-|----------|----------------|-------|
-| Android/iOS/desktop | `cars_storage_io.dart` | JSON file under the app documents directory |
-| Web | `cars_storage_web.dart` | Browser `localStorage` |
+| Platform            | Implementation          | Notes                                       |
+| ------------------- | ----------------------- | ------------------------------------------- |
+| Android/iOS/desktop | `cars_storage_io.dart`  | JSON file under the app documents directory |
+| Web                 | `cars_storage_web.dart` | Browser `localStorage`                      |
 
 On first launch, data is seeded from `assets/data/cars.json`.
 
@@ -186,11 +185,11 @@ Brand assets live in `cars_manager/assets/icons/`. Platform-facing metadata is c
 
 Current checks are intentionally lightweight:
 
-| Check | Command |
-|-------|---------|
-| Format | `npm run format:check` |
-| Analyze | `npm run analyze` |
-| Tests | `npm test` |
-| Full local verification | `npm run verify` |
+| Check                   | Command                |
+| ----------------------- | ---------------------- |
+| Format                  | `npm run format:check` |
+| Analyze                 | `npm run analyze`      |
+| Tests                   | `npm test`             |
+| Full local verification | `npm run verify`       |
 
 Current coverage includes model business logic, generated analytics serialization, Riverpod provider behavior, and shared widget smoke tests. Future work should add golden coverage for the v2 dashboard, garage, vehicle detail, analytics, and settings screens in light and dark mode.

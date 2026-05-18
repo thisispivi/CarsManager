@@ -24,6 +24,7 @@ Cars Manager is a local-first vehicle companion for tracking fuel, maintenance, 
 ## Table of Contents
 
 - [Features](#features)
+- [Screenshots](#screenshots)
 - [Architecture](#architecture)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
@@ -53,6 +54,28 @@ Cars Manager is a local-first vehicle companion for tracking fuel, maintenance, 
 - **Internationalisation** — English and Italian UI through Flutter gen-l10n.
 - **Responsive layout** — bottom navigation on mobile, navigation rail on tablet, sidebar on desktop.
 - **Cross-platform** — Android, iOS, web, Windows, macOS, and Linux project targets.
+
+---
+
+## Screenshots
+
+<table>
+  <tr>
+    <th>Dashboard</th>
+    <th>Garage</th>
+    <th>Analytics</th>
+  </tr>
+  <tr>
+    <td><img alt="Cars Manager dashboard in light mode" src="docs/screenshots/android/light/01-dashboard.png" width="220"></td>
+    <td><img alt="Cars Manager garage in light mode" src="docs/screenshots/android/light/02-garage.png" width="220"></td>
+    <td><img alt="Cars Manager analytics in light mode" src="docs/screenshots/android/light/06-analytics.png" width="220"></td>
+  </tr>
+  <tr>
+    <td><img alt="Cars Manager dashboard in dark mode" src="docs/screenshots/android/dark/01-dashboard.png" width="220"></td>
+    <td><img alt="Cars Manager garage in dark mode" src="docs/screenshots/android/dark/02-garage.png" width="220"></td>
+    <td><img alt="Cars Manager analytics in dark mode" src="docs/screenshots/android/dark/06-analytics.png" width="220"></td>
+  </tr>
+</table>
 
 ---
 
