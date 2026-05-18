@@ -11,6 +11,25 @@ Versioning: [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.4] — 2026-05-18
+
+### Added
+- CSV import/export support for car data through the analytics export service.
+- Settings import/export controls and notification feature polish.
+- Unit coverage for the add fuel entry bottom sheet.
+- AI Generated badge in the README.
+
+### Changed
+- Version bumped to `2.0.4+4`.
+- Refined fuel entry calculations and localization strings.
+- Updated home page layout for improved car display.
+- Removed insurance expiration date handling from car properties and forms.
+
+### Fixed
+- Removed the accidentally committed `.vscode` directory from version control.
+
+---
+
 ## [2.0.3] — 2026-05-18
 
 ### Added
@@ -75,7 +94,8 @@ Versioning: [Semantic Versioning](https://semver.org/).
 - Pre-commit hooks: `dart format`, `dart analyze`, `flutter test`
 - GitHub Actions CI: dart analyze + dart test
 
-[Unreleased]: https://github.com/thisispivi/CarsManager/compare/v2.0.3...HEAD
+[Unreleased]: https://github.com/thisispivi/CarsManager/compare/v2.0.4...HEAD
+[2.0.4]: https://github.com/thisispivi/CarsManager/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/thisispivi/CarsManager/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/thisispivi/CarsManager/compare/v1.0.0...v2.0.2
 [1.0.0]: https://github.com/thisispivi/CarsManager/releases/tag/v1.0.0

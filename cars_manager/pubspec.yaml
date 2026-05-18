@@ -3,7 +3,7 @@ description: "Cars Manager — the smart way to manage your vehicles. Track fuel
 
 publish_to: 'none' 
 
-version: 2.0.3+3
+version: 2.0.4+4
 
 environment:
   sdk: ^3.8.0
